@@ -1,0 +1,19 @@
+{
+  "app-name": "PieMenyus",
+  "title-profiles": "Profiles",
+  "button-create": "Create",
+  "button-add-pie-menu": "Add Pie Menu",
+  "button-settings": "Settings",
+  "table-header-name": "Name",
+  "table-header-color": "Color",
+  "table-header-hotkey": "Hotkey",
+  "table-header-actions": "Actions",
+  "button-edit": "Edit",
+  "button-delete": "Delete",
+  "label-create-profile": "Create Profile",
+  "label-search": "Type to search...",
+  "button-back": "Back",
+  "button-new-pie-menu": "New Pie Menu",
+  "button-link-pie-menu": "Link Pie Menu"
+
+}
