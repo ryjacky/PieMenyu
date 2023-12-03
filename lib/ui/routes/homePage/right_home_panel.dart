@@ -10,10 +10,9 @@ import 'package:pie_menyu/ui/widgets/minimal_text_field.dart';
 
 class RightHomePanel extends StatefulWidget {
   final Profile profile;
-  final List<PieMenu> pieMenus;
 
   const RightHomePanel(
-      {super.key, required this.profile, required this.pieMenus});
+      {super.key, required this.profile});
 
   @override
   State<RightHomePanel> createState() => _RightHomePanelState();
@@ -22,40 +21,6 @@ class RightHomePanel extends StatefulWidget {
 class _RightHomePanelState extends State<RightHomePanel> {
   final double tableRowGap = 10;
   List<PieMenu> pieMenusFromOtherProfiles = [];
-
-  void createPieMenu() async {
-    PieMenu newPieMenu = PieMenu(
-      name: "New Pie Menu",
-    );
-    int pieMenuId = await DB.createPieMenu(newPieMenu);
-    await DB.addPieMenuToProfile(pieMenuId, widget.profile.id);
-
-    setState(() {
-      widget.pieMenus.add(newPieMenu);
-    });
-  }
-
-  void setPieMenuName(String name, PieMenu pieMenu) async {
-    setState(() {
-      pieMenu.name = name;
-    });
-
-    await DB.updatePieMenu(pieMenu);
-  }
-
-  String getPieMenuHotkey(PieMenu pieMenu) {
-    try {
-      HotkeyToPieMenuId htpm = widget.profile.hotkeyToPieMenuIds
-          .firstWhere((element) => element.pieMenuId == pieMenu.id);
-
-      return (htpm.ctrl ? "Ctrl + " : "") +
-          (htpm.alt ? "Alt + " : "") +
-          (htpm.shift ? "Shift + " : "") +
-          htpm.key;
-    } catch (e) {
-      return '';
-    }
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -106,7 +71,7 @@ class _RightHomePanelState extends State<RightHomePanel> {
                           style: Theme.of(context).textTheme.labelMedium),
                     ],
                   ),
-                  for (var pieMenu in widget.pieMenus)
+                  for (var pieMenu in widget.profile.pieMenus)
                     TableRow(
                       children: [
                         Container(
@@ -153,7 +118,9 @@ class _RightHomePanelState extends State<RightHomePanel> {
                               ),
                               TableActionButton(
                                 icon: FontAwesomeIcons.trash,
-                                onPressed: () {},
+                                onPressed: () {
+                                  removePieMenuLink(pieMenu);
+                                },
                                 color: Theme.of(context)
                                     .colorScheme
                                     .errorContainer,
@@ -170,5 +137,46 @@ class _RightHomePanelState extends State<RightHomePanel> {
         ],
       ),
     );
+  }
+
+  void createPieMenu() async {
+    PieMenu newPieMenu = PieMenu(
+      name: "New Pie Menu",
+    );
+    int pieMenuId = await DB.createPieMenu(newPieMenu);
+    await DB.addPieMenuToProfile(pieMenuId, widget.profile.id);
+
+    setState(() {
+      widget.profile.pieMenus.add(newPieMenu);
+    });
+  }
+
+  void setPieMenuName(String name, PieMenu pieMenu) async {
+    setState(() {
+      pieMenu.name = name;
+    });
+
+    await DB.updatePieMenu(pieMenu);
+  }
+
+  String getPieMenuHotkey(PieMenu pieMenu) {
+    try {
+      HotkeyToPieMenuId htpm = widget.profile.hotkeyToPieMenuIds
+          .firstWhere((element) => element.pieMenuId == pieMenu.id);
+
+      return (htpm.ctrl ? "Ctrl + " : "") +
+          (htpm.alt ? "Alt + " : "") +
+          (htpm.shift ? "Shift + " : "") +
+          htpm.key;
+    } catch (e) {
+      return '';
+    }
+  }
+
+  removePieMenuLink(PieMenu pieMenu) async {
+    setState(() {
+      widget.profile.pieMenus.remove(pieMenu);
+    });
+    await DB.updateProfileToPieMenuLinks(widget.profile);
   }
 }

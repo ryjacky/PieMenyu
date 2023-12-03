@@ -105,4 +105,11 @@ class DB {
       await _isar.profiles.put(profile);
     });
   }
+
+  static Future<void> updateProfileToPieMenuLinks(Profile profile) async {
+    await _isar.writeTxn(() async {
+      await profile.pieMenus.save();
+    });
+
+  }
 }
