@@ -23,6 +23,7 @@ class _HomePageState extends State<HomePage> {
   );
   List<PieMenu> selectedProfilePieMenus = [];
   bool isCreatingProfile = false;
+  Map<int, int> selectedProfilePieMenuLinkedCounts = {};
 
   updateSelectedProfile(profileId) async {
     if (isCreatingProfile) {
@@ -31,28 +32,33 @@ class _HomePageState extends State<HomePage> {
       });
     }
 
-    log("Fetching profile...");
+    log("Fetching profile and its pie menus...");
 
-    List<Profile> tempProfileList = await DB.getProfiles(ids: [profileId]);
+    List<dynamic> result = await Future.wait([
+      DB.getProfiles(ids: [profileId]),
+      DB.getProfilePieMenuIds(profileId),
+    ]);
+
+    List<Profile> tempProfileList = result[0];
+    List<int> tempProfilePieMenuIds = result[1];
+
     if (tempProfileList.isEmpty) {
       log("Profile not found, id: $profileId");
       return;
     }
 
-    if (selectedProfile == tempProfileList.first) {
-      log("Profile is the same, id: $profileId");
-      return;
+    List<int> countList = await Future.wait(
+        tempProfilePieMenuIds.map((pieMenuId) => DB.getPieMenuLinkedCount(pieMenuId)));
+    Map<int, int> tempSelectedProfilePieMenuLinkedCounts = {};
+    for (int i = 0; i < tempProfilePieMenuIds.length; i++) {
+      tempSelectedProfilePieMenuLinkedCounts[tempProfilePieMenuIds[i]] = countList[i];
     }
 
-    List<PieMenu> tempPieMenus = tempProfileList.first.hotkeyToPieMenuID.isEmpty
-        ? []
-        : await DB.getPieMenus(
-            ids: tempProfileList.first.hotkeyToPieMenuID
-                .map((e) => e.pieMenuId)
-                .toList());
+    List<PieMenu> tempProfilePieMenus = await DB.getPieMenus(ids: tempProfilePieMenuIds);
 
     setState(() {
-      selectedProfilePieMenus = tempPieMenus;
+      selectedProfilePieMenuLinkedCounts = tempSelectedProfilePieMenuLinkedCounts;
+      selectedProfilePieMenus = tempProfilePieMenus;
       selectedProfile = tempProfileList.first;
       log("RightHomePanel state updated");
     });
@@ -89,6 +95,7 @@ class _HomePageState extends State<HomePage> {
                       child: isCreatingProfile
                           ? RightCreateProfilePanel()
                           : RightHomePanel(
+                              pieMenuLinkedCounts: selectedProfilePieMenuLinkedCounts,
                               profile: selectedProfile,
                               pieMenus: selectedProfilePieMenus,
                             )),

@@ -11,9 +11,13 @@ import 'package:pie_menyu/ui/widgets/minimal_text_field.dart';
 class RightHomePanel extends StatefulWidget {
   final Profile profile;
   final List<PieMenu> pieMenus;
+  final Map<int, int> pieMenuLinkedCounts;
 
   const RightHomePanel(
-      {super.key, required this.profile, required this.pieMenus});
+      {super.key,
+      required this.profile,
+      required this.pieMenus,
+      required this.pieMenuLinkedCounts});
 
   @override
   State<RightHomePanel> createState() => _RightHomePanelState();
@@ -22,7 +26,6 @@ class RightHomePanel extends StatefulWidget {
 class _RightHomePanelState extends State<RightHomePanel> {
   final double tableRowGap = 10;
   List<PieMenu> pieMenusFromOtherProfiles = [];
-
 
   void createPieMenu() async {
     PieMenu newPieMenu = PieMenu(
@@ -61,86 +64,91 @@ class _RightHomePanelState extends State<RightHomePanel> {
               )
             ],
           ),
-          Padding(
-            padding: const EdgeInsets.fromLTRB(0, 15, 0, 0),
-            child: Table(
-              columnWidths: const {
-                0: FractionColumnWidth(0.06),
-                1: FractionColumnWidth(0.39),
-                2: FractionColumnWidth(0.39),
-                3: FractionColumnWidth(0.16),
-              },
-              defaultVerticalAlignment: TableCellVerticalAlignment.middle,
-              children: [
-                TableRow(
-                  children: [
-                    Text('', style: Theme.of(context).textTheme.labelMedium),
-                    Text("table-header-name".i18n(),
-                        style: Theme.of(context).textTheme.labelMedium),
-                    Text("table-header-hotkey".i18n(),
-                        style: Theme.of(context).textTheme.labelMedium),
-                    Text("table-header-actions".i18n(),
-                        style: Theme.of(context).textTheme.labelMedium),
-                  ],
-                ),
-                for (var pieMenu in widget.pieMenus)
+          Expanded(
+              child: Padding(
+            padding: const EdgeInsets.fromLTRB(0, 20, 0, 0),
+            child: SingleChildScrollView(
+              child: Table(
+                columnWidths: const {
+                  0: FractionColumnWidth(0.06),
+                  1: FractionColumnWidth(0.39),
+                  2: FractionColumnWidth(0.39),
+                  3: FractionColumnWidth(0.16),
+                },
+                defaultVerticalAlignment: TableCellVerticalAlignment.middle,
+                children: [
                   TableRow(
                     children: [
-                      Container(
-                        alignment: Alignment.center,
-                        padding: const EdgeInsets.fromLTRB(0, 15, 0, 0),
-                        child: Draggable(
-                          data: pieMenu.id,
-                          feedback: Text(
-                            pieMenu.name,
-                            textAlign: TextAlign.center,
-                            style: Theme.of(context).textTheme.labelMedium,
-                          ),
-                          child: TextButton(
-                              style: TextButton.styleFrom(
-                                minimumSize: const Size(32, 32),
-                              ),
-                              onPressed: () {},
-                              child: const Text("1")),
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.fromLTRB(0, 15, 8, 0),
-                        child: MinimalTextField(
-                          controller: TextEditingController(text: pieMenu.name),
-                        ),
-                      ),
-                      const Padding(
-                        padding: EdgeInsets.fromLTRB(0, 15, 8, 0),
-                        child: MinimalTextField(),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.fromLTRB(0, 15, 8, 0),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceAround,
-                          children: [
-                            TableActionButton(
-                              icon: FontAwesomeIcons.pencil,
-                              onPressed: () {},
-                              color: Theme.of(context).colorScheme.secondary,
-                            ),
-                            TableActionButton(
-                              icon: FontAwesomeIcons.trash,
-                              onPressed: () {},
-                              color:
-                                  Theme.of(context).colorScheme.errorContainer,
-                            ),
-                          ],
-                        ),
-                      ),
+                      Text('', style: Theme.of(context).textTheme.labelMedium),
+                      Text("table-header-name".i18n(),
+                          style: Theme.of(context).textTheme.labelMedium),
+                      Text("table-header-hotkey".i18n(),
+                          style: Theme.of(context).textTheme.labelMedium),
+                      Text("table-header-actions".i18n(),
+                          style: Theme.of(context).textTheme.labelMedium),
                     ],
                   ),
-              ],
+                  for (var pieMenu in widget.pieMenus)
+                    TableRow(
+                      children: [
+                        Container(
+                          alignment: Alignment.center,
+                          padding: const EdgeInsets.fromLTRB(0, 15, 0, 0),
+                          child: Draggable(
+                            data: pieMenu.id,
+                            feedback: Text(
+                              pieMenu.name,
+                              textAlign: TextAlign.center,
+                              style: Theme.of(context).textTheme.labelMedium,
+                            ),
+                            child: TextButton(
+                                style: TextButton.styleFrom(
+                                  minimumSize: const Size(32, 32),
+                                ),
+                                onPressed: () {},
+                                child: Text(
+                                    pieMenuLinkedCount[pieMenu.id].toString())),
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.fromLTRB(0, 15, 8, 0),
+                          child: MinimalTextField(
+                            controller:
+                                TextEditingController(text: pieMenu.name),
+                          ),
+                        ),
+                        const Padding(
+                          padding: EdgeInsets.fromLTRB(0, 15, 8, 0),
+                          child: MinimalTextField(),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.fromLTRB(0, 15, 8, 0),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceAround,
+                            children: [
+                              TableActionButton(
+                                icon: FontAwesomeIcons.pencil,
+                                onPressed: () {},
+                                color: Theme.of(context).colorScheme.secondary,
+                              ),
+                              TableActionButton(
+                                icon: FontAwesomeIcons.trash,
+                                onPressed: () {},
+                                color: Theme.of(context)
+                                    .colorScheme
+                                    .errorContainer,
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                ],
+              ),
             ),
-          )
+          )),
         ],
       ),
     );
   }
-
 }

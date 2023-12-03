@@ -86,11 +86,6 @@ class _LeftHomePanelState extends State<LeftHomePanel> {
                         return;
                       }
 
-                      if (profiles[index].hotkeyToPieMenuID
-                          .any((element) => element.pieMenuId == pieMenuId)) {
-                        return;
-                      }
-
                       DB.addPieMenuToProfile(pieMenuId, profiles[index].id);
                     },
                     builder: (context, List<int?> candidateData, rejectedData) {
