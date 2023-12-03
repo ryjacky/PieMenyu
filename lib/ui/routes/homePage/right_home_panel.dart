@@ -13,9 +13,7 @@ class RightHomePanel extends StatefulWidget {
   final List<PieMenu> pieMenus;
 
   const RightHomePanel(
-      {super.key,
-      required this.profile,
-      required this.pieMenus});
+      {super.key, required this.profile, required this.pieMenus});
 
   @override
   State<RightHomePanel> createState() => _RightHomePanelState();
@@ -35,6 +33,28 @@ class _RightHomePanelState extends State<RightHomePanel> {
     setState(() {
       widget.pieMenus.add(newPieMenu);
     });
+  }
+
+  void setPieMenuName(String name, PieMenu pieMenu) async {
+    setState(() {
+      pieMenu.name = name;
+    });
+
+    await DB.updatePieMenu(pieMenu);
+  }
+
+  String getPieMenuHotkey(PieMenu pieMenu) {
+    try {
+      HotkeyToPieMenuId htpm = widget.profile.hotkeyToPieMenuIds
+          .firstWhere((element) => element.pieMenuId == pieMenu.id);
+
+      return (htpm.ctrl ? "Ctrl + " : "") +
+          (htpm.alt ? "Alt + " : "") +
+          (htpm.shift ? "Shift + " : "") +
+          htpm.key;
+    } catch (e) {
+      return '';
+    }
   }
 
   @override
@@ -104,21 +124,23 @@ class _RightHomePanelState extends State<RightHomePanel> {
                                   minimumSize: const Size(32, 32),
                                 ),
                                 onPressed: () {},
-                                child: Text(
-                                    pieMenu.profiles.length.toString())),
+                                child:
+                                    Text(pieMenu.profiles.length.toString())),
                           ),
                         ),
                         Padding(
                           padding: const EdgeInsets.fromLTRB(0, 15, 8, 0),
                           child: MinimalTextField(
+                            onSubmitted: (String name) {
+                              setPieMenuName(name, pieMenu);
+                            },
                             controller:
                                 TextEditingController(text: pieMenu.name),
                           ),
                         ),
-                        const Padding(
-                          padding: EdgeInsets.fromLTRB(0, 15, 8, 0),
-                          child: MinimalTextField(),
-                        ),
+                        Padding(
+                            padding: const EdgeInsets.fromLTRB(0, 15, 8, 0),
+                            child: MinimalTextField()),
                         Padding(
                           padding: const EdgeInsets.fromLTRB(0, 15, 8, 0),
                           child: Row(

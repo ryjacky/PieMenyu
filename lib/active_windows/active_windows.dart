@@ -5,8 +5,10 @@ import 'package:pie_menyu/active_windows/window_info.dart';
 import 'package:process_run/shell.dart';
 
 class ActiveWindows {
-  String windowsCommand = 'powershell -command "Get-Process | Where-Object { \$_.MainWindowTitle -ne \'\' } | Select-Object Name, Path | ConvertTo-Json"';
-  String macCommand = 'osascript -e \'tell application "System Events" to get name of (processes where background only is false)\'';
+  String windowsCommand =
+      'powershell -command "Get-Process | Where-Object { \$_.MainWindowTitle -ne \'\' } | Select-Object Name, Path | ConvertTo-Json"';
+  String macCommand =
+      'osascript -e \'tell application "System Events" to get name of (processes where background only is false)\'';
   String linuxCommand = 'xdotool getactivewindow getwindowname';
 
   Future<List<WindowInfo>> getOpenedWindows() async {
@@ -15,8 +17,9 @@ class ActiveWindows {
       List<dynamic> result = jsonDecode(rawResult);
 
       return result
+          .where((rawWindowInfo) => rawWindowInfo['Path'] != null)
           .map((rawWindowInfo) => WindowInfo(
-          name: rawWindowInfo['Name'], path: rawWindowInfo['Path']))
+              name: rawWindowInfo['Name'], path: rawWindowInfo['Path']))
           .toList();
     } else if (Platform.isMacOS) {
       return [];
@@ -25,6 +28,5 @@ class ActiveWindows {
     } else {
       throw Exception("Unsupported platform");
     }
-
   }
 }

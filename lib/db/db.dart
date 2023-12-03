@@ -93,4 +93,16 @@ class DB {
 
     return profile.pieMenus.map((e) => e.id).toList();
   }
+
+  static updatePieMenu(PieMenu pieMenu) async {
+    await _isar.writeTxn(() async {
+      await _isar.pieMenus.put(pieMenu);
+    });
+  }
+
+  static void updateProfile(Profile profile) async {
+    await _isar.writeTxn(() async {
+      await _isar.profiles.put(profile);
+    });
+  }
 }
