@@ -1,9 +1,10 @@
+import 'dart:developer';
+
 import 'package:isar/isar.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:pie_menyu/db/pie_item.dart';
 import 'package:pie_menyu/db/pie_menu.dart';
 import 'package:pie_menyu/db/profile.dart';
-import 'package:pie_menyu/db/profile_hotkey_to_pie_menu_id.dart';
 
 class DB {
   static late Isar _isar;
@@ -14,7 +15,6 @@ class DB {
       ProfileSchema,
       PieMenuSchema,
       PieItemSchema,
-      ProfileHotkeyToPieMenuIdSchema
     ], directory: dir.path);
 
     // Create initial record if not existed
@@ -42,20 +42,26 @@ class DB {
   }
 
   static addPieMenuToProfile(int pieMenuId, int profileId) async {
-    int count = await _isar.profileHotkeyToPieMenuIds
-        .where()
-        .profileIdEqualTo(profileId)
-        .filter()
-        .pieMenuIdEqualTo(pieMenuId)
-        .count();
+    List<dynamic> result = await Future.wait([
+      _isar.profiles.get(profileId),
+      _isar.pieMenus.get(pieMenuId),
+    ]);
 
-    if (count != 0) {
+    Profile? profile = result[0];
+    if (profile == null) {
+      log("Profile not found, id: $profileId");
       return;
     }
 
+    PieMenu? pieMenu = result[1];
+    if (pieMenu == null) {
+      log("Pie menu not found, id: $pieMenuId");
+      return;
+    }
+
+    profile.pieMenus.add(pieMenu);
     await _isar.writeTxn(() async {
-      await _isar.profileHotkeyToPieMenuIds.put(
-          ProfileHotkeyToPieMenuId(profileId: profileId, pieMenuId: pieMenuId));
+      await profile.pieMenus.save();
     });
   }
 
@@ -69,18 +75,22 @@ class DB {
   }
 
   static Future<int> getPieMenuLinkedCount(int pieMenuId) async {
-    return await _isar.profileHotkeyToPieMenuIds
-        .where()
-        .pieMenuIdEqualTo(pieMenuId)
-        .count();
+     PieMenu? pieMenu = await _isar.pieMenus.get(pieMenuId);
+     if (pieMenu == null) {
+       return 0;
+     }
+
+     return pieMenu.profiles.length;
   }
 
   static Future<List<int>> getProfilePieMenuIds(int profileId) async {
-    return (await _isar.profileHotkeyToPieMenuIds
-            .where()
-            .profileIdEqualTo(profileId)
-            .findAll())
-        .map((e) => e.pieMenuId)
-        .toList();
+    // get profile
+    Profile? profile = await _isar.profiles.get(profileId);
+    if (profile == null) {
+      log("Profile not found, id: $profileId");
+      return [];
+    }
+
+    return profile.pieMenus.map((e) => e.id).toList();
   }
 }

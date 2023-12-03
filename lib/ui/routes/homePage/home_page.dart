@@ -23,42 +23,21 @@ class _HomePageState extends State<HomePage> {
   );
   List<PieMenu> selectedProfilePieMenus = [];
   bool isCreatingProfile = false;
-  Map<int, int> selectedProfilePieMenuLinkedCounts = {};
 
   updateSelectedProfile(profileId) async {
-    if (isCreatingProfile) {
-      setState(() {
-        isCreatingProfile = false;
-      });
-    }
-
     log("Fetching profile and its pie menus...");
 
-    List<dynamic> result = await Future.wait([
-      DB.getProfiles(ids: [profileId]),
-      DB.getProfilePieMenuIds(profileId),
-    ]);
-
-    List<Profile> tempProfileList = result[0];
-    List<int> tempProfilePieMenuIds = result[1];
+    List<Profile> tempProfileList = await DB.getProfiles(ids: [profileId]);
+    await tempProfileList.first.pieMenus.load();
 
     if (tempProfileList.isEmpty) {
       log("Profile not found, id: $profileId");
       return;
     }
 
-    List<int> countList = await Future.wait(
-        tempProfilePieMenuIds.map((pieMenuId) => DB.getPieMenuLinkedCount(pieMenuId)));
-    Map<int, int> tempSelectedProfilePieMenuLinkedCounts = {};
-    for (int i = 0; i < tempProfilePieMenuIds.length; i++) {
-      tempSelectedProfilePieMenuLinkedCounts[tempProfilePieMenuIds[i]] = countList[i];
-    }
-
-    List<PieMenu> tempProfilePieMenus = await DB.getPieMenus(ids: tempProfilePieMenuIds);
-
     setState(() {
-      selectedProfilePieMenuLinkedCounts = tempSelectedProfilePieMenuLinkedCounts;
-      selectedProfilePieMenus = tempProfilePieMenus;
+      isCreatingProfile = false;
+      selectedProfilePieMenus = tempProfileList.first.pieMenus.toList();
       selectedProfile = tempProfileList.first;
       log("RightHomePanel state updated");
     });
@@ -95,7 +74,6 @@ class _HomePageState extends State<HomePage> {
                       child: isCreatingProfile
                           ? RightCreateProfilePanel()
                           : RightHomePanel(
-                              pieMenuLinkedCounts: selectedProfilePieMenuLinkedCounts,
                               profile: selectedProfile,
                               pieMenus: selectedProfilePieMenus,
                             )),

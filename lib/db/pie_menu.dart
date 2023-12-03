@@ -1,4 +1,6 @@
 import 'package:isar/isar.dart';
+import 'package:pie_menyu/db/pie_item.dart';
+import 'package:pie_menyu/db/profile.dart';
 
 part 'pie_menu.g.dart';
 
@@ -11,18 +13,22 @@ class PieMenu {
 
   @enumerated
   PieMenuActivationMode activationMode;
-  int escapeRadius;
   bool openInScreenCenter;
   String mainColor;
   String secondaryColor;
   String iconColor;
-  List<int> pieItemIds;
+  int escapeRadius;
   int centerRadius;
   int centerThickness;
   int pieItemWidth;
   int iconSize;
   int pieItemRoundness;
   int pieItemSpread;
+
+  IsarLinks<PieItem> pieItems = IsarLinks<PieItem>();
+
+  @Backlink(to: 'pieMenus')
+  IsarLinks<Profile> profiles = IsarLinks<Profile>();
 
   PieMenu({
     this.name = 'New Pie Menu',
@@ -33,7 +39,6 @@ class PieMenu {
     this.mainColor = '#1DAEAA',
     this.secondaryColor = '#282828',
     this.iconColor = '#FFFFFF',
-    this.pieItemIds = const [],
     this.centerRadius = 20,
     this.centerThickness = 10,
     this.pieItemWidth = 100,

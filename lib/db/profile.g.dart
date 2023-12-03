@@ -27,13 +27,19 @@ const ProfileSchema = CollectionSchema(
       name: r'exes',
       type: IsarType.stringList,
     ),
-    r'iconBase64': PropertySchema(
+    r'hotkeyToPieMenuIds': PropertySchema(
       id: 2,
+      name: r'hotkeyToPieMenuIds',
+      type: IsarType.objectList,
+      target: r'HotkeyToPieMenuId',
+    ),
+    r'iconBase64': PropertySchema(
+      id: 3,
       name: r'iconBase64',
       type: IsarType.string,
     ),
     r'name': PropertySchema(
-      id: 3,
+      id: 4,
       name: r'name',
       type: IsarType.string,
     )
@@ -44,8 +50,15 @@ const ProfileSchema = CollectionSchema(
   deserializeProp: _profileDeserializeProp,
   idName: r'id',
   indexes: {},
-  links: {},
-  embeddedSchemas: {},
+  links: {
+    r'pieMenus': LinkSchema(
+      id: 7685601216207819822,
+      name: r'pieMenus',
+      target: r'PieMenu',
+      single: false,
+    )
+  },
+  embeddedSchemas: {r'HotkeyToPieMenuId': HotkeyToPieMenuIdSchema},
   getId: _profileGetId,
   getLinks: _profileGetLinks,
   attach: _profileAttach,
@@ -65,6 +78,15 @@ int _profileEstimateSize(
       bytesCount += value.length * 3;
     }
   }
+  bytesCount += 3 + object.hotkeyToPieMenuIds.length * 3;
+  {
+    final offsets = allOffsets[HotkeyToPieMenuId]!;
+    for (var i = 0; i < object.hotkeyToPieMenuIds.length; i++) {
+      final value = object.hotkeyToPieMenuIds[i];
+      bytesCount +=
+          HotkeyToPieMenuIdSchema.estimateSize(value, offsets, allOffsets);
+    }
+  }
   bytesCount += 3 + object.iconBase64.length * 3;
   bytesCount += 3 + object.name.length * 3;
   return bytesCount;
@@ -78,8 +100,14 @@ void _profileSerialize(
 ) {
   writer.writeBool(offsets[0], object.enabled);
   writer.writeStringList(offsets[1], object.exes);
-  writer.writeString(offsets[2], object.iconBase64);
-  writer.writeString(offsets[3], object.name);
+  writer.writeObjectList<HotkeyToPieMenuId>(
+    offsets[2],
+    allOffsets,
+    HotkeyToPieMenuIdSchema.serialize,
+    object.hotkeyToPieMenuIds,
+  );
+  writer.writeString(offsets[3], object.iconBase64);
+  writer.writeString(offsets[4], object.name);
 }
 
 Profile _profileDeserialize(
@@ -91,9 +119,16 @@ Profile _profileDeserialize(
   final object = Profile(
     enabled: reader.readBoolOrNull(offsets[0]) ?? true,
     exes: reader.readStringList(offsets[1]) ?? const [],
-    iconBase64: reader.readStringOrNull(offsets[2]) ?? "",
-    name: reader.readStringOrNull(offsets[3]) ?? 'New Profile',
+    iconBase64: reader.readStringOrNull(offsets[3]) ?? "",
+    name: reader.readStringOrNull(offsets[4]) ?? 'New Profile',
   );
+  object.hotkeyToPieMenuIds = reader.readObjectList<HotkeyToPieMenuId>(
+        offsets[2],
+        HotkeyToPieMenuIdSchema.deserialize,
+        allOffsets,
+        HotkeyToPieMenuId(),
+      ) ??
+      [];
   object.id = id;
   return object;
 }
@@ -110,8 +145,16 @@ P _profileDeserializeProp<P>(
     case 1:
       return (reader.readStringList(offset) ?? const []) as P;
     case 2:
-      return (reader.readStringOrNull(offset) ?? "") as P;
+      return (reader.readObjectList<HotkeyToPieMenuId>(
+            offset,
+            HotkeyToPieMenuIdSchema.deserialize,
+            allOffsets,
+            HotkeyToPieMenuId(),
+          ) ??
+          []) as P;
     case 3:
+      return (reader.readStringOrNull(offset) ?? "") as P;
+    case 4:
       return (reader.readStringOrNull(offset) ?? 'New Profile') as P;
     default:
       throw IsarError('Unknown property with id $propertyId');
@@ -123,11 +166,12 @@ Id _profileGetId(Profile object) {
 }
 
 List<IsarLinkBase<dynamic>> _profileGetLinks(Profile object) {
-  return [];
+  return [object.pieMenus];
 }
 
 void _profileAttach(IsarCollection<dynamic> col, Id id, Profile object) {
   object.id = id;
+  object.pieMenus.attach(col, col.isar.collection<PieMenu>(), r'pieMenus', id);
 }
 
 extension ProfileQueryWhereSort on QueryBuilder<Profile, Profile, QWhere> {
@@ -424,6 +468,95 @@ extension ProfileQueryFilter
     return QueryBuilder.apply(this, (query) {
       return query.listLength(
         r'exes',
+        lower,
+        includeLower,
+        upper,
+        includeUpper,
+      );
+    });
+  }
+
+  QueryBuilder<Profile, Profile, QAfterFilterCondition>
+      hotkeyToPieMenuIdsLengthEqualTo(int length) {
+    return QueryBuilder.apply(this, (query) {
+      return query.listLength(
+        r'hotkeyToPieMenuIds',
+        length,
+        true,
+        length,
+        true,
+      );
+    });
+  }
+
+  QueryBuilder<Profile, Profile, QAfterFilterCondition>
+      hotkeyToPieMenuIdsIsEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.listLength(
+        r'hotkeyToPieMenuIds',
+        0,
+        true,
+        0,
+        true,
+      );
+    });
+  }
+
+  QueryBuilder<Profile, Profile, QAfterFilterCondition>
+      hotkeyToPieMenuIdsIsNotEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.listLength(
+        r'hotkeyToPieMenuIds',
+        0,
+        false,
+        999999,
+        true,
+      );
+    });
+  }
+
+  QueryBuilder<Profile, Profile, QAfterFilterCondition>
+      hotkeyToPieMenuIdsLengthLessThan(
+    int length, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.listLength(
+        r'hotkeyToPieMenuIds',
+        0,
+        true,
+        length,
+        include,
+      );
+    });
+  }
+
+  QueryBuilder<Profile, Profile, QAfterFilterCondition>
+      hotkeyToPieMenuIdsLengthGreaterThan(
+    int length, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.listLength(
+        r'hotkeyToPieMenuIds',
+        length,
+        include,
+        999999,
+        true,
+      );
+    });
+  }
+
+  QueryBuilder<Profile, Profile, QAfterFilterCondition>
+      hotkeyToPieMenuIdsLengthBetween(
+    int lower,
+    int upper, {
+    bool includeLower = true,
+    bool includeUpper = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.listLength(
+        r'hotkeyToPieMenuIds',
         lower,
         includeLower,
         upper,
@@ -746,10 +879,74 @@ extension ProfileQueryFilter
 }
 
 extension ProfileQueryObject
-    on QueryBuilder<Profile, Profile, QFilterCondition> {}
+    on QueryBuilder<Profile, Profile, QFilterCondition> {
+  QueryBuilder<Profile, Profile, QAfterFilterCondition>
+      hotkeyToPieMenuIdsElement(FilterQuery<HotkeyToPieMenuId> q) {
+    return QueryBuilder.apply(this, (query) {
+      return query.object(q, r'hotkeyToPieMenuIds');
+    });
+  }
+}
 
 extension ProfileQueryLinks
-    on QueryBuilder<Profile, Profile, QFilterCondition> {}
+    on QueryBuilder<Profile, Profile, QFilterCondition> {
+  QueryBuilder<Profile, Profile, QAfterFilterCondition> pieMenus(
+      FilterQuery<PieMenu> q) {
+    return QueryBuilder.apply(this, (query) {
+      return query.link(q, r'pieMenus');
+    });
+  }
+
+  QueryBuilder<Profile, Profile, QAfterFilterCondition> pieMenusLengthEqualTo(
+      int length) {
+    return QueryBuilder.apply(this, (query) {
+      return query.linkLength(r'pieMenus', length, true, length, true);
+    });
+  }
+
+  QueryBuilder<Profile, Profile, QAfterFilterCondition> pieMenusIsEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.linkLength(r'pieMenus', 0, true, 0, true);
+    });
+  }
+
+  QueryBuilder<Profile, Profile, QAfterFilterCondition> pieMenusIsNotEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.linkLength(r'pieMenus', 0, false, 999999, true);
+    });
+  }
+
+  QueryBuilder<Profile, Profile, QAfterFilterCondition> pieMenusLengthLessThan(
+    int length, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.linkLength(r'pieMenus', 0, true, length, include);
+    });
+  }
+
+  QueryBuilder<Profile, Profile, QAfterFilterCondition>
+      pieMenusLengthGreaterThan(
+    int length, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.linkLength(r'pieMenus', length, include, 999999, true);
+    });
+  }
+
+  QueryBuilder<Profile, Profile, QAfterFilterCondition> pieMenusLengthBetween(
+    int lower,
+    int upper, {
+    bool includeLower = true,
+    bool includeUpper = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.linkLength(
+          r'pieMenus', lower, includeLower, upper, includeUpper);
+    });
+  }
+}
 
 extension ProfileQuerySortBy on QueryBuilder<Profile, Profile, QSortBy> {
   QueryBuilder<Profile, Profile, QAfterSortBy> sortByEnabled() {
@@ -889,6 +1086,13 @@ extension ProfileQueryProperty
     });
   }
 
+  QueryBuilder<Profile, List<HotkeyToPieMenuId>, QQueryOperations>
+      hotkeyToPieMenuIdsProperty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addPropertyName(r'hotkeyToPieMenuIds');
+    });
+  }
+
   QueryBuilder<Profile, String, QQueryOperations> iconBase64Property() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'iconBase64');
@@ -901,3 +1105,335 @@ extension ProfileQueryProperty
     });
   }
 }
+
+// **************************************************************************
+// IsarEmbeddedGenerator
+// **************************************************************************
+
+// coverage:ignore-file
+// ignore_for_file: duplicate_ignore, non_constant_identifier_names, constant_identifier_names, invalid_use_of_protected_member, unnecessary_cast, prefer_const_constructors, lines_longer_than_80_chars, require_trailing_commas, inference_failure_on_function_invocation, unnecessary_parenthesis, unnecessary_raw_strings, unnecessary_null_checks, join_return_with_assignment, prefer_final_locals, avoid_js_rounded_ints, avoid_positional_boolean_parameters, always_specify_types
+
+const HotkeyToPieMenuIdSchema = Schema(
+  name: r'HotkeyToPieMenuId',
+  id: -6507779408773911994,
+  properties: {
+    r'alt': PropertySchema(
+      id: 0,
+      name: r'alt',
+      type: IsarType.bool,
+    ),
+    r'ctrl': PropertySchema(
+      id: 1,
+      name: r'ctrl',
+      type: IsarType.bool,
+    ),
+    r'key': PropertySchema(
+      id: 2,
+      name: r'key',
+      type: IsarType.string,
+    ),
+    r'pieMenuId': PropertySchema(
+      id: 3,
+      name: r'pieMenuId',
+      type: IsarType.long,
+    ),
+    r'shift': PropertySchema(
+      id: 4,
+      name: r'shift',
+      type: IsarType.bool,
+    )
+  },
+  estimateSize: _hotkeyToPieMenuIdEstimateSize,
+  serialize: _hotkeyToPieMenuIdSerialize,
+  deserialize: _hotkeyToPieMenuIdDeserialize,
+  deserializeProp: _hotkeyToPieMenuIdDeserializeProp,
+);
+
+int _hotkeyToPieMenuIdEstimateSize(
+  HotkeyToPieMenuId object,
+  List<int> offsets,
+  Map<Type, List<int>> allOffsets,
+) {
+  var bytesCount = offsets.last;
+  bytesCount += 3 + object.key.length * 3;
+  return bytesCount;
+}
+
+void _hotkeyToPieMenuIdSerialize(
+  HotkeyToPieMenuId object,
+  IsarWriter writer,
+  List<int> offsets,
+  Map<Type, List<int>> allOffsets,
+) {
+  writer.writeBool(offsets[0], object.alt);
+  writer.writeBool(offsets[1], object.ctrl);
+  writer.writeString(offsets[2], object.key);
+  writer.writeLong(offsets[3], object.pieMenuId);
+  writer.writeBool(offsets[4], object.shift);
+}
+
+HotkeyToPieMenuId _hotkeyToPieMenuIdDeserialize(
+  Id id,
+  IsarReader reader,
+  List<int> offsets,
+  Map<Type, List<int>> allOffsets,
+) {
+  final object = HotkeyToPieMenuId(
+    alt: reader.readBoolOrNull(offsets[0]) ?? false,
+    ctrl: reader.readBoolOrNull(offsets[1]) ?? false,
+    key: reader.readStringOrNull(offsets[2]) ?? "",
+    pieMenuId: reader.readLongOrNull(offsets[3]) ?? 0,
+    shift: reader.readBoolOrNull(offsets[4]) ?? false,
+  );
+  return object;
+}
+
+P _hotkeyToPieMenuIdDeserializeProp<P>(
+  IsarReader reader,
+  int propertyId,
+  int offset,
+  Map<Type, List<int>> allOffsets,
+) {
+  switch (propertyId) {
+    case 0:
+      return (reader.readBoolOrNull(offset) ?? false) as P;
+    case 1:
+      return (reader.readBoolOrNull(offset) ?? false) as P;
+    case 2:
+      return (reader.readStringOrNull(offset) ?? "") as P;
+    case 3:
+      return (reader.readLongOrNull(offset) ?? 0) as P;
+    case 4:
+      return (reader.readBoolOrNull(offset) ?? false) as P;
+    default:
+      throw IsarError('Unknown property with id $propertyId');
+  }
+}
+
+extension HotkeyToPieMenuIdQueryFilter
+    on QueryBuilder<HotkeyToPieMenuId, HotkeyToPieMenuId, QFilterCondition> {
+  QueryBuilder<HotkeyToPieMenuId, HotkeyToPieMenuId, QAfterFilterCondition>
+      altEqualTo(bool value) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'alt',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<HotkeyToPieMenuId, HotkeyToPieMenuId, QAfterFilterCondition>
+      ctrlEqualTo(bool value) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'ctrl',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<HotkeyToPieMenuId, HotkeyToPieMenuId, QAfterFilterCondition>
+      keyEqualTo(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'key',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<HotkeyToPieMenuId, HotkeyToPieMenuId, QAfterFilterCondition>
+      keyGreaterThan(
+    String value, {
+    bool include = false,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        include: include,
+        property: r'key',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<HotkeyToPieMenuId, HotkeyToPieMenuId, QAfterFilterCondition>
+      keyLessThan(
+    String value, {
+    bool include = false,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.lessThan(
+        include: include,
+        property: r'key',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<HotkeyToPieMenuId, HotkeyToPieMenuId, QAfterFilterCondition>
+      keyBetween(
+    String lower,
+    String upper, {
+    bool includeLower = true,
+    bool includeUpper = true,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.between(
+        property: r'key',
+        lower: lower,
+        includeLower: includeLower,
+        upper: upper,
+        includeUpper: includeUpper,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<HotkeyToPieMenuId, HotkeyToPieMenuId, QAfterFilterCondition>
+      keyStartsWith(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.startsWith(
+        property: r'key',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<HotkeyToPieMenuId, HotkeyToPieMenuId, QAfterFilterCondition>
+      keyEndsWith(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.endsWith(
+        property: r'key',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<HotkeyToPieMenuId, HotkeyToPieMenuId, QAfterFilterCondition>
+      keyContains(String value, {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.contains(
+        property: r'key',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<HotkeyToPieMenuId, HotkeyToPieMenuId, QAfterFilterCondition>
+      keyMatches(String pattern, {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.matches(
+        property: r'key',
+        wildcard: pattern,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<HotkeyToPieMenuId, HotkeyToPieMenuId, QAfterFilterCondition>
+      keyIsEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'key',
+        value: '',
+      ));
+    });
+  }
+
+  QueryBuilder<HotkeyToPieMenuId, HotkeyToPieMenuId, QAfterFilterCondition>
+      keyIsNotEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        property: r'key',
+        value: '',
+      ));
+    });
+  }
+
+  QueryBuilder<HotkeyToPieMenuId, HotkeyToPieMenuId, QAfterFilterCondition>
+      pieMenuIdEqualTo(int value) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'pieMenuId',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<HotkeyToPieMenuId, HotkeyToPieMenuId, QAfterFilterCondition>
+      pieMenuIdGreaterThan(
+    int value, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        include: include,
+        property: r'pieMenuId',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<HotkeyToPieMenuId, HotkeyToPieMenuId, QAfterFilterCondition>
+      pieMenuIdLessThan(
+    int value, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.lessThan(
+        include: include,
+        property: r'pieMenuId',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<HotkeyToPieMenuId, HotkeyToPieMenuId, QAfterFilterCondition>
+      pieMenuIdBetween(
+    int lower,
+    int upper, {
+    bool includeLower = true,
+    bool includeUpper = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.between(
+        property: r'pieMenuId',
+        lower: lower,
+        includeLower: includeLower,
+        upper: upper,
+        includeUpper: includeUpper,
+      ));
+    });
+  }
+
+  QueryBuilder<HotkeyToPieMenuId, HotkeyToPieMenuId, QAfterFilterCondition>
+      shiftEqualTo(bool value) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'shift',
+        value: value,
+      ));
+    });
+  }
+}
+
+extension HotkeyToPieMenuIdQueryObject
+    on QueryBuilder<HotkeyToPieMenuId, HotkeyToPieMenuId, QFilterCondition> {}

@@ -1,10 +1,14 @@
 import 'package:isar/isar.dart';
+import 'package:pie_menyu/db/pie_menu.dart';
 
 part 'pie_item.g.dart';
 
 @collection
 class PieItem {
-  Id id = Isar.autoIncrement; // you can also use id = null to auto increment
+  Id id = Isar.autoIncrement;
+
+  @Backlink(to: 'pieItems')
+  IsarLinks<PieMenu> pieMenus = IsarLinks<PieMenu>();
 
   PieItem({
     String iconBase64 = '',

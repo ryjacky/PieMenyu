@@ -23,7 +23,15 @@ const PieItemSchema = CollectionSchema(
   deserializeProp: _pieItemDeserializeProp,
   idName: r'id',
   indexes: {},
-  links: {},
+  links: {
+    r'pieMenus': LinkSchema(
+      id: 6484480270944672114,
+      name: r'pieMenus',
+      target: r'PieMenu',
+      single: false,
+      linkName: r'pieItems',
+    )
+  },
   embeddedSchemas: {},
   getId: _pieItemGetId,
   getLinks: _pieItemGetLinks,
@@ -74,11 +82,12 @@ Id _pieItemGetId(PieItem object) {
 }
 
 List<IsarLinkBase<dynamic>> _pieItemGetLinks(PieItem object) {
-  return [];
+  return [object.pieMenus];
 }
 
 void _pieItemAttach(IsarCollection<dynamic> col, Id id, PieItem object) {
   object.id = id;
+  object.pieMenus.attach(col, col.isar.collection<PieMenu>(), r'pieMenus', id);
 }
 
 extension PieItemQueryWhereSort on QueryBuilder<PieItem, PieItem, QWhere> {
@@ -215,7 +224,64 @@ extension PieItemQueryObject
     on QueryBuilder<PieItem, PieItem, QFilterCondition> {}
 
 extension PieItemQueryLinks
-    on QueryBuilder<PieItem, PieItem, QFilterCondition> {}
+    on QueryBuilder<PieItem, PieItem, QFilterCondition> {
+  QueryBuilder<PieItem, PieItem, QAfterFilterCondition> pieMenus(
+      FilterQuery<PieMenu> q) {
+    return QueryBuilder.apply(this, (query) {
+      return query.link(q, r'pieMenus');
+    });
+  }
+
+  QueryBuilder<PieItem, PieItem, QAfterFilterCondition> pieMenusLengthEqualTo(
+      int length) {
+    return QueryBuilder.apply(this, (query) {
+      return query.linkLength(r'pieMenus', length, true, length, true);
+    });
+  }
+
+  QueryBuilder<PieItem, PieItem, QAfterFilterCondition> pieMenusIsEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.linkLength(r'pieMenus', 0, true, 0, true);
+    });
+  }
+
+  QueryBuilder<PieItem, PieItem, QAfterFilterCondition> pieMenusIsNotEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.linkLength(r'pieMenus', 0, false, 999999, true);
+    });
+  }
+
+  QueryBuilder<PieItem, PieItem, QAfterFilterCondition> pieMenusLengthLessThan(
+    int length, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.linkLength(r'pieMenus', 0, true, length, include);
+    });
+  }
+
+  QueryBuilder<PieItem, PieItem, QAfterFilterCondition>
+      pieMenusLengthGreaterThan(
+    int length, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.linkLength(r'pieMenus', length, include, 999999, true);
+    });
+  }
+
+  QueryBuilder<PieItem, PieItem, QAfterFilterCondition> pieMenusLengthBetween(
+    int lower,
+    int upper, {
+    bool includeLower = true,
+    bool includeUpper = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.linkLength(
+          r'pieMenus', lower, includeLower, upper, includeUpper);
+    });
+  }
+}
 
 extension PieItemQuerySortBy on QueryBuilder<PieItem, PieItem, QSortBy> {}
 

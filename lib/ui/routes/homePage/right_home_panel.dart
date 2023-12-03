@@ -11,13 +11,11 @@ import 'package:pie_menyu/ui/widgets/minimal_text_field.dart';
 class RightHomePanel extends StatefulWidget {
   final Profile profile;
   final List<PieMenu> pieMenus;
-  final Map<int, int> pieMenuLinkedCounts;
 
   const RightHomePanel(
       {super.key,
       required this.profile,
-      required this.pieMenus,
-      required this.pieMenuLinkedCounts});
+      required this.pieMenus});
 
   @override
   State<RightHomePanel> createState() => _RightHomePanelState();
@@ -107,7 +105,7 @@ class _RightHomePanelState extends State<RightHomePanel> {
                                 ),
                                 onPressed: () {},
                                 child: Text(
-                                    pieMenuLinkedCount[pieMenu.id].toString())),
+                                    pieMenu.profiles.length.toString())),
                           ),
                         ),
                         Padding(
