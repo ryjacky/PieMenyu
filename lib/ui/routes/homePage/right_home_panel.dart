@@ -190,8 +190,10 @@ class _RightHomePanelState extends State<RightHomePanel> {
   }
 
   addHotkeyToProfile(HotKey hotKey, int pieMenuId) async {
-    List<HotkeyToPieMenuId> hotkeyToPieMenuIdList = [];
-    hotkeyToPieMenuIdList.addAll(widget.profile.hotkeyToPieMenuIdList);
+    List<HotkeyToPieMenuId> hotkeyToPieMenuIdList = widget
+        .profile.hotkeyToPieMenuIdList
+        .where((element) => element.pieMenuId != pieMenuId)
+        .toList();
     hotkeyToPieMenuIdList.add(HotkeyToPieMenuId.fromHotKey(hotKey, pieMenuId));
 
     widget.profile.hotkeyToPieMenuIdList = hotkeyToPieMenuIdList;

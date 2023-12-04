@@ -10,7 +10,7 @@ class DB {
   static late Isar _isar;
 
   static initialize() async {
-    final dir = await getApplicationDocumentsDirectory();
+    final dir = await getApplicationSupportDirectory();
     DB._isar = await Isar.open([
       ProfileSchema,
       PieMenuSchema,

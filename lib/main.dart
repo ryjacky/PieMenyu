@@ -15,7 +15,7 @@ Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   // For hot reload, `unregisterAll()` needs to be called.
   await hotKeyManager.unregisterAll();
-  DB.initialize();
+  await DB.initialize();
 
   runApp(const PieMenyus());
 
