@@ -15,23 +15,6 @@ Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   // For hot reload, `unregisterAll()` needs to be called.
   await hotKeyManager.unregisterAll();
-
-  HotKey _hotKey = HotKey(
-    KeyCode.keyD,
-    modifiers: [KeyModifier.shift],
-    // Set hotkey scope (default is HotKeyScope.system)
-    scope: HotKeyScope.system, // Set as inapp-wide hotkey.
-  );
-  await hotKeyManager.register(
-    _hotKey,
-    keyDownHandler: (hotKey) {
-      log('onKeyDown+${hotKey.toJson()}');
-    },
-    // Only works on macOS.
-    keyUpHandler: (hotKey){
-      log('onKeyUp+${hotKey.toJson()}');
-    } ,
-  );
   DB.initialize();
 
   runApp(const PieMenyus());
