@@ -14,6 +14,10 @@
   "label-search": "Type to search...",
   "button-back": "Back",
   "button-new-pie-menu": "New Pie Menu",
-  "button-link-pie-menu": "Link Pie Menu"
+  "button-link-pie-menu": "Link Pie Menu",
+  "snackbar-pie-menu-deleted": "Pie Menu is deleted",
+  "label-undo": "Undo",
+  "tooltip-remove-pie-menu": "Long press to remove Pie Menu",
+  "pie-menu-name-saved": "Pie Menu name is saved."
 
 }

@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:localization/localization.dart';
@@ -11,8 +13,7 @@ import 'package:pie_menyu/ui/widgets/minimal_text_field.dart';
 class RightHomePanel extends StatefulWidget {
   final Profile profile;
 
-  const RightHomePanel(
-      {super.key, required this.profile});
+  const RightHomePanel({super.key, required this.profile});
 
   @override
   State<RightHomePanel> createState() => _RightHomePanelState();
@@ -96,11 +97,10 @@ class _RightHomePanelState extends State<RightHomePanel> {
                         Padding(
                           padding: const EdgeInsets.fromLTRB(0, 15, 8, 0),
                           child: MinimalTextField(
-                            onSubmitted: (String name) {
-                              setPieMenuName(name, pieMenu);
+                            onSubmitted: (String? name) {
+                              setPieMenuName(name ?? "", pieMenu);
                             },
-                            controller:
-                                TextEditingController(text: pieMenu.name),
+                            content: pieMenu.name,
                           ),
                         ),
                         Padding(
@@ -116,14 +116,17 @@ class _RightHomePanelState extends State<RightHomePanel> {
                                 onPressed: () {},
                                 color: Theme.of(context).colorScheme.secondary,
                               ),
-                              TableActionButton(
-                                icon: FontAwesomeIcons.trash,
-                                onPressed: () {
-                                  removePieMenuLink(pieMenu);
-                                },
-                                color: Theme.of(context)
-                                    .colorScheme
-                                    .errorContainer,
+                              Tooltip(
+                                message: "tooltip-remove-pie-menu".i18n(),
+                                child: TableActionButton(
+                                  icon: FontAwesomeIcons.trash,
+                                  onLongPress: () {
+                                    removePieMenuLink(pieMenu);
+                                  },
+                                  color: Theme.of(context)
+                                      .colorScheme
+                                      .errorContainer,
+                                ),
                               ),
                             ],
                           ),
@@ -155,6 +158,10 @@ class _RightHomePanelState extends State<RightHomePanel> {
     setState(() {
       pieMenu.name = name;
     });
+
+    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        backgroundColor: Theme.of(context).colorScheme.primary,
+        content: Text("pie-menu-name-saved".i18n())));
 
     await DB.updatePieMenu(pieMenu);
   }
