@@ -1,5 +1,8 @@
+import 'dart:developer';
+
 import 'package:bitsdojo_window/bitsdojo_window.dart';
 import 'package:flutter/material.dart';
+import 'package:hotkey_manager/hotkey_manager.dart';
 import 'package:localization/localization.dart';
 import 'package:pie_menyu/db/db.dart';
 import 'package:pie_menyu/ui/routes/homePage/home_page.dart';
@@ -7,8 +10,28 @@ import 'package:pie_menyu/ui/routes/homePage/home_page.dart';
 import 'theme/color_schemes.g.dart';
 import 'theme/text_theme.g.dart';
 
-void main() {
+Future<void> main() async {
   LocalJsonLocalization.delegate.directories = ['lib/i18n'];
+  WidgetsFlutterBinding.ensureInitialized();
+  // For hot reload, `unregisterAll()` needs to be called.
+  await hotKeyManager.unregisterAll();
+
+  HotKey _hotKey = HotKey(
+    KeyCode.keyD,
+    modifiers: [KeyModifier.shift],
+    // Set hotkey scope (default is HotKeyScope.system)
+    scope: HotKeyScope.system, // Set as inapp-wide hotkey.
+  );
+  await hotKeyManager.register(
+    _hotKey,
+    keyDownHandler: (hotKey) {
+      log('onKeyDown+${hotKey.toJson()}');
+    },
+    // Only works on macOS.
+    keyUpHandler: (hotKey){
+      log('onKeyUp+${hotKey.toJson()}');
+    } ,
+  );
   DB.initialize();
 
   runApp(const PieMenyus());

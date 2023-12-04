@@ -72,7 +72,7 @@ class _HomePageState extends State<HomePage> {
                   Expanded(
                       flex: 7,
                       child: isCreatingProfile
-                          ? RightCreateProfilePanel()
+                          ? const RightCreateProfilePanel()
                           : RightHomePanel(
                               profile: selectedProfile,
                             )),

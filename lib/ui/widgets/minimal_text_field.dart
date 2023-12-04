@@ -23,7 +23,7 @@ class _MinimalTextFieldState extends State<MinimalTextField> {
   Widget build(BuildContext context) {
     return Focus(
       onFocusChange: (hasFocus) {
-        if (!hasFocus) {
+        if (!hasFocus && widget.onSubmitted != null) {
           widget.onSubmitted!(content);
         }
       },

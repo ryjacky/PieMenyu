@@ -1,6 +1,9 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:localization/localization.dart';
+import 'package:pie_menyu/active_windows/hotkey_recorder.dart';
 import 'package:pie_menyu/db/db.dart';
 import 'package:pie_menyu/db/pie_menu.dart';
 import 'package:pie_menyu/db/profile.dart';
@@ -53,8 +56,8 @@ class _RightHomePanelState extends State<RightHomePanel> {
               child: Table(
                 columnWidths: const {
                   0: FractionColumnWidth(0.06),
-                  1: FractionColumnWidth(0.39),
-                  2: FractionColumnWidth(0.39),
+                  1: FractionColumnWidth(0.52),
+                  2: FractionColumnWidth(0.26),
                   3: FractionColumnWidth(0.16),
                 },
                 defaultVerticalAlignment: TableCellVerticalAlignment.middle,
@@ -93,7 +96,7 @@ class _RightHomePanelState extends State<RightHomePanel> {
                           ),
                         ),
                         Padding(
-                          padding: const EdgeInsets.fromLTRB(0, 15, 8, 0),
+                          padding: const EdgeInsets.fromLTRB(0, 15, 25, 0),
                           child: MinimalTextField(
                             onSubmitted: (String? name) {
                               setPieMenuName(name ?? "", pieMenu);
@@ -103,7 +106,12 @@ class _RightHomePanelState extends State<RightHomePanel> {
                         ),
                         Padding(
                             padding: const EdgeInsets.fromLTRB(0, 15, 8, 0),
-                            child: MinimalTextField()),
+                            child: KeyPressRecorder(
+                              onHotKeyRecorded: (hotKey) {
+                                log(hotKey.toString());
+                                setState(() {});
+                              },
+                            ),),
                         Padding(
                           padding: const EdgeInsets.fromLTRB(0, 15, 8, 0),
                           child: Row(

@@ -4,6 +4,7 @@
 
 list(APPEND FLUTTER_PLUGIN_LIST
   bitsdojo_window_linux
+  hotkey_manager
   isar_flutter_libs
   screen_retriever
   window_manager
