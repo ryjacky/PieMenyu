@@ -1,7 +1,6 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:hotkey_manager/hotkey_manager.dart';
 import 'package:localization/localization.dart';
 import 'package:pie_menyu/active_windows/hotkey_recorder.dart';
 import 'package:pie_menyu/db/db.dart';
@@ -105,13 +104,13 @@ class _RightHomePanelState extends State<RightHomePanel> {
                           ),
                         ),
                         Padding(
-                            padding: const EdgeInsets.fromLTRB(0, 15, 8, 0),
-                            child: KeyPressRecorder(
-                              onHotKeyRecorded: (hotKey) {
-                                log(hotKey.toString());
-                                setState(() {});
-                              },
-                            ),),
+                          padding: const EdgeInsets.fromLTRB(0, 15, 8, 0),
+                          child: KeyPressRecorder(
+                            initalHotKey: getPieMenuHotkey(pieMenu),
+                            onHotKeyRecorded: (hotkey) =>
+                                addHotkeyToProfile(hotkey, pieMenu.id),
+                          ),
+                        ),
                         Padding(
                           padding: const EdgeInsets.fromLTRB(0, 15, 8, 0),
                           child: Row(
@@ -172,17 +171,14 @@ class _RightHomePanelState extends State<RightHomePanel> {
     await DB.updatePieMenu(pieMenu);
   }
 
-  String getPieMenuHotkey(PieMenu pieMenu) {
+  HotKey? getPieMenuHotkey(PieMenu pieMenu) {
     try {
-      HotkeyToPieMenuId htpm = widget.profile.hotkeyToPieMenuIds
+      HotkeyToPieMenuId htpm = widget.profile.hotkeyToPieMenuIdList
           .firstWhere((element) => element.pieMenuId == pieMenu.id);
 
-      return (htpm.ctrl ? "Ctrl + " : "") +
-          (htpm.alt ? "Alt + " : "") +
-          (htpm.shift ? "Shift + " : "") +
-          htpm.key;
+      return HotKey(htpm.keyCode, modifiers: htpm.keyModifiers);
     } catch (e) {
-      return '';
+      return null;
     }
   }
 
@@ -191,5 +187,14 @@ class _RightHomePanelState extends State<RightHomePanel> {
       widget.profile.pieMenus.remove(pieMenu);
     });
     await DB.updateProfileToPieMenuLinks(widget.profile);
+  }
+
+  addHotkeyToProfile(HotKey hotKey, int pieMenuId) async {
+    List<HotkeyToPieMenuId> hotkeyToPieMenuIdList = [];
+    hotkeyToPieMenuIdList.addAll(widget.profile.hotkeyToPieMenuIdList);
+    hotkeyToPieMenuIdList.add(HotkeyToPieMenuId.fromHotKey(hotKey, pieMenuId));
+
+    widget.profile.hotkeyToPieMenuIdList = hotkeyToPieMenuIdList;
+    DB.updateProfile(widget.profile);
   }
 }
