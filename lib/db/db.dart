@@ -41,7 +41,7 @@ class DB {
     return (await _isar.pieMenus.getAll(ids)).whereType<PieMenu>().toList();
   }
 
-  static addPieMenuToProfile(int pieMenuId, int profileId) async {
+  static Future<void> addPieMenuToProfile(int pieMenuId, int profileId) async {
     List<dynamic> result = await Future.wait([
       _isar.profiles.get(profileId),
       _isar.pieMenus.get(pieMenuId),
@@ -61,6 +61,8 @@ class DB {
 
     profile.pieMenus.add(pieMenu);
     await _isar.writeTxn(() async {
+      // Isar automatically handles duplicated case for IsarLinks and will
+      // not add if existed
       await profile.pieMenus.save();
     });
   }

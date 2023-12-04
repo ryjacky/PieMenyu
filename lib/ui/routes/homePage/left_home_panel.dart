@@ -81,12 +81,13 @@ class _LeftHomePanelState extends State<LeftHomePanel> {
                   height: 50,
                   padding: const EdgeInsets.fromLTRB(0, 0, 0, 5),
                   child: DragTarget(
-                    onAccept: (int? pieMenuId) {
+                    onAccept: (int? pieMenuId) async {
                       if (pieMenuId == null) {
                         return;
                       }
 
-                      DB.addPieMenuToProfile(pieMenuId, profiles[index].id);
+                      await DB.addPieMenuToProfile(pieMenuId, profiles[index].id);
+                      widget.onProfileSelected(profiles[iProfileSelected].id);
                     },
                     builder: (context, List<int?> candidateData, rejectedData) {
                       return ProfileListItem(
