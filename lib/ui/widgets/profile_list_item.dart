@@ -5,10 +5,10 @@ import 'package:pie_menyu/db/profile.dart';
 
 class ProfileListItem extends StatefulWidget {
   final Profile profile;
-  bool active;
+  final bool active;
   final VoidCallback onPressed;
 
-  ProfileListItem({super.key, required this.profile, required this.active, required this.onPressed});
+  const ProfileListItem({super.key, required this.profile, required this.active, required this.onPressed});
 
   @override
   State<ProfileListItem> createState() => _ProfileListItemState();

@@ -46,9 +46,4 @@ class InfoCardWithIcon extends TextButton {
                     ),
                   ]),
             ));
-
-  @override
-  Widget build(BuildContext context) {
-    return const Placeholder();
-  }
 }
