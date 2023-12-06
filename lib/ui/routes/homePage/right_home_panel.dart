@@ -21,7 +21,6 @@ class RightHomePanel extends StatefulWidget {
 
 class _RightHomePanelState extends State<RightHomePanel> {
   final double tableRowGap = 10;
-  List<PieMenu> pieMenusFromOtherProfiles = [];
 
   @override
   Widget build(BuildContext context) {
@@ -106,6 +105,7 @@ class _RightHomePanelState extends State<RightHomePanel> {
                         Padding(
                           padding: const EdgeInsets.fromLTRB(0, 15, 8, 0),
                           child: KeyPressRecorder(
+                            key: ValueKey(pieMenu.id),
                             initalHotKey: getPieMenuHotkey(pieMenu),
                             onHotKeyRecorded: (hotkey) =>
                                 addHotkeyToProfile(hotkey, pieMenu.id),
@@ -199,4 +199,5 @@ class _RightHomePanelState extends State<RightHomePanel> {
     widget.profile.hotkeyToPieMenuIdList = hotkeyToPieMenuIdList;
     DB.updateProfile(widget.profile);
   }
+
 }
