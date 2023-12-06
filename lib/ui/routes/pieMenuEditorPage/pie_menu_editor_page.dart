@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:pie_menyu/db/pie_menu.dart';
 
 class PieMenuEditorPage extends StatefulWidget {
-  const PieMenuEditorPage({super.key});
+  final PieMenu pieMenu;
+  const PieMenuEditorPage({super.key, required this.pieMenu});
 
   @override
   State<PieMenuEditorPage> createState() => _PieMenuEditorPageState();

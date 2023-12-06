@@ -6,15 +6,15 @@ import 'package:pie_menyu/active_windows/hotkey_recorder.dart';
 import 'package:pie_menyu/db/db.dart';
 import 'package:pie_menyu/db/pie_menu.dart';
 import 'package:pie_menyu/db/profile.dart';
+import 'package:pie_menyu/ui/routes/pieMenuEditorPage/pie_menu_editor_page.dart';
 import 'package:pie_menyu/ui/widgets/PrimaryButton.dart';
 import 'package:pie_menyu/ui/widgets/TableActionButton.dart';
 import 'package:pie_menyu/ui/widgets/minimal_text_field.dart';
 
 class RightHomePanel extends StatefulWidget {
   final Profile profile;
-  final Function(PieMenu pieMenu)? onEditPieMenu;
 
-  const RightHomePanel({super.key, required this.profile, this.onEditPieMenu});
+  const RightHomePanel({super.key, required this.profile});
 
   @override
   State<RightHomePanel> createState() => _RightHomePanelState();
@@ -119,7 +119,15 @@ class _RightHomePanelState extends State<RightHomePanel> {
                             children: [
                               TableActionButton(
                                 icon: FontAwesomeIcons.pencil,
-                                onPressed: () {},
+                                onPressed: () {
+                                  Navigator.of(context).push(
+                                    MaterialPageRoute(
+                                      builder: (context) => PieMenuEditorPage(
+                                        pieMenu: pieMenu,
+                                      ),
+                                    ),
+                                  );
+                                },
                                 color: Theme.of(context).colorScheme.secondary,
                               ),
                               Tooltip(

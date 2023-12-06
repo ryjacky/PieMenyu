@@ -45,11 +45,7 @@ class PieMenyus extends StatelessWidget {
           textTheme: textTheme
       ),
       themeMode: ThemeMode.dark,
-      home: WindowBorder(
-        color: Theme.of(context).colorScheme.primary,
-        width: 1,
-        child: const HomePage()
-      ),
+      home: const HomePage()
     );
   }
 }
