@@ -67,13 +67,14 @@ class DB {
     });
   }
 
-  static Future<int> createPieMenu(PieMenu pieMenu) async {
-    late int newPieMenuId;
+  /// Insert when not existed, update when existed.
+  static Future<int> putPieMenu(PieMenu pieMenu) async {
+    late int pieMenuId;
     await _isar.writeTxn(() async {
-      newPieMenuId = await _isar.pieMenus.put(pieMenu);
+      pieMenuId = await _isar.pieMenus.put(pieMenu);
     });
 
-    return newPieMenuId;
+    return pieMenuId;
   }
 
   static Future<int> getPieMenuLinkedCount(int pieMenuId) async {
@@ -94,12 +95,6 @@ class DB {
     }
 
     return profile.pieMenus.map((e) => e.id).toList();
-  }
-
-  static updatePieMenu(PieMenu pieMenu) async {
-    await _isar.writeTxn(() async {
-      await _isar.pieMenus.put(pieMenu);
-    });
   }
 
   static void updateProfile(Profile profile) async {

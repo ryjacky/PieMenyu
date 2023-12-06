@@ -12,8 +12,9 @@ import 'package:pie_menyu/ui/widgets/minimal_text_field.dart';
 
 class RightHomePanel extends StatefulWidget {
   final Profile profile;
+  final Function(PieMenu pieMenu)? onEditPieMenu;
 
-  const RightHomePanel({super.key, required this.profile});
+  const RightHomePanel({super.key, required this.profile, this.onEditPieMenu});
 
   @override
   State<RightHomePanel> createState() => _RightHomePanelState();
@@ -151,7 +152,7 @@ class _RightHomePanelState extends State<RightHomePanel> {
     PieMenu newPieMenu = PieMenu(
       name: "New Pie Menu",
     );
-    int pieMenuId = await DB.createPieMenu(newPieMenu);
+    int pieMenuId = await DB.putPieMenu(newPieMenu);
     await DB.addPieMenuToProfile(pieMenuId, widget.profile.id);
 
     setState(() {
@@ -168,7 +169,7 @@ class _RightHomePanelState extends State<RightHomePanel> {
         backgroundColor: Theme.of(context).colorScheme.primary,
         content: Text("pie-menu-name-saved".i18n())));
 
-    await DB.updatePieMenu(pieMenu);
+    await DB.putPieMenu(pieMenu);
   }
 
   HotKey? getPieMenuHotkey(PieMenu pieMenu) {
