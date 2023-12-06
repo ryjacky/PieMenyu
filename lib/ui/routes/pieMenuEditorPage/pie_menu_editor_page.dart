@@ -29,7 +29,7 @@ class _PieMenuEditorPageState extends State<PieMenuEditorPage> {
                   ),
                   Expanded(
                       flex: 4,
-                      child: PieMenuProperties()),
+                      child: PieMenuProperties(pieMenu: widget.pieMenu,)),
                 ],
               ),
             ),

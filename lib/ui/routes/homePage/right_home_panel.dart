@@ -54,8 +54,8 @@ class _RightHomePanelState extends State<RightHomePanel> {
             child: SingleChildScrollView(
               child: Table(
                 columnWidths: const {
-                  0: FractionColumnWidth(0.06),
-                  1: FractionColumnWidth(0.52),
+                  0: FractionColumnWidth(0.07),
+                  1: FractionColumnWidth(0.51),
                   2: FractionColumnWidth(0.26),
                   3: FractionColumnWidth(0.16),
                 },
@@ -86,7 +86,9 @@ class _RightHomePanelState extends State<RightHomePanel> {
                               style: Theme.of(context).textTheme.labelMedium,
                             ),
                             child: TextButton(
+
                                 style: TextButton.styleFrom(
+                              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
                                   minimumSize: const Size(32, 32),
                                 ),
                                 onPressed: () {},

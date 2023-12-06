@@ -40,7 +40,7 @@ class PieMenyus extends StatelessWidget {
         LocalJsonLocalization.delegate
       ],
       darkTheme: ThemeData(
-          useMaterial3: false,
+          useMaterial3: true,
           colorScheme: darkColorScheme,
           textTheme: textTheme
       ),
