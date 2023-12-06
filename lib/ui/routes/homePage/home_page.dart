@@ -74,7 +74,7 @@ class _HomePageState extends State<HomePage> {
                       child: isCreatingProfile
                           ? const RightCreateProfilePanel()
                           : RightHomePanel(
-                              onEditPieMenu: () {},
+                              onEditPieMenu: (a) {},
                               profile: selectedProfile,
                             )),
                 ],

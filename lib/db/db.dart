@@ -86,17 +86,6 @@ class DB {
      return pieMenu.profiles.length;
   }
 
-  static Future<List<int>> getProfilePieMenuIds(int profileId) async {
-    // get profile
-    Profile? profile = await _isar.profiles.get(profileId);
-    if (profile == null) {
-      log("Profile not found, id: $profileId");
-      return [];
-    }
-
-    return profile.pieMenus.map((e) => e.id).toList();
-  }
-
   static void updateProfile(Profile profile) async {
     await _isar.writeTxn(() async {
       await _isar.profiles.put(profile);
