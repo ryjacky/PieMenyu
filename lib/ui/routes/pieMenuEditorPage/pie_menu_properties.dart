@@ -4,7 +4,6 @@ import 'package:localization/localization.dart';
 import 'package:pie_menyu/db/pie_menu.dart';
 import 'package:pie_menyu/theme/color_schemes.g.dart';
 import 'package:pie_menyu/theme/text_theme.g.dart';
-import 'package:pie_menyu/ui/widgets/compact_slider.dart';
 import 'package:pie_menyu/ui/widgets/draggable_number_field.dart';
 
 class PieMenuProperties extends StatefulWidget {
