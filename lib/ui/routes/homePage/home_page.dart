@@ -6,7 +6,7 @@ import 'package:pie_menyu/db/pie_menu.dart';
 import 'package:pie_menyu/db/profile.dart';
 import 'package:pie_menyu/ui/routes/homePage/right_create_profile_panel.dart';
 
-import '../../widgets/HomePageTitleBar.dart';
+import 'home_page_titlebar.dart';
 import 'left_home_panel.dart';
 import 'right_home_panel.dart';
 
