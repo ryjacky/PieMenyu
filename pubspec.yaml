@@ -44,6 +44,7 @@ dependencies:
   flutter_colorpicker: ^1.0.3
   process_run: ^0.13.3
   hotkey_manager: ^0.1.8
+  gap: ^3.0.1
 
 dev_dependencies:
   flutter_test:

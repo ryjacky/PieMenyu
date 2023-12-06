@@ -46,7 +46,7 @@ const PieMenuSchema = CollectionSchema(
     r'iconColor': PropertySchema(
       id: 5,
       name: r'iconColor',
-      type: IsarType.string,
+      type: IsarType.long,
     ),
     r'iconSize': PropertySchema(
       id: 6,
@@ -56,7 +56,7 @@ const PieMenuSchema = CollectionSchema(
     r'mainColor': PropertySchema(
       id: 7,
       name: r'mainColor',
-      type: IsarType.string,
+      type: IsarType.long,
     ),
     r'name': PropertySchema(
       id: 8,
@@ -86,7 +86,7 @@ const PieMenuSchema = CollectionSchema(
     r'secondaryColor': PropertySchema(
       id: 13,
       name: r'secondaryColor',
-      type: IsarType.string,
+      type: IsarType.long,
     )
   },
   estimateSize: _pieMenuEstimateSize,
@@ -123,10 +123,7 @@ int _pieMenuEstimateSize(
   Map<Type, List<int>> allOffsets,
 ) {
   var bytesCount = offsets.last;
-  bytesCount += 3 + object.iconColor.length * 3;
-  bytesCount += 3 + object.mainColor.length * 3;
   bytesCount += 3 + object.name.length * 3;
-  bytesCount += 3 + object.secondaryColor.length * 3;
   return bytesCount;
 }
 
@@ -141,15 +138,15 @@ void _pieMenuSerialize(
   writer.writeLong(offsets[2], object.centerThickness);
   writer.writeBool(offsets[3], object.enabled);
   writer.writeLong(offsets[4], object.escapeRadius);
-  writer.writeString(offsets[5], object.iconColor);
+  writer.writeLong(offsets[5], object.iconColor);
   writer.writeLong(offsets[6], object.iconSize);
-  writer.writeString(offsets[7], object.mainColor);
+  writer.writeLong(offsets[7], object.mainColor);
   writer.writeString(offsets[8], object.name);
   writer.writeBool(offsets[9], object.openInScreenCenter);
   writer.writeLong(offsets[10], object.pieItemRoundness);
   writer.writeLong(offsets[11], object.pieItemSpread);
   writer.writeLong(offsets[12], object.pieItemWidth);
-  writer.writeString(offsets[13], object.secondaryColor);
+  writer.writeLong(offsets[13], object.secondaryColor);
 }
 
 PieMenu _pieMenuDeserialize(
@@ -166,15 +163,15 @@ PieMenu _pieMenuDeserialize(
     centerThickness: reader.readLongOrNull(offsets[2]) ?? 10,
     enabled: reader.readBoolOrNull(offsets[3]) ?? true,
     escapeRadius: reader.readLongOrNull(offsets[4]) ?? 0,
-    iconColor: reader.readStringOrNull(offsets[5]) ?? '#FFFFFF',
+    iconColor: reader.readLongOrNull(offsets[5]) ?? 0xFFFFFF,
     iconSize: reader.readLongOrNull(offsets[6]) ?? 16,
-    mainColor: reader.readStringOrNull(offsets[7]) ?? '#1DAEAA',
+    mainColor: reader.readLongOrNull(offsets[7]) ?? 0x1DAEAA,
     name: reader.readStringOrNull(offsets[8]) ?? 'New Pie Menu',
     openInScreenCenter: reader.readBoolOrNull(offsets[9]) ?? false,
     pieItemRoundness: reader.readLongOrNull(offsets[10]) ?? 7,
     pieItemSpread: reader.readLongOrNull(offsets[11]) ?? 150,
     pieItemWidth: reader.readLongOrNull(offsets[12]) ?? 100,
-    secondaryColor: reader.readStringOrNull(offsets[13]) ?? '#282828',
+    secondaryColor: reader.readLongOrNull(offsets[13]) ?? 0x282828,
   );
   object.id = id;
   return object;
@@ -200,11 +197,11 @@ P _pieMenuDeserializeProp<P>(
     case 4:
       return (reader.readLongOrNull(offset) ?? 0) as P;
     case 5:
-      return (reader.readStringOrNull(offset) ?? '#FFFFFF') as P;
+      return (reader.readLongOrNull(offset) ?? 0xFFFFFF) as P;
     case 6:
       return (reader.readLongOrNull(offset) ?? 16) as P;
     case 7:
-      return (reader.readStringOrNull(offset) ?? '#1DAEAA') as P;
+      return (reader.readLongOrNull(offset) ?? 0x1DAEAA) as P;
     case 8:
       return (reader.readStringOrNull(offset) ?? 'New Pie Menu') as P;
     case 9:
@@ -216,7 +213,7 @@ P _pieMenuDeserializeProp<P>(
     case 12:
       return (reader.readLongOrNull(offset) ?? 100) as P;
     case 13:
-      return (reader.readStringOrNull(offset) ?? '#282828') as P;
+      return (reader.readLongOrNull(offset) ?? 0x282828) as P;
     default:
       throw IsarError('Unknown property with id $propertyId');
   }
@@ -545,54 +542,46 @@ extension PieMenuQueryFilter
   }
 
   QueryBuilder<PieMenu, PieMenu, QAfterFilterCondition> iconColorEqualTo(
-    String value, {
-    bool caseSensitive = true,
-  }) {
+      int value) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.equalTo(
         property: r'iconColor',
         value: value,
-        caseSensitive: caseSensitive,
       ));
     });
   }
 
   QueryBuilder<PieMenu, PieMenu, QAfterFilterCondition> iconColorGreaterThan(
-    String value, {
+    int value, {
     bool include = false,
-    bool caseSensitive = true,
   }) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.greaterThan(
         include: include,
         property: r'iconColor',
         value: value,
-        caseSensitive: caseSensitive,
       ));
     });
   }
 
   QueryBuilder<PieMenu, PieMenu, QAfterFilterCondition> iconColorLessThan(
-    String value, {
+    int value, {
     bool include = false,
-    bool caseSensitive = true,
   }) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.lessThan(
         include: include,
         property: r'iconColor',
         value: value,
-        caseSensitive: caseSensitive,
       ));
     });
   }
 
   QueryBuilder<PieMenu, PieMenu, QAfterFilterCondition> iconColorBetween(
-    String lower,
-    String upper, {
+    int lower,
+    int upper, {
     bool includeLower = true,
     bool includeUpper = true,
-    bool caseSensitive = true,
   }) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.between(
@@ -601,75 +590,6 @@ extension PieMenuQueryFilter
         includeLower: includeLower,
         upper: upper,
         includeUpper: includeUpper,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<PieMenu, PieMenu, QAfterFilterCondition> iconColorStartsWith(
-    String value, {
-    bool caseSensitive = true,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.startsWith(
-        property: r'iconColor',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<PieMenu, PieMenu, QAfterFilterCondition> iconColorEndsWith(
-    String value, {
-    bool caseSensitive = true,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.endsWith(
-        property: r'iconColor',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<PieMenu, PieMenu, QAfterFilterCondition> iconColorContains(
-      String value,
-      {bool caseSensitive = true}) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.contains(
-        property: r'iconColor',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<PieMenu, PieMenu, QAfterFilterCondition> iconColorMatches(
-      String pattern,
-      {bool caseSensitive = true}) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.matches(
-        property: r'iconColor',
-        wildcard: pattern,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<PieMenu, PieMenu, QAfterFilterCondition> iconColorIsEmpty() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.equalTo(
-        property: r'iconColor',
-        value: '',
-      ));
-    });
-  }
-
-  QueryBuilder<PieMenu, PieMenu, QAfterFilterCondition> iconColorIsNotEmpty() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.greaterThan(
-        property: r'iconColor',
-        value: '',
       ));
     });
   }
@@ -780,54 +700,46 @@ extension PieMenuQueryFilter
   }
 
   QueryBuilder<PieMenu, PieMenu, QAfterFilterCondition> mainColorEqualTo(
-    String value, {
-    bool caseSensitive = true,
-  }) {
+      int value) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.equalTo(
         property: r'mainColor',
         value: value,
-        caseSensitive: caseSensitive,
       ));
     });
   }
 
   QueryBuilder<PieMenu, PieMenu, QAfterFilterCondition> mainColorGreaterThan(
-    String value, {
+    int value, {
     bool include = false,
-    bool caseSensitive = true,
   }) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.greaterThan(
         include: include,
         property: r'mainColor',
         value: value,
-        caseSensitive: caseSensitive,
       ));
     });
   }
 
   QueryBuilder<PieMenu, PieMenu, QAfterFilterCondition> mainColorLessThan(
-    String value, {
+    int value, {
     bool include = false,
-    bool caseSensitive = true,
   }) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.lessThan(
         include: include,
         property: r'mainColor',
         value: value,
-        caseSensitive: caseSensitive,
       ));
     });
   }
 
   QueryBuilder<PieMenu, PieMenu, QAfterFilterCondition> mainColorBetween(
-    String lower,
-    String upper, {
+    int lower,
+    int upper, {
     bool includeLower = true,
     bool includeUpper = true,
-    bool caseSensitive = true,
   }) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.between(
@@ -836,75 +748,6 @@ extension PieMenuQueryFilter
         includeLower: includeLower,
         upper: upper,
         includeUpper: includeUpper,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<PieMenu, PieMenu, QAfterFilterCondition> mainColorStartsWith(
-    String value, {
-    bool caseSensitive = true,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.startsWith(
-        property: r'mainColor',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<PieMenu, PieMenu, QAfterFilterCondition> mainColorEndsWith(
-    String value, {
-    bool caseSensitive = true,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.endsWith(
-        property: r'mainColor',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<PieMenu, PieMenu, QAfterFilterCondition> mainColorContains(
-      String value,
-      {bool caseSensitive = true}) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.contains(
-        property: r'mainColor',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<PieMenu, PieMenu, QAfterFilterCondition> mainColorMatches(
-      String pattern,
-      {bool caseSensitive = true}) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.matches(
-        property: r'mainColor',
-        wildcard: pattern,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<PieMenu, PieMenu, QAfterFilterCondition> mainColorIsEmpty() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.equalTo(
-        property: r'mainColor',
-        value: '',
-      ));
-    });
-  }
-
-  QueryBuilder<PieMenu, PieMenu, QAfterFilterCondition> mainColorIsNotEmpty() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.greaterThan(
-        property: r'mainColor',
-        value: '',
       ));
     });
   }
@@ -1212,55 +1055,47 @@ extension PieMenuQueryFilter
   }
 
   QueryBuilder<PieMenu, PieMenu, QAfterFilterCondition> secondaryColorEqualTo(
-    String value, {
-    bool caseSensitive = true,
-  }) {
+      int value) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.equalTo(
         property: r'secondaryColor',
         value: value,
-        caseSensitive: caseSensitive,
       ));
     });
   }
 
   QueryBuilder<PieMenu, PieMenu, QAfterFilterCondition>
       secondaryColorGreaterThan(
-    String value, {
+    int value, {
     bool include = false,
-    bool caseSensitive = true,
   }) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.greaterThan(
         include: include,
         property: r'secondaryColor',
         value: value,
-        caseSensitive: caseSensitive,
       ));
     });
   }
 
   QueryBuilder<PieMenu, PieMenu, QAfterFilterCondition> secondaryColorLessThan(
-    String value, {
+    int value, {
     bool include = false,
-    bool caseSensitive = true,
   }) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.lessThan(
         include: include,
         property: r'secondaryColor',
         value: value,
-        caseSensitive: caseSensitive,
       ));
     });
   }
 
   QueryBuilder<PieMenu, PieMenu, QAfterFilterCondition> secondaryColorBetween(
-    String lower,
-    String upper, {
+    int lower,
+    int upper, {
     bool includeLower = true,
     bool includeUpper = true,
-    bool caseSensitive = true,
   }) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.between(
@@ -1269,78 +1104,6 @@ extension PieMenuQueryFilter
         includeLower: includeLower,
         upper: upper,
         includeUpper: includeUpper,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<PieMenu, PieMenu, QAfterFilterCondition>
-      secondaryColorStartsWith(
-    String value, {
-    bool caseSensitive = true,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.startsWith(
-        property: r'secondaryColor',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<PieMenu, PieMenu, QAfterFilterCondition> secondaryColorEndsWith(
-    String value, {
-    bool caseSensitive = true,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.endsWith(
-        property: r'secondaryColor',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<PieMenu, PieMenu, QAfterFilterCondition> secondaryColorContains(
-      String value,
-      {bool caseSensitive = true}) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.contains(
-        property: r'secondaryColor',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<PieMenu, PieMenu, QAfterFilterCondition> secondaryColorMatches(
-      String pattern,
-      {bool caseSensitive = true}) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.matches(
-        property: r'secondaryColor',
-        wildcard: pattern,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<PieMenu, PieMenu, QAfterFilterCondition>
-      secondaryColorIsEmpty() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.equalTo(
-        property: r'secondaryColor',
-        value: '',
-      ));
-    });
-  }
-
-  QueryBuilder<PieMenu, PieMenu, QAfterFilterCondition>
-      secondaryColorIsNotEmpty() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.greaterThan(
-        property: r'secondaryColor',
-        value: '',
       ));
     });
   }
@@ -1851,10 +1614,9 @@ extension PieMenuQueryWhereDistinct
     });
   }
 
-  QueryBuilder<PieMenu, PieMenu, QDistinct> distinctByIconColor(
-      {bool caseSensitive = true}) {
+  QueryBuilder<PieMenu, PieMenu, QDistinct> distinctByIconColor() {
     return QueryBuilder.apply(this, (query) {
-      return query.addDistinctBy(r'iconColor', caseSensitive: caseSensitive);
+      return query.addDistinctBy(r'iconColor');
     });
   }
 
@@ -1864,10 +1626,9 @@ extension PieMenuQueryWhereDistinct
     });
   }
 
-  QueryBuilder<PieMenu, PieMenu, QDistinct> distinctByMainColor(
-      {bool caseSensitive = true}) {
+  QueryBuilder<PieMenu, PieMenu, QDistinct> distinctByMainColor() {
     return QueryBuilder.apply(this, (query) {
-      return query.addDistinctBy(r'mainColor', caseSensitive: caseSensitive);
+      return query.addDistinctBy(r'mainColor');
     });
   }
 
@@ -1902,11 +1663,9 @@ extension PieMenuQueryWhereDistinct
     });
   }
 
-  QueryBuilder<PieMenu, PieMenu, QDistinct> distinctBySecondaryColor(
-      {bool caseSensitive = true}) {
+  QueryBuilder<PieMenu, PieMenu, QDistinct> distinctBySecondaryColor() {
     return QueryBuilder.apply(this, (query) {
-      return query.addDistinctBy(r'secondaryColor',
-          caseSensitive: caseSensitive);
+      return query.addDistinctBy(r'secondaryColor');
     });
   }
 }
@@ -1950,7 +1709,7 @@ extension PieMenuQueryProperty
     });
   }
 
-  QueryBuilder<PieMenu, String, QQueryOperations> iconColorProperty() {
+  QueryBuilder<PieMenu, int, QQueryOperations> iconColorProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'iconColor');
     });
@@ -1962,7 +1721,7 @@ extension PieMenuQueryProperty
     });
   }
 
-  QueryBuilder<PieMenu, String, QQueryOperations> mainColorProperty() {
+  QueryBuilder<PieMenu, int, QQueryOperations> mainColorProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'mainColor');
     });
@@ -1998,7 +1757,7 @@ extension PieMenuQueryProperty
     });
   }
 
-  QueryBuilder<PieMenu, String, QQueryOperations> secondaryColorProperty() {
+  QueryBuilder<PieMenu, int, QQueryOperations> secondaryColorProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'secondaryColor');
     });

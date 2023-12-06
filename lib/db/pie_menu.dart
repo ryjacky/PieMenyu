@@ -14,9 +14,9 @@ class PieMenu {
   @enumerated
   PieMenuActivationMode activationMode;
   bool openInScreenCenter;
-  String mainColor;
-  String secondaryColor;
-  String iconColor;
+  int mainColor;
+  int secondaryColor;
+  int iconColor;
   int escapeRadius;
   int centerRadius;
   int centerThickness;
@@ -36,9 +36,9 @@ class PieMenu {
     this.activationMode = PieMenuActivationMode.activateOnKeyDown,
     this.escapeRadius = 0,
     this.openInScreenCenter = false,
-    this.mainColor = '#1DAEAA',
-    this.secondaryColor = '#282828',
-    this.iconColor = '#FFFFFF',
+    this.mainColor = 0x1DAEAA,
+    this.secondaryColor = 0x282828,
+    this.iconColor = 0xFFFFFF,
     this.centerRadius = 20,
     this.centerThickness = 10,
     this.pieItemWidth = 100,

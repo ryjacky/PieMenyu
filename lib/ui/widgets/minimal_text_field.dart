@@ -3,8 +3,10 @@ import 'package:flutter/material.dart';
 class MinimalTextField extends StatefulWidget {
   final Function(String)? onSubmitted;
   final String content;
+  final TextInputType? keyboardType;
 
-  const MinimalTextField({super.key, this.content = "", this.onSubmitted});
+  const MinimalTextField(
+      {super.key, this.content = "", this.onSubmitted, this.keyboardType});
 
   @override
   State<MinimalTextField> createState() => _MinimalTextFieldState();
@@ -32,6 +34,7 @@ class _MinimalTextFieldState extends State<MinimalTextField> {
             this.content = content;
           },
           controller: TextEditingController(text: content),
+          keyboardType: widget.keyboardType,
           decoration: const InputDecoration(
             border: OutlineInputBorder(),
             contentPadding: EdgeInsets.all(10),
