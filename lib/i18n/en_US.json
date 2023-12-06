@@ -18,6 +18,8 @@
   "snackbar-pie-menu-deleted": "Pie Menu is deleted",
   "label-undo": "Undo",
   "tooltip-remove-pie-menu": "Long press to remove Pie Menu",
-  "pie-menu-name-saved": "Pie Menu name is saved."
+  "pie-menu-name-saved": "Pie Menu name is saved.",
+  "tab-properties": "Properties",
+  "tab-actions": "Actions"
 
 }
