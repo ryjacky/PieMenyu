@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:bitsdojo_window/bitsdojo_window.dart';
 import 'package:flutter/material.dart';
 import 'package:hotkey_manager/hotkey_manager.dart';
@@ -40,7 +38,7 @@ class PieMenyus extends StatelessWidget {
         LocalJsonLocalization.delegate
       ],
       darkTheme: ThemeData(
-          useMaterial3: true,
+          useMaterial3: false,
           colorScheme: darkColorScheme,
           textTheme: textTheme
       ),
