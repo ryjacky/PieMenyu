@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:pie_menyu/db/db.dart';
 import 'package:pie_menyu/db/pie_item.dart';
 import 'package:pie_menyu/db/pie_menu.dart';
-import 'package:pie_menyu/ui/widgets/pie_item_edit.dart';
+import 'package:pie_menyu/ui/widgets/pie_item_widget.dart';
 
 class PieMenuPreview extends StatefulWidget {
   final PieMenu pieMenu;
@@ -60,7 +60,7 @@ class _PieMenuPreviewState extends State<PieMenuPreview> {
             Positioned(
                 left: computeXAdjusted(i, constraints.maxWidth / 2),
                 bottom: computeYAdjusted(i, constraints.maxHeight / 2),
-                child: PieItemEdit(
+                child: PieItemWidget(
                   horizontalOffset:
                       i % (widget.pieMenu.pieItems.length / 2) == 0
                           ? PieItemOffset.center

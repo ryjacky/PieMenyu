@@ -4,14 +4,14 @@ import 'package:gap/gap.dart';
 
 enum PieItemOffset { toRight, toLeft, center }
 
-class PieItemEdit extends StatefulWidget {
+class PieItemWidget extends StatefulWidget {
   final int width;
   final int height;
   final int backgroundColor;
   final int borderRadius;
   final PieItemOffset horizontalOffset;
 
-  const PieItemEdit(
+  const PieItemWidget(
       {super.key,
       required this.width,
       required this.height,
@@ -20,10 +20,10 @@ class PieItemEdit extends StatefulWidget {
       this.horizontalOffset = PieItemOffset.toRight});
 
   @override
-  State<PieItemEdit> createState() => _PieItemEditState();
+  State<PieItemWidget> createState() => _PieItemWidgetState();
 }
 
-class _PieItemEditState extends State<PieItemEdit> {
+class _PieItemWidgetState extends State<PieItemWidget> {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
