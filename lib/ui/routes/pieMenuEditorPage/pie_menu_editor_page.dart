@@ -22,14 +22,19 @@ class _PieMenuEditorPageState extends State<PieMenuEditorPage> {
             const PieMenuEditorPageTitleBar(),
             Expanded(
               child: Row(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
                   Expanded(
                       flex: 6,
-                      child: PieMenuPreview()
+                      child: PieMenuPreview(pieMenu: widget.pieMenu),
                   ),
                   Expanded(
                       flex: 4,
-                      child: PieMenuProperties(pieMenu: widget.pieMenu,)),
+                      child: PieMenuProperties(pieMenu: widget.pieMenu,
+                        onChanged: (onChanged) {
+                          setState(() {});
+                        },
+                      )),
                 ],
               ),
             ),

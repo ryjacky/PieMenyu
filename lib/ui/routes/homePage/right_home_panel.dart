@@ -99,6 +99,7 @@ class _RightHomePanelState extends State<RightHomePanel> {
                         Padding(
                           padding: const EdgeInsets.fromLTRB(0, 15, 25, 0),
                           child: MinimalTextField(
+                            key: ValueKey(pieMenu.id),
                             onSubmitted: (String? name) {
                               setPieMenuName(name ?? "", pieMenu);
                             },

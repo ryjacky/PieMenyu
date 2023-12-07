@@ -170,7 +170,6 @@ PieMenu _pieMenuDeserialize(
     openInScreenCenter: reader.readBoolOrNull(offsets[9]) ?? false,
     pieItemRoundness: reader.readLongOrNull(offsets[10]) ?? 7,
     pieItemSpread: reader.readLongOrNull(offsets[11]) ?? 150,
-    pieItemWidth: reader.readLongOrNull(offsets[12]) ?? 100,
     secondaryColor: reader.readLongOrNull(offsets[13]) ?? 0x282828,
   );
   object.id = id;
@@ -211,7 +210,7 @@ P _pieMenuDeserializeProp<P>(
     case 11:
       return (reader.readLongOrNull(offset) ?? 150) as P;
     case 12:
-      return (reader.readLongOrNull(offset) ?? 100) as P;
+      return (reader.readLong(offset)) as P;
     case 13:
       return (reader.readLongOrNull(offset) ?? 0x282828) as P;
     default:

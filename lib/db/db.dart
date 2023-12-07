@@ -98,4 +98,38 @@ class DB {
     });
 
   }
+
+  /// Insert when not existed, update when existed.
+  /// [pieItem.id] will be set to the inserted id.
+  static Future<void> putPieItem(PieItem pieItem) async {
+    await _isar.writeTxn(() async {
+      await _isar.pieItems.put(pieItem);
+    });
+  }
+
+  static addPieItemToPieMenu(int pieItemID, int pieMenuId) async {
+    List<dynamic> result = await Future.wait([
+      _isar.pieItems.get(pieItemID),
+      _isar.pieMenus.get(pieMenuId),
+    ]);
+
+    PieItem? pieItem = result[0];
+    if (pieItem == null) {
+      log("Pie item not found, id: $pieItemID");
+      return;
+    }
+
+    PieMenu? pieMenu = result[1];
+    if (pieMenu == null) {
+      log("Pie menu not found, id: $pieMenuId");
+      return;
+    }
+
+    pieMenu.pieItems.add(pieItem);
+    await _isar.writeTxn(() async {
+      // Isar automatically handles duplicated case for IsarLinks and will
+      // not add if existed
+      await pieMenu.pieItems.save();
+    });
+  }
 }

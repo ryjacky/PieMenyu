@@ -20,10 +20,11 @@ class PieMenu {
   int escapeRadius;
   int centerRadius;
   int centerThickness;
-  int pieItemWidth;
   int iconSize;
   int pieItemRoundness;
   int pieItemSpread;
+
+  final int pieItemWidth = 512;
 
   IsarLinks<PieItem> pieItems = IsarLinks<PieItem>();
 
@@ -41,7 +42,6 @@ class PieMenu {
     this.iconColor = 0xFFFFFF,
     this.centerRadius = 20,
     this.centerThickness = 10,
-    this.pieItemWidth = 100,
     this.iconSize = 16,
     this.pieItemRoundness = 7,
     this.pieItemSpread = 150,
