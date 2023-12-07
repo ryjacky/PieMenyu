@@ -25,11 +25,10 @@ class _PieMenuEditorPageState extends State<PieMenuEditorPage> {
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
                   Expanded(
-                      flex: 6,
                       child: PieMenuPreview(pieMenu: widget.pieMenu),
                   ),
-                  Expanded(
-                      flex: 4,
+                  SizedBox(
+                      width: 300,
                       child: PieMenuProperties(pieMenu: widget.pieMenu,
                         onChanged: (onChanged) {
                           setState(() {});
