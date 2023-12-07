@@ -78,6 +78,7 @@ class _PieMenuPropertiesState extends State<PieMenuProperties> {
                                     setState(() {
                                       widget.pieMenu.openInScreenCenter = value;
                                     });
+                                    widget.onChanged(widget.pieMenu);
                                   },
                                 )
                               ],
@@ -146,6 +147,7 @@ class _PieMenuPropertiesState extends State<PieMenuProperties> {
                                           setState(() {
                                             widget.pieMenu.escapeRadius = value;
                                           });
+                                          widget.onChanged(widget.pieMenu);
                                         },
                                       ),
                                     ),
@@ -188,6 +190,7 @@ class _PieMenuPropertiesState extends State<PieMenuProperties> {
                                       setState(() {
                                         widget.pieMenu.centerThickness = value;
                                       });
+                                      widget.onChanged(widget.pieMenu);
                                     },
                                   ),
                                 ),
@@ -208,6 +211,7 @@ class _PieMenuPropertiesState extends State<PieMenuProperties> {
                                       setState(() {
                                         widget.pieMenu.iconSize = value;
                                       });
+                                      widget.onChanged(widget.pieMenu);
                                     },
                                   ),
                                 ),
@@ -249,6 +253,7 @@ class _PieMenuPropertiesState extends State<PieMenuProperties> {
                                       setState(() {
                                         widget.pieMenu.pieItemSpread = value;
                                       });
+                                      widget.onChanged(widget.pieMenu);
                                     },
                                   ),
                                 ),
