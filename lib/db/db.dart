@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'package:isar/isar.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:pie_menyu/db/pie_item.dart';
+import 'package:pie_menyu/db/pie_item_task.dart';
 import 'package:pie_menyu/db/pie_menu.dart';
 import 'package:pie_menyu/db/profile.dart';
 
@@ -15,6 +16,7 @@ class DB {
       ProfileSchema,
       PieMenuSchema,
       PieItemSchema,
+      PieItemTaskSchema
     ], directory: dir.path);
 
     // Create initial record if not existed
