@@ -11,11 +11,13 @@ import 'package:pie_menyu/ui/widgets/profile_list_item.dart';
 class LeftHomePanel extends StatefulWidget {
   final VoidCallback onCreateProfile;
   final Function(int profileId) onProfileSelected;
+  final Function()? onSettingPressed;
 
   const LeftHomePanel(
       {super.key,
       required this.onCreateProfile,
-      required this.onProfileSelected});
+      required this.onProfileSelected,
+      this.onSettingPressed});
 
   @override
   State<LeftHomePanel> createState() => _LeftHomePanelState();
@@ -86,7 +88,8 @@ class _LeftHomePanelState extends State<LeftHomePanel> {
                         return;
                       }
 
-                      await DB.addPieMenuToProfile(pieMenuId, profiles[index].id);
+                      await DB.addPieMenuToProfile(
+                          pieMenuId, profiles[index].id);
                       widget.onProfileSelected(profiles[iProfileSelected].id);
                     },
                     builder: (context, List<int?> candidateData, rejectedData) {
@@ -104,6 +107,20 @@ class _LeftHomePanelState extends State<LeftHomePanel> {
               },
             ),
           ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: [
+              TextButton(
+                  onPressed: () {
+                    widget.onSettingPressed?.call();
+                  },
+                  style: TextButton.styleFrom(
+                    padding: const EdgeInsets.all(15),
+                    minimumSize: const Size(0, 0),
+                  ),
+                  child: const FaIcon(FontAwesomeIcons.gear))
+            ],
+          )
         ],
       ),
     );

@@ -20,6 +20,9 @@
   "tooltip-remove-pie-menu": "Long press to remove Pie Menu",
   "pie-menu-name-saved": "Pie Menu name is saved.",
   "tab-properties": "Properties",
-  "tab-actions": "Actions"
+  "tab-actions": "Actions",
+  "label-setting": "Setting",
+  "setting-launch-at-startup": "Launch at startup",
+  "setting-launch-at-startup-description": "Launch PieMenyu at startup"
 
 }

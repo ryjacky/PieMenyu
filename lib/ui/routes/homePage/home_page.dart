@@ -5,10 +5,17 @@ import 'package:pie_menyu/db/db.dart';
 import 'package:pie_menyu/db/pie_menu.dart';
 import 'package:pie_menyu/db/profile.dart';
 import 'package:pie_menyu/ui/routes/homePage/right_create_profile_panel.dart';
+import 'package:pie_menyu/ui/routes/homePage/right_setting_panel.dart';
 
 import 'home_page_titlebar.dart';
 import 'left_home_panel.dart';
 import 'right_home_panel.dart';
+
+enum RightPanelType {
+  home,
+  setting,
+  pieMenuEditor,
+}
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -22,7 +29,7 @@ class _HomePageState extends State<HomePage> {
     name: "Loading...",
   );
   List<PieMenu> selectedProfilePieMenus = [];
-  bool isCreatingProfile = false;
+  RightPanelType currentRightPanelType = RightPanelType.home;
 
   updateSelectedProfile(profileId) async {
     log("Fetching profile and its pie menus...");
@@ -36,7 +43,7 @@ class _HomePageState extends State<HomePage> {
     }
 
     setState(() {
-      isCreatingProfile = false;
+      currentRightPanelType = RightPanelType.home;
       selectedProfilePieMenus = tempProfileList.first.pieMenus.toList();
       selectedProfile = tempProfileList.first;
       log("RightHomePanel state updated");
@@ -62,24 +69,35 @@ class _HomePageState extends State<HomePage> {
                   Expanded(
                       flex: 3,
                       child: LeftHomePanel(
+                        onSettingPressed: () {
+                          setState(() {
+                            currentRightPanelType = RightPanelType.setting;
+                          });
+                        },
                         onCreateProfile: () {
                           setState(() {
-                            isCreatingProfile = true;
+                            currentRightPanelType =
+                                RightPanelType.pieMenuEditor;
                           });
                         },
                         onProfileSelected: updateSelectedProfile,
                       )),
-                  Expanded(
-                      flex: 7,
-                      child: isCreatingProfile
-                          ? const RightCreateProfilePanel()
-                          : RightHomePanel(
-                              profile: selectedProfile,
-                            )),
+                  Expanded(flex: 7, child: getRightPanel()),
                 ],
               ),
             ),
           ],
         ));
+  }
+
+  getRightPanel() {
+    switch (currentRightPanelType) {
+      case RightPanelType.pieMenuEditor:
+        return const RightCreateProfilePanel();
+      case RightPanelType.home:
+        return RightHomePanel(profile: selectedProfile);
+      default:
+        return const RightSettingPanel();
+    }
   }
 }

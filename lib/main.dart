@@ -1,7 +1,11 @@
+import 'dart:io';
+
 import 'package:bitsdojo_window/bitsdojo_window.dart';
 import 'package:flutter/material.dart';
 import 'package:hotkey_manager/hotkey_manager.dart';
+import 'package:launch_at_startup/launch_at_startup.dart';
 import 'package:localization/localization.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 import 'package:pie_menyu/db/db.dart';
 import 'package:pie_menyu/ui/routes/homePage/home_page.dart';
 
@@ -14,6 +18,13 @@ Future<void> main() async {
   // For hot reload, `unregisterAll()` needs to be called.
   await hotKeyManager.unregisterAll();
   await DB.initialize();
+
+  PackageInfo packageInfo = await PackageInfo.fromPlatform();
+
+  launchAtStartup.setup(
+    appName: packageInfo.appName,
+    appPath: Platform.resolvedExecutable,
+  );
 
   runApp(const PieMenyus());
 
