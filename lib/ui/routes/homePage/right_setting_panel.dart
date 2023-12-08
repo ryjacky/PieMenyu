@@ -1,10 +1,15 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
+import 'package:hotkey_manager/hotkey_manager.dart';
 import 'package:launch_at_startup/launch_at_startup.dart';
 import 'package:localization/localization.dart';
 import 'package:pie_menyu/active_windows/hotkey_recorder.dart';
+import 'package:pie_menyu/settings/setting_keys.dart';
 import 'package:pie_menyu/ui/widgets/material_3_switch.dart';
 import 'package:pie_menyu/ui/widgets/setting_list_tile.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class RightSettingPanel extends StatefulWidget {
   const RightSettingPanel({super.key});
@@ -15,18 +20,24 @@ class RightSettingPanel extends StatefulWidget {
 
 class _RightSettingPanelState extends State<RightSettingPanel> {
   bool isLaunchAtStartup = false;
+  HotKey? escapeKey;
+
+  SharedPreferences? prefs;
 
   @override
   void initState() {
-    super.initState();
     loadSettings();
+
+    super.initState();
   }
 
   loadSettings() async {
-    bool isEnabled = await launchAtStartup.isEnabled();
-    setState(() {
-      isLaunchAtStartup = isEnabled;
-    });
+    isLaunchAtStartup = await launchAtStartup.isEnabled();
+    prefs = await SharedPreferences.getInstance();
+    escapeKey = HotKey.fromJson(
+        jsonDecode(prefs?.getString(SettingKeys.escapeKey.key) ?? '{}'));
+
+    setState(() {});
   }
 
   @override
@@ -56,8 +67,7 @@ class _RightSettingPanelState extends State<RightSettingPanel> {
                   children: [
                     SettingListTile(
                       title: "setting-launch-at-startup".i18n(),
-                      subtitle:
-                          "setting-launch-at-startup-description".i18n(),
+                      subtitle: "setting-launch-at-startup-description".i18n(),
                       tileColor: Theme.of(context).colorScheme.surface,
                       trailing: Material3Switch(
                         value: isLaunchAtStartup,
@@ -73,7 +83,7 @@ class _RightSettingPanelState extends State<RightSettingPanel> {
                         },
                       ),
                     ),
-                    Gap(20),
+                    const Gap(20),
                     SettingListTile(
                         title: "setting-escape-key".i18n(),
                         subtitle: "setting-escape-key-description".i18n(),
@@ -81,10 +91,15 @@ class _RightSettingPanelState extends State<RightSettingPanel> {
                         trailing: SizedBox(
                           width: 100,
                           child: KeyPressRecorder(
-                            onHotKeyRecorded: (hotkey){},
+                            key: ValueKey(escapeKey),
+                            initalHotKey: escapeKey,
+                            onHotKeyRecorded: (hotkey) {
+                              prefs?.setString(
+                                  SettingKeys.escapeKey.key, jsonEncode(hotkey.toJson()));
+                              setState(() {});
+                            },
                           ),
-                        )
-                    )
+                        ))
                   ],
                 )),
           ),
