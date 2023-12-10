@@ -1,10 +1,9 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:localization/localization.dart';
-import 'package:pie_menyu/active_windows/active_windows.dart';
-import 'package:pie_menyu/active_windows/window_info.dart';
-
-import '../../widgets/app_info_card.dart';
+import 'package:pie_menyu/task_bar_process_info/task_bar_process_info.dart';
 
 class RightCreateProfilePanel extends StatefulWidget {
   const RightCreateProfilePanel({super.key});
@@ -15,7 +14,13 @@ class RightCreateProfilePanel extends StatefulWidget {
 }
 
 class _RightCreateProfilePanelState extends State<RightCreateProfilePanel> {
-  List<WindowInfo> activeApps = [];
+  Set<TaskBarProcessInfo> activeApps = {
+    TaskBarProcessInfo(
+        processName: "label-loading".i18n(),
+        exePath: "label-loading".i18n(),
+        base64Icon: "",
+        mainWindowTitle: "label-loading".i18n())
+  };
 
   @override
   void initState() {
@@ -24,10 +29,8 @@ class _RightCreateProfilePanelState extends State<RightCreateProfilePanel> {
   }
 
   setActiveWindow() async {
-    List<WindowInfo> tempWinInfoList = await ActiveWindows().getOpenedWindows();
-    setState(() {
-      activeApps = tempWinInfoList;
-    });
+    activeApps = await TaskBarProcessInfo.getAllUnique();
+    setState(() {});
   }
 
   @override
@@ -57,21 +60,37 @@ class _RightCreateProfilePanelState extends State<RightCreateProfilePanel> {
             ),
           ),
           Expanded(
-            child: SingleChildScrollView(
-              child: Wrap(children: [
-                for (WindowInfo activeApp in activeApps)
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: InfoCardWithIcon(
-                      onPressed: () {},
-                      title: activeApp.name,
-                      description: '',
-                      icon: FontAwesomeIcons.font,
+              child: ListView(
+            children: [
+              for (TaskBarProcessInfo activeApp in activeApps)
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(0, 10, 0, 0),
+                  child: Container(
+                    decoration: BoxDecoration(
+                      border: Border.all(
+                        color: Theme.of(context).colorScheme.surface,
+                      ),
+                      borderRadius: BorderRadius.circular(5),
+                      color: Theme.of(context).colorScheme.surface,
                     ),
-                  )
-              ]),
-            ),
-          )
+                    child: ListTile(
+                      title: Text(activeApp.processName),
+                      subtitle: Text(activeApp.exePath),
+                      leading: Image.memory(
+                        base64Decode(activeApp.base64Icon),
+                        errorBuilder: (context, error, stackTrace) {
+                          return const Icon(FontAwesomeIcons.question,
+                              size: 32);
+                        },
+                      ),
+                      onTap: () {
+                        print(activeApp.processName);
+                      },
+                    ),
+                  ),
+                )
+            ],
+          ))
         ],
       ),
     );

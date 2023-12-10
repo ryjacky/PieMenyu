@@ -48,6 +48,7 @@ dependencies:
   shared_preferences: ^2.2.2
   launch_at_startup: ^0.2.2
   package_info_plus: ^3.1.2
+  path: ^1.8.3
 
 dev_dependencies:
   flutter_test:
@@ -76,6 +77,7 @@ flutter:
   # To add assets to your application, add an assets section, like this:
   assets:
      - lib/i18n/
+     - support/
   #   - images/a_dot_burr.jpeg
   #   - images/a_dot_ham.jpeg
 

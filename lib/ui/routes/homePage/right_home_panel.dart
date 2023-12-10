@@ -2,13 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:hotkey_manager/hotkey_manager.dart';
 import 'package:localization/localization.dart';
-import 'package:pie_menyu/active_windows/hotkey_recorder.dart';
 import 'package:pie_menyu/db/db.dart';
 import 'package:pie_menyu/db/pie_menu.dart';
 import 'package:pie_menyu/db/profile.dart';
 import 'package:pie_menyu/ui/routes/pieMenuEditorPage/pie_menu_editor_page.dart';
 import 'package:pie_menyu/ui/widgets/PrimaryButton.dart';
 import 'package:pie_menyu/ui/widgets/TableActionButton.dart';
+import 'package:pie_menyu/ui/widgets/key_press_recorder.dart';
 import 'package:pie_menyu/ui/widgets/minimal_text_field.dart';
 
 class RightHomePanel extends StatefulWidget {
@@ -86,9 +86,9 @@ class _RightHomePanelState extends State<RightHomePanel> {
                               style: Theme.of(context).textTheme.labelMedium,
                             ),
                             child: TextButton(
-
                                 style: TextButton.styleFrom(
-                              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
+                                  shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(5)),
                                   minimumSize: const Size(32, 32),
                                 ),
                                 onPressed: () {},
@@ -211,5 +211,4 @@ class _RightHomePanelState extends State<RightHomePanel> {
     widget.profile.hotkeyToPieMenuIdList = hotkeyToPieMenuIdList;
     DB.updateProfile(widget.profile);
   }
-
 }
