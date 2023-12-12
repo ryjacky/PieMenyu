@@ -26,6 +26,8 @@
   "setting-launch-at-startup-description": "Launch PieMenyu at startup",
   "setting-escape-key": "Escape key",
   "setting-escape-key-description": "Force close any opened pie menu when pressing Escape key",
-  "label-loading": "Loading..."
+  "label-loading": "Loading...",
+  "tab-pie-items": "Pie Items",
+  "label-new-pie-item": "New Pie Item"
 
 }

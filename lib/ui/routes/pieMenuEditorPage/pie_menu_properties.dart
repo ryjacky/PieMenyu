@@ -1,15 +1,24 @@
+import 'dart:convert';
+
+import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:gap/gap.dart';
 import 'package:localization/localization.dart';
+import 'package:pie_menyu/db/db.dart';
+import 'package:pie_menyu/db/pie_item.dart';
 import 'package:pie_menyu/db/pie_menu.dart';
+import 'package:pie_menyu/ui/widgets/PrimaryButton.dart';
 import 'package:pie_menyu/ui/widgets/draggable_number_field.dart';
 import 'package:pie_menyu/ui/widgets/material_3_switch.dart';
+import 'package:pie_menyu/ui/widgets/minimal_text_field.dart';
 
 class PieMenuProperties extends StatefulWidget {
   final PieMenu pieMenu;
   final Function(PieMenu) onChanged;
 
-  const PieMenuProperties({super.key, required this.pieMenu, required this.onChanged});
+  const PieMenuProperties(
+      {super.key, required this.pieMenu, required this.onChanged});
 
   @override
   State<PieMenuProperties> createState() => _PieMenuPropertiesState();
@@ -21,7 +30,7 @@ class _PieMenuPropertiesState extends State<PieMenuProperties> {
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
-        length: 2,
+        length: 3,
         child: Column(
           children: [
             Theme(
@@ -31,6 +40,7 @@ class _PieMenuPropertiesState extends State<PieMenuProperties> {
                   textTheme: Theme.of(context).textTheme),
               child: TabBar(
                 tabs: [
+                  Tab(text: "tab-pie-items".i18n()),
                   Tab(text: "tab-properties".i18n()),
                   Tab(text: "tab-actions".i18n()),
                 ],
@@ -39,6 +49,55 @@ class _PieMenuPropertiesState extends State<PieMenuProperties> {
             Expanded(
               child: TabBarView(
                 children: [
+                  ReorderableListView(
+                      header: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: PrimaryButton(
+                          onPressed: createPieItem,
+                          label: Text("label-new-pie-item".i18n()),
+                          icon: FontAwesomeIcons.plus,
+                        ),
+                      ),
+                      children: [
+                        for (PieItem pieItem in widget.pieMenu.pieItems)
+                          SizedBox(
+                            key: ValueKey(pieItem),
+                            width: 280,
+                            child: ListTile(
+                                title: MinimalTextField(
+                                  content: pieItem.displayName,
+                                  onSubmitted: (String value) {
+                                    setState(() {
+                                      pieItem.displayName = value;
+                                    });
+                                    widget.onChanged(widget.pieMenu);
+                                  },
+                                ),
+                                leading: TextButton(
+                                  style: TextButton.styleFrom(
+                                    padding: const EdgeInsets.all(2),
+                                    minimumSize: const Size(45, 45),
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(3),
+                                    ),
+                                    side: BorderSide(
+                                      color: Theme.of(context)
+                                          .colorScheme
+                                          .outlineVariant,
+                                      width: 2,
+                                    ),
+                                  ),
+                                  onPressed: () {},
+                                  child: Image.memory(
+                                    base64Decode(pieItem.iconBase64),
+                                    errorBuilder:
+                                        (context, error, stackTrace) =>
+                                            const Icon(FontAwesomeIcons.plus),
+                                  ),
+                                )),
+                          ),
+                      ],
+                      onReorder: (oldIndex, newIndex) {}),
                   SingleChildScrollView(
                     child: Padding(
                       padding: const EdgeInsets.all(18.0),
@@ -89,9 +148,7 @@ class _PieMenuPropertiesState extends State<PieMenuProperties> {
                             children: [
                               Text("Activation Mode"),
                               SizedBox(
-                                  width: 10,
-                                  height: 10,
-                                  child: Placeholder()),
+                                  width: 10, height: 10, child: Placeholder()),
                             ],
                           ),
                           Gap(rowGap),
@@ -100,9 +157,7 @@ class _PieMenuPropertiesState extends State<PieMenuProperties> {
                             children: [
                               Text("Main Color"),
                               SizedBox(
-                                  width: 10,
-                                  height: 10,
-                                  child: Placeholder()),
+                                  width: 10, height: 10, child: Placeholder()),
                             ],
                           ),
                           Gap(rowGap),
@@ -111,9 +166,7 @@ class _PieMenuPropertiesState extends State<PieMenuProperties> {
                             children: [
                               Text("Secondary Color"),
                               SizedBox(
-                                  width: 10,
-                                  height: 10,
-                                  child: Placeholder()),
+                                  width: 10, height: 10, child: Placeholder()),
                             ],
                           ),
                           Gap(rowGap),
@@ -122,9 +175,7 @@ class _PieMenuPropertiesState extends State<PieMenuProperties> {
                             children: [
                               Text("Icon Color"),
                               SizedBox(
-                                  width: 10,
-                                  height: 10,
-                                  child: Placeholder()),
+                                  width: 10, height: 10, child: Placeholder()),
                             ],
                           ),
                           Gap(rowGap),
@@ -135,8 +186,7 @@ class _PieMenuPropertiesState extends State<PieMenuProperties> {
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceBetween,
                                 children: [
-                                  const Expanded(
-                                      child: Text("Escape Radius")),
+                                  const Expanded(child: Text("Escape Radius")),
                                   SizedBox(
                                     width: 70,
                                     child: DraggableNumberField(
@@ -270,5 +320,16 @@ class _PieMenuPropertiesState extends State<PieMenuProperties> {
             ),
           ],
         ));
+  }
+
+  createPieItem() async {
+    final PieItem newPieItem = PieItem(displayName: "label-new-pie-item".i18n());
+    await DB.putPieItem(newPieItem);
+    widget.pieMenu.pieItems.add(newPieItem);
+
+    setState(() {
+
+    });
+    // updateParameterThenSetState();
   }
 }

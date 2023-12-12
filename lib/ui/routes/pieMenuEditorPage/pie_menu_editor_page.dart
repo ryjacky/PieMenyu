@@ -13,6 +13,14 @@ class PieMenuEditorPage extends StatefulWidget {
 }
 
 class _PieMenuEditorPageState extends State<PieMenuEditorPage> {
+  late PieMenu pieMenu;
+
+  @override
+  void initState() {
+    pieMenu = widget.pieMenu;
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -25,13 +33,15 @@ class _PieMenuEditorPageState extends State<PieMenuEditorPage> {
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
                   Expanded(
-                      child: PieMenuPreview(pieMenu: widget.pieMenu),
+                      child: PieMenuPreview(pieMenu: pieMenu),
                   ),
                   SizedBox(
                       width: 300,
-                      child: PieMenuProperties(pieMenu: widget.pieMenu,
+                      child: PieMenuProperties(pieMenu: pieMenu,
                         onChanged: (onChanged) {
-                          setState(() {});
+                          setState(() {
+                            pieMenu = onChanged;
+                          });
                         },
                       )),
                 ],

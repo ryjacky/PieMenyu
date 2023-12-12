@@ -34,20 +34,11 @@ class _PieMenuPreviewState extends State<PieMenuPreview> {
     setState(() {});
   }
 
-  createPieItem() async {
-    final PieItem newPieItem = PieItem(displayName: "test");
-    await DB.putPieItem(newPieItem);
-    widget.pieMenu.pieItems.add(newPieItem);
-
-    updateParameterThenSetState();
-  }
-
   @override
   Widget build(BuildContext context) {
     return LayoutBuilder(builder: (context, constraints) {
       return Stack(
         children: [
-          TextButton(onPressed: createPieItem, child: Text("add pie item")),
           Positioned(
               left: constraints.maxWidth / 2 - 25,
               bottom: constraints.maxHeight / 2,
