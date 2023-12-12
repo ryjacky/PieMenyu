@@ -16,7 +16,23 @@ extension GetPieItemCollection on Isar {
 const PieItemSchema = CollectionSchema(
   name: r'PieItem',
   id: 2206230188476552550,
-  properties: {},
+  properties: {
+    r'displayName': PropertySchema(
+      id: 0,
+      name: r'displayName',
+      type: IsarType.string,
+    ),
+    r'enabled': PropertySchema(
+      id: 1,
+      name: r'enabled',
+      type: IsarType.bool,
+    ),
+    r'iconBase64': PropertySchema(
+      id: 2,
+      name: r'iconBase64',
+      type: IsarType.string,
+    )
+  },
   estimateSize: _pieItemEstimateSize,
   serialize: _pieItemSerialize,
   deserialize: _pieItemDeserialize,
@@ -51,6 +67,8 @@ int _pieItemEstimateSize(
   Map<Type, List<int>> allOffsets,
 ) {
   var bytesCount = offsets.last;
+  bytesCount += 3 + object.displayName.length * 3;
+  bytesCount += 3 + object.iconBase64.length * 3;
   return bytesCount;
 }
 
@@ -59,14 +77,23 @@ void _pieItemSerialize(
   IsarWriter writer,
   List<int> offsets,
   Map<Type, List<int>> allOffsets,
-) {}
+) {
+  writer.writeString(offsets[0], object.displayName);
+  writer.writeBool(offsets[1], object.enabled);
+  writer.writeString(offsets[2], object.iconBase64);
+}
+
 PieItem _pieItemDeserialize(
   Id id,
   IsarReader reader,
   List<int> offsets,
   Map<Type, List<int>> allOffsets,
 ) {
-  final object = PieItem();
+  final object = PieItem(
+    displayName: reader.readStringOrNull(offsets[0]) ?? '',
+    enabled: reader.readBoolOrNull(offsets[1]) ?? false,
+    iconBase64: reader.readStringOrNull(offsets[2]) ?? '',
+  );
   object.id = id;
   return object;
 }
@@ -78,6 +105,12 @@ P _pieItemDeserializeProp<P>(
   Map<Type, List<int>> allOffsets,
 ) {
   switch (propertyId) {
+    case 0:
+      return (reader.readStringOrNull(offset) ?? '') as P;
+    case 1:
+      return (reader.readBoolOrNull(offset) ?? false) as P;
+    case 2:
+      return (reader.readStringOrNull(offset) ?? '') as P;
     default:
       throw IsarError('Unknown property with id $propertyId');
   }
@@ -175,6 +208,277 @@ extension PieItemQueryWhere on QueryBuilder<PieItem, PieItem, QWhereClause> {
 
 extension PieItemQueryFilter
     on QueryBuilder<PieItem, PieItem, QFilterCondition> {
+  QueryBuilder<PieItem, PieItem, QAfterFilterCondition> displayNameEqualTo(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'displayName',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<PieItem, PieItem, QAfterFilterCondition> displayNameGreaterThan(
+    String value, {
+    bool include = false,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        include: include,
+        property: r'displayName',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<PieItem, PieItem, QAfterFilterCondition> displayNameLessThan(
+    String value, {
+    bool include = false,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.lessThan(
+        include: include,
+        property: r'displayName',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<PieItem, PieItem, QAfterFilterCondition> displayNameBetween(
+    String lower,
+    String upper, {
+    bool includeLower = true,
+    bool includeUpper = true,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.between(
+        property: r'displayName',
+        lower: lower,
+        includeLower: includeLower,
+        upper: upper,
+        includeUpper: includeUpper,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<PieItem, PieItem, QAfterFilterCondition> displayNameStartsWith(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.startsWith(
+        property: r'displayName',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<PieItem, PieItem, QAfterFilterCondition> displayNameEndsWith(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.endsWith(
+        property: r'displayName',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<PieItem, PieItem, QAfterFilterCondition> displayNameContains(
+      String value,
+      {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.contains(
+        property: r'displayName',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<PieItem, PieItem, QAfterFilterCondition> displayNameMatches(
+      String pattern,
+      {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.matches(
+        property: r'displayName',
+        wildcard: pattern,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<PieItem, PieItem, QAfterFilterCondition> displayNameIsEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'displayName',
+        value: '',
+      ));
+    });
+  }
+
+  QueryBuilder<PieItem, PieItem, QAfterFilterCondition>
+      displayNameIsNotEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        property: r'displayName',
+        value: '',
+      ));
+    });
+  }
+
+  QueryBuilder<PieItem, PieItem, QAfterFilterCondition> enabledEqualTo(
+      bool value) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'enabled',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<PieItem, PieItem, QAfterFilterCondition> iconBase64EqualTo(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'iconBase64',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<PieItem, PieItem, QAfterFilterCondition> iconBase64GreaterThan(
+    String value, {
+    bool include = false,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        include: include,
+        property: r'iconBase64',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<PieItem, PieItem, QAfterFilterCondition> iconBase64LessThan(
+    String value, {
+    bool include = false,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.lessThan(
+        include: include,
+        property: r'iconBase64',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<PieItem, PieItem, QAfterFilterCondition> iconBase64Between(
+    String lower,
+    String upper, {
+    bool includeLower = true,
+    bool includeUpper = true,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.between(
+        property: r'iconBase64',
+        lower: lower,
+        includeLower: includeLower,
+        upper: upper,
+        includeUpper: includeUpper,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<PieItem, PieItem, QAfterFilterCondition> iconBase64StartsWith(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.startsWith(
+        property: r'iconBase64',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<PieItem, PieItem, QAfterFilterCondition> iconBase64EndsWith(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.endsWith(
+        property: r'iconBase64',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<PieItem, PieItem, QAfterFilterCondition> iconBase64Contains(
+      String value,
+      {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.contains(
+        property: r'iconBase64',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<PieItem, PieItem, QAfterFilterCondition> iconBase64Matches(
+      String pattern,
+      {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.matches(
+        property: r'iconBase64',
+        wildcard: pattern,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<PieItem, PieItem, QAfterFilterCondition> iconBase64IsEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'iconBase64',
+        value: '',
+      ));
+    });
+  }
+
+  QueryBuilder<PieItem, PieItem, QAfterFilterCondition> iconBase64IsNotEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        property: r'iconBase64',
+        value: '',
+      ));
+    });
+  }
+
   QueryBuilder<PieItem, PieItem, QAfterFilterCondition> idEqualTo(Id value) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.equalTo(
@@ -304,10 +608,82 @@ extension PieItemQueryLinks
   }
 }
 
-extension PieItemQuerySortBy on QueryBuilder<PieItem, PieItem, QSortBy> {}
+extension PieItemQuerySortBy on QueryBuilder<PieItem, PieItem, QSortBy> {
+  QueryBuilder<PieItem, PieItem, QAfterSortBy> sortByDisplayName() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'displayName', Sort.asc);
+    });
+  }
+
+  QueryBuilder<PieItem, PieItem, QAfterSortBy> sortByDisplayNameDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'displayName', Sort.desc);
+    });
+  }
+
+  QueryBuilder<PieItem, PieItem, QAfterSortBy> sortByEnabled() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'enabled', Sort.asc);
+    });
+  }
+
+  QueryBuilder<PieItem, PieItem, QAfterSortBy> sortByEnabledDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'enabled', Sort.desc);
+    });
+  }
+
+  QueryBuilder<PieItem, PieItem, QAfterSortBy> sortByIconBase64() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'iconBase64', Sort.asc);
+    });
+  }
+
+  QueryBuilder<PieItem, PieItem, QAfterSortBy> sortByIconBase64Desc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'iconBase64', Sort.desc);
+    });
+  }
+}
 
 extension PieItemQuerySortThenBy
     on QueryBuilder<PieItem, PieItem, QSortThenBy> {
+  QueryBuilder<PieItem, PieItem, QAfterSortBy> thenByDisplayName() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'displayName', Sort.asc);
+    });
+  }
+
+  QueryBuilder<PieItem, PieItem, QAfterSortBy> thenByDisplayNameDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'displayName', Sort.desc);
+    });
+  }
+
+  QueryBuilder<PieItem, PieItem, QAfterSortBy> thenByEnabled() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'enabled', Sort.asc);
+    });
+  }
+
+  QueryBuilder<PieItem, PieItem, QAfterSortBy> thenByEnabledDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'enabled', Sort.desc);
+    });
+  }
+
+  QueryBuilder<PieItem, PieItem, QAfterSortBy> thenByIconBase64() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'iconBase64', Sort.asc);
+    });
+  }
+
+  QueryBuilder<PieItem, PieItem, QAfterSortBy> thenByIconBase64Desc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'iconBase64', Sort.desc);
+    });
+  }
+
   QueryBuilder<PieItem, PieItem, QAfterSortBy> thenById() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'id', Sort.asc);
@@ -322,13 +698,51 @@ extension PieItemQuerySortThenBy
 }
 
 extension PieItemQueryWhereDistinct
-    on QueryBuilder<PieItem, PieItem, QDistinct> {}
+    on QueryBuilder<PieItem, PieItem, QDistinct> {
+  QueryBuilder<PieItem, PieItem, QDistinct> distinctByDisplayName(
+      {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addDistinctBy(r'displayName', caseSensitive: caseSensitive);
+    });
+  }
+
+  QueryBuilder<PieItem, PieItem, QDistinct> distinctByEnabled() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addDistinctBy(r'enabled');
+    });
+  }
+
+  QueryBuilder<PieItem, PieItem, QDistinct> distinctByIconBase64(
+      {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addDistinctBy(r'iconBase64', caseSensitive: caseSensitive);
+    });
+  }
+}
 
 extension PieItemQueryProperty
     on QueryBuilder<PieItem, PieItem, QQueryProperty> {
   QueryBuilder<PieItem, int, QQueryOperations> idProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'id');
+    });
+  }
+
+  QueryBuilder<PieItem, String, QQueryOperations> displayNameProperty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addPropertyName(r'displayName');
+    });
+  }
+
+  QueryBuilder<PieItem, bool, QQueryOperations> enabledProperty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addPropertyName(r'enabled');
+    });
+  }
+
+  QueryBuilder<PieItem, String, QQueryOperations> iconBase64Property() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addPropertyName(r'iconBase64');
     });
   }
 }

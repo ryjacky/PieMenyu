@@ -8,14 +8,18 @@ part 'pie_item.g.dart';
 class PieItem {
   Id id = Isar.autoIncrement;
 
+  String iconBase64 = '';
+  String displayName = '';
+  bool enabled = true;
+
   @Backlink(to: 'pieItems')
   IsarLinks<PieMenu> pieMenus = IsarLinks<PieMenu>();
 
   IsarLink<PieItemTask> beginningTask = IsarLink<PieItemTask>();
 
   PieItem({
-    String iconBase64 = '',
-    String displayName = '',
-    bool enabled = false,
+    this.iconBase64 = '',
+    this.displayName = '',
+    this.enabled = false,
   });
 }
