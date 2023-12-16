@@ -28,6 +28,11 @@
   "setting-escape-key-description": "Force close any opened pie menu when pressing Escape key",
   "label-loading": "Loading...",
   "tab-pie-items": "Pie Items",
-  "label-new-pie-item": "New Pie Item"
+  "label-new-pie-item": "New Pie Item",
+  "label-select-color-shade": "Select color shade",
+  "label-main-color": "Main color",
+  "label-colors": "Colors",
+  "label-secondary-color": "Secondary color",
+  "label-icon-color": "Icon color"
 
 }

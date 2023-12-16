@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'dart:io';
 
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
@@ -12,6 +11,7 @@ import 'package:pie_menyu/system/file_icon.dart';
 import 'package:pie_menyu/view/controller/pie_menu_controller.dart';
 import 'package:pie_menyu/view/widgets/PrimaryButton.dart';
 import 'package:pie_menyu/view/widgets/draggable_number_field.dart';
+import 'package:pie_menyu/view/widgets/expansion_color_picker_tile.dart';
 import 'package:pie_menyu/view/widgets/material_3_switch.dart';
 import 'package:pie_menyu/view/widgets/minimal_text_field.dart';
 
@@ -87,7 +87,9 @@ class _PieMenuPropertiesState extends State<PieMenuProperties> {
                                     ),
                                   ),
                                   onPressed: () async {
-                                    widget.controller.updatePieItem(pieItem, iconBase64: await pickPieItemIconFromFile());
+                                    widget.controller.updatePieItem(pieItem,
+                                        iconBase64:
+                                            await pickPieItemIconFromFile());
                                   },
                                   child: Image.memory(
                                     width: 32,
@@ -107,6 +109,38 @@ class _PieMenuPropertiesState extends State<PieMenuProperties> {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.stretch,
                         children: [
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text("label-colors".i18n()),
+                              ExpansionColorPickerTile(
+                                title: Text("label-main-color".i18n()),
+                                color: Color(widget.controller.value.mainColor),
+                                onColorChanged: (color) {
+                                  widget.controller
+                                      .update(mainColor: color.value);
+                                },
+                              ),
+                              ExpansionColorPickerTile(
+                                title: Text("label-secondary-color".i18n()),
+                                color: Color(
+                                    widget.controller.value.secondaryColor),
+                                onColorChanged: (color) {
+                                  widget.controller
+                                      .update(secondaryColor: color.value);
+                                },
+                              ),
+                              ExpansionColorPickerTile(
+                                title: Text("label-icon-color".i18n()),
+                                color: Color(widget.controller.value.iconColor),
+                                onColorChanged: (color) {
+                                  widget.controller
+                                      .update(iconColor: color.value);
+                                },
+                              ),
+                            ],
+                          ),
+                          Gap(rowGap),
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
@@ -147,33 +181,6 @@ class _PieMenuPropertiesState extends State<PieMenuProperties> {
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               Text("Activation Mode"),
-                              SizedBox(
-                                  width: 10, height: 10, child: Placeholder()),
-                            ],
-                          ),
-                          Gap(rowGap),
-                          const Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Text("Main Color"),
-                              SizedBox(
-                                  width: 10, height: 10, child: Placeholder()),
-                            ],
-                          ),
-                          Gap(rowGap),
-                          const Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Text("Secondary Color"),
-                              SizedBox(
-                                  width: 10, height: 10, child: Placeholder()),
-                            ],
-                          ),
-                          Gap(rowGap),
-                          const Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Text("Icon Color"),
                               SizedBox(
                                   width: 10, height: 10, child: Placeholder()),
                             ],
