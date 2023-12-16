@@ -47,7 +47,7 @@ class _PieMenuPreviewState extends State<PieMenuPreview> {
         children: [
           Positioned(
               left: (constraints.maxWidth - widget.pieMenu.centerRadius - widget.pieMenu.centerThickness) / 2,
-              bottom: (constraints.maxHeight - widget.pieMenu.centerRadius) / 2,
+              bottom: (constraints.maxHeight - widget.pieMenu.centerRadius - widget.pieMenu.centerThickness) / 2,
               child: CustomPaint(
                 size: Size(
                     (widget.pieMenu.centerRadius +

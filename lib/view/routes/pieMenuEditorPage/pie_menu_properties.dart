@@ -1,11 +1,14 @@
 import 'dart:convert';
+import 'dart:io';
 
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:gap/gap.dart';
 import 'package:localization/localization.dart';
 import 'package:pie_menyu/db/db.dart';
 import 'package:pie_menyu/db/pie_item.dart';
+import 'package:pie_menyu/system/file_icon.dart';
 import 'package:pie_menyu/view/controller/pie_menu_controller.dart';
 import 'package:pie_menyu/view/widgets/PrimaryButton.dart';
 import 'package:pie_menyu/view/widgets/draggable_number_field.dart';
@@ -71,8 +74,8 @@ class _PieMenuPropertiesState extends State<PieMenuProperties> {
                                 ),
                                 leading: TextButton(
                                   style: TextButton.styleFrom(
-                                    padding: const EdgeInsets.all(2),
-                                    minimumSize: const Size(45, 45),
+                                    padding: const EdgeInsets.all(5),
+                                    minimumSize: const Size(50, 50),
                                     shape: RoundedRectangleBorder(
                                       borderRadius: BorderRadius.circular(3),
                                     ),
@@ -83,8 +86,12 @@ class _PieMenuPropertiesState extends State<PieMenuProperties> {
                                       width: 2,
                                     ),
                                   ),
-                                  onPressed: () {},
+                                  onPressed: () async {
+                                    widget.controller.updatePieItem(pieItem, iconBase64: await pickPieItemIconFromFile());
+                                  },
                                   child: Image.memory(
+                                    width: 32,
+                                    height: 32,
                                     base64Decode(pieItem.iconBase64),
                                     errorBuilder:
                                         (context, error, stackTrace) =>
@@ -314,5 +321,15 @@ class _PieMenuPropertiesState extends State<PieMenuProperties> {
 
     setState(() {});
     // updateParameterThenSetState();
+  }
+
+  Future<String> pickPieItemIconFromFile() async {
+    FilePickerResult? result = await FilePicker.platform.pickFiles();
+
+    if (result != null) {
+      return FileIcon.getBase64(result.files.single.path!);
+    }
+
+    return "";
   }
 }

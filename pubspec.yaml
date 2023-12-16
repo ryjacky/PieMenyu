@@ -49,6 +49,7 @@ dependencies:
   launch_at_startup: ^0.2.2
   package_info_plus: ^3.1.2
   path: ^1.8.3
+  file_picker: ^5.2.10
 
 dev_dependencies:
   flutter_test:

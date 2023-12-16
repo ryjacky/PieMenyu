@@ -3,7 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:localization/localization.dart';
-import 'package:pie_menyu/task_bar_process_info/task_bar_process_info.dart';
+import 'package:pie_menyu/system/task_bar_process_info.dart';
 
 class RightCreateProfilePanel extends StatefulWidget {
   const RightCreateProfilePanel({super.key});
