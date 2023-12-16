@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:pie_menyu/db/pie_menu.dart';
 import 'package:pie_menyu/view/widgets/pie_item_widget.dart';
 
+import '../../painter/PieCenterPainter.dart';
+
 class PieMenuPreview extends StatefulWidget {
   final PieMenu pieMenu;
 
@@ -44,17 +46,25 @@ class _PieMenuPreviewState extends State<PieMenuPreview> {
       return Stack(
         children: [
           Positioned(
-              left: constraints.maxWidth / 2 - 25,
-              bottom: constraints.maxHeight / 2 - 25,
-              child: Container(
-                color: Colors.red,
-                width: 50,
-                height: 50,
+              left: (constraints.maxWidth - widget.pieMenu.centerRadius - widget.pieMenu.centerThickness) / 2,
+              bottom: (constraints.maxHeight - widget.pieMenu.centerRadius) / 2,
+              child: CustomPaint(
+                size: Size(
+                    (widget.pieMenu.centerRadius +
+                        widget.pieMenu.centerThickness).toDouble(),
+                    (widget.pieMenu.centerRadius +
+                        widget.pieMenu.centerThickness).toDouble()),
+                painter: PieCenterPainter(
+                    centerThickness: widget.pieMenu.centerThickness.toDouble(),
+                    backgroundColor: Color(widget.pieMenu.secondaryColor),
+                    foregroundColor: Color(widget.pieMenu.mainColor),
+                    numberOfPieItems: widget.pieMenu.pieItems.length),
               )),
           for (int i = 0; i < widget.pieMenu.pieItems.length; i++)
             Positioned(
                 left: computeXAdjusted(i, constraints.maxWidth / 2),
-                bottom: computeYAdjusted(i, constraints.maxHeight / 2 - height/2),
+                bottom:
+                    computeYAdjusted(i, constraints.maxHeight / 2 - height / 2),
                 child: PieItemWidget(
                   name: widget.pieMenu.pieItems.elementAt(i).displayName,
                   icon: widget.pieMenu.pieItems.elementAt(i).iconBase64,
