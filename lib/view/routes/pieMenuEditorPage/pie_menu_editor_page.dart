@@ -19,7 +19,7 @@ class _PieMenuEditorPageState extends State<PieMenuEditorPage> {
   @override
   void initState() {
     super.initState();
-    pieMenuController.update(widget.pieMenu);
+    pieMenuController.value = widget.pieMenu;
   }
 
   @override

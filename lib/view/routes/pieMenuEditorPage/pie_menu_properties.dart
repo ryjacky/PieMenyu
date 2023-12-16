@@ -15,8 +15,7 @@ import 'package:pie_menyu/view/widgets/minimal_text_field.dart';
 class PieMenuProperties extends StatefulWidget {
   final PieMenuController controller;
 
-  const PieMenuProperties(
-      {super.key, required this.controller});
+  const PieMenuProperties({super.key, required this.controller});
 
   @override
   State<PieMenuProperties> createState() => _PieMenuPropertiesState();
@@ -57,7 +56,7 @@ class _PieMenuPropertiesState extends State<PieMenuProperties> {
                         ),
                       ),
                       children: [
-                        for (PieItem pieItem
+                        for (final PieItem pieItem
                             in widget.controller.value.pieItems)
                           SizedBox(
                             key: ValueKey(pieItem),
@@ -66,8 +65,8 @@ class _PieMenuPropertiesState extends State<PieMenuProperties> {
                                 title: MinimalTextField(
                                   content: pieItem.displayName,
                                   onSubmitted: (String value) {
-                                    widget.controller
-                                        .updateProperties(name: value);
+                                    widget.controller.updatePieItem(pieItem,
+                                        displayName: value);
                                   },
                                 ),
                                 leading: TextButton(
@@ -112,8 +111,7 @@ class _PieMenuPropertiesState extends State<PieMenuProperties> {
                                     Theme.of(context).colorScheme.primary,
                                 onChanged: (bool value) {
                                   // This is called when the user toggles the switch.
-                                  widget.controller
-                                      .updateProperties(enabled: value);
+                                  widget.controller.update(enabled: value);
                                 },
                               )
                             ],
@@ -125,14 +123,14 @@ class _PieMenuPropertiesState extends State<PieMenuProperties> {
                               const Text("Open In Screen Center"),
                               Material3Switch(
                                 // This bool value toggles the switch.
-                                value: widget
-                                    .controller.value.openInScreenCenter,
+                                value:
+                                    widget.controller.value.openInScreenCenter,
                                 activeColor:
                                     Theme.of(context).colorScheme.primary,
                                 onChanged: (bool value) {
                                   // This is called when the user toggles the switch.
-                                  widget.controller.updateProperties(
-                                      openInScreenCenter: value);
+                                  widget.controller
+                                      .update(openInScreenCenter: value);
                                 },
                               )
                             ],
@@ -187,11 +185,11 @@ class _PieMenuPropertiesState extends State<PieMenuProperties> {
                                     child: DraggableNumberField(
                                       min: 0,
                                       max: 500,
-                                      value: widget
-                                          .controller.value.escapeRadius,
+                                      value:
+                                          widget.controller.value.escapeRadius,
                                       onChanged: (int value) {
-                                        widget.controller.updateProperties(
-                                            escapeRadius: value);
+                                        widget.controller
+                                            .update(escapeRadius: value);
                                       },
                                     ),
                                   ),
@@ -209,11 +207,10 @@ class _PieMenuPropertiesState extends State<PieMenuProperties> {
                                 child: DraggableNumberField(
                                   min: 0,
                                   max: 500,
-                                  value:
-                                      widget.controller.value.centerRadius,
+                                  value: widget.controller.value.centerRadius,
                                   onChanged: (int value) {
                                     widget.controller
-                                        .updateProperties(centerRadius: value);
+                                        .update(centerRadius: value);
                                   },
                                 ),
                               ),
@@ -229,11 +226,11 @@ class _PieMenuPropertiesState extends State<PieMenuProperties> {
                                 child: DraggableNumberField(
                                   min: 0,
                                   max: 500,
-                                  value: widget
-                                      .controller.value.centerThickness,
+                                  value:
+                                      widget.controller.value.centerThickness,
                                   onChanged: (int value) {
-                                    widget.controller.updateProperties(
-                                        centerThickness: value);
+                                    widget.controller
+                                        .update(centerThickness: value);
                                   },
                                 ),
                               ),
@@ -251,8 +248,7 @@ class _PieMenuPropertiesState extends State<PieMenuProperties> {
                                   max: 500,
                                   value: widget.controller.value.iconSize,
                                   onChanged: (int value) {
-                                    widget.controller.updateProperties(
-                                        iconSize: value);
+                                    widget.controller.update(iconSize: value);
                                   },
                                 ),
                               ),
@@ -271,8 +267,8 @@ class _PieMenuPropertiesState extends State<PieMenuProperties> {
                                   value:
                                       widget.controller.value.pieItemRoundness,
                                   onChanged: (int value) {
-                                    widget.controller.updateProperties(
-                                        pieItemRoundness: value);
+                                    widget.controller
+                                        .update(pieItemRoundness: value);
                                   },
                                 ),
                               ),
@@ -290,8 +286,8 @@ class _PieMenuPropertiesState extends State<PieMenuProperties> {
                                   max: 500,
                                   value: widget.controller.value.pieItemSpread,
                                   onChanged: (int value) {
-                                    widget.controller.updateProperties(
-                                        pieItemSpread: value);
+                                    widget.controller
+                                        .update(pieItemSpread: value);
                                   },
                                 ),
                               ),

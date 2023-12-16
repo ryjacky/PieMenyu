@@ -1,12 +1,14 @@
 import 'package:flutter/widgets.dart';
 import 'package:pie_menyu/db/pie_item.dart';
+import 'package:pie_menyu/db/pie_item_task.dart';
 import 'package:pie_menyu/db/pie_menu.dart';
 
 class PieMenuController extends ValueNotifier<PieMenu> {
   PieMenuController(super.value);
 
-  void update(PieMenu pieMenu){
-    value = pieMenu;
+  @override
+  set value(PieMenu pieMenu){
+    super.value = pieMenu;
     notifyListeners();
   }
 
@@ -15,7 +17,7 @@ class PieMenuController extends ValueNotifier<PieMenu> {
     notifyListeners();
   }
 
-  void updateProperties(
+  void update(
       {String? name,
       bool? enabled,
       PieMenuActivationMode? activationMode,
@@ -44,6 +46,24 @@ class PieMenuController extends ValueNotifier<PieMenu> {
     ..iconSize = iconSize ?? value.iconSize
     ..pieItemRoundness = pieItemRoundness ?? value.pieItemRoundness
     ..pieItemSpread = pieItemSpread ?? value.pieItemSpread;
+
+    notifyListeners();
+  }
+
+  void updatePieItem(PieItem pieItem, {
+    String? iconBase64,
+    String? displayName,
+    bool? enabled,
+    PieItemTask? pieItemTask,
+  }) {
+    pieItem
+    ..iconBase64 = iconBase64 ?? pieItem.iconBase64
+    ..displayName = displayName ?? pieItem.displayName
+    ..enabled = enabled ?? pieItem.enabled;
+
+    if (pieItemTask != null) {
+      pieItem.beginningTask.value = pieItemTask;
+    }
 
     notifyListeners();
   }
