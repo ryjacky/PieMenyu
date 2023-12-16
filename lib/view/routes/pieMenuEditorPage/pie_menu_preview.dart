@@ -1,10 +1,8 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
-import 'package:pie_menyu/db/db.dart';
-import 'package:pie_menyu/db/pie_item.dart';
 import 'package:pie_menyu/db/pie_menu.dart';
-import 'package:pie_menyu/ui/widgets/pie_item_widget.dart';
+import 'package:pie_menyu/view/widgets/pie_item_widget.dart';
 
 class PieMenuPreview extends StatefulWidget {
   final PieMenu pieMenu;
@@ -36,12 +34,18 @@ class _PieMenuPreviewState extends State<PieMenuPreview> {
 
   @override
   Widget build(BuildContext context) {
+    const height = 35;
+
+    if (!widget.pieMenu.pieItems.isLoaded) {
+      widget.pieMenu.pieItems.load();
+    }
+    angleDelta = 2 * pi / widget.pieMenu.pieItems.length;
     return LayoutBuilder(builder: (context, constraints) {
       return Stack(
         children: [
           Positioned(
               left: constraints.maxWidth / 2 - 25,
-              bottom: constraints.maxHeight / 2,
+              bottom: constraints.maxHeight / 2 - 25,
               child: Container(
                 color: Colors.red,
                 width: 50,
@@ -50,8 +54,10 @@ class _PieMenuPreviewState extends State<PieMenuPreview> {
           for (int i = 0; i < widget.pieMenu.pieItems.length; i++)
             Positioned(
                 left: computeXAdjusted(i, constraints.maxWidth / 2),
-                bottom: computeYAdjusted(i, constraints.maxHeight / 2),
+                bottom: computeYAdjusted(i, constraints.maxHeight / 2 - height/2),
                 child: PieItemWidget(
+                  name: widget.pieMenu.pieItems.elementAt(i).displayName,
+                  icon: widget.pieMenu.pieItems.elementAt(i).iconBase64,
                   horizontalOffset:
                       i % (widget.pieMenu.pieItems.length / 2) == 0
                           ? PieItemOffset.center
@@ -61,7 +67,7 @@ class _PieMenuPreviewState extends State<PieMenuPreview> {
                   borderRadius: widget.pieMenu.pieItemRoundness,
                   backgroundColor: widget.pieMenu.secondaryColor,
                   width: widget.pieMenu.pieItemWidth,
-                  height: 50,
+                  height: height,
                 )),
         ],
       );

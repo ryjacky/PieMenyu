@@ -7,7 +7,7 @@ import 'package:launch_at_startup/launch_at_startup.dart';
 import 'package:localization/localization.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:pie_menyu/db/db.dart';
-import 'package:pie_menyu/ui/routes/homePage/home_page.dart';
+import 'package:pie_menyu/view/routes/homePage/home_page.dart';
 
 import 'theme/color_schemes.g.dart';
 import 'theme/text_theme.g.dart';

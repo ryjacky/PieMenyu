@@ -5,8 +5,8 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:localization/localization.dart';
 import 'package:pie_menyu/db/db.dart';
 import 'package:pie_menyu/db/profile.dart';
-import 'package:pie_menyu/ui/widgets/PrimaryButton.dart';
-import 'package:pie_menyu/ui/widgets/profile_list_item.dart';
+import 'package:pie_menyu/view/widgets/PrimaryButton.dart';
+import 'package:pie_menyu/view/widgets/profile_list_item.dart';
 
 class LeftHomePanel extends StatefulWidget {
   final VoidCallback onCreateProfile;

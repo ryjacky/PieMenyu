@@ -1,24 +1,22 @@
 import 'dart:convert';
 
-import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:gap/gap.dart';
 import 'package:localization/localization.dart';
 import 'package:pie_menyu/db/db.dart';
 import 'package:pie_menyu/db/pie_item.dart';
-import 'package:pie_menyu/db/pie_menu.dart';
-import 'package:pie_menyu/ui/widgets/PrimaryButton.dart';
-import 'package:pie_menyu/ui/widgets/draggable_number_field.dart';
-import 'package:pie_menyu/ui/widgets/material_3_switch.dart';
-import 'package:pie_menyu/ui/widgets/minimal_text_field.dart';
+import 'package:pie_menyu/view/controller/pie_menu_controller.dart';
+import 'package:pie_menyu/view/widgets/PrimaryButton.dart';
+import 'package:pie_menyu/view/widgets/draggable_number_field.dart';
+import 'package:pie_menyu/view/widgets/material_3_switch.dart';
+import 'package:pie_menyu/view/widgets/minimal_text_field.dart';
 
 class PieMenuProperties extends StatefulWidget {
-  final PieMenu pieMenu;
-  final Function(PieMenu) onChanged;
+  final PieMenuController controller;
 
   const PieMenuProperties(
-      {super.key, required this.pieMenu, required this.onChanged});
+      {super.key, required this.controller});
 
   @override
   State<PieMenuProperties> createState() => _PieMenuPropertiesState();
@@ -59,7 +57,8 @@ class _PieMenuPropertiesState extends State<PieMenuProperties> {
                         ),
                       ),
                       children: [
-                        for (PieItem pieItem in widget.pieMenu.pieItems)
+                        for (PieItem pieItem
+                            in widget.controller.value.pieItems)
                           SizedBox(
                             key: ValueKey(pieItem),
                             width: 280,
@@ -67,10 +66,8 @@ class _PieMenuPropertiesState extends State<PieMenuProperties> {
                                 title: MinimalTextField(
                                   content: pieItem.displayName,
                                   onSubmitted: (String value) {
-                                    setState(() {
-                                      pieItem.displayName = value;
-                                    });
-                                    widget.onChanged(widget.pieMenu);
+                                    widget.controller
+                                        .updateProperties(name: value);
                                   },
                                 ),
                                 leading: TextButton(
@@ -110,14 +107,13 @@ class _PieMenuPropertiesState extends State<PieMenuProperties> {
                               const Text("Enabled"),
                               Material3Switch(
                                 // This bool value toggles the switch.
-                                value: widget.pieMenu.enabled,
+                                value: widget.controller.value.enabled,
                                 activeColor:
                                     Theme.of(context).colorScheme.primary,
                                 onChanged: (bool value) {
                                   // This is called when the user toggles the switch.
-                                  setState(() {
-                                    widget.pieMenu.enabled = value;
-                                  });
+                                  widget.controller
+                                      .updateProperties(enabled: value);
                                 },
                               )
                             ],
@@ -129,15 +125,14 @@ class _PieMenuPropertiesState extends State<PieMenuProperties> {
                               const Text("Open In Screen Center"),
                               Material3Switch(
                                 // This bool value toggles the switch.
-                                value: widget.pieMenu.openInScreenCenter,
+                                value: widget
+                                    .controller.value.openInScreenCenter,
                                 activeColor:
                                     Theme.of(context).colorScheme.primary,
                                 onChanged: (bool value) {
                                   // This is called when the user toggles the switch.
-                                  setState(() {
-                                    widget.pieMenu.openInScreenCenter = value;
-                                  });
-                                  widget.onChanged(widget.pieMenu);
+                                  widget.controller.updateProperties(
+                                      openInScreenCenter: value);
                                 },
                               )
                             ],
@@ -192,12 +187,11 @@ class _PieMenuPropertiesState extends State<PieMenuProperties> {
                                     child: DraggableNumberField(
                                       min: 0,
                                       max: 500,
-                                      value: widget.pieMenu.escapeRadius,
+                                      value: widget
+                                          .controller.value.escapeRadius,
                                       onChanged: (int value) {
-                                        setState(() {
-                                          widget.pieMenu.escapeRadius = value;
-                                        });
-                                        widget.onChanged(widget.pieMenu);
+                                        widget.controller.updateProperties(
+                                            escapeRadius: value);
                                       },
                                     ),
                                   ),
@@ -215,11 +209,11 @@ class _PieMenuPropertiesState extends State<PieMenuProperties> {
                                 child: DraggableNumberField(
                                   min: 0,
                                   max: 500,
-                                  value: widget.pieMenu.centerRadius,
+                                  value:
+                                      widget.controller.value.centerRadius,
                                   onChanged: (int value) {
-                                    widget.pieMenu.centerRadius = value;
-                                    widget.onChanged(widget.pieMenu);
-                                    setState(() {});
+                                    widget.controller
+                                        .updateProperties(centerRadius: value);
                                   },
                                 ),
                               ),
@@ -235,12 +229,11 @@ class _PieMenuPropertiesState extends State<PieMenuProperties> {
                                 child: DraggableNumberField(
                                   min: 0,
                                   max: 500,
-                                  value: widget.pieMenu.centerThickness,
+                                  value: widget
+                                      .controller.value.centerThickness,
                                   onChanged: (int value) {
-                                    setState(() {
-                                      widget.pieMenu.centerThickness = value;
-                                    });
-                                    widget.onChanged(widget.pieMenu);
+                                    widget.controller.updateProperties(
+                                        centerThickness: value);
                                   },
                                 ),
                               ),
@@ -256,12 +249,10 @@ class _PieMenuPropertiesState extends State<PieMenuProperties> {
                                 child: DraggableNumberField(
                                   min: 0,
                                   max: 500,
-                                  value: widget.pieMenu.iconSize,
+                                  value: widget.controller.value.iconSize,
                                   onChanged: (int value) {
-                                    setState(() {
-                                      widget.pieMenu.iconSize = value;
-                                    });
-                                    widget.onChanged(widget.pieMenu);
+                                    widget.controller.updateProperties(
+                                        iconSize: value);
                                   },
                                 ),
                               ),
@@ -277,12 +268,11 @@ class _PieMenuPropertiesState extends State<PieMenuProperties> {
                                 child: DraggableNumberField(
                                   min: 0,
                                   max: 500,
-                                  value: widget.pieMenu.pieItemRoundness,
+                                  value:
+                                      widget.controller.value.pieItemRoundness,
                                   onChanged: (int value) {
-                                    setState(() {
-                                      widget.pieMenu.pieItemRoundness = value;
-                                    });
-                                    widget.onChanged(widget.pieMenu);
+                                    widget.controller.updateProperties(
+                                        pieItemRoundness: value);
                                   },
                                 ),
                               ),
@@ -298,12 +288,10 @@ class _PieMenuPropertiesState extends State<PieMenuProperties> {
                                 child: DraggableNumberField(
                                   min: 0,
                                   max: 500,
-                                  value: widget.pieMenu.pieItemSpread,
+                                  value: widget.controller.value.pieItemSpread,
                                   onChanged: (int value) {
-                                    setState(() {
-                                      widget.pieMenu.pieItemSpread = value;
-                                    });
-                                    widget.onChanged(widget.pieMenu);
+                                    widget.controller.updateProperties(
+                                        pieItemSpread: value);
                                   },
                                 ),
                               ),
@@ -323,13 +311,12 @@ class _PieMenuPropertiesState extends State<PieMenuProperties> {
   }
 
   createPieItem() async {
-    final PieItem newPieItem = PieItem(displayName: "label-new-pie-item".i18n());
+    final PieItem newPieItem =
+        PieItem(displayName: "label-new-pie-item".i18n());
     await DB.putPieItem(newPieItem);
-    widget.pieMenu.pieItems.add(newPieItem);
+    widget.controller.addPieItem(newPieItem);
 
-    setState(() {
-
-    });
+    setState(() {});
     // updateParameterThenSetState();
   }
 }

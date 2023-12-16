@@ -6,9 +6,9 @@ import 'package:hotkey_manager/hotkey_manager.dart';
 import 'package:launch_at_startup/launch_at_startup.dart';
 import 'package:localization/localization.dart';
 import 'package:pie_menyu/settings/setting_keys.dart';
-import 'package:pie_menyu/ui/widgets/key_press_recorder.dart';
-import 'package:pie_menyu/ui/widgets/material_3_switch.dart';
-import 'package:pie_menyu/ui/widgets/setting_list_tile.dart';
+import 'package:pie_menyu/view/widgets/key_press_recorder.dart';
+import 'package:pie_menyu/view/widgets/material_3_switch.dart';
+import 'package:pie_menyu/view/widgets/setting_list_tile.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class RightSettingPanel extends StatefulWidget {
