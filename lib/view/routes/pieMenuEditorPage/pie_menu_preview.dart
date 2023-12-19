@@ -84,15 +84,26 @@ class _PieMenuPreviewState extends State<PieMenuPreview> {
     });
   }
 
-  double computeYAdjusted(int i, double originY) =>
-      originY +
-      getYFromBiasedPolar(angleDelta * i, widget.pieMenu.centerRadius);
+  double computeYAdjusted(int i, double originY) {
+    double yAdjusted = originY +
+        getYFromBiasedPolar(angleDelta * i, widget.pieMenu.centerRadius + widget.pieMenu.pieItemSpread);
+
+    if (i == 0) {
+      yAdjusted += 10;
+    }
+
+    if (i == widget.pieMenu.pieItems.length / 2) {
+      yAdjusted -= 10;
+    }
+
+    return yAdjusted;
+  }
 
   /// Returns the x coordinate relative to the [originX] and adjusted
   /// the pie item so it looks more like in a circle.
   double computeXAdjusted(int i, double originX) {
     double rawX =
-        getXFromBiasedPolar(angleDelta * i, widget.pieMenu.centerRadius);
+        getXFromBiasedPolar(angleDelta * i, widget.pieMenu.centerRadius + widget.pieMenu.pieItemSpread);
     double half = widget.pieMenu.pieItems.length / 2;
     if (i % half != 0) {
       rawX += i > half

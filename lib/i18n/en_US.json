@@ -33,6 +33,20 @@
   "label-main-color": "Main color",
   "label-colors": "Colors",
   "label-secondary-color": "Secondary color",
-  "label-icon-color": "Icon color"
+  "label-icon-color": "Icon color",
+  "label-hotkey-task": "Hotkey Task",
+  "label-hotkey": "Hotkey",
+  "button-add-hotkey-task": "Add Hotkey Task",
+  "label-repeat": "Repeat",
+  "tooltip-add-send-key-action": "Add Send Key Action - Send key to the active window",
+  "tooltip-add-mouse-click-action": "Add Mouse Click Action - Click mouse at specific position",
+  "tooltip-add-run-file-action": "Add Run File Action - Run file or application",
+  "tooltip-add-open-sub-menu-action": "Add Open Sub Menu Action - Open another Pie Menu",
+  "tooltip-add-open-folder-action": "Add Open Folder Action - Open folder",
+  "tooltip-add-open-app-action": "Add Open App Action - Open application if not running, otherwise bring it to front",
+  "tooltip-add-open-url-action": "Add Open URL Action - Open URL in browser",
+  "tooltip-add-open-editor-action": "Add Open Editor Action - Open PieMenyu editor",
+  "tooltip-add-resize-window-action": "Add Resize Window Action - Resize active window",
+  "tooltip-add-move-window-action": "Add Move Window Action - Move active window to certain position"
 
 }

@@ -39,7 +39,7 @@ class _PieMenuEditorPageState extends State<PieMenuEditorPage> {
                       child: PieMenuPreview(pieMenu: value),
                     ),
                     SizedBox(
-                        width: 300,
+                        width: 325,
                         child: PieMenuProperties(
                           controller: pieMenuController
                         )
