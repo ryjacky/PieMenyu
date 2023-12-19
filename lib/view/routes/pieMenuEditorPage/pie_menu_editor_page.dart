@@ -59,7 +59,8 @@ class _PieMenuEditorPageState extends State<PieMenuEditorPage> {
                                         Expanded(
                                           child: ElevatedButton.icon(
                                             onPressed: savePieMenu,
-                                            icon: const Icon(Icons.save_outlined),
+                                            icon:
+                                                const Icon(Icons.save_outlined),
                                             label: Text("button-save".i18n()),
                                           ),
                                         ),
@@ -94,5 +95,11 @@ class _PieMenuEditorPageState extends State<PieMenuEditorPage> {
     }
   }
 
-  resetPieMenu() {}
+  resetPieMenu() async {
+    PieMenu? initialPieMenu =
+        (await DB.getPieMenus(ids: [pieMenuController.value.id])).firstOrNull;
+    if (initialPieMenu != null) {
+      pieMenuController.value = initialPieMenu;
+    }
+  }
 }
