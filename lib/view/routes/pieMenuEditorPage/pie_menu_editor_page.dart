@@ -7,6 +7,7 @@ import 'package:pie_menyu/view/routes/pieMenuEditorPage/pie_menu_properties.dart
 
 class PieMenuEditorPage extends StatefulWidget {
   final PieMenu pieMenu;
+
   const PieMenuEditorPage({super.key, required this.pieMenu});
 
   @override
@@ -29,23 +30,21 @@ class _PieMenuEditorPageState extends State<PieMenuEditorPage> {
         body: Column(
           children: [
             const PieMenuEditorPageTitleBar(),
-            ValueListenableBuilder(
-              valueListenable: pieMenuController,
-              builder: (context, value, child) => Expanded(
-                child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
-                    Expanded(
-                      child: PieMenuPreview(pieMenu: value),
-                    ),
-                    SizedBox(
-                        width: 325,
-                        child: PieMenuProperties(
-                          controller: pieMenuController
-                        )
-                    ),
-                  ],
-                ),
+            Expanded(
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  Expanded(
+                    child: ValueListenableBuilder(
+                        valueListenable: pieMenuController,
+                        builder: (context, value, child) =>
+                            PieMenuPreview(pieMenu: value)),
+                  ),
+                  SizedBox(
+                      width: 325,
+                      child:
+                          PieMenuProperties(controller: pieMenuController)),
+                ],
               ),
             ),
           ],
