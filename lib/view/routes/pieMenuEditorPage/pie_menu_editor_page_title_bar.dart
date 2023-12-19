@@ -1,5 +1,7 @@
 import 'package:bitsdojo_window/bitsdojo_window.dart';
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:localization/localization.dart';
 
 class PieMenuEditorPageTitleBar extends StatelessWidget {
   const PieMenuEditorPageTitleBar({super.key});
@@ -26,6 +28,15 @@ class PieMenuEditorPageTitleBar extends StatelessWidget {
           color: Theme.of(context).colorScheme.surface,
           child: Row(
             children: [
+              Padding(
+                padding: const EdgeInsets.fromLTRB(5.0, 6.0, 0.0, 3),
+                child: TextButton(
+                    onPressed: () {},
+                    child: const Icon(
+                      FontAwesomeIcons.reply,
+                      size: 15,
+                    )),
+              ),
               Expanded(child: MoveWindow()),
               MinimizeWindowButton(colors: buttonColors),
               MaximizeWindowButton(colors: buttonColors),

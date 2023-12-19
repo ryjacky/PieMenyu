@@ -47,6 +47,7 @@
   "tooltip-add-open-url-action": "Add Open URL Action - Open URL in browser",
   "tooltip-add-open-editor-action": "Add Open Editor Action - Open PieMenyu editor",
   "tooltip-add-resize-window-action": "Add Resize Window Action - Resize active window",
-  "tooltip-add-move-window-action": "Add Move Window Action - Move active window to certain position"
-
+  "tooltip-add-move-window-action": "Add Move Window Action - Move active window to certain position",
+  "button-save": "Save",
+  "button-reset": "Reset"
 }
