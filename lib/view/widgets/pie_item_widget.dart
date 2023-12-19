@@ -48,12 +48,12 @@ class _PieItemWidgetState extends State<PieItemWidget> {
                   color: Color(widget.backgroundColor),
                 ),
                 padding: const EdgeInsets.all(5),
-                height: widget.iconSize,
                 child:
                     Row(mainAxisAlignment: MainAxisAlignment.start, children: [
                   Image.memory(
                     base64Decode(widget.icon),
-                    width: widget.iconSize,
+                    width: widget.iconSize + 5,
+                    alignment: Alignment.centerLeft,
                     height: widget.iconSize,
                     fit: BoxFit.fitHeight,
                     isAntiAlias: true,
@@ -61,10 +61,7 @@ class _PieItemWidgetState extends State<PieItemWidget> {
                       return const SizedBox(width: 0, height: 0);
                     },
                   ),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 5),
-                    child: Text(widget.name),
-                  )
+                      Text(widget.name)
                 ])),
           ]),
     );
