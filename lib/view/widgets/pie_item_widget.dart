@@ -1,26 +1,25 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:gap/gap.dart';
 
 enum PieItemOffset { toRight, toLeft, center }
 
 class PieItemWidget extends StatefulWidget {
   final int width;
-  final int height;
   final int backgroundColor;
   final int borderRadius;
   final String name;
   final String icon;
   final PieItemOffset horizontalOffset;
+  final double iconSize;
 
   const PieItemWidget(
       {super.key,
       required this.width,
-      required this.height,
       required this.backgroundColor,
       required this.borderRadius,
       required this.name,
+      required this.iconSize,
       this.icon = "",
       this.horizontalOffset = PieItemOffset.toRight});
 
@@ -29,33 +28,11 @@ class PieItemWidget extends StatefulWidget {
 }
 
 class _PieItemWidgetState extends State<PieItemWidget> {
-  bool hasIcon = false;
-  Image? icon;
-
-  @override
-  void initState() {
-    icon = Image.memory(
-      base64Decode(widget.icon),
-      width: 18,
-      height: 18,
-      errorBuilder: (context, object, error) {
-        setState(() {
-          hasIcon = false;
-        });
-        return const SizedBox(
-          width: 0,
-          height: 0,
-        );
-      },
-    );
-
-    super.initState();
-  }
-
   @override
   Widget build(BuildContext context) {
     return SizedBox(
       width: widget.width.toDouble(),
+
       child: Row(
           mainAxisAlignment: widget.horizontalOffset == PieItemOffset.toRight
               ? MainAxisAlignment.start
@@ -71,12 +48,23 @@ class _PieItemWidgetState extends State<PieItemWidget> {
                   color: Color(widget.backgroundColor),
                 ),
                 padding: const EdgeInsets.all(5),
-                height: widget.height.toDouble(),
+                height: widget.iconSize,
                 child:
                     Row(mainAxisAlignment: MainAxisAlignment.start, children: [
-                  if (hasIcon && icon != null) icon!,
-                      if (hasIcon)const Gap(10),
-                  Text(widget.name)
+                  Image.memory(
+                    base64Decode(widget.icon),
+                    width: widget.iconSize,
+                    height: widget.iconSize,
+                    fit: BoxFit.fitHeight,
+                    isAntiAlias: true,
+                    errorBuilder: (context, object, error) {
+                      return const SizedBox(width: 0, height: 0);
+                    },
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 5),
+                    child: Text(widget.name),
+                  )
                 ])),
           ]),
     );

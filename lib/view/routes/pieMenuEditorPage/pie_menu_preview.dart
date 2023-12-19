@@ -46,14 +46,22 @@ class _PieMenuPreviewState extends State<PieMenuPreview> {
       return Stack(
         children: [
           Positioned(
-              left: (constraints.maxWidth - widget.pieMenu.centerRadius - widget.pieMenu.centerThickness) / 2,
-              bottom: (constraints.maxHeight - widget.pieMenu.centerRadius - widget.pieMenu.centerThickness) / 2,
+              left: (constraints.maxWidth -
+                      widget.pieMenu.centerRadius -
+                      widget.pieMenu.centerThickness) /
+                  2,
+              bottom: (constraints.maxHeight -
+                      widget.pieMenu.centerRadius -
+                      widget.pieMenu.centerThickness) /
+                  2,
               child: CustomPaint(
                 size: Size(
                     (widget.pieMenu.centerRadius +
-                        widget.pieMenu.centerThickness).toDouble(),
+                            widget.pieMenu.centerThickness)
+                        .toDouble(),
                     (widget.pieMenu.centerRadius +
-                        widget.pieMenu.centerThickness).toDouble()),
+                            widget.pieMenu.centerThickness)
+                        .toDouble()),
                 painter: PieCenterPainter(
                     centerThickness: widget.pieMenu.centerThickness.toDouble(),
                     backgroundColor: Color(widget.pieMenu.secondaryColor),
@@ -77,7 +85,7 @@ class _PieMenuPreviewState extends State<PieMenuPreview> {
                   borderRadius: widget.pieMenu.pieItemRoundness,
                   backgroundColor: widget.pieMenu.secondaryColor,
                   width: widget.pieMenu.pieItemWidth,
-                  height: height,
+                  iconSize: widget.pieMenu.iconSize.toDouble(),
                 )),
         ],
       );
@@ -86,7 +94,8 @@ class _PieMenuPreviewState extends State<PieMenuPreview> {
 
   double computeYAdjusted(int i, double originY) {
     double yAdjusted = originY +
-        getYFromBiasedPolar(angleDelta * i, widget.pieMenu.centerRadius + widget.pieMenu.pieItemSpread);
+        getYFromBiasedPolar(angleDelta * i,
+            widget.pieMenu.centerRadius + widget.pieMenu.pieItemSpread);
 
     if (i == 0) {
       yAdjusted += 10;
@@ -102,8 +111,8 @@ class _PieMenuPreviewState extends State<PieMenuPreview> {
   /// Returns the x coordinate relative to the [originX] and adjusted
   /// the pie item so it looks more like in a circle.
   double computeXAdjusted(int i, double originX) {
-    double rawX =
-        getXFromBiasedPolar(angleDelta * i, widget.pieMenu.centerRadius + widget.pieMenu.pieItemSpread);
+    double rawX = getXFromBiasedPolar(angleDelta * i,
+        widget.pieMenu.centerRadius + widget.pieMenu.pieItemSpread);
     double half = widget.pieMenu.pieItems.length / 2;
     if (i % half != 0) {
       rawX += i > half
