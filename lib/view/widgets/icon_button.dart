@@ -6,7 +6,7 @@ class MonochromeIconButton extends TextButton {
           style: TextButton.styleFrom(
             foregroundColor: Colors.white70,
             padding: const EdgeInsets.all(0),
-            minimumSize: const Size(40, 40),
+            minimumSize: const Size(45, 45),
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(3),
             ),
