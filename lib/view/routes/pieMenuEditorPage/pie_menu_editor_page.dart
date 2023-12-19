@@ -88,6 +88,10 @@ class _PieMenuEditorPageState extends State<PieMenuEditorPage> {
 
   savePieMenu() {
     DB.putPieMenu(pieMenuController.value);
+    for (var pieItem in pieMenuController.value.pieItems) {
+      DB.putPieItem(pieItem);
+      DB.addPieItemToPieMenu(pieItem.id, pieMenuController.value.id);
+    }
   }
 
   resetPieMenu() {}
