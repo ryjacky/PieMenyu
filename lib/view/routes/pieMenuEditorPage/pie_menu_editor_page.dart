@@ -40,7 +40,9 @@ class _PieMenuEditorPageState extends State<PieMenuEditorPage> {
                         crossAxisAlignment: CrossAxisAlignment.stretch,
                         children: [
                           Expanded(
-                            child: PieMenuPreview(pieMenu: value),
+                            child: Container(
+                              color: Colors.white30,
+                                child: PieMenuPreview(pieMenu: value)),
                           ),
                           SizedBox(
                               width: 325,
