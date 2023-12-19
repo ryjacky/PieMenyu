@@ -31,7 +31,9 @@ class PieMenuEditorPageTitleBar extends StatelessWidget {
               Padding(
                 padding: const EdgeInsets.fromLTRB(5.0, 6.0, 0.0, 3),
                 child: TextButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                    },
                     child: const Icon(
                       FontAwesomeIcons.reply,
                       size: 15,
