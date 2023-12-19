@@ -31,21 +31,20 @@ class _PieMenuEditorPageState extends State<PieMenuEditorPage> {
           children: [
             const PieMenuEditorPageTitleBar(),
             Expanded(
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
-                  Expanded(
-                    child: ValueListenableBuilder(
-                        valueListenable: pieMenuController,
-                        builder: (context, value, child) =>
-                            PieMenuPreview(pieMenu: value)),
-                  ),
-                  SizedBox(
-                      width: 325,
-                      child:
-                          PieMenuProperties(controller: pieMenuController)),
-                ],
-              ),
+              child: ValueListenableBuilder(
+                  valueListenable: pieMenuController,
+                  builder: (context, value, child) => Row(
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        children: [
+                          Expanded(
+                            child: PieMenuPreview(pieMenu: value),
+                          ),
+                          SizedBox(
+                              width: 325,
+                              child: PieMenuProperties(
+                                  controller: pieMenuController)),
+                        ],
+                      )),
             ),
           ],
         ));
