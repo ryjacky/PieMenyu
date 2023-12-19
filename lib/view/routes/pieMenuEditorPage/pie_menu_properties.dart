@@ -92,9 +92,11 @@ class _PieMenuPropertiesState extends State<PieMenuProperties> {
                                     ),
                                   ),
                                   onPressed: () async {
-                                    widget.controller.updatePieItem(pieItem,
-                                        iconBase64:
-                                            await pickPieItemIconFromFile());
+                                    String? icon = await pickPieItemIconFromFile();
+                                    if (icon != null) {
+                                      widget.controller.updatePieItem(pieItem,
+                                          iconBase64: icon);
+                                    }
                                   },
                                   child: Image.memory(
                                     width: 32,
@@ -436,14 +438,14 @@ class _PieMenuPropertiesState extends State<PieMenuProperties> {
     // updateParameterThenSetState();
   }
 
-  Future<String> pickPieItemIconFromFile() async {
+  Future<String?> pickPieItemIconFromFile() async {
     FilePickerResult? result = await FilePicker.platform.pickFiles();
 
     if (result != null) {
       return FileIcon.getBase64(result.files.single.path!);
     }
 
-    return "";
+    return null;
   }
 
   void newHotkeyTask() {}
