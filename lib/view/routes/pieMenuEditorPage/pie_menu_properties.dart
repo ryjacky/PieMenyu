@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:gap/gap.dart';
 import 'package:localization/localization.dart';
-import 'package:pie_menyu/db/db.dart';
 import 'package:pie_menyu/db/pie_item.dart';
 import 'package:pie_menyu/system/file_icon.dart';
 import 'package:pie_menyu/view/widgets/PrimaryButton.dart';
@@ -15,7 +14,6 @@ import 'package:pie_menyu/view/widgets/material_3_switch.dart';
 import 'package:pie_menyu/view/widgets/minimal_text_field.dart';
 import 'package:provider/provider.dart';
 
-import '../../../db/pie_menu.dart';
 import 'pie_menu_editor_page_view_model.dart';
 import 'pie_menu_property_tab_actions.dart';
 
