@@ -51,7 +51,7 @@ const PieItemSchema = CollectionSchema(
       id: 1390805873144296387,
       name: r'beginningTask',
       target: r'PieItemTask',
-      single: true,
+      single: false,
     )
   },
   embeddedSchemas: {},
@@ -601,9 +601,56 @@ extension PieItemQueryLinks
     });
   }
 
-  QueryBuilder<PieItem, PieItem, QAfterFilterCondition> beginningTaskIsNull() {
+  QueryBuilder<PieItem, PieItem, QAfterFilterCondition>
+      beginningTaskLengthEqualTo(int length) {
+    return QueryBuilder.apply(this, (query) {
+      return query.linkLength(r'beginningTask', length, true, length, true);
+    });
+  }
+
+  QueryBuilder<PieItem, PieItem, QAfterFilterCondition> beginningTaskIsEmpty() {
     return QueryBuilder.apply(this, (query) {
       return query.linkLength(r'beginningTask', 0, true, 0, true);
+    });
+  }
+
+  QueryBuilder<PieItem, PieItem, QAfterFilterCondition>
+      beginningTaskIsNotEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.linkLength(r'beginningTask', 0, false, 999999, true);
+    });
+  }
+
+  QueryBuilder<PieItem, PieItem, QAfterFilterCondition>
+      beginningTaskLengthLessThan(
+    int length, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.linkLength(r'beginningTask', 0, true, length, include);
+    });
+  }
+
+  QueryBuilder<PieItem, PieItem, QAfterFilterCondition>
+      beginningTaskLengthGreaterThan(
+    int length, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.linkLength(r'beginningTask', length, include, 999999, true);
+    });
+  }
+
+  QueryBuilder<PieItem, PieItem, QAfterFilterCondition>
+      beginningTaskLengthBetween(
+    int lower,
+    int upper, {
+    bool includeLower = true,
+    bool includeUpper = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.linkLength(
+          r'beginningTask', lower, includeLower, upper, includeUpper);
     });
   }
 }

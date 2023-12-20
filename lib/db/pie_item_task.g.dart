@@ -40,14 +40,7 @@ const PieItemTaskSchema = CollectionSchema(
   deserializeProp: _pieItemTaskDeserializeProp,
   idName: r'id',
   indexes: {},
-  links: {
-    r'nextTask': LinkSchema(
-      id: 2726062798711907089,
-      name: r'nextTask',
-      target: r'PieItemTask',
-      single: true,
-    )
-  },
+  links: {},
   embeddedSchemas: {},
   getId: _pieItemTaskGetId,
   getLinks: _pieItemTaskGetLinks,
@@ -148,14 +141,12 @@ Id _pieItemTaskGetId(PieItemTask object) {
 }
 
 List<IsarLinkBase<dynamic>> _pieItemTaskGetLinks(PieItemTask object) {
-  return [object.nextTask];
+  return [];
 }
 
 void _pieItemTaskAttach(
     IsarCollection<dynamic> col, Id id, PieItemTask object) {
   object.id = id;
-  object.nextTask
-      .attach(col, col.isar.collection<PieItemTask>(), r'nextTask', id);
 }
 
 extension PieItemTaskQueryWhereSort
@@ -630,21 +621,7 @@ extension PieItemTaskQueryObject
     on QueryBuilder<PieItemTask, PieItemTask, QFilterCondition> {}
 
 extension PieItemTaskQueryLinks
-    on QueryBuilder<PieItemTask, PieItemTask, QFilterCondition> {
-  QueryBuilder<PieItemTask, PieItemTask, QAfterFilterCondition> nextTask(
-      FilterQuery<PieItemTask> q) {
-    return QueryBuilder.apply(this, (query) {
-      return query.link(q, r'nextTask');
-    });
-  }
-
-  QueryBuilder<PieItemTask, PieItemTask, QAfterFilterCondition>
-      nextTaskIsNull() {
-    return QueryBuilder.apply(this, (query) {
-      return query.linkLength(r'nextTask', 0, true, 0, true);
-    });
-  }
-}
+    on QueryBuilder<PieItemTask, PieItemTask, QFilterCondition> {}
 
 extension PieItemTaskQuerySortBy
     on QueryBuilder<PieItemTask, PieItemTask, QSortBy> {

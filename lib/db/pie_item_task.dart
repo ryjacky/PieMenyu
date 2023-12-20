@@ -11,8 +11,6 @@ class PieItemTask {
   int repeat = 1;
   List<String> arguments = [];
 
-  IsarLink<PieItemTask> nextTask = IsarLink<PieItemTask>();
-
   PieItemTask({
     this.taskType = PieItemTaskType.sendKey,
     this.repeat = 1,

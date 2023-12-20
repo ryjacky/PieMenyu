@@ -15,7 +15,7 @@ class PieItem {
   @Backlink(to: 'pieItems')
   IsarLinks<PieMenu> pieMenus = IsarLinks<PieMenu>();
 
-  IsarLink<PieItemTask> beginningTask = IsarLink<PieItemTask>();
+  IsarLinks<PieItemTask> beginningTask = IsarLinks<PieItemTask>();
 
   PieItem({
     this.iconBase64 = '',
