@@ -7,23 +7,28 @@ class PieItemTask {
   Id id = Isar.autoIncrement;
 
   @enumerated
-  PieItemTaskType taskType = PieItemTaskType.addon;
+  PieItemTaskType taskType = PieItemTaskType.sendKey;
   int repeat = 1;
   List<String> arguments = [];
 
   IsarLink<PieItemTask> nextTask = IsarLink<PieItemTask>();
 
   PieItemTask({
-    this.taskType = PieItemTaskType.addon,
+    this.taskType = PieItemTaskType.sendKey,
     this.repeat = 1,
     this.arguments = const [],
   });
 }
 
 enum PieItemTaskType {
-  addon,
-  delay,
-  repeat,
-  arguments,
-  nextTask,
+  sendKey,
+  mouseClick,
+  runFile,
+  openMenu,
+  openFolder,
+  openApp,
+  openUrl,
+  openEditor,
+  resizeWindow,
+  moveWindow,
 }

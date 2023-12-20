@@ -93,7 +93,7 @@ PieItemTask _pieItemTaskDeserialize(
     repeat: reader.readLongOrNull(offsets[1]) ?? 1,
     taskType:
         _PieItemTasktaskTypeValueEnumMap[reader.readByteOrNull(offsets[2])] ??
-            PieItemTaskType.addon,
+            PieItemTaskType.sendKey,
   );
   object.id = id;
   return object;
@@ -112,25 +112,35 @@ P _pieItemTaskDeserializeProp<P>(
       return (reader.readLongOrNull(offset) ?? 1) as P;
     case 2:
       return (_PieItemTasktaskTypeValueEnumMap[reader.readByteOrNull(offset)] ??
-          PieItemTaskType.addon) as P;
+          PieItemTaskType.sendKey) as P;
     default:
       throw IsarError('Unknown property with id $propertyId');
   }
 }
 
 const _PieItemTasktaskTypeEnumValueMap = {
-  'addon': 0,
-  'delay': 1,
-  'repeat': 2,
-  'arguments': 3,
-  'nextTask': 4,
+  'sendKey': 0,
+  'mouseClick': 1,
+  'runFile': 2,
+  'openMenu': 3,
+  'openFolder': 4,
+  'openApp': 5,
+  'openUrl': 6,
+  'openEditor': 7,
+  'resizeWindow': 8,
+  'moveWindow': 9,
 };
 const _PieItemTasktaskTypeValueEnumMap = {
-  0: PieItemTaskType.addon,
-  1: PieItemTaskType.delay,
-  2: PieItemTaskType.repeat,
-  3: PieItemTaskType.arguments,
-  4: PieItemTaskType.nextTask,
+  0: PieItemTaskType.sendKey,
+  1: PieItemTaskType.mouseClick,
+  2: PieItemTaskType.runFile,
+  3: PieItemTaskType.openMenu,
+  4: PieItemTaskType.openFolder,
+  5: PieItemTaskType.openApp,
+  6: PieItemTaskType.openUrl,
+  7: PieItemTaskType.openEditor,
+  8: PieItemTaskType.resizeWindow,
+  9: PieItemTaskType.moveWindow,
 };
 
 Id _pieItemTaskGetId(PieItemTask object) {
