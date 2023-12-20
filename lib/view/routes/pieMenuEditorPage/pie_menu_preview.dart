@@ -1,6 +1,8 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:localization/localization.dart';
+import 'package:pie_menyu/db/pie_item.dart';
 import 'package:pie_menyu/db/pie_menu.dart';
 import 'package:pie_menyu/view/routes/pieMenuEditorPage/pie_menu_editor_page_view_model.dart';
 import 'package:pie_menyu/view/widgets/pie_item_widget.dart';
@@ -9,71 +11,64 @@ import 'package:provider/provider.dart';
 import '../../painter/PieCenterPainter.dart';
 
 class PieMenuPreview extends StatefulWidget {
-  final PieMenu pieMenu;
-
-  const PieMenuPreview({super.key, required this.pieMenu});
+  const PieMenuPreview({super.key});
 
   @override
   State<PieMenuPreview> createState() => _PieMenuPreviewState();
 }
 
 class _PieMenuPreviewState extends State<PieMenuPreview> {
+  PieMenu _pieMenu = PieMenu(name: "label-loading".i18n());
+  List<PieItem> _pieItems = [];
   double angleDelta = 0;
 
   @override
   void initState() {
     super.initState();
-
-    updateParameterThenSetState();
   }
 
   Future<void> updateParameterThenSetState() async {
-    if (!widget.pieMenu.pieItems.isLoaded) {
-      widget.pieMenu.pieItems.load();
-    }
-    angleDelta = 2 * pi / widget.pieMenu.pieItems.length;
-
-    setState(() {});
+    angleDelta = 2 * pi / _pieMenu.pieItems.length;
   }
 
   @override
   Widget build(BuildContext context) {
+    _pieMenu = context.watch<PieMenuEditorPageViewModel>().pieMenu;
+    _pieItems = context.select<PieMenuEditorPageViewModel, List<PieItem>>(
+        (value) => value.pieItems);
+
+    updateParameterThenSetState();
     final currentPieMenuId = context.select<PieMenuEditorPageViewModel, int>(
         (value) => value.currentPieItemId);
 
     const height = 35;
 
-    if (!widget.pieMenu.pieItems.isLoaded) {
-      widget.pieMenu.pieItems.load();
-    }
-    angleDelta = 2 * pi / widget.pieMenu.pieItems.length;
+    angleDelta = 2 * pi / _pieItems.length;
     return LayoutBuilder(builder: (context, constraints) {
       return Stack(
         children: [
           Positioned(
               left: (constraints.maxWidth -
-                      widget.pieMenu.centerRadius -
-                      widget.pieMenu.centerThickness) /
+                      _pieMenu.centerRadius -
+                      _pieMenu.centerThickness) /
                   2,
               bottom: (constraints.maxHeight -
-                      widget.pieMenu.centerRadius -
-                      widget.pieMenu.centerThickness) /
+                      _pieMenu.centerRadius -
+                      _pieMenu.centerThickness) /
                   2,
               child: CustomPaint(
                 size: Size(
-                    (widget.pieMenu.centerRadius +
-                            widget.pieMenu.centerThickness)
+                    (_pieMenu.centerRadius + _pieMenu.centerThickness)
                         .toDouble(),
-                    (widget.pieMenu.centerRadius +
-                            widget.pieMenu.centerThickness)
+                    (_pieMenu.centerRadius + _pieMenu.centerThickness)
                         .toDouble()),
                 painter: PieCenterPainter(
-                    centerThickness: widget.pieMenu.centerThickness.toDouble(),
-                    backgroundColor: Color(widget.pieMenu.secondaryColor),
-                    foregroundColor: Color(widget.pieMenu.mainColor),
-                    numberOfPieItems: widget.pieMenu.pieItems.length),
+                    centerThickness: _pieMenu.centerThickness.toDouble(),
+                    backgroundColor: Color(_pieMenu.secondaryColor),
+                    foregroundColor: Color(_pieMenu.mainColor),
+                    numberOfPieItems: _pieItems.length),
               )),
-          for (int i = 0; i < widget.pieMenu.pieItems.length; i++)
+          for (int i = 0; i < _pieItems.length; i++)
             Positioned(
               left: computeXAdjusted(i, constraints.maxWidth / 2),
               bottom:
@@ -81,24 +76,23 @@ class _PieMenuPreviewState extends State<PieMenuPreview> {
               child: GestureDetector(
                 onTap: () {
                   context.read<PieMenuEditorPageViewModel>().currentPieItemId =
-                      widget.pieMenu.pieItems.elementAt(i).id;
+                      _pieItems.elementAt(i).id;
                 },
                 child: PieItemWidget(
-                  name: widget.pieMenu.pieItems.elementAt(i).displayName,
-                  icon: widget.pieMenu.pieItems.elementAt(i).iconBase64,
-                  horizontalOffset:
-                      i % (widget.pieMenu.pieItems.length / 2) == 0
-                          ? PieItemOffset.center
-                          : i > widget.pieMenu.pieItems.length / 2
-                              ? PieItemOffset.toLeft
-                              : PieItemOffset.toRight,
-                  borderRadius: widget.pieMenu.pieItemRoundness,
-                  backgroundColor: currentPieMenuId ==
-                          widget.pieMenu.pieItems.elementAt(i).id
-                      ? widget.pieMenu.mainColor
-                      : widget.pieMenu.secondaryColor,
-                  width: widget.pieMenu.pieItemWidth,
-                  iconSize: widget.pieMenu.iconSize.toDouble(),
+                  name: _pieItems.elementAt(i).displayName,
+                  icon: _pieItems.elementAt(i).iconBase64,
+                  horizontalOffset: i % (_pieItems.length / 2) == 0
+                      ? PieItemOffset.center
+                      : i > _pieItems.length / 2
+                          ? PieItemOffset.toLeft
+                          : PieItemOffset.toRight,
+                  borderRadius: _pieMenu.pieItemRoundness,
+                  backgroundColor:
+                      currentPieMenuId == _pieItems.elementAt(i).id
+                          ? _pieMenu.mainColor
+                          : _pieMenu.secondaryColor,
+                  width: _pieMenu.pieItemWidth,
+                  iconSize: _pieMenu.iconSize.toDouble(),
                 ),
               ),
             ),
@@ -109,14 +103,14 @@ class _PieMenuPreviewState extends State<PieMenuPreview> {
 
   double computeYAdjusted(int i, double originY) {
     double yAdjusted = originY +
-        getYFromBiasedPolar(angleDelta * i,
-            widget.pieMenu.centerRadius + widget.pieMenu.pieItemSpread);
+        getYFromBiasedPolar(
+            angleDelta * i, _pieMenu.centerRadius + _pieMenu.pieItemSpread);
 
     if (i == 0) {
       yAdjusted += 10;
     }
 
-    if (i == widget.pieMenu.pieItems.length / 2) {
+    if (i == _pieItems.length / 2) {
       yAdjusted -= 10;
     }
 
@@ -126,16 +120,14 @@ class _PieMenuPreviewState extends State<PieMenuPreview> {
   /// Returns the x coordinate relative to the [originX] and adjusted
   /// the pie item so it looks more like in a circle.
   double computeXAdjusted(int i, double originX) {
-    double rawX = getXFromBiasedPolar(angleDelta * i,
-        widget.pieMenu.centerRadius + widget.pieMenu.pieItemSpread);
-    double half = widget.pieMenu.pieItems.length / 2;
+    double rawX = getXFromBiasedPolar(
+        angleDelta * i, _pieMenu.centerRadius + _pieMenu.pieItemSpread);
+    double half = _pieItems.length / 2;
     if (i % half != 0) {
-      rawX += i > half
-          ? -widget.pieMenu.pieItemWidth / 2
-          : widget.pieMenu.pieItemWidth / 2;
+      rawX += i > half ? -_pieMenu.pieItemWidth / 2 : _pieMenu.pieItemWidth / 2;
     }
 
-    return originX + rawX - widget.pieMenu.pieItemWidth / 2;
+    return originX + rawX - _pieMenu.pieItemWidth / 2;
   }
 
   /// Returns the x coordinate from a polar coordinate system starting from the

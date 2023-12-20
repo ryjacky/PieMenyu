@@ -109,7 +109,7 @@ class DB {
     });
   }
 
-  static addPieItemToPieMenu(int pieItemID, int pieMenuId) async {
+  static addPieItemToPieMenuWithId(int pieItemID, int pieMenuId) async {
     List<dynamic> result = await Future.wait([
       _isar.pieItems.get(pieItemID),
       _isar.pieMenus.get(pieMenuId),
@@ -132,6 +132,34 @@ class DB {
       // Isar automatically handles duplicated case for IsarLinks and will
       // not add if existed
       await pieMenu.pieItems.save();
+    });
+  }
+
+  static addPieItemsToPieMenu(List<PieItem> pieItems, PieMenu pieMenu) async {
+    pieMenu.pieItems.addAll(pieItems);
+    await _isar.writeTxn(() async {
+      // Isar automatically handles duplicated case for IsarLinks and will
+      // not add if existed
+      await pieMenu.pieItems.save();
+    });
+  }
+
+  /// Quoted from https://isar.dev/docs/
+  /// Insert or update a list of objects.
+  /// Returns the list of ids of the new or updated objects.
+  /// If the objects have an non-final id property,
+  /// it will be set to the assigned id.
+  /// Otherwise you should use the returned ids to update the objects.
+  static Future<void> putPieItemTasks(List<PieItemTask> tasks) async {
+    await _isar.writeTxn(() async {
+      await _isar.pieItemTasks.putAll(tasks);
+    });
+  }
+
+  static addTasksToPieItem(List<PieItemTask> tasks, PieItem pieItem) {
+    pieItem.tasks.addAll(tasks);
+    _isar.writeTxn(() async {
+      pieItem.tasks.save();
     });
   }
 }

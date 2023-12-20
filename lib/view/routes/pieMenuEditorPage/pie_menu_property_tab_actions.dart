@@ -53,7 +53,7 @@ class PieMenuPropertyTabActions extends StatelessWidget {
                 icon: Icons.keyboard,
                 onPressed: () => context
                     .read<PieMenuEditorPageViewModel>()
-                    .createTask(PieItemTaskType.sendKey),
+                    .createTaskInCurrentPieItem(PieItemTaskType.sendKey),
               ),
             ),
             Gap(gap),
@@ -63,7 +63,7 @@ class PieMenuPropertyTabActions extends StatelessWidget {
                 icon: FontAwesomeIcons.handPointer,
                 onPressed: () => context
                     .read<PieMenuEditorPageViewModel>()
-                    .createTask(PieItemTaskType.mouseClick),
+                    .createTaskInCurrentPieItem(PieItemTaskType.mouseClick),
               ),
             ),
             Gap(gap),
@@ -73,7 +73,7 @@ class PieMenuPropertyTabActions extends StatelessWidget {
                 icon: Icons.file_open,
                 onPressed: () => context
                     .read<PieMenuEditorPageViewModel>()
-                    .createTask(PieItemTaskType.runFile),
+                    .createTaskInCurrentPieItem(PieItemTaskType.runFile),
               ),
             ),
             Gap(gap),
@@ -83,7 +83,7 @@ class PieMenuPropertyTabActions extends StatelessWidget {
                 icon: Icons.pie_chart,
                 onPressed: () => context
                     .read<PieMenuEditorPageViewModel>()
-                    .createTask(PieItemTaskType.openSubMenu),
+                    .createTaskInCurrentPieItem(PieItemTaskType.openSubMenu),
               ),
             ),
             Gap(gap),
@@ -93,7 +93,7 @@ class PieMenuPropertyTabActions extends StatelessWidget {
                 icon: Icons.folder,
                 onPressed: () => context
                     .read<PieMenuEditorPageViewModel>()
-                    .createTask(PieItemTaskType.openFolder),
+                    .createTaskInCurrentPieItem(PieItemTaskType.openFolder),
               ),
             ),
             Gap(gap),
@@ -103,7 +103,7 @@ class PieMenuPropertyTabActions extends StatelessWidget {
                 icon: Icons.play_arrow_rounded,
                 onPressed: () => context
                     .read<PieMenuEditorPageViewModel>()
-                    .createTask(PieItemTaskType.openApp),
+                    .createTaskInCurrentPieItem(PieItemTaskType.openApp),
               ),
             ),
             Gap(gap),
@@ -113,7 +113,7 @@ class PieMenuPropertyTabActions extends StatelessWidget {
                 icon: Icons.link,
                 onPressed: () => context
                     .read<PieMenuEditorPageViewModel>()
-                    .createTask(PieItemTaskType.openUrl),
+                    .createTaskInCurrentPieItem(PieItemTaskType.openUrl),
               ),
             ),
             Gap(gap),
@@ -123,7 +123,7 @@ class PieMenuPropertyTabActions extends StatelessWidget {
                 icon: Icons.edit_note,
                 onPressed: () => context
                     .read<PieMenuEditorPageViewModel>()
-                    .createTask(PieItemTaskType.openEditor),
+                    .createTaskInCurrentPieItem(PieItemTaskType.openEditor),
               ),
             ),
             Gap(gap),
@@ -133,7 +133,7 @@ class PieMenuPropertyTabActions extends StatelessWidget {
                 icon: Icons.photo_size_select_small,
                 onPressed: () => context
                     .read<PieMenuEditorPageViewModel>()
-                    .createTask(PieItemTaskType.resizeWindow),
+                    .createTaskInCurrentPieItem(PieItemTaskType.resizeWindow),
               ),
             ),
             Gap(gap),
@@ -143,7 +143,7 @@ class PieMenuPropertyTabActions extends StatelessWidget {
                 icon: Icons.move_down,
                 onPressed: () => context
                     .read<PieMenuEditorPageViewModel>()
-                    .createTask(PieItemTaskType.moveWindow),
+                    .createTaskInCurrentPieItem(PieItemTaskType.moveWindow),
               ),
             ),
             Gap(gap),
