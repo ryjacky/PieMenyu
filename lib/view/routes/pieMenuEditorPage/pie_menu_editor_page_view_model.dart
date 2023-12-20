@@ -20,9 +20,9 @@ class PieMenuEditorPageViewModel extends ChangeNotifier {
   Map<int, List<PieItemTask>> _tasksOfPieItem = {};
 
   PieMenuEditorPageViewModel({
-    required int currentPieMenuId,
+    required int currentPieItemId,
     required PieMenu pieMenu,
-  })  : _currentPieItemId = currentPieMenuId,
+  })  : _currentPieItemId = currentPieItemId,
         _pieMenu = pieMenu {
     loadPieItemTasks();
   }
@@ -41,9 +41,9 @@ class PieMenuEditorPageViewModel extends ChangeNotifier {
 
   PieMenu get pieMenu => _pieMenu;
 
-  int get currentPieMenuId => _currentPieItemId;
+  int get currentPieItemId => _currentPieItemId;
 
-  set currentPieMenuId(int value) {
+  set currentPieItemId(int value) {
     _currentPieItemId = value;
     notifyListeners();
   }

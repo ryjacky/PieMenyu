@@ -39,7 +39,7 @@ class _PieMenuPreviewState extends State<PieMenuPreview> {
   @override
   Widget build(BuildContext context) {
     final currentPieMenuId = context.select<PieMenuEditorPageViewModel, int>(
-        (value) => value.currentPieMenuId);
+        (value) => value.currentPieItemId);
 
     const height = 35;
 
@@ -75,32 +75,33 @@ class _PieMenuPreviewState extends State<PieMenuPreview> {
               )),
           for (int i = 0; i < widget.pieMenu.pieItems.length; i++)
             Positioned(
-                left: computeXAdjusted(i, constraints.maxWidth / 2),
-                bottom:
-                    computeYAdjusted(i, constraints.maxHeight / 2 - height / 2),
-                child: GestureDetector(
-                  onTap: () {
-                    context
-                        .read<PieMenuEditorPageViewModel>()
-                        .currentPieMenuId = i;
-                  },
-                  child: PieItemWidget(
-                    name: widget.pieMenu.pieItems.elementAt(i).displayName,
-                    icon: widget.pieMenu.pieItems.elementAt(i).iconBase64,
-                    horizontalOffset:
-                        i % (widget.pieMenu.pieItems.length / 2) == 0
-                            ? PieItemOffset.center
-                            : i > widget.pieMenu.pieItems.length / 2
-                                ? PieItemOffset.toLeft
-                                : PieItemOffset.toRight,
-                    borderRadius: widget.pieMenu.pieItemRoundness,
-                    backgroundColor: currentPieMenuId == i
-                        ? widget.pieMenu.mainColor
-                        : widget.pieMenu.secondaryColor,
-                    width: widget.pieMenu.pieItemWidth,
-                    iconSize: widget.pieMenu.iconSize.toDouble(),
-                  ),
-                )),
+              left: computeXAdjusted(i, constraints.maxWidth / 2),
+              bottom:
+                  computeYAdjusted(i, constraints.maxHeight / 2 - height / 2),
+              child: GestureDetector(
+                onTap: () {
+                  context.read<PieMenuEditorPageViewModel>().currentPieItemId =
+                      widget.pieMenu.pieItems.elementAt(i).id;
+                },
+                child: PieItemWidget(
+                  name: widget.pieMenu.pieItems.elementAt(i).displayName,
+                  icon: widget.pieMenu.pieItems.elementAt(i).iconBase64,
+                  horizontalOffset:
+                      i % (widget.pieMenu.pieItems.length / 2) == 0
+                          ? PieItemOffset.center
+                          : i > widget.pieMenu.pieItems.length / 2
+                              ? PieItemOffset.toLeft
+                              : PieItemOffset.toRight,
+                  borderRadius: widget.pieMenu.pieItemRoundness,
+                  backgroundColor: currentPieMenuId ==
+                          widget.pieMenu.pieItems.elementAt(i).id
+                      ? widget.pieMenu.mainColor
+                      : widget.pieMenu.secondaryColor,
+                  width: widget.pieMenu.pieItemWidth,
+                  iconSize: widget.pieMenu.iconSize.toDouble(),
+                ),
+              ),
+            ),
         ],
       );
     });

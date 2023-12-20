@@ -16,11 +16,19 @@ class PieMenuPropertyTabActions extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final currentPieItemId = context.select<PieMenuEditorPageViewModel, int>(
+        (value) => value.currentPieItemId);
+
     return Row(
       children: [
-        const Expanded(
+        Expanded(
           flex: 7,
-          child: PieItemTaskList(),
+          child: currentPieItemId == 0
+              ? Text(
+                  "hint-select-pie-item-first".i18n(),
+                  textAlign: TextAlign.center,
+                )
+              : const PieItemTaskList(),
         ),
         Container(
           padding: const EdgeInsets.fromLTRB(5, 0, 5, 0),

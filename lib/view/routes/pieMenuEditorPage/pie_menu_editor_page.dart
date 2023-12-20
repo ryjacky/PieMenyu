@@ -34,7 +34,7 @@ class _PieMenuEditorPageState extends State<PieMenuEditorPage> {
       providers: [
         ChangeNotifierProvider(
           create: (context) => PieMenuEditorPageViewModel(
-            currentPieMenuId: widget.pieMenu.id,
+            currentPieItemId: 0,
             pieMenu: widget.pieMenu,
           ),
         ),

@@ -11,7 +11,7 @@ class PieItemTaskList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final currentPieItemId = context.select<PieMenuEditorPageViewModel, int>(
-            (value) => value.currentPieMenuId);
+            (value) => value.currentPieItemId);
 
     final List<PieItemTask> pieItemTasks =
     context.select<PieMenuEditorPageViewModel, List<PieItemTask>>(
