@@ -2,7 +2,9 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:pie_menyu/db/pie_menu.dart';
+import 'package:pie_menyu/view/routes/pieMenuEditorPage/pie_menu_editor_page_view_model.dart';
 import 'package:pie_menyu/view/widgets/pie_item_widget.dart';
+import 'package:provider/provider.dart';
 
 import '../../painter/PieCenterPainter.dart';
 
@@ -36,6 +38,9 @@ class _PieMenuPreviewState extends State<PieMenuPreview> {
 
   @override
   Widget build(BuildContext context) {
+    final currentPieMenuId = context.select<PieMenuEditorPageViewModel, int>(
+        (value) => value.currentPieMenuId);
+
     const height = 35;
 
     if (!widget.pieMenu.pieItems.isLoaded) {
@@ -73,19 +78,28 @@ class _PieMenuPreviewState extends State<PieMenuPreview> {
                 left: computeXAdjusted(i, constraints.maxWidth / 2),
                 bottom:
                     computeYAdjusted(i, constraints.maxHeight / 2 - height / 2),
-                child: PieItemWidget(
-                  name: widget.pieMenu.pieItems.elementAt(i).displayName,
-                  icon: widget.pieMenu.pieItems.elementAt(i).iconBase64,
-                  horizontalOffset:
-                      i % (widget.pieMenu.pieItems.length / 2) == 0
-                          ? PieItemOffset.center
-                          : i > widget.pieMenu.pieItems.length / 2
-                              ? PieItemOffset.toLeft
-                              : PieItemOffset.toRight,
-                  borderRadius: widget.pieMenu.pieItemRoundness,
-                  backgroundColor: widget.pieMenu.secondaryColor,
-                  width: widget.pieMenu.pieItemWidth,
-                  iconSize: widget.pieMenu.iconSize.toDouble(),
+                child: GestureDetector(
+                  onTap: () {
+                    context
+                        .read<PieMenuEditorPageViewModel>()
+                        .currentPieMenuId = i;
+                  },
+                  child: PieItemWidget(
+                    name: widget.pieMenu.pieItems.elementAt(i).displayName,
+                    icon: widget.pieMenu.pieItems.elementAt(i).iconBase64,
+                    horizontalOffset:
+                        i % (widget.pieMenu.pieItems.length / 2) == 0
+                            ? PieItemOffset.center
+                            : i > widget.pieMenu.pieItems.length / 2
+                                ? PieItemOffset.toLeft
+                                : PieItemOffset.toRight,
+                    borderRadius: widget.pieMenu.pieItemRoundness,
+                    backgroundColor: currentPieMenuId == i
+                        ? widget.pieMenu.mainColor
+                        : widget.pieMenu.secondaryColor,
+                    width: widget.pieMenu.pieItemWidth,
+                    iconSize: widget.pieMenu.iconSize.toDouble(),
+                  ),
                 )),
         ],
       );

@@ -115,25 +115,27 @@ const _PieItemTasktaskTypeEnumValueMap = {
   'sendKey': 0,
   'mouseClick': 1,
   'runFile': 2,
-  'openMenu': 3,
+  'openSubMenu': 3,
   'openFolder': 4,
   'openApp': 5,
   'openUrl': 6,
   'openEditor': 7,
   'resizeWindow': 8,
   'moveWindow': 9,
+  'sendText': 10,
 };
 const _PieItemTasktaskTypeValueEnumMap = {
   0: PieItemTaskType.sendKey,
   1: PieItemTaskType.mouseClick,
   2: PieItemTaskType.runFile,
-  3: PieItemTaskType.openMenu,
+  3: PieItemTaskType.openSubMenu,
   4: PieItemTaskType.openFolder,
   5: PieItemTaskType.openApp,
   6: PieItemTaskType.openUrl,
   7: PieItemTaskType.openEditor,
   8: PieItemTaskType.resizeWindow,
   9: PieItemTaskType.moveWindow,
+  10: PieItemTaskType.sendText,
 };
 
 Id _pieItemTaskGetId(PieItemTask object) {

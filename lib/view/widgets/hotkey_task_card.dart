@@ -13,7 +13,6 @@ class HotkeyTaskCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
-
         child: Column(
       children: [
         ListTile(
@@ -32,17 +31,15 @@ class HotkeyTaskCard extends StatelessWidget {
                   ),
                 ],
               ),
-            )
-        ),
+            )),
         ListTile(
           title: Text("label-hotkey".i18n()),
           trailing: SizedBox(
             width: 160,
-            child: KeyPressRecorder(onHotKeyRecorded: (hotkey){}),
+            child: KeyPressRecorder(onHotKeyRecorded: (hotkey) {}),
           ),
         )
       ],
-
     ));
   }
 }

@@ -17,6 +17,11 @@ import 'package:pie_menyu/view/widgets/icon_button.dart';
 import 'package:pie_menyu/view/widgets/material_3_switch.dart';
 import 'package:pie_menyu/view/widgets/minimal_text_field.dart';
 import 'package:pie_menyu/view/widgets/hotkey_task_card.dart';
+import 'package:provider/provider.dart';
+
+import 'pie_item_task_list.dart';
+import 'pie_menu_editor_page_view_model.dart';
+import 'pie_menu_property_tab_actions.dart';
 
 class PieMenuProperties extends StatefulWidget {
   final PieMenuController controller;
@@ -29,8 +34,6 @@ class PieMenuProperties extends StatefulWidget {
 
 class _PieMenuPropertiesState extends State<PieMenuProperties> {
   final double rowGap = 10;
-  final double buttonGap = 6;
-  List<PieItemTask> pieItemTasks = [PieItemTask()];
 
   @override
   Widget build(BuildContext context) {
@@ -92,7 +95,8 @@ class _PieMenuPropertiesState extends State<PieMenuProperties> {
                                     ),
                                   ),
                                   onPressed: () async {
-                                    String? icon = await pickPieItemIconFromFile();
+                                    String? icon =
+                                        await pickPieItemIconFromFile();
                                     if (icon != null) {
                                       widget.controller.updatePieItem(pieItem,
                                           iconBase64: icon);
@@ -319,108 +323,7 @@ class _PieMenuPropertiesState extends State<PieMenuProperties> {
                       ),
                     ),
                   ),
-                  Row(
-                    children: [
-                      Expanded(
-                        flex: 7,
-                        child: ListView(
-                          children: [
-                            for (final PieItemTask pieItemTask in pieItemTasks)
-                              HotkeyTaskCard(pieItemTask: pieItemTask),
-                          ],
-                        ),
-                      ),
-                      Container(
-                        padding: const EdgeInsets.fromLTRB(5, 0, 5, 0),
-                        width: 50,
-                        child: ListView(children: [
-                          Container(
-                            alignment: Alignment.center,
-                            padding: const EdgeInsets.fromLTRB(0, 10, 0, 0),
-                            child: const FaIcon(
-                              FontAwesomeIcons.plus,
-                              color: Colors.white70,
-                              size: 20,
-                            ),
-                          ),
-                          const Divider(
-                            indent: 7,
-                            endIndent: 7,
-                          ),
-                          Tooltip(
-                            message: "tooltip-add-send-key-action".i18n(),
-                            child: MonochromeIconButton(
-                                icon: Icons.keyboard,
-                                onPressed: newHotkeyTask),
-                          ),
-                          Gap(buttonGap),
-                          Tooltip(
-                            message: "tooltip-add-mouse-click-action".i18n(),
-                            child: MonochromeIconButton(
-                                icon: FontAwesomeIcons.handPointer,
-                                onPressed: newHotkeyTask),
-                          ),
-                          Gap(buttonGap),
-                          Tooltip(
-                            message: "tooltip-add-run-file-action".i18n(),
-                            child: MonochromeIconButton(
-                                icon: Icons.file_open,
-                                onPressed: newHotkeyTask),
-                          ),
-                          Gap(buttonGap),
-                          Tooltip(
-                            message:
-                                "tooltip-add-open-sub-menu-action".i18n(),
-                            child: MonochromeIconButton(
-                                icon: Icons.pie_chart,
-                                onPressed: newHotkeyTask),
-                          ),
-                          Gap(buttonGap),
-                          Tooltip(
-                            message: "tooltip-add-open-folder-action".i18n(),
-                            child: MonochromeIconButton(
-                                icon: Icons.folder, onPressed: newHotkeyTask),
-                          ),
-                          Gap(buttonGap),
-                          Tooltip(
-                            message: "tooltip-add-open-app-action".i18n(),
-                            child: MonochromeIconButton(
-                                icon: Icons.play_arrow_rounded,
-                                onPressed: newHotkeyTask),
-                          ),
-                          Gap(buttonGap),
-                          Tooltip(
-                            message: "tooltip-add-open-url-action".i18n(),
-                            child: MonochromeIconButton(
-                                icon: Icons.link, onPressed: newHotkeyTask),
-                          ),
-                          Gap(buttonGap),
-                          Tooltip(
-                            message: "tooltip-add-open-editor-action".i18n(),
-                            child: MonochromeIconButton(
-                                icon: Icons.edit_note,
-                                onPressed: newHotkeyTask),
-                          ),
-                          Gap(buttonGap),
-                          Tooltip(
-                            message:
-                                "tooltip-add-resize-window-action".i18n(),
-                            child: MonochromeIconButton(
-                                icon: Icons.photo_size_select_small,
-                                onPressed: newHotkeyTask),
-                          ),
-                          Gap(buttonGap),
-                          Tooltip(
-                            message: "tooltip-add-move-window-action".i18n(),
-                            child: MonochromeIconButton(
-                                icon: Icons.move_down,
-                                onPressed: newHotkeyTask),
-                          ),
-                          Gap(buttonGap),
-                        ]),
-                      ),
-                    ],
-                  ),
+                  const PieMenuPropertyTabActions(),
                 ],
               ),
             ),
@@ -450,3 +353,5 @@ class _PieMenuPropertiesState extends State<PieMenuProperties> {
 
   void newHotkeyTask() {}
 }
+
+

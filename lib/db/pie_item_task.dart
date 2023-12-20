@@ -22,11 +22,12 @@ enum PieItemTaskType {
   sendKey,
   mouseClick,
   runFile,
-  openMenu,
+  openSubMenu,
   openFolder,
   openApp,
   openUrl,
   openEditor,
   resizeWindow,
   moveWindow,
+  sendText,
 }

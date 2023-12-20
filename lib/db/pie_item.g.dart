@@ -47,9 +47,9 @@ const PieItemSchema = CollectionSchema(
       single: false,
       linkName: r'pieItems',
     ),
-    r'beginningTask': LinkSchema(
-      id: 1390805873144296387,
-      name: r'beginningTask',
+    r'tasks': LinkSchema(
+      id: -8485404465967763350,
+      name: r'tasks',
       target: r'PieItemTask',
       single: false,
     )
@@ -121,14 +121,13 @@ Id _pieItemGetId(PieItem object) {
 }
 
 List<IsarLinkBase<dynamic>> _pieItemGetLinks(PieItem object) {
-  return [object.pieMenus, object.beginningTask];
+  return [object.pieMenus, object.tasks];
 }
 
 void _pieItemAttach(IsarCollection<dynamic> col, Id id, PieItem object) {
   object.id = id;
   object.pieMenus.attach(col, col.isar.collection<PieMenu>(), r'pieMenus', id);
-  object.beginningTask
-      .attach(col, col.isar.collection<PieItemTask>(), r'beginningTask', id);
+  object.tasks.attach(col, col.isar.collection<PieItemTask>(), r'tasks', id);
 }
 
 extension PieItemQueryWhereSort on QueryBuilder<PieItem, PieItem, QWhere> {
@@ -594,55 +593,51 @@ extension PieItemQueryLinks
     });
   }
 
-  QueryBuilder<PieItem, PieItem, QAfterFilterCondition> beginningTask(
+  QueryBuilder<PieItem, PieItem, QAfterFilterCondition> tasks(
       FilterQuery<PieItemTask> q) {
     return QueryBuilder.apply(this, (query) {
-      return query.link(q, r'beginningTask');
+      return query.link(q, r'tasks');
     });
   }
 
-  QueryBuilder<PieItem, PieItem, QAfterFilterCondition>
-      beginningTaskLengthEqualTo(int length) {
+  QueryBuilder<PieItem, PieItem, QAfterFilterCondition> tasksLengthEqualTo(
+      int length) {
     return QueryBuilder.apply(this, (query) {
-      return query.linkLength(r'beginningTask', length, true, length, true);
+      return query.linkLength(r'tasks', length, true, length, true);
     });
   }
 
-  QueryBuilder<PieItem, PieItem, QAfterFilterCondition> beginningTaskIsEmpty() {
+  QueryBuilder<PieItem, PieItem, QAfterFilterCondition> tasksIsEmpty() {
     return QueryBuilder.apply(this, (query) {
-      return query.linkLength(r'beginningTask', 0, true, 0, true);
+      return query.linkLength(r'tasks', 0, true, 0, true);
     });
   }
 
-  QueryBuilder<PieItem, PieItem, QAfterFilterCondition>
-      beginningTaskIsNotEmpty() {
+  QueryBuilder<PieItem, PieItem, QAfterFilterCondition> tasksIsNotEmpty() {
     return QueryBuilder.apply(this, (query) {
-      return query.linkLength(r'beginningTask', 0, false, 999999, true);
+      return query.linkLength(r'tasks', 0, false, 999999, true);
     });
   }
 
-  QueryBuilder<PieItem, PieItem, QAfterFilterCondition>
-      beginningTaskLengthLessThan(
+  QueryBuilder<PieItem, PieItem, QAfterFilterCondition> tasksLengthLessThan(
     int length, {
     bool include = false,
   }) {
     return QueryBuilder.apply(this, (query) {
-      return query.linkLength(r'beginningTask', 0, true, length, include);
+      return query.linkLength(r'tasks', 0, true, length, include);
     });
   }
 
-  QueryBuilder<PieItem, PieItem, QAfterFilterCondition>
-      beginningTaskLengthGreaterThan(
+  QueryBuilder<PieItem, PieItem, QAfterFilterCondition> tasksLengthGreaterThan(
     int length, {
     bool include = false,
   }) {
     return QueryBuilder.apply(this, (query) {
-      return query.linkLength(r'beginningTask', length, include, 999999, true);
+      return query.linkLength(r'tasks', length, include, 999999, true);
     });
   }
 
-  QueryBuilder<PieItem, PieItem, QAfterFilterCondition>
-      beginningTaskLengthBetween(
+  QueryBuilder<PieItem, PieItem, QAfterFilterCondition> tasksLengthBetween(
     int lower,
     int upper, {
     bool includeLower = true,
@@ -650,7 +645,7 @@ extension PieItemQueryLinks
   }) {
     return QueryBuilder.apply(this, (query) {
       return query.linkLength(
-          r'beginningTask', lower, includeLower, upper, includeUpper);
+          r'tasks', lower, includeLower, upper, includeUpper);
     });
   }
 }

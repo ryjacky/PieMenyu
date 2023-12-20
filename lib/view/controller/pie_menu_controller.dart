@@ -56,14 +56,14 @@ class PieMenuController extends ValueNotifier<PieMenu> {
     bool? enabled,
     PieItemTask? pieItemTask,
   }) {
-    pieItem
-    ..iconBase64 = iconBase64 ?? pieItem.iconBase64
-    ..displayName = displayName ?? pieItem.displayName
-    ..enabled = enabled ?? pieItem.enabled;
-
-    if (pieItemTask != null) {
-      pieItem.beginningTask.value = pieItemTask;
-    }
+    // pieItem
+    // ..iconBase64 = iconBase64 ?? pieItem.iconBase64
+    // ..displayName = displayName ?? pieItem.displayName
+    // ..enabled = enabled ?? pieItem.enabled;
+    //
+    // if (pieItemTask != null) {
+    //   pieItem.tasks.value = pieItemTask;
+    // }
 
     notifyListeners();
   }
