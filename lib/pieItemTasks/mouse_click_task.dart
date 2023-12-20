@@ -1,16 +1,21 @@
 import 'package:pie_menyu/db/pie_item_task.dart';
 
 class MouseClickTask extends PieItemTask {
-  MouseClickTask();
+  MouseClickTask() : super(taskType: PieItemTaskType.mouseClick){
+    _fieldCheck();
+  }
 
-  _beforeSet(){
+  MouseClickTask.from(PieItemTask pieItemTask) : super.from(pieItemTask){
+    _fieldCheck();
+  }
+
+  _fieldCheck(){
     if (arguments.length != 3) {
       arguments = ["", "", ""];
     }
   }
 
   set mouseButton(MouseButton value) {
-    _beforeSet();
     arguments[0] = value.name;
   }
 
@@ -20,21 +25,19 @@ class MouseClickTask extends PieItemTask {
   }
 
   set x(int value) {
-    _beforeSet();
     arguments[1] = value.toString();
   }
 
   int get x {
-    return int.parse(arguments[1]);
+    return int.tryParse(arguments[1]) ?? 0;
   }
 
   set y(int value) {
-    _beforeSet();
     arguments[2] = value.toString();
   }
 
   int get y {
-    return int.parse(arguments[2]);
+    return int.tryParse(arguments[2]) ?? 0;
   }
 }
 

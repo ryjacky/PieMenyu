@@ -50,5 +50,9 @@
   "tooltip-add-move-window-task": "Add Move Window Task - Move active window to certain position",
   "button-save": "Save",
   "button-reset": "Reset",
-  "hint-select-pie-item-first": "Select Pie Item first"
+  "hint-select-pie-item-first": "Select Pie Item first",
+  "label-mouse-click-task": "Mouse Click Task",
+  "label-x": "X",
+  "label-y": "Y",
+  "label-mouse-button": "Mouse Button"
 }

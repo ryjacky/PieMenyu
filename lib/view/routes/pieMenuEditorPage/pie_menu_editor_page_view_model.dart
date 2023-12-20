@@ -5,6 +5,7 @@ import 'package:pie_menyu/db/db.dart';
 import 'package:pie_menyu/db/pie_item.dart';
 import 'package:pie_menyu/db/pie_item_task.dart';
 import 'package:pie_menyu/db/pie_menu.dart';
+import 'package:pie_menyu/pieItemTasks/mouse_click_task.dart';
 import 'package:pie_menyu/pieItemTasks/move_window_task.dart';
 import 'package:pie_menyu/pieItemTasks/open_app_task.dart';
 import 'package:pie_menyu/pieItemTasks/open_editor_task.dart';
@@ -13,8 +14,6 @@ import 'package:pie_menyu/pieItemTasks/open_sub_menu_task.dart';
 import 'package:pie_menyu/pieItemTasks/open_url_task.dart';
 import 'package:pie_menyu/pieItemTasks/resize_window_task.dart';
 import 'package:pie_menyu/pieItemTasks/run_file_task.dart';
-import 'package:pie_menyu/pieItemTasks/mouse_click_task.dart';
-import 'package:pie_menyu/pieItemTasks/send_key_task.dart';
 import 'package:pie_menyu/pieItemTasks/send_text_task.dart';
 
 class PieMenuEditorPageViewModel extends ChangeNotifier {
@@ -82,7 +81,7 @@ class PieMenuEditorPageViewModel extends ChangeNotifier {
 
     switch (taskType) {
       case PieItemTaskType.sendKey:
-        newTask = SendKeyTask();
+        newTask = PieItemTask();
         break;
       case PieItemTaskType.sendText:
         newTask = SendTextTask();
@@ -147,6 +146,23 @@ class PieMenuEditorPageViewModel extends ChangeNotifier {
       )
     ];
 
+    notifyListeners();
+  }
+
+  void putPieItemTaskInCurrentPieItem(PieItemTask pieItemTask) {
+    bool pieItemTaskExisted = _tasksOfPieItem[_currentPieItemId]!
+        .any((element) => element.id == pieItemTask.id);
+
+    if (pieItemTask.id == Isar.autoIncrement || !pieItemTaskExisted) {
+      _tasksOfPieItem[_currentPieItemId] = [
+        ...(_tasksOfPieItem[_currentPieItemId] ?? []),
+        pieItemTask
+      ];
+    } else {
+      _tasksOfPieItem[_currentPieItemId] = _tasksOfPieItem[_currentPieItemId]!
+          .map((e) => e.id == pieItemTask.id ? pieItemTask : e)
+          .toList();
+    }
     notifyListeners();
   }
 }

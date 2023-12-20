@@ -16,6 +16,12 @@ class PieItemTask {
     this.repeat = 1,
     this.arguments = const [],
   });
+
+  PieItemTask.from(PieItemTask pieItemTask) {
+    repeat = pieItemTask.repeat;
+    arguments = pieItemTask.arguments;
+    id = pieItemTask.id;
+  }
 }
 
 enum PieItemTaskType {
