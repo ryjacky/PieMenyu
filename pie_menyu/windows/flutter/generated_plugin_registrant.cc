@@ -10,6 +10,7 @@
 #include <isar_flutter_libs/isar_flutter_libs_plugin.h>
 #include <screen_retriever/screen_retriever_plugin.h>
 #include <system_tray/system_tray_plugin.h>
+#include <win32hooks/win32hooks_plugin_c_api.h>
 #include <window_manager/window_manager_plugin.h>
 
 void RegisterPlugins(flutter::PluginRegistry* registry) {
@@ -21,6 +22,8 @@ void RegisterPlugins(flutter::PluginRegistry* registry) {
       registry->GetRegistrarForPlugin("ScreenRetrieverPlugin"));
   SystemTrayPluginRegisterWithRegistrar(
       registry->GetRegistrarForPlugin("SystemTrayPlugin"));
+  Win32hooksPluginCApiRegisterWithRegistrar(
+      registry->GetRegistrarForPlugin("Win32hooksPluginCApi"));
   WindowManagerPluginRegisterWithRegistrar(
       registry->GetRegistrarForPlugin("WindowManagerPlugin"));
 }
