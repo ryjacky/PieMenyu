@@ -1,0 +1,1 @@
+/usr/bin/c++.exe -g -shared -Wl,--enable-auto-import -o cygscreen_retriever_plugin.dll -Wl,--out-implib,libscreen_retriever_plugin.dll.a -Wl,--major-image-version,0,--minor-image-version,0 CMakeFiles/screen_retriever_plugin.dir/screen_retriever_plugin.cpp.o  ../../flutter/libflutter_wrapper_plugin.a ../../../flutter/ephemeral/flutter_windows.dll.lib 

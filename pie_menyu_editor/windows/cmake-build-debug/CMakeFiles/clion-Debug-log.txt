@@ -1,0 +1,16 @@
+C:\cygwin64\bin\cmake.exe -DCMAKE_BUILD_TYPE=Debug -DCMAKE_MAKE_PROGRAM=/usr/bin/make.exe -G "CodeBlocks - Unix Makefiles" -S /cygdrive/e/pie_menyu/windows -B /cygdrive/e/pie_menyu/windows/cmake-build-debug
+-- The CXX compiler identification is GNU 11.3.0
+-- Detecting CXX compiler ABI info
+-- Detecting CXX compiler ABI info - done
+-- Check for working CXX compiler: /usr/bin/c++.exe - skipped
+-- Detecting CXX compile features
+-- Detecting CXX compile features - done
+-- Configuring done
+-- Generating done
+-- Build files have been written to: /cygdrive/e/pie_menyu/windows/cmake-build-debug
+
+Problems were encountered while collecting compiler information:
+	cc1plus: fatal error: /W4: No such file or directory
+	cc1plus: fatal error: /WX: No such file or directory
+	cc1plus: fatal error: /wd"4100": No such file or directory
+	cc1plus: fatal error: /EHsc: No such file or directory

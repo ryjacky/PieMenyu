@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CodeBlocks_project_file>
+	<FileVersion major="1" minor="6"/>
+	<Project>
+		<Option title="screen_retriever"/>
+		<Option makefile_is_custom="1"/>
+		<Option compiler="gcc"/>
+		<Option virtualFolders="CMake Files\;CMake Files\flutter\;CMake Files\flutter\ephemeral\;CMake Files\flutter\ephemeral\.plugin_symlinks\;CMake Files\flutter\ephemeral\.plugin_symlinks\bitsdojo_window_windows\;CMake Files\flutter\ephemeral\.plugin_symlinks\bitsdojo_window_windows\windows\;CMake Files\flutter\ephemeral\.plugin_symlinks\hotkey_manager\;CMake Files\flutter\ephemeral\.plugin_symlinks\hotkey_manager\windows\;CMake Files\flutter\ephemeral\.plugin_symlinks\isar_flutter_libs\;CMake Files\flutter\ephemeral\.plugin_symlinks\isar_flutter_libs\windows\;CMake Files\flutter\ephemeral\.plugin_symlinks\screen_retriever\;CMake Files\flutter\ephemeral\.plugin_symlinks\screen_retriever\windows\;CMake Files\flutter\ephemeral\.plugin_symlinks\window_manager\;CMake Files\flutter\ephemeral\.plugin_symlinks\window_manager\windows\;CMake Files\runner\;"/>
+		<Build>
+			<Target title="all">
+				<Option working_dir="/cygdrive/e/pie_menyu/windows/cmake-build-debug/plugins/screen_retriever"/>
+				<Option type="4"/>
+				<MakeCommands>
+					<Build command="/usr/bin/make.exe -j12 -f &quot;/cygdrive/e/pie_menyu/windows/cmake-build-debug/plugins/screen_retriever/Makefile&quot;  VERBOSE=1 all"/>
+					<CompileFile command="/usr/bin/make.exe -j12 -f &quot;/cygdrive/e/pie_menyu/windows/cmake-build-debug/plugins/screen_retriever/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make.exe -j12 -f &quot;/cygdrive/e/pie_menyu/windows/cmake-build-debug/plugins/screen_retriever/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make.exe -j12 -f &quot;/cygdrive/e/pie_menyu/windows/cmake-build-debug/plugins/screen_retriever/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="screen_retriever_plugin">
+				<Option output="/cygdrive/e/pie_menyu/windows/cmake-build-debug/plugins/screen_retriever/cygscreen_retriever_plugin.dll" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/cygdrive/e/pie_menyu/windows/cmake-build-debug/plugins/screen_retriever"/>
+				<Option object_output="./"/>
+				<Option type="3"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add option="-D_HAS_EXCEPTIONS=0"/>
+					<Add option="-D_DEBUG"/>
+					<Add option="-DFLUTTER_PLUGIN_IMPL"/>
+					<Add option="-D_SILENCE_CXX17_CODECVT_HEADER_DEPRECATION_WARNING"/>
+					<Add option="-DUNICODE"/>
+					<Add option="-D_UNICODE"/>
+					<Add directory="/cygdrive/e/pie_menyu/windows/flutter/ephemeral"/>
+					<Add directory="/cygdrive/e/pie_menyu/windows/flutter/ephemeral/cpp_client_wrapper/include"/>
+					<Add directory="/usr/lib/gcc/x86_64-pc-cygwin/11/include/c++"/>
+					<Add directory="/usr/lib/gcc/x86_64-pc-cygwin/11/include/c++/x86_64-pc-cygwin"/>
+					<Add directory="/usr/lib/gcc/x86_64-pc-cygwin/11/include/c++/backward"/>
+					<Add directory="/usr/lib/gcc/x86_64-pc-cygwin/11/include"/>
+					<Add directory="/usr/include"/>
+					<Add directory="/usr/lib/gcc/x86_64-pc-cygwin/11/../../../../lib/../include/w32api"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make.exe -j12 -f &quot;/cygdrive/e/pie_menyu/windows/cmake-build-debug/plugins/screen_retriever/Makefile&quot;  VERBOSE=1 screen_retriever_plugin"/>
+					<CompileFile command="/usr/bin/make.exe -j12 -f &quot;/cygdrive/e/pie_menyu/windows/cmake-build-debug/plugins/screen_retriever/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make.exe -j12 -f &quot;/cygdrive/e/pie_menyu/windows/cmake-build-debug/plugins/screen_retriever/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make.exe -j12 -f &quot;/cygdrive/e/pie_menyu/windows/cmake-build-debug/plugins/screen_retriever/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="screen_retriever_plugin/fast">
+				<Option output="/cygdrive/e/pie_menyu/windows/cmake-build-debug/plugins/screen_retriever/cygscreen_retriever_plugin.dll" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/cygdrive/e/pie_menyu/windows/cmake-build-debug/plugins/screen_retriever"/>
+				<Option object_output="./"/>
+				<Option type="3"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add option="-D_HAS_EXCEPTIONS=0"/>
+					<Add option="-D_DEBUG"/>
+					<Add option="-DFLUTTER_PLUGIN_IMPL"/>
+					<Add option="-D_SILENCE_CXX17_CODECVT_HEADER_DEPRECATION_WARNING"/>
+					<Add option="-DUNICODE"/>
+					<Add option="-D_UNICODE"/>
+					<Add directory="/cygdrive/e/pie_menyu/windows/flutter/ephemeral"/>
+					<Add directory="/cygdrive/e/pie_menyu/windows/flutter/ephemeral/cpp_client_wrapper/include"/>
+					<Add directory="/usr/lib/gcc/x86_64-pc-cygwin/11/include/c++"/>
+					<Add directory="/usr/lib/gcc/x86_64-pc-cygwin/11/include/c++/x86_64-pc-cygwin"/>
+					<Add directory="/usr/lib/gcc/x86_64-pc-cygwin/11/include/c++/backward"/>
+					<Add directory="/usr/lib/gcc/x86_64-pc-cygwin/11/include"/>
+					<Add directory="/usr/include"/>
+					<Add directory="/usr/lib/gcc/x86_64-pc-cygwin/11/../../../../lib/../include/w32api"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make.exe -j12 -f &quot;/cygdrive/e/pie_menyu/windows/cmake-build-debug/plugins/screen_retriever/Makefile&quot;  VERBOSE=1 screen_retriever_plugin/fast"/>
+					<CompileFile command="/usr/bin/make.exe -j12 -f &quot;/cygdrive/e/pie_menyu/windows/cmake-build-debug/plugins/screen_retriever/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make.exe -j12 -f &quot;/cygdrive/e/pie_menyu/windows/cmake-build-debug/plugins/screen_retriever/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make.exe -j12 -f &quot;/cygdrive/e/pie_menyu/windows/cmake-build-debug/plugins/screen_retriever/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+		</Build>
+		<Unit filename="/cygdrive/e/pie_menyu/windows/flutter/ephemeral/.plugin_symlinks/screen_retriever/windows/screen_retriever_plugin.cpp">
+			<Option target="screen_retriever_plugin"/>
+		</Unit>
+		<Unit filename="/cygdrive/e/pie_menyu/windows/CMakeLists.txt">
+			<Option virtualFolder="CMake Files\"/>
+		</Unit>
+		<Unit filename="/cygdrive/e/pie_menyu/windows/flutter/CMakeLists.txt">
+			<Option virtualFolder="CMake Files\flutter\"/>
+		</Unit>
+		<Unit filename="/cygdrive/e/pie_menyu/windows/flutter/generated_plugins.cmake">
+			<Option virtualFolder="CMake Files\flutter\"/>
+		</Unit>
+		<Unit filename="/cygdrive/e/pie_menyu/windows/flutter/ephemeral/generated_config.cmake">
+			<Option virtualFolder="CMake Files\flutter\ephemeral\"/>
+		</Unit>
+		<Unit filename="/cygdrive/e/pie_menyu/windows/flutter/ephemeral/.plugin_symlinks/bitsdojo_window_windows/windows/CMakeLists.txt">
+			<Option virtualFolder="CMake Files\flutter\ephemeral\.plugin_symlinks\bitsdojo_window_windows\windows\"/>
+		</Unit>
+		<Unit filename="/cygdrive/e/pie_menyu/windows/flutter/ephemeral/.plugin_symlinks/hotkey_manager/windows/CMakeLists.txt">
+			<Option virtualFolder="CMake Files\flutter\ephemeral\.plugin_symlinks\hotkey_manager\windows\"/>
+		</Unit>
+		<Unit filename="/cygdrive/e/pie_menyu/windows/flutter/ephemeral/.plugin_symlinks/isar_flutter_libs/windows/CMakeLists.txt">
+			<Option virtualFolder="CMake Files\flutter\ephemeral\.plugin_symlinks\isar_flutter_libs\windows\"/>
+		</Unit>
+		<Unit filename="/cygdrive/e/pie_menyu/windows/flutter/ephemeral/.plugin_symlinks/screen_retriever/windows/CMakeLists.txt">
+			<Option virtualFolder="CMake Files\flutter\ephemeral\.plugin_symlinks\screen_retriever\windows\"/>
+		</Unit>
+		<Unit filename="/cygdrive/e/pie_menyu/windows/flutter/ephemeral/.plugin_symlinks/window_manager/windows/CMakeLists.txt">
+			<Option virtualFolder="CMake Files\flutter\ephemeral\.plugin_symlinks\window_manager\windows\"/>
+		</Unit>
+		<Unit filename="/cygdrive/e/pie_menyu/windows/runner/CMakeLists.txt">
+			<Option virtualFolder="CMake Files\runner\"/>
+		</Unit>
+	</Project>
+</CodeBlocks_project_file>

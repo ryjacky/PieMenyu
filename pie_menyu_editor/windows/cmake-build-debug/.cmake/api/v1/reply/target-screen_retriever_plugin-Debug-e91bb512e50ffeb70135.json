@@ -1,0 +1,251 @@
+{
+	"artifacts" : 
+	[
+		{
+			"path" : "plugins/screen_retriever/cygscreen_retriever_plugin.dll"
+		},
+		{
+			"path" : "plugins/screen_retriever/libscreen_retriever_plugin.dll.a"
+		},
+		{
+			"path" : "plugins/screen_retriever/cygscreen_retriever_plugin.pdb"
+		}
+	],
+	"backtrace" : 1,
+	"backtraceGraph" : 
+	{
+		"commands" : 
+		[
+			"add_library",
+			"target_link_libraries",
+			"add_dependencies",
+			"target_compile_options",
+			"apply_standard_settings",
+			"target_compile_definitions",
+			"add_definitions"
+		],
+		"files" : 
+		[
+			"flutter/ephemeral/.plugin_symlinks/screen_retriever/windows/CMakeLists.txt",
+			"flutter/CMakeLists.txt",
+			"CMakeLists.txt"
+		],
+		"nodes" : 
+		[
+			{
+				"file" : 0
+			},
+			{
+				"command" : 0,
+				"file" : 0,
+				"line" : 9,
+				"parent" : 0
+			},
+			{
+				"command" : 1,
+				"file" : 0,
+				"line" : 19,
+				"parent" : 0
+			},
+			{
+				"file" : 1
+			},
+			{
+				"command" : 1,
+				"file" : 1,
+				"line" : 34,
+				"parent" : 3
+			},
+			{
+				"command" : 2,
+				"file" : 1,
+				"line" : 35,
+				"parent" : 3
+			},
+			{
+				"command" : 4,
+				"file" : 0,
+				"line" : 12,
+				"parent" : 0
+			},
+			{
+				"command" : 3,
+				"file" : 2,
+				"line" : 42,
+				"parent" : 6
+			},
+			{
+				"command" : 3,
+				"file" : 2,
+				"line" : 43,
+				"parent" : 6
+			},
+			{
+				"command" : 5,
+				"file" : 0,
+				"line" : 15,
+				"parent" : 0
+			},
+			{
+				"file" : 2
+			},
+			{
+				"command" : 6,
+				"file" : 2,
+				"line" : 33,
+				"parent" : 10
+			},
+			{
+				"command" : 5,
+				"file" : 2,
+				"line" : 45,
+				"parent" : 6
+			},
+			{
+				"command" : 5,
+				"file" : 2,
+				"line" : 44,
+				"parent" : 6
+			},
+			{
+				"command" : 5,
+				"file" : 0,
+				"line" : 16,
+				"parent" : 0
+			}
+		]
+	},
+	"compileGroups" : 
+	[
+		{
+			"compileCommandFragments" : 
+			[
+				{
+					"fragment" : "-g -fvisibility=hidden"
+				},
+				{
+					"backtrace" : 7,
+					"fragment" : "/W4"
+				},
+				{
+					"backtrace" : 7,
+					"fragment" : "/WX"
+				},
+				{
+					"backtrace" : 7,
+					"fragment" : "/wd\\\"4100\\\""
+				},
+				{
+					"backtrace" : 8,
+					"fragment" : "/EHsc"
+				}
+			],
+			"defines" : 
+			[
+				{
+					"backtrace" : 9,
+					"define" : "FLUTTER_PLUGIN_IMPL"
+				},
+				{
+					"backtrace" : 11,
+					"define" : "UNICODE"
+				},
+				{
+					"backtrace" : 12,
+					"define" : "_DEBUG"
+				},
+				{
+					"backtrace" : 13,
+					"define" : "_HAS_EXCEPTIONS=0"
+				},
+				{
+					"backtrace" : 14,
+					"define" : "_SILENCE_CXX17_CODECVT_HEADER_DEPRECATION_WARNING"
+				},
+				{
+					"backtrace" : 11,
+					"define" : "_UNICODE"
+				},
+				{
+					"define" : "screen_retriever_plugin_EXPORTS"
+				}
+			],
+			"includes" : 
+			[
+				{
+					"backtrace" : 2,
+					"path" : "/cygdrive/e/pie_menyu/windows/flutter/ephemeral"
+				},
+				{
+					"backtrace" : 2,
+					"path" : "/cygdrive/e/pie_menyu/windows/flutter/ephemeral/cpp_client_wrapper/include"
+				}
+			],
+			"language" : "CXX",
+			"sourceIndexes" : 
+			[
+				0
+			]
+		}
+	],
+	"dependencies" : 
+	[
+		{
+			"backtrace" : 2,
+			"id" : "flutter_wrapper_plugin::@2bb09fbb03a373b2cb34"
+		},
+		{
+			"backtrace" : 5,
+			"id" : "flutter_assemble::@2bb09fbb03a373b2cb34"
+		}
+	],
+	"id" : "screen_retriever_plugin::@3807a39ae1c9dc0b6e21",
+	"link" : 
+	{
+		"commandFragments" : 
+		[
+			{
+				"fragment" : "",
+				"role" : "flags"
+			},
+			{
+				"backtrace" : 2,
+				"fragment" : "../../flutter/libflutter_wrapper_plugin.a",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 4,
+				"fragment" : "../../../flutter/ephemeral/flutter_windows.dll.lib",
+				"role" : "libraries"
+			}
+		],
+		"language" : "CXX"
+	},
+	"name" : "screen_retriever_plugin",
+	"nameOnDisk" : "cygscreen_retriever_plugin.dll",
+	"paths" : 
+	{
+		"build" : "plugins/screen_retriever",
+		"source" : "flutter/ephemeral/.plugin_symlinks/screen_retriever/windows"
+	},
+	"sourceGroups" : 
+	[
+		{
+			"name" : "Source Files",
+			"sourceIndexes" : 
+			[
+				0
+			]
+		}
+	],
+	"sources" : 
+	[
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "flutter/ephemeral/.plugin_symlinks/screen_retriever/windows/screen_retriever_plugin.cpp",
+			"sourceGroupIndex" : 0
+		}
+	],
+	"type" : "SHARED_LIBRARY"
+}

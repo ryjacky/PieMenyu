@@ -1,0 +1,14 @@
+{
+	"backtraceGraph" : 
+	{
+		"commands" : [],
+		"files" : [],
+		"nodes" : []
+	},
+	"installers" : [],
+	"paths" : 
+	{
+		"build" : "plugins/isar_flutter_libs",
+		"source" : "flutter/ephemeral/.plugin_symlinks/isar_flutter_libs/windows"
+	}
+}

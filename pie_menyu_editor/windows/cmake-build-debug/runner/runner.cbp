@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CodeBlocks_project_file>
+	<FileVersion major="1" minor="6"/>
+	<Project>
+		<Option title="runner"/>
+		<Option makefile_is_custom="1"/>
+		<Option compiler="gcc"/>
+		<Option virtualFolders="CMake Files\;CMake Files\flutter\;CMake Files\flutter\ephemeral\;CMake Files\flutter\ephemeral\.plugin_symlinks\;CMake Files\flutter\ephemeral\.plugin_symlinks\bitsdojo_window_windows\;CMake Files\flutter\ephemeral\.plugin_symlinks\bitsdojo_window_windows\windows\;CMake Files\flutter\ephemeral\.plugin_symlinks\hotkey_manager\;CMake Files\flutter\ephemeral\.plugin_symlinks\hotkey_manager\windows\;CMake Files\flutter\ephemeral\.plugin_symlinks\isar_flutter_libs\;CMake Files\flutter\ephemeral\.plugin_symlinks\isar_flutter_libs\windows\;CMake Files\flutter\ephemeral\.plugin_symlinks\screen_retriever\;CMake Files\flutter\ephemeral\.plugin_symlinks\screen_retriever\windows\;CMake Files\flutter\ephemeral\.plugin_symlinks\window_manager\;CMake Files\flutter\ephemeral\.plugin_symlinks\window_manager\windows\;CMake Files\runner\;"/>
+		<Build>
+			<Target title="all">
+				<Option working_dir="/cygdrive/e/pie_menyu/windows/cmake-build-debug/runner"/>
+				<Option type="4"/>
+				<MakeCommands>
+					<Build command="/usr/bin/make.exe -j12 -f &quot;/cygdrive/e/pie_menyu/windows/cmake-build-debug/runner/Makefile&quot;  VERBOSE=1 all"/>
+					<CompileFile command="/usr/bin/make.exe -j12 -f &quot;/cygdrive/e/pie_menyu/windows/cmake-build-debug/runner/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make.exe -j12 -f &quot;/cygdrive/e/pie_menyu/windows/cmake-build-debug/runner/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make.exe -j12 -f &quot;/cygdrive/e/pie_menyu/windows/cmake-build-debug/runner/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="pie_menyu">
+				<Option output="/cygdrive/e/pie_menyu/windows/cmake-build-debug/runner/pie_menyu.exe" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/cygdrive/e/pie_menyu/windows/cmake-build-debug/runner"/>
+				<Option object_output="./"/>
+				<Option type="0"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add option="-D_HAS_EXCEPTIONS=0"/>
+					<Add option="-D_DEBUG"/>
+					<Add option="-DFLUTTER_VERSION=&quot;1.0.0+1&quot;"/>
+					<Add option="-DFLUTTER_VERSION_MAJOR=1"/>
+					<Add option="-DFLUTTER_VERSION_MINOR=0"/>
+					<Add option="-DFLUTTER_VERSION_PATCH=0"/>
+					<Add option="-DFLUTTER_VERSION_BUILD=1"/>
+					<Add option="-DNOMINMAX"/>
+					<Add option="-DUNICODE"/>
+					<Add option="-D_UNICODE"/>
+					<Add directory="/cygdrive/e/pie_menyu/windows"/>
+					<Add directory="/cygdrive/e/pie_menyu/windows/flutter/ephemeral"/>
+					<Add directory="/cygdrive/e/pie_menyu/windows/flutter/ephemeral/cpp_client_wrapper/include"/>
+					<Add directory="/cygdrive/e/pie_menyu/windows/flutter/ephemeral/.plugin_symlinks/bitsdojo_window_windows/windows/include"/>
+					<Add directory="/cygdrive/e/pie_menyu/windows/flutter/ephemeral/.plugin_symlinks/hotkey_manager/windows/include"/>
+					<Add directory="/cygdrive/e/pie_menyu/windows/flutter/ephemeral/.plugin_symlinks/isar_flutter_libs/windows/include"/>
+					<Add directory="/cygdrive/e/pie_menyu/windows/flutter/ephemeral/.plugin_symlinks/screen_retriever/windows/include"/>
+					<Add directory="/cygdrive/e/pie_menyu/windows/flutter/ephemeral/.plugin_symlinks/window_manager/windows/include"/>
+					<Add directory="/usr/lib/gcc/x86_64-pc-cygwin/11/include/c++"/>
+					<Add directory="/usr/lib/gcc/x86_64-pc-cygwin/11/include/c++/x86_64-pc-cygwin"/>
+					<Add directory="/usr/lib/gcc/x86_64-pc-cygwin/11/include/c++/backward"/>
+					<Add directory="/usr/lib/gcc/x86_64-pc-cygwin/11/include"/>
+					<Add directory="/usr/include"/>
+					<Add directory="/usr/lib/gcc/x86_64-pc-cygwin/11/../../../../lib/../include/w32api"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make.exe -j12 -f &quot;/cygdrive/e/pie_menyu/windows/cmake-build-debug/runner/Makefile&quot;  VERBOSE=1 pie_menyu"/>
+					<CompileFile command="/usr/bin/make.exe -j12 -f &quot;/cygdrive/e/pie_menyu/windows/cmake-build-debug/runner/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make.exe -j12 -f &quot;/cygdrive/e/pie_menyu/windows/cmake-build-debug/runner/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make.exe -j12 -f &quot;/cygdrive/e/pie_menyu/windows/cmake-build-debug/runner/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="pie_menyu/fast">
+				<Option output="/cygdrive/e/pie_menyu/windows/cmake-build-debug/runner/pie_menyu.exe" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/cygdrive/e/pie_menyu/windows/cmake-build-debug/runner"/>
+				<Option object_output="./"/>
+				<Option type="0"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add option="-D_HAS_EXCEPTIONS=0"/>
+					<Add option="-D_DEBUG"/>
+					<Add option="-DFLUTTER_VERSION=&quot;1.0.0+1&quot;"/>
+					<Add option="-DFLUTTER_VERSION_MAJOR=1"/>
+					<Add option="-DFLUTTER_VERSION_MINOR=0"/>
+					<Add option="-DFLUTTER_VERSION_PATCH=0"/>
+					<Add option="-DFLUTTER_VERSION_BUILD=1"/>
+					<Add option="-DNOMINMAX"/>
+					<Add option="-DUNICODE"/>
+					<Add option="-D_UNICODE"/>
+					<Add directory="/cygdrive/e/pie_menyu/windows"/>
+					<Add directory="/cygdrive/e/pie_menyu/windows/flutter/ephemeral"/>
+					<Add directory="/cygdrive/e/pie_menyu/windows/flutter/ephemeral/cpp_client_wrapper/include"/>
+					<Add directory="/cygdrive/e/pie_menyu/windows/flutter/ephemeral/.plugin_symlinks/bitsdojo_window_windows/windows/include"/>
+					<Add directory="/cygdrive/e/pie_menyu/windows/flutter/ephemeral/.plugin_symlinks/hotkey_manager/windows/include"/>
+					<Add directory="/cygdrive/e/pie_menyu/windows/flutter/ephemeral/.plugin_symlinks/isar_flutter_libs/windows/include"/>
+					<Add directory="/cygdrive/e/pie_menyu/windows/flutter/ephemeral/.plugin_symlinks/screen_retriever/windows/include"/>
+					<Add directory="/cygdrive/e/pie_menyu/windows/flutter/ephemeral/.plugin_symlinks/window_manager/windows/include"/>
+					<Add directory="/usr/lib/gcc/x86_64-pc-cygwin/11/include/c++"/>
+					<Add directory="/usr/lib/gcc/x86_64-pc-cygwin/11/include/c++/x86_64-pc-cygwin"/>
+					<Add directory="/usr/lib/gcc/x86_64-pc-cygwin/11/include/c++/backward"/>
+					<Add directory="/usr/lib/gcc/x86_64-pc-cygwin/11/include"/>
+					<Add directory="/usr/include"/>
+					<Add directory="/usr/lib/gcc/x86_64-pc-cygwin/11/../../../../lib/../include/w32api"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make.exe -j12 -f &quot;/cygdrive/e/pie_menyu/windows/cmake-build-debug/runner/Makefile&quot;  VERBOSE=1 pie_menyu/fast"/>
+					<CompileFile command="/usr/bin/make.exe -j12 -f &quot;/cygdrive/e/pie_menyu/windows/cmake-build-debug/runner/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make.exe -j12 -f &quot;/cygdrive/e/pie_menyu/windows/cmake-build-debug/runner/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make.exe -j12 -f &quot;/cygdrive/e/pie_menyu/windows/cmake-build-debug/runner/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+		</Build>
+		<Unit filename="/cygdrive/e/pie_menyu/windows/flutter/generated_plugin_registrant.cc">
+			<Option target="pie_menyu"/>
+		</Unit>
+		<Unit filename="/cygdrive/e/pie_menyu/windows/flutter/generated_plugin_registrant.h">
+			<Option target="pie_menyu"/>
+		</Unit>
+		<Unit filename="/cygdrive/e/pie_menyu/windows/runner/Runner.rc">
+			<Option target="pie_menyu"/>
+		</Unit>
+		<Unit filename="/cygdrive/e/pie_menyu/windows/runner/flutter_window.cpp">
+			<Option target="pie_menyu"/>
+		</Unit>
+		<Unit filename="/cygdrive/e/pie_menyu/windows/runner/flutter_window.h">
+			<Option target="pie_menyu"/>
+		</Unit>
+		<Unit filename="/cygdrive/e/pie_menyu/windows/runner/main.cpp">
+			<Option target="pie_menyu"/>
+		</Unit>
+		<Unit filename="/cygdrive/e/pie_menyu/windows/runner/runner.exe.manifest">
+			<Option target="pie_menyu"/>
+		</Unit>
+		<Unit filename="/cygdrive/e/pie_menyu/windows/runner/utils.cpp">
+			<Option target="pie_menyu"/>
+		</Unit>
+		<Unit filename="/cygdrive/e/pie_menyu/windows/runner/utils.h">
+			<Option target="pie_menyu"/>
+		</Unit>
+		<Unit filename="/cygdrive/e/pie_menyu/windows/runner/win32_window.cpp">
+			<Option target="pie_menyu"/>
+		</Unit>
+		<Unit filename="/cygdrive/e/pie_menyu/windows/runner/win32_window.h">
+			<Option target="pie_menyu"/>
+		</Unit>
+		<Unit filename="/cygdrive/e/pie_menyu/windows/CMakeLists.txt">
+			<Option virtualFolder="CMake Files\"/>
+		</Unit>
+		<Unit filename="/cygdrive/e/pie_menyu/windows/flutter/CMakeLists.txt">
+			<Option virtualFolder="CMake Files\flutter\"/>
+		</Unit>
+		<Unit filename="/cygdrive/e/pie_menyu/windows/flutter/generated_plugins.cmake">
+			<Option virtualFolder="CMake Files\flutter\"/>
+		</Unit>
+		<Unit filename="/cygdrive/e/pie_menyu/windows/flutter/ephemeral/generated_config.cmake">
+			<Option virtualFolder="CMake Files\flutter\ephemeral\"/>
+		</Unit>
+		<Unit filename="/cygdrive/e/pie_menyu/windows/flutter/ephemeral/.plugin_symlinks/bitsdojo_window_windows/windows/CMakeLists.txt">
+			<Option virtualFolder="CMake Files\flutter\ephemeral\.plugin_symlinks\bitsdojo_window_windows\windows\"/>
+		</Unit>
+		<Unit filename="/cygdrive/e/pie_menyu/windows/flutter/ephemeral/.plugin_symlinks/hotkey_manager/windows/CMakeLists.txt">
+			<Option virtualFolder="CMake Files\flutter\ephemeral\.plugin_symlinks\hotkey_manager\windows\"/>
+		</Unit>
+		<Unit filename="/cygdrive/e/pie_menyu/windows/flutter/ephemeral/.plugin_symlinks/isar_flutter_libs/windows/CMakeLists.txt">
+			<Option virtualFolder="CMake Files\flutter\ephemeral\.plugin_symlinks\isar_flutter_libs\windows\"/>
+		</Unit>
+		<Unit filename="/cygdrive/e/pie_menyu/windows/flutter/ephemeral/.plugin_symlinks/screen_retriever/windows/CMakeLists.txt">
+			<Option virtualFolder="CMake Files\flutter\ephemeral\.plugin_symlinks\screen_retriever\windows\"/>
+		</Unit>
+		<Unit filename="/cygdrive/e/pie_menyu/windows/flutter/ephemeral/.plugin_symlinks/window_manager/windows/CMakeLists.txt">
+			<Option virtualFolder="CMake Files\flutter\ephemeral\.plugin_symlinks\window_manager\windows\"/>
+		</Unit>
+		<Unit filename="/cygdrive/e/pie_menyu/windows/runner/CMakeLists.txt">
+			<Option virtualFolder="CMake Files\runner\"/>
+		</Unit>
+	</Project>
+</CodeBlocks_project_file>

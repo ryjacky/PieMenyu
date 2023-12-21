@@ -1,0 +1,14 @@
+{
+	"backtraceGraph" : 
+	{
+		"commands" : [],
+		"files" : [],
+		"nodes" : []
+	},
+	"installers" : [],
+	"paths" : 
+	{
+		"build" : "plugins/bitsdojo_window_windows",
+		"source" : "flutter/ephemeral/.plugin_symlinks/bitsdojo_window_windows/windows"
+	}
+}

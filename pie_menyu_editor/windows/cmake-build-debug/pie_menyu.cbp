@@ -1,0 +1,676 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CodeBlocks_project_file>
+	<FileVersion major="1" minor="6"/>
+	<Project>
+		<Option title="pie_menyu"/>
+		<Option makefile_is_custom="1"/>
+		<Option compiler="gcc"/>
+		<Option virtualFolders="CMake Files\;CMake Files\flutter\;CMake Files\flutter\ephemeral\;CMake Files\flutter\ephemeral\.plugin_symlinks\;CMake Files\flutter\ephemeral\.plugin_symlinks\bitsdojo_window_windows\;CMake Files\flutter\ephemeral\.plugin_symlinks\bitsdojo_window_windows\windows\;CMake Files\flutter\ephemeral\.plugin_symlinks\hotkey_manager\;CMake Files\flutter\ephemeral\.plugin_symlinks\hotkey_manager\windows\;CMake Files\flutter\ephemeral\.plugin_symlinks\isar_flutter_libs\;CMake Files\flutter\ephemeral\.plugin_symlinks\isar_flutter_libs\windows\;CMake Files\flutter\ephemeral\.plugin_symlinks\screen_retriever\;CMake Files\flutter\ephemeral\.plugin_symlinks\screen_retriever\windows\;CMake Files\flutter\ephemeral\.plugin_symlinks\window_manager\;CMake Files\flutter\ephemeral\.plugin_symlinks\window_manager\windows\;CMake Files\runner\;"/>
+		<Build>
+			<Target title="all">
+				<Option working_dir="/cygdrive/e/pie_menyu/windows/cmake-build-debug"/>
+				<Option type="4"/>
+				<MakeCommands>
+					<Build command="/usr/bin/make.exe -j12 -f &quot;/cygdrive/e/pie_menyu/windows/cmake-build-debug/Makefile&quot;  VERBOSE=1 all"/>
+					<CompileFile command="/usr/bin/make.exe -j12 -f &quot;/cygdrive/e/pie_menyu/windows/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make.exe -j12 -f &quot;/cygdrive/e/pie_menyu/windows/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make.exe -j12 -f &quot;/cygdrive/e/pie_menyu/windows/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="edit_cache">
+				<Option working_dir="/cygdrive/e/pie_menyu/windows/cmake-build-debug"/>
+				<Option type="4"/>
+				<MakeCommands>
+					<Build command="/usr/bin/make.exe -j12 -f &quot;/cygdrive/e/pie_menyu/windows/cmake-build-debug/Makefile&quot;  VERBOSE=1 edit_cache"/>
+					<CompileFile command="/usr/bin/make.exe -j12 -f &quot;/cygdrive/e/pie_menyu/windows/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make.exe -j12 -f &quot;/cygdrive/e/pie_menyu/windows/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make.exe -j12 -f &quot;/cygdrive/e/pie_menyu/windows/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="rebuild_cache">
+				<Option working_dir="/cygdrive/e/pie_menyu/windows/cmake-build-debug"/>
+				<Option type="4"/>
+				<MakeCommands>
+					<Build command="/usr/bin/make.exe -j12 -f &quot;/cygdrive/e/pie_menyu/windows/cmake-build-debug/Makefile&quot;  VERBOSE=1 rebuild_cache"/>
+					<CompileFile command="/usr/bin/make.exe -j12 -f &quot;/cygdrive/e/pie_menyu/windows/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make.exe -j12 -f &quot;/cygdrive/e/pie_menyu/windows/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make.exe -j12 -f &quot;/cygdrive/e/pie_menyu/windows/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="list_install_components">
+				<Option working_dir="/cygdrive/e/pie_menyu/windows/cmake-build-debug"/>
+				<Option type="4"/>
+				<MakeCommands>
+					<Build command="/usr/bin/make.exe -j12 -f &quot;/cygdrive/e/pie_menyu/windows/cmake-build-debug/Makefile&quot;  VERBOSE=1 list_install_components"/>
+					<CompileFile command="/usr/bin/make.exe -j12 -f &quot;/cygdrive/e/pie_menyu/windows/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make.exe -j12 -f &quot;/cygdrive/e/pie_menyu/windows/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make.exe -j12 -f &quot;/cygdrive/e/pie_menyu/windows/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="install">
+				<Option working_dir="/cygdrive/e/pie_menyu/windows/cmake-build-debug"/>
+				<Option type="4"/>
+				<MakeCommands>
+					<Build command="/usr/bin/make.exe -j12 -f &quot;/cygdrive/e/pie_menyu/windows/cmake-build-debug/Makefile&quot;  VERBOSE=1 install"/>
+					<CompileFile command="/usr/bin/make.exe -j12 -f &quot;/cygdrive/e/pie_menyu/windows/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make.exe -j12 -f &quot;/cygdrive/e/pie_menyu/windows/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make.exe -j12 -f &quot;/cygdrive/e/pie_menyu/windows/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="install/local">
+				<Option working_dir="/cygdrive/e/pie_menyu/windows/cmake-build-debug"/>
+				<Option type="4"/>
+				<MakeCommands>
+					<Build command="/usr/bin/make.exe -j12 -f &quot;/cygdrive/e/pie_menyu/windows/cmake-build-debug/Makefile&quot;  VERBOSE=1 install/local"/>
+					<CompileFile command="/usr/bin/make.exe -j12 -f &quot;/cygdrive/e/pie_menyu/windows/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make.exe -j12 -f &quot;/cygdrive/e/pie_menyu/windows/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make.exe -j12 -f &quot;/cygdrive/e/pie_menyu/windows/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="install/strip">
+				<Option working_dir="/cygdrive/e/pie_menyu/windows/cmake-build-debug"/>
+				<Option type="4"/>
+				<MakeCommands>
+					<Build command="/usr/bin/make.exe -j12 -f &quot;/cygdrive/e/pie_menyu/windows/cmake-build-debug/Makefile&quot;  VERBOSE=1 install/strip"/>
+					<CompileFile command="/usr/bin/make.exe -j12 -f &quot;/cygdrive/e/pie_menyu/windows/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make.exe -j12 -f &quot;/cygdrive/e/pie_menyu/windows/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make.exe -j12 -f &quot;/cygdrive/e/pie_menyu/windows/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="flutter_wrapper_plugin">
+				<Option output="/cygdrive/e/pie_menyu/windows/cmake-build-debug/flutter/libflutter_wrapper_plugin.a" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/cygdrive/e/pie_menyu/windows/cmake-build-debug/flutter"/>
+				<Option object_output="./"/>
+				<Option type="2"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add option="-D_HAS_EXCEPTIONS=0"/>
+					<Add option="-D_DEBUG"/>
+					<Add option="-DUNICODE"/>
+					<Add option="-D_UNICODE"/>
+					<Add directory="/cygdrive/e/pie_menyu/windows/flutter/ephemeral/cpp_client_wrapper/include"/>
+					<Add directory="/cygdrive/e/pie_menyu/windows/flutter/ephemeral"/>
+					<Add directory="/usr/lib/gcc/x86_64-pc-cygwin/11/include/c++"/>
+					<Add directory="/usr/lib/gcc/x86_64-pc-cygwin/11/include/c++/x86_64-pc-cygwin"/>
+					<Add directory="/usr/lib/gcc/x86_64-pc-cygwin/11/include/c++/backward"/>
+					<Add directory="/usr/lib/gcc/x86_64-pc-cygwin/11/include"/>
+					<Add directory="/usr/include"/>
+					<Add directory="/usr/lib/gcc/x86_64-pc-cygwin/11/../../../../lib/../include/w32api"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make.exe -j12 -f &quot;/cygdrive/e/pie_menyu/windows/cmake-build-debug/flutter/Makefile&quot;  VERBOSE=1 flutter_wrapper_plugin"/>
+					<CompileFile command="/usr/bin/make.exe -j12 -f &quot;/cygdrive/e/pie_menyu/windows/cmake-build-debug/flutter/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make.exe -j12 -f &quot;/cygdrive/e/pie_menyu/windows/cmake-build-debug/flutter/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make.exe -j12 -f &quot;/cygdrive/e/pie_menyu/windows/cmake-build-debug/flutter/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="flutter_wrapper_plugin/fast">
+				<Option output="/cygdrive/e/pie_menyu/windows/cmake-build-debug/flutter/libflutter_wrapper_plugin.a" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/cygdrive/e/pie_menyu/windows/cmake-build-debug/flutter"/>
+				<Option object_output="./"/>
+				<Option type="2"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add option="-D_HAS_EXCEPTIONS=0"/>
+					<Add option="-D_DEBUG"/>
+					<Add option="-DUNICODE"/>
+					<Add option="-D_UNICODE"/>
+					<Add directory="/cygdrive/e/pie_menyu/windows/flutter/ephemeral/cpp_client_wrapper/include"/>
+					<Add directory="/cygdrive/e/pie_menyu/windows/flutter/ephemeral"/>
+					<Add directory="/usr/lib/gcc/x86_64-pc-cygwin/11/include/c++"/>
+					<Add directory="/usr/lib/gcc/x86_64-pc-cygwin/11/include/c++/x86_64-pc-cygwin"/>
+					<Add directory="/usr/lib/gcc/x86_64-pc-cygwin/11/include/c++/backward"/>
+					<Add directory="/usr/lib/gcc/x86_64-pc-cygwin/11/include"/>
+					<Add directory="/usr/include"/>
+					<Add directory="/usr/lib/gcc/x86_64-pc-cygwin/11/../../../../lib/../include/w32api"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make.exe -j12 -f &quot;/cygdrive/e/pie_menyu/windows/cmake-build-debug/flutter/Makefile&quot;  VERBOSE=1 flutter_wrapper_plugin/fast"/>
+					<CompileFile command="/usr/bin/make.exe -j12 -f &quot;/cygdrive/e/pie_menyu/windows/cmake-build-debug/flutter/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make.exe -j12 -f &quot;/cygdrive/e/pie_menyu/windows/cmake-build-debug/flutter/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make.exe -j12 -f &quot;/cygdrive/e/pie_menyu/windows/cmake-build-debug/flutter/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="flutter_wrapper_app">
+				<Option output="/cygdrive/e/pie_menyu/windows/cmake-build-debug/flutter/libflutter_wrapper_app.a" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/cygdrive/e/pie_menyu/windows/cmake-build-debug/flutter"/>
+				<Option object_output="./"/>
+				<Option type="2"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add option="-D_HAS_EXCEPTIONS=0"/>
+					<Add option="-D_DEBUG"/>
+					<Add option="-DUNICODE"/>
+					<Add option="-D_UNICODE"/>
+					<Add directory="/cygdrive/e/pie_menyu/windows/flutter/ephemeral/cpp_client_wrapper/include"/>
+					<Add directory="/cygdrive/e/pie_menyu/windows/flutter/ephemeral"/>
+					<Add directory="/usr/lib/gcc/x86_64-pc-cygwin/11/include/c++"/>
+					<Add directory="/usr/lib/gcc/x86_64-pc-cygwin/11/include/c++/x86_64-pc-cygwin"/>
+					<Add directory="/usr/lib/gcc/x86_64-pc-cygwin/11/include/c++/backward"/>
+					<Add directory="/usr/lib/gcc/x86_64-pc-cygwin/11/include"/>
+					<Add directory="/usr/include"/>
+					<Add directory="/usr/lib/gcc/x86_64-pc-cygwin/11/../../../../lib/../include/w32api"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make.exe -j12 -f &quot;/cygdrive/e/pie_menyu/windows/cmake-build-debug/flutter/Makefile&quot;  VERBOSE=1 flutter_wrapper_app"/>
+					<CompileFile command="/usr/bin/make.exe -j12 -f &quot;/cygdrive/e/pie_menyu/windows/cmake-build-debug/flutter/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make.exe -j12 -f &quot;/cygdrive/e/pie_menyu/windows/cmake-build-debug/flutter/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make.exe -j12 -f &quot;/cygdrive/e/pie_menyu/windows/cmake-build-debug/flutter/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="flutter_wrapper_app/fast">
+				<Option output="/cygdrive/e/pie_menyu/windows/cmake-build-debug/flutter/libflutter_wrapper_app.a" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/cygdrive/e/pie_menyu/windows/cmake-build-debug/flutter"/>
+				<Option object_output="./"/>
+				<Option type="2"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add option="-D_HAS_EXCEPTIONS=0"/>
+					<Add option="-D_DEBUG"/>
+					<Add option="-DUNICODE"/>
+					<Add option="-D_UNICODE"/>
+					<Add directory="/cygdrive/e/pie_menyu/windows/flutter/ephemeral/cpp_client_wrapper/include"/>
+					<Add directory="/cygdrive/e/pie_menyu/windows/flutter/ephemeral"/>
+					<Add directory="/usr/lib/gcc/x86_64-pc-cygwin/11/include/c++"/>
+					<Add directory="/usr/lib/gcc/x86_64-pc-cygwin/11/include/c++/x86_64-pc-cygwin"/>
+					<Add directory="/usr/lib/gcc/x86_64-pc-cygwin/11/include/c++/backward"/>
+					<Add directory="/usr/lib/gcc/x86_64-pc-cygwin/11/include"/>
+					<Add directory="/usr/include"/>
+					<Add directory="/usr/lib/gcc/x86_64-pc-cygwin/11/../../../../lib/../include/w32api"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make.exe -j12 -f &quot;/cygdrive/e/pie_menyu/windows/cmake-build-debug/flutter/Makefile&quot;  VERBOSE=1 flutter_wrapper_app/fast"/>
+					<CompileFile command="/usr/bin/make.exe -j12 -f &quot;/cygdrive/e/pie_menyu/windows/cmake-build-debug/flutter/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make.exe -j12 -f &quot;/cygdrive/e/pie_menyu/windows/cmake-build-debug/flutter/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make.exe -j12 -f &quot;/cygdrive/e/pie_menyu/windows/cmake-build-debug/flutter/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="flutter_assemble">
+				<Option working_dir="/cygdrive/e/pie_menyu/windows/cmake-build-debug/flutter"/>
+				<Option type="4"/>
+				<MakeCommands>
+					<Build command="/usr/bin/make.exe -j12 -f &quot;/cygdrive/e/pie_menyu/windows/cmake-build-debug/flutter/Makefile&quot;  VERBOSE=1 flutter_assemble"/>
+					<CompileFile command="/usr/bin/make.exe -j12 -f &quot;/cygdrive/e/pie_menyu/windows/cmake-build-debug/flutter/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make.exe -j12 -f &quot;/cygdrive/e/pie_menyu/windows/cmake-build-debug/flutter/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make.exe -j12 -f &quot;/cygdrive/e/pie_menyu/windows/cmake-build-debug/flutter/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="pie_menyu">
+				<Option output="/cygdrive/e/pie_menyu/windows/cmake-build-debug/runner/pie_menyu.exe" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/cygdrive/e/pie_menyu/windows/cmake-build-debug/runner"/>
+				<Option object_output="./"/>
+				<Option type="0"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add option="-D_HAS_EXCEPTIONS=0"/>
+					<Add option="-D_DEBUG"/>
+					<Add option="-DFLUTTER_VERSION=&quot;1.0.0+1&quot;"/>
+					<Add option="-DFLUTTER_VERSION_MAJOR=1"/>
+					<Add option="-DFLUTTER_VERSION_MINOR=0"/>
+					<Add option="-DFLUTTER_VERSION_PATCH=0"/>
+					<Add option="-DFLUTTER_VERSION_BUILD=1"/>
+					<Add option="-DNOMINMAX"/>
+					<Add option="-DUNICODE"/>
+					<Add option="-D_UNICODE"/>
+					<Add directory="/cygdrive/e/pie_menyu/windows"/>
+					<Add directory="/cygdrive/e/pie_menyu/windows/flutter/ephemeral"/>
+					<Add directory="/cygdrive/e/pie_menyu/windows/flutter/ephemeral/cpp_client_wrapper/include"/>
+					<Add directory="/cygdrive/e/pie_menyu/windows/flutter/ephemeral/.plugin_symlinks/bitsdojo_window_windows/windows/include"/>
+					<Add directory="/cygdrive/e/pie_menyu/windows/flutter/ephemeral/.plugin_symlinks/hotkey_manager/windows/include"/>
+					<Add directory="/cygdrive/e/pie_menyu/windows/flutter/ephemeral/.plugin_symlinks/isar_flutter_libs/windows/include"/>
+					<Add directory="/cygdrive/e/pie_menyu/windows/flutter/ephemeral/.plugin_symlinks/screen_retriever/windows/include"/>
+					<Add directory="/cygdrive/e/pie_menyu/windows/flutter/ephemeral/.plugin_symlinks/window_manager/windows/include"/>
+					<Add directory="/usr/lib/gcc/x86_64-pc-cygwin/11/include/c++"/>
+					<Add directory="/usr/lib/gcc/x86_64-pc-cygwin/11/include/c++/x86_64-pc-cygwin"/>
+					<Add directory="/usr/lib/gcc/x86_64-pc-cygwin/11/include/c++/backward"/>
+					<Add directory="/usr/lib/gcc/x86_64-pc-cygwin/11/include"/>
+					<Add directory="/usr/include"/>
+					<Add directory="/usr/lib/gcc/x86_64-pc-cygwin/11/../../../../lib/../include/w32api"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make.exe -j12 -f &quot;/cygdrive/e/pie_menyu/windows/cmake-build-debug/runner/Makefile&quot;  VERBOSE=1 pie_menyu"/>
+					<CompileFile command="/usr/bin/make.exe -j12 -f &quot;/cygdrive/e/pie_menyu/windows/cmake-build-debug/runner/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make.exe -j12 -f &quot;/cygdrive/e/pie_menyu/windows/cmake-build-debug/runner/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make.exe -j12 -f &quot;/cygdrive/e/pie_menyu/windows/cmake-build-debug/runner/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="pie_menyu/fast">
+				<Option output="/cygdrive/e/pie_menyu/windows/cmake-build-debug/runner/pie_menyu.exe" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/cygdrive/e/pie_menyu/windows/cmake-build-debug/runner"/>
+				<Option object_output="./"/>
+				<Option type="0"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add option="-D_HAS_EXCEPTIONS=0"/>
+					<Add option="-D_DEBUG"/>
+					<Add option="-DFLUTTER_VERSION=&quot;1.0.0+1&quot;"/>
+					<Add option="-DFLUTTER_VERSION_MAJOR=1"/>
+					<Add option="-DFLUTTER_VERSION_MINOR=0"/>
+					<Add option="-DFLUTTER_VERSION_PATCH=0"/>
+					<Add option="-DFLUTTER_VERSION_BUILD=1"/>
+					<Add option="-DNOMINMAX"/>
+					<Add option="-DUNICODE"/>
+					<Add option="-D_UNICODE"/>
+					<Add directory="/cygdrive/e/pie_menyu/windows"/>
+					<Add directory="/cygdrive/e/pie_menyu/windows/flutter/ephemeral"/>
+					<Add directory="/cygdrive/e/pie_menyu/windows/flutter/ephemeral/cpp_client_wrapper/include"/>
+					<Add directory="/cygdrive/e/pie_menyu/windows/flutter/ephemeral/.plugin_symlinks/bitsdojo_window_windows/windows/include"/>
+					<Add directory="/cygdrive/e/pie_menyu/windows/flutter/ephemeral/.plugin_symlinks/hotkey_manager/windows/include"/>
+					<Add directory="/cygdrive/e/pie_menyu/windows/flutter/ephemeral/.plugin_symlinks/isar_flutter_libs/windows/include"/>
+					<Add directory="/cygdrive/e/pie_menyu/windows/flutter/ephemeral/.plugin_symlinks/screen_retriever/windows/include"/>
+					<Add directory="/cygdrive/e/pie_menyu/windows/flutter/ephemeral/.plugin_symlinks/window_manager/windows/include"/>
+					<Add directory="/usr/lib/gcc/x86_64-pc-cygwin/11/include/c++"/>
+					<Add directory="/usr/lib/gcc/x86_64-pc-cygwin/11/include/c++/x86_64-pc-cygwin"/>
+					<Add directory="/usr/lib/gcc/x86_64-pc-cygwin/11/include/c++/backward"/>
+					<Add directory="/usr/lib/gcc/x86_64-pc-cygwin/11/include"/>
+					<Add directory="/usr/include"/>
+					<Add directory="/usr/lib/gcc/x86_64-pc-cygwin/11/../../../../lib/../include/w32api"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make.exe -j12 -f &quot;/cygdrive/e/pie_menyu/windows/cmake-build-debug/runner/Makefile&quot;  VERBOSE=1 pie_menyu/fast"/>
+					<CompileFile command="/usr/bin/make.exe -j12 -f &quot;/cygdrive/e/pie_menyu/windows/cmake-build-debug/runner/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make.exe -j12 -f &quot;/cygdrive/e/pie_menyu/windows/cmake-build-debug/runner/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make.exe -j12 -f &quot;/cygdrive/e/pie_menyu/windows/cmake-build-debug/runner/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="bitsdojo_window_windows_plugin">
+				<Option output="/cygdrive/e/pie_menyu/windows/cmake-build-debug/plugins/bitsdojo_window_windows/libbitsdojo_window_windows_plugin.a" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/cygdrive/e/pie_menyu/windows/cmake-build-debug/plugins/bitsdojo_window_windows"/>
+				<Option object_output="./"/>
+				<Option type="2"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add option="-D_HAS_EXCEPTIONS=0"/>
+					<Add option="-D_DEBUG"/>
+					<Add option="-DFLUTTER_PLUGIN_IMPL"/>
+					<Add option="-DUNICODE"/>
+					<Add option="-D_UNICODE"/>
+					<Add directory="/cygdrive/e/pie_menyu/windows/flutter/ephemeral"/>
+					<Add directory="/cygdrive/e/pie_menyu/windows/flutter/ephemeral/cpp_client_wrapper/include"/>
+					<Add directory="/usr/lib/gcc/x86_64-pc-cygwin/11/include/c++"/>
+					<Add directory="/usr/lib/gcc/x86_64-pc-cygwin/11/include/c++/x86_64-pc-cygwin"/>
+					<Add directory="/usr/lib/gcc/x86_64-pc-cygwin/11/include/c++/backward"/>
+					<Add directory="/usr/lib/gcc/x86_64-pc-cygwin/11/include"/>
+					<Add directory="/usr/include"/>
+					<Add directory="/usr/lib/gcc/x86_64-pc-cygwin/11/../../../../lib/../include/w32api"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make.exe -j12 -f &quot;/cygdrive/e/pie_menyu/windows/cmake-build-debug/plugins/bitsdojo_window_windows/Makefile&quot;  VERBOSE=1 bitsdojo_window_windows_plugin"/>
+					<CompileFile command="/usr/bin/make.exe -j12 -f &quot;/cygdrive/e/pie_menyu/windows/cmake-build-debug/plugins/bitsdojo_window_windows/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make.exe -j12 -f &quot;/cygdrive/e/pie_menyu/windows/cmake-build-debug/plugins/bitsdojo_window_windows/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make.exe -j12 -f &quot;/cygdrive/e/pie_menyu/windows/cmake-build-debug/plugins/bitsdojo_window_windows/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="bitsdojo_window_windows_plugin/fast">
+				<Option output="/cygdrive/e/pie_menyu/windows/cmake-build-debug/plugins/bitsdojo_window_windows/libbitsdojo_window_windows_plugin.a" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/cygdrive/e/pie_menyu/windows/cmake-build-debug/plugins/bitsdojo_window_windows"/>
+				<Option object_output="./"/>
+				<Option type="2"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add option="-D_HAS_EXCEPTIONS=0"/>
+					<Add option="-D_DEBUG"/>
+					<Add option="-DFLUTTER_PLUGIN_IMPL"/>
+					<Add option="-DUNICODE"/>
+					<Add option="-D_UNICODE"/>
+					<Add directory="/cygdrive/e/pie_menyu/windows/flutter/ephemeral"/>
+					<Add directory="/cygdrive/e/pie_menyu/windows/flutter/ephemeral/cpp_client_wrapper/include"/>
+					<Add directory="/usr/lib/gcc/x86_64-pc-cygwin/11/include/c++"/>
+					<Add directory="/usr/lib/gcc/x86_64-pc-cygwin/11/include/c++/x86_64-pc-cygwin"/>
+					<Add directory="/usr/lib/gcc/x86_64-pc-cygwin/11/include/c++/backward"/>
+					<Add directory="/usr/lib/gcc/x86_64-pc-cygwin/11/include"/>
+					<Add directory="/usr/include"/>
+					<Add directory="/usr/lib/gcc/x86_64-pc-cygwin/11/../../../../lib/../include/w32api"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make.exe -j12 -f &quot;/cygdrive/e/pie_menyu/windows/cmake-build-debug/plugins/bitsdojo_window_windows/Makefile&quot;  VERBOSE=1 bitsdojo_window_windows_plugin/fast"/>
+					<CompileFile command="/usr/bin/make.exe -j12 -f &quot;/cygdrive/e/pie_menyu/windows/cmake-build-debug/plugins/bitsdojo_window_windows/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make.exe -j12 -f &quot;/cygdrive/e/pie_menyu/windows/cmake-build-debug/plugins/bitsdojo_window_windows/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make.exe -j12 -f &quot;/cygdrive/e/pie_menyu/windows/cmake-build-debug/plugins/bitsdojo_window_windows/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="hotkey_manager_plugin">
+				<Option output="/cygdrive/e/pie_menyu/windows/cmake-build-debug/plugins/hotkey_manager/cyghotkey_manager_plugin.dll" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/cygdrive/e/pie_menyu/windows/cmake-build-debug/plugins/hotkey_manager"/>
+				<Option object_output="./"/>
+				<Option type="3"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add option="-D_HAS_EXCEPTIONS=0"/>
+					<Add option="-D_DEBUG"/>
+					<Add option="-DFLUTTER_PLUGIN_IMPL"/>
+					<Add option="-DUNICODE"/>
+					<Add option="-D_UNICODE"/>
+					<Add directory="/cygdrive/e/pie_menyu/windows/flutter/ephemeral"/>
+					<Add directory="/cygdrive/e/pie_menyu/windows/flutter/ephemeral/cpp_client_wrapper/include"/>
+					<Add directory="/usr/lib/gcc/x86_64-pc-cygwin/11/include/c++"/>
+					<Add directory="/usr/lib/gcc/x86_64-pc-cygwin/11/include/c++/x86_64-pc-cygwin"/>
+					<Add directory="/usr/lib/gcc/x86_64-pc-cygwin/11/include/c++/backward"/>
+					<Add directory="/usr/lib/gcc/x86_64-pc-cygwin/11/include"/>
+					<Add directory="/usr/include"/>
+					<Add directory="/usr/lib/gcc/x86_64-pc-cygwin/11/../../../../lib/../include/w32api"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make.exe -j12 -f &quot;/cygdrive/e/pie_menyu/windows/cmake-build-debug/plugins/hotkey_manager/Makefile&quot;  VERBOSE=1 hotkey_manager_plugin"/>
+					<CompileFile command="/usr/bin/make.exe -j12 -f &quot;/cygdrive/e/pie_menyu/windows/cmake-build-debug/plugins/hotkey_manager/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make.exe -j12 -f &quot;/cygdrive/e/pie_menyu/windows/cmake-build-debug/plugins/hotkey_manager/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make.exe -j12 -f &quot;/cygdrive/e/pie_menyu/windows/cmake-build-debug/plugins/hotkey_manager/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="hotkey_manager_plugin/fast">
+				<Option output="/cygdrive/e/pie_menyu/windows/cmake-build-debug/plugins/hotkey_manager/cyghotkey_manager_plugin.dll" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/cygdrive/e/pie_menyu/windows/cmake-build-debug/plugins/hotkey_manager"/>
+				<Option object_output="./"/>
+				<Option type="3"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add option="-D_HAS_EXCEPTIONS=0"/>
+					<Add option="-D_DEBUG"/>
+					<Add option="-DFLUTTER_PLUGIN_IMPL"/>
+					<Add option="-DUNICODE"/>
+					<Add option="-D_UNICODE"/>
+					<Add directory="/cygdrive/e/pie_menyu/windows/flutter/ephemeral"/>
+					<Add directory="/cygdrive/e/pie_menyu/windows/flutter/ephemeral/cpp_client_wrapper/include"/>
+					<Add directory="/usr/lib/gcc/x86_64-pc-cygwin/11/include/c++"/>
+					<Add directory="/usr/lib/gcc/x86_64-pc-cygwin/11/include/c++/x86_64-pc-cygwin"/>
+					<Add directory="/usr/lib/gcc/x86_64-pc-cygwin/11/include/c++/backward"/>
+					<Add directory="/usr/lib/gcc/x86_64-pc-cygwin/11/include"/>
+					<Add directory="/usr/include"/>
+					<Add directory="/usr/lib/gcc/x86_64-pc-cygwin/11/../../../../lib/../include/w32api"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make.exe -j12 -f &quot;/cygdrive/e/pie_menyu/windows/cmake-build-debug/plugins/hotkey_manager/Makefile&quot;  VERBOSE=1 hotkey_manager_plugin/fast"/>
+					<CompileFile command="/usr/bin/make.exe -j12 -f &quot;/cygdrive/e/pie_menyu/windows/cmake-build-debug/plugins/hotkey_manager/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make.exe -j12 -f &quot;/cygdrive/e/pie_menyu/windows/cmake-build-debug/plugins/hotkey_manager/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make.exe -j12 -f &quot;/cygdrive/e/pie_menyu/windows/cmake-build-debug/plugins/hotkey_manager/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="isar_flutter_libs_plugin">
+				<Option output="/cygdrive/e/pie_menyu/windows/cmake-build-debug/plugins/isar_flutter_libs/cygisar_flutter_libs_plugin.dll" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/cygdrive/e/pie_menyu/windows/cmake-build-debug/plugins/isar_flutter_libs"/>
+				<Option object_output="./"/>
+				<Option type="3"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add option="-D_HAS_EXCEPTIONS=0"/>
+					<Add option="-D_DEBUG"/>
+					<Add option="-DFLUTTER_PLUGIN_IMPL"/>
+					<Add option="-DUNICODE"/>
+					<Add option="-D_UNICODE"/>
+					<Add directory="/cygdrive/e/pie_menyu/windows/flutter/ephemeral"/>
+					<Add directory="/cygdrive/e/pie_menyu/windows/flutter/ephemeral/cpp_client_wrapper/include"/>
+					<Add directory="/usr/lib/gcc/x86_64-pc-cygwin/11/include/c++"/>
+					<Add directory="/usr/lib/gcc/x86_64-pc-cygwin/11/include/c++/x86_64-pc-cygwin"/>
+					<Add directory="/usr/lib/gcc/x86_64-pc-cygwin/11/include/c++/backward"/>
+					<Add directory="/usr/lib/gcc/x86_64-pc-cygwin/11/include"/>
+					<Add directory="/usr/include"/>
+					<Add directory="/usr/lib/gcc/x86_64-pc-cygwin/11/../../../../lib/../include/w32api"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make.exe -j12 -f &quot;/cygdrive/e/pie_menyu/windows/cmake-build-debug/plugins/isar_flutter_libs/Makefile&quot;  VERBOSE=1 isar_flutter_libs_plugin"/>
+					<CompileFile command="/usr/bin/make.exe -j12 -f &quot;/cygdrive/e/pie_menyu/windows/cmake-build-debug/plugins/isar_flutter_libs/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make.exe -j12 -f &quot;/cygdrive/e/pie_menyu/windows/cmake-build-debug/plugins/isar_flutter_libs/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make.exe -j12 -f &quot;/cygdrive/e/pie_menyu/windows/cmake-build-debug/plugins/isar_flutter_libs/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="isar_flutter_libs_plugin/fast">
+				<Option output="/cygdrive/e/pie_menyu/windows/cmake-build-debug/plugins/isar_flutter_libs/cygisar_flutter_libs_plugin.dll" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/cygdrive/e/pie_menyu/windows/cmake-build-debug/plugins/isar_flutter_libs"/>
+				<Option object_output="./"/>
+				<Option type="3"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add option="-D_HAS_EXCEPTIONS=0"/>
+					<Add option="-D_DEBUG"/>
+					<Add option="-DFLUTTER_PLUGIN_IMPL"/>
+					<Add option="-DUNICODE"/>
+					<Add option="-D_UNICODE"/>
+					<Add directory="/cygdrive/e/pie_menyu/windows/flutter/ephemeral"/>
+					<Add directory="/cygdrive/e/pie_menyu/windows/flutter/ephemeral/cpp_client_wrapper/include"/>
+					<Add directory="/usr/lib/gcc/x86_64-pc-cygwin/11/include/c++"/>
+					<Add directory="/usr/lib/gcc/x86_64-pc-cygwin/11/include/c++/x86_64-pc-cygwin"/>
+					<Add directory="/usr/lib/gcc/x86_64-pc-cygwin/11/include/c++/backward"/>
+					<Add directory="/usr/lib/gcc/x86_64-pc-cygwin/11/include"/>
+					<Add directory="/usr/include"/>
+					<Add directory="/usr/lib/gcc/x86_64-pc-cygwin/11/../../../../lib/../include/w32api"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make.exe -j12 -f &quot;/cygdrive/e/pie_menyu/windows/cmake-build-debug/plugins/isar_flutter_libs/Makefile&quot;  VERBOSE=1 isar_flutter_libs_plugin/fast"/>
+					<CompileFile command="/usr/bin/make.exe -j12 -f &quot;/cygdrive/e/pie_menyu/windows/cmake-build-debug/plugins/isar_flutter_libs/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make.exe -j12 -f &quot;/cygdrive/e/pie_menyu/windows/cmake-build-debug/plugins/isar_flutter_libs/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make.exe -j12 -f &quot;/cygdrive/e/pie_menyu/windows/cmake-build-debug/plugins/isar_flutter_libs/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="screen_retriever_plugin">
+				<Option output="/cygdrive/e/pie_menyu/windows/cmake-build-debug/plugins/screen_retriever/cygscreen_retriever_plugin.dll" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/cygdrive/e/pie_menyu/windows/cmake-build-debug/plugins/screen_retriever"/>
+				<Option object_output="./"/>
+				<Option type="3"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add option="-D_HAS_EXCEPTIONS=0"/>
+					<Add option="-D_DEBUG"/>
+					<Add option="-DFLUTTER_PLUGIN_IMPL"/>
+					<Add option="-D_SILENCE_CXX17_CODECVT_HEADER_DEPRECATION_WARNING"/>
+					<Add option="-DUNICODE"/>
+					<Add option="-D_UNICODE"/>
+					<Add directory="/cygdrive/e/pie_menyu/windows/flutter/ephemeral"/>
+					<Add directory="/cygdrive/e/pie_menyu/windows/flutter/ephemeral/cpp_client_wrapper/include"/>
+					<Add directory="/usr/lib/gcc/x86_64-pc-cygwin/11/include/c++"/>
+					<Add directory="/usr/lib/gcc/x86_64-pc-cygwin/11/include/c++/x86_64-pc-cygwin"/>
+					<Add directory="/usr/lib/gcc/x86_64-pc-cygwin/11/include/c++/backward"/>
+					<Add directory="/usr/lib/gcc/x86_64-pc-cygwin/11/include"/>
+					<Add directory="/usr/include"/>
+					<Add directory="/usr/lib/gcc/x86_64-pc-cygwin/11/../../../../lib/../include/w32api"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make.exe -j12 -f &quot;/cygdrive/e/pie_menyu/windows/cmake-build-debug/plugins/screen_retriever/Makefile&quot;  VERBOSE=1 screen_retriever_plugin"/>
+					<CompileFile command="/usr/bin/make.exe -j12 -f &quot;/cygdrive/e/pie_menyu/windows/cmake-build-debug/plugins/screen_retriever/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make.exe -j12 -f &quot;/cygdrive/e/pie_menyu/windows/cmake-build-debug/plugins/screen_retriever/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make.exe -j12 -f &quot;/cygdrive/e/pie_menyu/windows/cmake-build-debug/plugins/screen_retriever/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="screen_retriever_plugin/fast">
+				<Option output="/cygdrive/e/pie_menyu/windows/cmake-build-debug/plugins/screen_retriever/cygscreen_retriever_plugin.dll" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/cygdrive/e/pie_menyu/windows/cmake-build-debug/plugins/screen_retriever"/>
+				<Option object_output="./"/>
+				<Option type="3"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add option="-D_HAS_EXCEPTIONS=0"/>
+					<Add option="-D_DEBUG"/>
+					<Add option="-DFLUTTER_PLUGIN_IMPL"/>
+					<Add option="-D_SILENCE_CXX17_CODECVT_HEADER_DEPRECATION_WARNING"/>
+					<Add option="-DUNICODE"/>
+					<Add option="-D_UNICODE"/>
+					<Add directory="/cygdrive/e/pie_menyu/windows/flutter/ephemeral"/>
+					<Add directory="/cygdrive/e/pie_menyu/windows/flutter/ephemeral/cpp_client_wrapper/include"/>
+					<Add directory="/usr/lib/gcc/x86_64-pc-cygwin/11/include/c++"/>
+					<Add directory="/usr/lib/gcc/x86_64-pc-cygwin/11/include/c++/x86_64-pc-cygwin"/>
+					<Add directory="/usr/lib/gcc/x86_64-pc-cygwin/11/include/c++/backward"/>
+					<Add directory="/usr/lib/gcc/x86_64-pc-cygwin/11/include"/>
+					<Add directory="/usr/include"/>
+					<Add directory="/usr/lib/gcc/x86_64-pc-cygwin/11/../../../../lib/../include/w32api"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make.exe -j12 -f &quot;/cygdrive/e/pie_menyu/windows/cmake-build-debug/plugins/screen_retriever/Makefile&quot;  VERBOSE=1 screen_retriever_plugin/fast"/>
+					<CompileFile command="/usr/bin/make.exe -j12 -f &quot;/cygdrive/e/pie_menyu/windows/cmake-build-debug/plugins/screen_retriever/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make.exe -j12 -f &quot;/cygdrive/e/pie_menyu/windows/cmake-build-debug/plugins/screen_retriever/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make.exe -j12 -f &quot;/cygdrive/e/pie_menyu/windows/cmake-build-debug/plugins/screen_retriever/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="window_manager_plugin">
+				<Option output="/cygdrive/e/pie_menyu/windows/cmake-build-debug/plugins/window_manager/cygwindow_manager_plugin.dll" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/cygdrive/e/pie_menyu/windows/cmake-build-debug/plugins/window_manager"/>
+				<Option object_output="./"/>
+				<Option type="3"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add option="-D_HAS_EXCEPTIONS=0"/>
+					<Add option="-D_DEBUG"/>
+					<Add option="-DFLUTTER_PLUGIN_IMPL"/>
+					<Add option="-D_SILENCE_CXX17_CODECVT_HEADER_DEPRECATION_WARNING"/>
+					<Add option="-DUNICODE"/>
+					<Add option="-D_UNICODE"/>
+					<Add directory="/cygdrive/e/pie_menyu/windows/flutter/ephemeral"/>
+					<Add directory="/cygdrive/e/pie_menyu/windows/flutter/ephemeral/cpp_client_wrapper/include"/>
+					<Add directory="/usr/lib/gcc/x86_64-pc-cygwin/11/include/c++"/>
+					<Add directory="/usr/lib/gcc/x86_64-pc-cygwin/11/include/c++/x86_64-pc-cygwin"/>
+					<Add directory="/usr/lib/gcc/x86_64-pc-cygwin/11/include/c++/backward"/>
+					<Add directory="/usr/lib/gcc/x86_64-pc-cygwin/11/include"/>
+					<Add directory="/usr/include"/>
+					<Add directory="/usr/lib/gcc/x86_64-pc-cygwin/11/../../../../lib/../include/w32api"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make.exe -j12 -f &quot;/cygdrive/e/pie_menyu/windows/cmake-build-debug/plugins/window_manager/Makefile&quot;  VERBOSE=1 window_manager_plugin"/>
+					<CompileFile command="/usr/bin/make.exe -j12 -f &quot;/cygdrive/e/pie_menyu/windows/cmake-build-debug/plugins/window_manager/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make.exe -j12 -f &quot;/cygdrive/e/pie_menyu/windows/cmake-build-debug/plugins/window_manager/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make.exe -j12 -f &quot;/cygdrive/e/pie_menyu/windows/cmake-build-debug/plugins/window_manager/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="window_manager_plugin/fast">
+				<Option output="/cygdrive/e/pie_menyu/windows/cmake-build-debug/plugins/window_manager/cygwindow_manager_plugin.dll" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/cygdrive/e/pie_menyu/windows/cmake-build-debug/plugins/window_manager"/>
+				<Option object_output="./"/>
+				<Option type="3"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add option="-D_HAS_EXCEPTIONS=0"/>
+					<Add option="-D_DEBUG"/>
+					<Add option="-DFLUTTER_PLUGIN_IMPL"/>
+					<Add option="-D_SILENCE_CXX17_CODECVT_HEADER_DEPRECATION_WARNING"/>
+					<Add option="-DUNICODE"/>
+					<Add option="-D_UNICODE"/>
+					<Add directory="/cygdrive/e/pie_menyu/windows/flutter/ephemeral"/>
+					<Add directory="/cygdrive/e/pie_menyu/windows/flutter/ephemeral/cpp_client_wrapper/include"/>
+					<Add directory="/usr/lib/gcc/x86_64-pc-cygwin/11/include/c++"/>
+					<Add directory="/usr/lib/gcc/x86_64-pc-cygwin/11/include/c++/x86_64-pc-cygwin"/>
+					<Add directory="/usr/lib/gcc/x86_64-pc-cygwin/11/include/c++/backward"/>
+					<Add directory="/usr/lib/gcc/x86_64-pc-cygwin/11/include"/>
+					<Add directory="/usr/include"/>
+					<Add directory="/usr/lib/gcc/x86_64-pc-cygwin/11/../../../../lib/../include/w32api"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make.exe -j12 -f &quot;/cygdrive/e/pie_menyu/windows/cmake-build-debug/plugins/window_manager/Makefile&quot;  VERBOSE=1 window_manager_plugin/fast"/>
+					<CompileFile command="/usr/bin/make.exe -j12 -f &quot;/cygdrive/e/pie_menyu/windows/cmake-build-debug/plugins/window_manager/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make.exe -j12 -f &quot;/cygdrive/e/pie_menyu/windows/cmake-build-debug/plugins/window_manager/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make.exe -j12 -f &quot;/cygdrive/e/pie_menyu/windows/cmake-build-debug/plugins/window_manager/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+		</Build>
+		<Unit filename="/cygdrive/e/pie_menyu/windows/flutter/ephemeral/.plugin_symlinks/bitsdojo_window_windows/windows/bitsdojo_window.cpp">
+			<Option target="bitsdojo_window_windows_plugin"/>
+		</Unit>
+		<Unit filename="/cygdrive/e/pie_menyu/windows/flutter/ephemeral/.plugin_symlinks/bitsdojo_window_windows/windows/bitsdojo_window.h">
+			<Option target="bitsdojo_window_windows_plugin"/>
+		</Unit>
+		<Unit filename="/cygdrive/e/pie_menyu/windows/flutter/ephemeral/.plugin_symlinks/bitsdojo_window_windows/windows/bitsdojo_window_api.cpp">
+			<Option target="bitsdojo_window_windows_plugin"/>
+		</Unit>
+		<Unit filename="/cygdrive/e/pie_menyu/windows/flutter/ephemeral/.plugin_symlinks/bitsdojo_window_windows/windows/bitsdojo_window_api.h">
+			<Option target="bitsdojo_window_windows_plugin"/>
+		</Unit>
+		<Unit filename="/cygdrive/e/pie_menyu/windows/flutter/ephemeral/.plugin_symlinks/bitsdojo_window_windows/windows/bitsdojo_window_plugin.cpp">
+			<Option target="bitsdojo_window_windows_plugin"/>
+		</Unit>
+		<Unit filename="/cygdrive/e/pie_menyu/windows/flutter/ephemeral/.plugin_symlinks/hotkey_manager/windows/hotkey_manager_plugin.cpp">
+			<Option target="hotkey_manager_plugin"/>
+		</Unit>
+		<Unit filename="/cygdrive/e/pie_menyu/windows/flutter/ephemeral/.plugin_symlinks/isar_flutter_libs/windows/isar_flutter_libs_plugin.cpp">
+			<Option target="isar_flutter_libs_plugin"/>
+		</Unit>
+		<Unit filename="/cygdrive/e/pie_menyu/windows/flutter/ephemeral/.plugin_symlinks/screen_retriever/windows/screen_retriever_plugin.cpp">
+			<Option target="screen_retriever_plugin"/>
+		</Unit>
+		<Unit filename="/cygdrive/e/pie_menyu/windows/flutter/ephemeral/.plugin_symlinks/window_manager/windows/window_manager.cpp">
+			<Option target="window_manager_plugin"/>
+		</Unit>
+		<Unit filename="/cygdrive/e/pie_menyu/windows/flutter/ephemeral/.plugin_symlinks/window_manager/windows/window_manager_plugin.cpp">
+			<Option target="window_manager_plugin"/>
+		</Unit>
+		<Unit filename="/cygdrive/e/pie_menyu/windows/flutter/ephemeral/cpp_client_wrapper/core_implementations.cc">
+			<Option target="flutter_wrapper_plugin"/>
+			<Option target="flutter_wrapper_app"/>
+		</Unit>
+		<Unit filename="/cygdrive/e/pie_menyu/windows/flutter/ephemeral/cpp_client_wrapper/flutter_engine.cc">
+			<Option target="flutter_wrapper_app"/>
+		</Unit>
+		<Unit filename="/cygdrive/e/pie_menyu/windows/flutter/ephemeral/cpp_client_wrapper/flutter_view_controller.cc">
+			<Option target="flutter_wrapper_app"/>
+		</Unit>
+		<Unit filename="/cygdrive/e/pie_menyu/windows/flutter/ephemeral/cpp_client_wrapper/plugin_registrar.cc">
+			<Option target="flutter_wrapper_plugin"/>
+		</Unit>
+		<Unit filename="/cygdrive/e/pie_menyu/windows/flutter/ephemeral/cpp_client_wrapper/standard_codec.cc">
+			<Option target="flutter_wrapper_plugin"/>
+			<Option target="flutter_wrapper_app"/>
+		</Unit>
+		<Unit filename="/cygdrive/e/pie_menyu/windows/flutter/ephemeral/flutter_windows.dll.rule">
+			<Option target="flutter_wrapper_plugin"/>
+			<Option target="flutter_wrapper_app"/>
+		</Unit>
+		<Unit filename="/cygdrive/e/pie_menyu/windows/flutter/generated_plugin_registrant.cc">
+			<Option target="pie_menyu"/>
+		</Unit>
+		<Unit filename="/cygdrive/e/pie_menyu/windows/flutter/generated_plugin_registrant.h">
+			<Option target="pie_menyu"/>
+		</Unit>
+		<Unit filename="/cygdrive/e/pie_menyu/windows/runner/Runner.rc">
+			<Option target="pie_menyu"/>
+		</Unit>
+		<Unit filename="/cygdrive/e/pie_menyu/windows/runner/flutter_window.cpp">
+			<Option target="pie_menyu"/>
+		</Unit>
+		<Unit filename="/cygdrive/e/pie_menyu/windows/runner/flutter_window.h">
+			<Option target="pie_menyu"/>
+		</Unit>
+		<Unit filename="/cygdrive/e/pie_menyu/windows/runner/main.cpp">
+			<Option target="pie_menyu"/>
+		</Unit>
+		<Unit filename="/cygdrive/e/pie_menyu/windows/runner/runner.exe.manifest">
+			<Option target="pie_menyu"/>
+		</Unit>
+		<Unit filename="/cygdrive/e/pie_menyu/windows/runner/utils.cpp">
+			<Option target="pie_menyu"/>
+		</Unit>
+		<Unit filename="/cygdrive/e/pie_menyu/windows/runner/utils.h">
+			<Option target="pie_menyu"/>
+		</Unit>
+		<Unit filename="/cygdrive/e/pie_menyu/windows/runner/win32_window.cpp">
+			<Option target="pie_menyu"/>
+		</Unit>
+		<Unit filename="/cygdrive/e/pie_menyu/windows/runner/win32_window.h">
+			<Option target="pie_menyu"/>
+		</Unit>
+		<Unit filename="/cygdrive/e/pie_menyu/windows/CMakeLists.txt">
+			<Option virtualFolder="CMake Files\"/>
+		</Unit>
+		<Unit filename="/cygdrive/e/pie_menyu/windows/flutter/CMakeLists.txt">
+			<Option virtualFolder="CMake Files\flutter\"/>
+		</Unit>
+		<Unit filename="/cygdrive/e/pie_menyu/windows/flutter/generated_plugins.cmake">
+			<Option virtualFolder="CMake Files\flutter\"/>
+		</Unit>
+		<Unit filename="/cygdrive/e/pie_menyu/windows/flutter/ephemeral/generated_config.cmake">
+			<Option virtualFolder="CMake Files\flutter\ephemeral\"/>
+		</Unit>
+		<Unit filename="/cygdrive/e/pie_menyu/windows/flutter/ephemeral/.plugin_symlinks/bitsdojo_window_windows/windows/CMakeLists.txt">
+			<Option virtualFolder="CMake Files\flutter\ephemeral\.plugin_symlinks\bitsdojo_window_windows\windows\"/>
+		</Unit>
+		<Unit filename="/cygdrive/e/pie_menyu/windows/flutter/ephemeral/.plugin_symlinks/hotkey_manager/windows/CMakeLists.txt">
+			<Option virtualFolder="CMake Files\flutter\ephemeral\.plugin_symlinks\hotkey_manager\windows\"/>
+		</Unit>
+		<Unit filename="/cygdrive/e/pie_menyu/windows/flutter/ephemeral/.plugin_symlinks/isar_flutter_libs/windows/CMakeLists.txt">
+			<Option virtualFolder="CMake Files\flutter\ephemeral\.plugin_symlinks\isar_flutter_libs\windows\"/>
+		</Unit>
+		<Unit filename="/cygdrive/e/pie_menyu/windows/flutter/ephemeral/.plugin_symlinks/screen_retriever/windows/CMakeLists.txt">
+			<Option virtualFolder="CMake Files\flutter\ephemeral\.plugin_symlinks\screen_retriever\windows\"/>
+		</Unit>
+		<Unit filename="/cygdrive/e/pie_menyu/windows/flutter/ephemeral/.plugin_symlinks/window_manager/windows/CMakeLists.txt">
+			<Option virtualFolder="CMake Files\flutter\ephemeral\.plugin_symlinks\window_manager\windows\"/>
+		</Unit>
+		<Unit filename="/cygdrive/e/pie_menyu/windows/runner/CMakeLists.txt">
+			<Option virtualFolder="CMake Files\runner\"/>
+		</Unit>
+	</Project>
+</CodeBlocks_project_file>
