@@ -38,6 +38,12 @@ class DB {
     return (await _isar.profiles.getAll(ids)).whereType<Profile>().toList();
   }
 
+  static Future<List<Profile>> getProfilesByExe(String exe) async {
+    return (await _isar.profiles.where().filter().exesElementContains(exe).findAll())
+        .whereType<Profile>()
+        .toList();
+  }
+
   static Future<List<PieMenu>> getPieMenus(
       {List<int> ids = const <int>[]}) async {
     if (ids.isEmpty) {
@@ -83,12 +89,12 @@ class DB {
   }
 
   static Future<int> getPieMenuLinkedCount(int pieMenuId) async {
-     PieMenu? pieMenu = await _isar.pieMenus.get(pieMenuId);
-     if (pieMenu == null) {
-       return 0;
-     }
+    PieMenu? pieMenu = await _isar.pieMenus.get(pieMenuId);
+    if (pieMenu == null) {
+      return 0;
+    }
 
-     return pieMenu.profiles.length;
+    return pieMenu.profiles.length;
   }
 
   static void updateProfile(Profile profile) async {
@@ -101,7 +107,6 @@ class DB {
     await _isar.writeTxn(() async {
       await profile.pieMenus.save();
     });
-
   }
 
   /// Insert when not existed, update when existed.

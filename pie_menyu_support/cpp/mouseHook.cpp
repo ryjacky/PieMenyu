@@ -11,7 +11,7 @@ LRESULT CALLBACK MouseHookCallback(int nCode, WPARAM wParam, LPARAM lParam)
 
         if (wParam == WM_MOUSEMOVE)
         {
-            std::cout << "Mouse position: (" << pMouseStruct->pt.x << ", " << pMouseStruct->pt.y << ")" << std::endl;
+            std::cout << pMouseStruct->pt.x << "\t" << pMouseStruct->pt.y << std::endl;
         }
     }
 

@@ -66,7 +66,7 @@ packages:
     source: hosted
     version: "1.3.1"
   ffi:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: ffi
       sha256: "7bf0adc28a23d395f19f3f1eb21dd7cfd1dd9f8e1c50051c069122e6853bc878"
@@ -78,6 +78,14 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.0"
+  flutter_isolate:
+    dependency: "direct main"
+    description:
+      name: flutter_isolate
+      sha256: "994ddec596da4ca12ca52154fd59404077584643eb7e3f1008a55fda9fe0b76b"
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.0.4"
   flutter_lints:
     dependency: "direct dev"
     description:
@@ -172,7 +180,7 @@ packages:
     source: hosted
     version: "1.0.0"
   path:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: path
       sha256: "8829d8a55c13fc0e37127c29fedf290c102f4e40ae94ada574091fe0ff96c917"
@@ -367,14 +375,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "5.1.1"
-  win32hooks:
-    dependency: "direct main"
-    description:
-      name: win32hooks
-      sha256: b307269b9ac97562601b48afa067d959aa3cf38c711dcb45ed6199be11cae60b
-      url: "https://pub.dev"
-    source: hosted
-    version: "1.0.0"
   window_manager:
     dependency: "direct main"
     description:
