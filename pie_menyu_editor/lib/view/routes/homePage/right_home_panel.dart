@@ -197,6 +197,8 @@ class _RightHomePanelState extends State<RightHomePanel> {
   removePieMenuLink(PieMenu pieMenu) async {
     setState(() {
       widget.profile.pieMenus.remove(pieMenu);
+      widget.profile.hotkeyToPieMenuIdList
+          .removeWhere((element) => element.pieMenuId == pieMenu.id);
     });
     await DB.updateProfileToPieMenuLinks(widget.profile);
   }
