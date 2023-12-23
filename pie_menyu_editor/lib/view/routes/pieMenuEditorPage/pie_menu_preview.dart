@@ -38,7 +38,7 @@ class _PieMenuPreviewState extends State<PieMenuPreview> {
 
     updateParameterThenSetState();
     final currentPieMenuId = context.select<PieMenuEditorPageViewModel, int>(
-        (value) => value.currentPieItemId);
+        (value) => value.pieItemOrderIndex);
 
     const height = 35;
 
@@ -74,7 +74,7 @@ class _PieMenuPreviewState extends State<PieMenuPreview> {
                   computeYAdjusted(i, constraints.maxHeight / 2 - height / 2),
               child: GestureDetector(
                 onTap: () {
-                  context.read<PieMenuEditorPageViewModel>().currentPieItemId =
+                  context.read<PieMenuEditorPageViewModel>().pieItemOrderIndex =
                       _pieItems.elementAt(i).id;
                 },
                 child: PieItemView(

@@ -3,6 +3,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:hotkey_manager/hotkey_manager.dart';
 import 'package:localization/localization.dart';
 import 'package:pie_menyu_editor/view/routes/pieMenuEditorPage/pie_menu_editor_page.dart';
+import 'package:pie_menyu_editor/view/routes/pieMenuEditorPage/pie_menu_editor_page_route.dart';
 import 'package:pie_menyu_editor/view/widgets/PrimaryButton.dart';
 import 'package:pie_menyu_editor/view/widgets/TableActionButton.dart';
 import 'package:pie_menyu_editor/view/widgets/key_press_recorder.dart';
@@ -10,6 +11,9 @@ import 'package:pie_menyu_editor/view/widgets/minimal_text_field.dart';
 import 'package:pie_menyu_core/db/db.dart';
 import 'package:pie_menyu_core/db/pie_menu.dart';
 import 'package:pie_menyu_core/db/profile.dart';
+import 'package:provider/provider.dart';
+
+import '../pieMenuEditorPage/pie_menu_editor_page_view_model.dart';
 
 class RightHomePanel extends StatefulWidget {
   final Profile profile;
@@ -125,9 +129,7 @@ class _RightHomePanelState extends State<RightHomePanel> {
                                 onPressed: () {
                                   Navigator.of(context).push(
                                     MaterialPageRoute(
-                                      builder: (context) => PieMenuEditorPage(
-                                        pieMenu: pieMenu,
-                                      ),
+                                      builder: (context) => PieMenuEditorPageRoute(pieMenu),
                                     ),
                                   );
                                 },

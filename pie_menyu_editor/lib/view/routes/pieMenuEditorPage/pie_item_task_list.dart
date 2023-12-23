@@ -21,7 +21,7 @@ class _PieItemTaskListState extends State<PieItemTaskList> {
   @override
   Widget build(BuildContext context) {
     final currentPieItemId = context.select<PieMenuEditorPageViewModel, int>(
-        (value) => value.currentPieItemId);
+        (value) => value.pieItemOrderIndex);
 
     final List<PieItemTask> pieItemTasks =
         context.select<PieMenuEditorPageViewModel, List<PieItemTask>>(

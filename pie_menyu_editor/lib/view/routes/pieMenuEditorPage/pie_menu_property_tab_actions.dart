@@ -17,7 +17,7 @@ class PieMenuPropertyTabActions extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final currentPieItemId = context.select<PieMenuEditorPageViewModel, int>(
-        (value) => value.currentPieItemId);
+        (value) => value.pieItemOrderIndex);
 
     return Row(
       children: [

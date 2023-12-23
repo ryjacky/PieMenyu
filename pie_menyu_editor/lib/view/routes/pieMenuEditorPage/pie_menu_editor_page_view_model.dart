@@ -69,9 +69,9 @@ class PieMenuEditorPageViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
-  int get currentPieItemId => _currentPieItemId;
+  int get pieItemOrderIndex => _currentPieItemId;
 
-  set currentPieItemId(int value) {
+  set pieItemOrderIndex(int value) {
     _currentPieItemId = value;
     notifyListeners();
   }
