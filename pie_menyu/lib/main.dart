@@ -35,7 +35,7 @@ Future<void> main() async {
 
   windowManager.waitUntilReadyToShow(windowOptions, () async {
     await windowManager.setAsFrameless();
-    await windowManager.minimize();
+    await windowManager.blur();
     await windowManager.hide();
   });
 

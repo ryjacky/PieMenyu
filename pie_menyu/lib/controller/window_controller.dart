@@ -61,10 +61,11 @@ class WindowController {
           pieMenuProvider.loadPieItems();
 
           final pieCenterScreenPosition = await screenRetriever.getCursorScreenPoint();
-          await windowManager.show();
+
           await windowManager.setPosition(Offset(
               pieCenterScreenPosition.dx - windowSize.width / 2,
               pieCenterScreenPosition.dy - windowSize.height / 2));
+          await windowManager.show();
           await windowManager.focus();
 
           pieMenuProvider.pieCenterScreenPosition = pieCenterScreenPosition;
