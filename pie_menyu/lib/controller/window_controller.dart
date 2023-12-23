@@ -21,7 +21,11 @@ class WindowController {
   WindowController() {
     keyboardProvider.addListener(() {
       if (keyboardProvider.keyEvent.type == KeyboardEventType.keyDown) {
-        showWindow(keyboardProvider.keyEvent.hotkey!);
+        if (keyboardProvider.keyEvent.hotkey != null) {
+          showWindow(keyboardProvider.keyEvent.hotkey!);
+        } else {
+          dev.log("Hotkey is null");
+        }
       }
       if (keyboardProvider.keyEvent.type == KeyboardEventType.keyUp) {
         hideWindow();
@@ -38,7 +42,7 @@ class WindowController {
       return;
     }
 
-    String foregroundApp = await getForegroundApp();
+    String foregroundApp = "ForegroundWindow.get().path";
 
     List<Profile> profilesOfForegroundApp =
         await DB.getProfilesByExe(foregroundApp);
@@ -57,10 +61,10 @@ class WindowController {
           pieMenuProvider.loadPieItems();
 
           final pieCenterScreenPosition = await screenRetriever.getCursorScreenPoint();
+          await windowManager.show();
           await windowManager.setPosition(Offset(
               pieCenterScreenPosition.dx - windowSize.width / 2,
               pieCenterScreenPosition.dy - windowSize.height / 2));
-          await windowManager.show();
           await windowManager.focus();
 
           pieMenuProvider.pieCenterScreenPosition = pieCenterScreenPosition;
@@ -70,9 +74,5 @@ class WindowController {
         }
       }
     }
-  }
-
-  String getForegroundApp() {
-    return "";
   }
 }

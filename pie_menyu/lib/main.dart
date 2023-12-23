@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:localization/localization.dart';
 import 'package:pie_menyu/system/mouse/mouse_cursor_provider.dart';
 import 'package:pie_menyu/system/pie_menyu_system_tray.dart';
-import 'package:pie_menyu/system/window/foreground_window.dart';
 import 'package:pie_menyu_core/db/db.dart';
 import 'package:pie_menyu_core/db/pie_item.dart';
 import 'package:pie_menyu_core/db/pie_menu.dart';
@@ -28,7 +27,6 @@ Future<void> main() async {
 
   WindowOptions windowOptions = WindowOptions(
     size: WindowController.windowSize,
-    center: true,
     backgroundColor: Colors.transparent,
     skipTaskbar: true,
     titleBarStyle: TitleBarStyle.hidden,
@@ -40,8 +38,6 @@ Future<void> main() async {
     await windowManager.minimize();
     await windowManager.hide();
   });
-
-  print(ForegroundWindow.get().path);
 
   final windowControl = WindowController();
 
