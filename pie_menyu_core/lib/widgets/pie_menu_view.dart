@@ -144,6 +144,6 @@ class _PieMenuViewState extends State<PieMenuView> {
 
   double getPieCenterRotation() {
     double result = 2 * pi * widget.pieItemOrderIndex / widget.pieItems.length;
-    return result.isNaN ? 0 : result;
+    return (result.isNaN || result.isInfinite) ? 0 : result;
   }
 }
