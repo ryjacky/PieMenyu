@@ -2,34 +2,60 @@ import 'dart:developer';
 import 'dart:isolate';
 
 import 'package:flutter/material.dart';
+import 'package:hotkey_manager/hotkey_manager.dart';
 import 'package:pie_menyu/system/keyboard/keyboard_event.dart';
+import 'package:pie_menyu_core/db/db.dart';
+import 'package:pie_menyu_core/db/profile.dart';
+import 'package:window_manager/window_manager.dart';
 
-import 'keyboard_hook.dart';
+import '../system_hook.dart';
 
 class KeyboardProvider extends ChangeNotifier {
-  Offset cursorPosition = Offset.zero;
-  ReceivePort? _receivePort;
-  SendPort? _sendPort;
+  KeyboardEvent _event = KeyboardEvent(KeyboardEventType.keyUp, 0);
 
-  KeyboardProvider(){
+  ReceivePort? _receivePort;
+
+  KeyboardProvider() {
     initializeKeyboardHook();
+    _initializeKeyDownHook();
   }
 
-  void initializeKeyboardHook() async {
-    _receivePort = await KeyboardHook.isolated();
-    _receivePort!.listen((event) {
-      if (event is SendPort) {
-        _sendPort = event;
-      }
-      log("FROM ISOLATE: ${(event)}");
+  get keyEvent => _event;
 
+  void initializeKeyboardHook() async {
+    _receivePort = await SystemHook.isolated(HookTypes.keyboard);
+    _receivePort!.listen((event) async {
+      if (await windowManager.isFocused()) {
+        _event = KeyboardEvent(KeyboardEventType.keyUp, 0);
+        notifyListeners();
+      }
     });
   }
 
   @override
   void dispose() {
-    _sendPort?.send(KeyboardHookControl.unhook);
     super.dispose();
   }
 
+  void _initializeKeyDownHook() async {
+    await hotKeyManager.unregisterAll();
+    List<Profile> profiles = await DB.getProfiles();
+    for (Profile profile in profiles) {
+      for (HotkeyToPieMenuId hotkeyToPieMenuId
+          in profile.hotkeyToPieMenuIdList) {
+        await hotKeyManager.register(
+          HotKey(hotkeyToPieMenuId.keyCode,
+              modifiers: hotkeyToPieMenuId.keyModifiers,
+              scope: HotKeyScope.system),
+          keyDownHandler: (hotkey) {
+            _event = KeyboardEvent(
+                KeyboardEventType.keyDown, hotkey.keyCode.keyId,
+                hotkey: hotkey);
+            notifyListeners();
+          },
+        );
+      }
+    }
+    log("Registered hotkeys: ${hotKeyManager.registeredHotKeyList}");
+  }
 }

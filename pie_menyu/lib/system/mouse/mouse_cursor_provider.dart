@@ -1,33 +1,51 @@
 import 'dart:developer';
-import 'dart:isolate';
 
 import 'package:flutter/material.dart';
-
-import 'mouse_hook.dart';
+import 'package:pie_menyu/system/system_hook.dart';
+import 'package:window_manager/window_manager.dart';
 
 class MouseCursorProvider extends ChangeNotifier {
   Offset cursorPosition = Offset.zero;
-  ReceivePort? _receivePort;
-  SendPort? _sendPort;
 
-  MouseCursorProvider(){
+  MouseCursorProvider() {
     initializeMouseHook();
   }
 
   void initializeMouseHook() async {
-    _receivePort = await MouseHook.isolated();
-    _receivePort!.listen((event) {
-      if (event is SendPort) {
-        _sendPort = event;
+    // _receivePort = await MouseHook.isolated();
+    // _receivePort!.listen((event) async {
+    //   if (event is SendPort) {
+    //     _sendPort = event;
+    //   }
+    //
+    //   if (!await windowManager.isFocused()) {
+    //     return;
+    //   }
+    //
+    //   if (event is MouseMoveEvent){
+    //     cursorPosition = Offset(event.x.toDouble(), event.y.toDouble());
+    //   }
+    //   notifyListeners();
+    // });
+
+    Stream out = await SystemHook.isolated(HookTypes.mouse);
+    out.listen((event) async {
+      if (!await windowManager.isFocused()) {
+        return;
       }
-      log("FROM ISOLATE: $event");
+
+      try {
+        List<String> pos = event.toString().trim().split("\t");
+        cursorPosition = Offset(double.parse(pos[0]), double.parse(pos[1]));
+        notifyListeners();
+      } catch (e) {
+        log("Invalid mouse hook info: $event");
+      }
     });
   }
 
   @override
   void dispose() {
-    _sendPort?.send(HookControl.unhook);
     super.dispose();
   }
-
 }

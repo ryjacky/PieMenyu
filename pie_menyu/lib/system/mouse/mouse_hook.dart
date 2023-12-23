@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:ffi';
 import 'dart:isolate';
 
@@ -16,7 +17,7 @@ class MouseHook {
   static Future<ReceivePort> isolated() async {
     final receivePort = ReceivePort();
 
-    Isolate.spawn((sendPort) => MouseHook._(sendPort), receivePort.sendPort);
+    await Isolate.spawn((sendPort) => MouseHook._(sendPort), receivePort.sendPort);
 
     return receivePort;
   }
@@ -25,8 +26,11 @@ class MouseHook {
     _sendPort.send(_receivePort.sendPort);
     _receivePort.listen((message) {
       if (message == HookControl.unhook){
+        print("UNHOOK");
         UnhookWindowsHookEx(_hookHandle);
       }
+      print("UNHOOK");
+
     });
 
     final callback = NativeCallable<CallWndProc>.isolateLocal(mouseHookProc,
@@ -50,6 +54,7 @@ class MouseHook {
     if (nCode >= 0 && wParam == WM_MOUSEMOVE) {
       _sendPort.send(MouseMoveEvent(pMouseStruct.ref.pt.x, pMouseStruct.ref.pt.y));
     }
+
     return CallNextHookEx(_hookHandle, nCode, wParam, lParam);
   }
 }

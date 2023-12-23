@@ -1,10 +1,10 @@
 import 'dart:async';
 import 'dart:developer';
-import 'dart:isolate';
 
 import 'package:flutter/material.dart';
 import 'package:hotkey_manager/hotkey_manager.dart';
 import 'package:localization/localization.dart';
+import 'package:pie_menyu/system/keyboard/keyboard_event.dart';
 import 'package:pie_menyu/system/keyboard/keyboard_provider.dart';
 import 'package:pie_menyu/system/pie_menyu_system_tray.dart';
 import 'package:pie_menyu_core/db/db.dart';
@@ -16,7 +16,6 @@ import 'package:provider/provider.dart';
 import 'package:screen_retriever/screen_retriever.dart';
 import 'package:window_manager/window_manager.dart';
 
-import 'system/keyboard_hook.dart';
 import 'system/mouse/mouse_cursor_provider.dart';
 import 'view/pie_menu_view.dart';
 
@@ -24,6 +23,7 @@ const windowSize = Size(1024, 1024);
 final pieMenuProvider = PieMenuProvider();
 
 Future<void> main() async {
+
   WidgetsFlutterBinding.ensureInitialized();
 
   List<Future<dynamic>> asyncInitializers = [
@@ -33,11 +33,16 @@ Future<void> main() async {
   ];
   await Future.wait(asyncInitializers);
 
-  KeyboardProvider();
+  final keyboardProvider = KeyboardProvider();
+  keyboardProvider.addListener(() {
+    if (keyboardProvider.keyEvent.type == KeyboardEventType.keyDown) {
+      showWindow(keyboardProvider.keyEvent.hotkey!);
+    }
+    if (keyboardProvider.keyEvent.type == KeyboardEventType.keyUp) {
+      hideWindow();
+    }
+  });
 
-  KeyboardHook.ensureInitialized();
-  KeyboardHook.instance.addKeyUpListener(hideWindow);
-  KeyboardHook.instance.addKeyDownListener(showWindow);
 
   WindowOptions windowOptions = const WindowOptions(
     size: windowSize,

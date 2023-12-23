@@ -1,5 +1,5 @@
 #include <iostream>
-#include <Windows.h>
+#include <windows.h>
 
 HHOOK g_hookHandle = nullptr;
 
