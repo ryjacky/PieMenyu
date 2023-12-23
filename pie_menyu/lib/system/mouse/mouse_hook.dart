@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:ffi';
 import 'dart:isolate';
+import 'dart:ui';
 
 import 'package:ffi/ffi.dart';
 import 'package:win32/win32.dart';
@@ -52,7 +53,7 @@ class MouseHook {
   int mouseHookProc(int nCode, int wParam, int lParam) {
     final pMouseStruct = Pointer<MOUSEHOOKSTRUCT>.fromAddress(lParam);
     if (nCode >= 0 && wParam == WM_MOUSEMOVE) {
-      _sendPort.send(MouseMoveEvent(pMouseStruct.ref.pt.x, pMouseStruct.ref.pt.y));
+      _sendPort.send(MouseEvent(position: Offset(pMouseStruct.ref.pt.x.toDouble(), pMouseStruct.ref.pt.y.toDouble())));
     }
 
     return CallNextHookEx(_hookHandle, nCode, wParam, lParam);

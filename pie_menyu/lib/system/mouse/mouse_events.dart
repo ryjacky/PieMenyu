@@ -1,8 +1,6 @@
-abstract class IMouseEvents {
-}
+import 'dart:ui';
 
-class MouseMoveEvent extends IMouseEvents {
-  final int x;
-  final int y;
-  MouseMoveEvent(this.x, this.y);
+class MouseEvent {
+  final Offset position;
+  MouseEvent({required this.position});
 }

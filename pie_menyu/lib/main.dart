@@ -1,26 +1,20 @@
 import 'dart:async';
-import 'dart:developer';
+import 'dart:math';
 
 import 'package:flutter/material.dart';
-import 'package:hotkey_manager/hotkey_manager.dart';
 import 'package:localization/localization.dart';
-import 'package:pie_menyu/system/keyboard/keyboard_event.dart';
-import 'package:pie_menyu/system/keyboard/keyboard_provider.dart';
+import 'package:pie_menyu/system/mouse/mouse_cursor_provider.dart';
 import 'package:pie_menyu/system/pie_menyu_system_tray.dart';
+import 'package:pie_menyu/system/window/foreground_window.dart';
 import 'package:pie_menyu_core/db/db.dart';
 import 'package:pie_menyu_core/db/pie_item.dart';
 import 'package:pie_menyu_core/db/pie_menu.dart';
-import 'package:pie_menyu_core/db/profile.dart';
 import 'package:pie_menyu_core/providers/pie_menu_provider.dart';
 import 'package:provider/provider.dart';
-import 'package:screen_retriever/screen_retriever.dart';
 import 'package:window_manager/window_manager.dart';
 
-import 'system/mouse/mouse_cursor_provider.dart';
+import 'controller/window_controller.dart';
 import 'view/pie_menu_view.dart';
-
-const windowSize = Size(1024, 1024);
-final pieMenuProvider = PieMenuProvider();
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -32,18 +26,8 @@ Future<void> main() async {
   ];
   await Future.wait(asyncInitializers);
 
-  final keyboardProvider = KeyboardProvider();
-  keyboardProvider.addListener(() {
-    if (keyboardProvider.keyEvent.type == KeyboardEventType.keyDown) {
-      showWindow(keyboardProvider.keyEvent.hotkey!);
-    }
-    if (keyboardProvider.keyEvent.type == KeyboardEventType.keyUp) {
-      hideWindow();
-    }
-  });
-
-  WindowOptions windowOptions = const WindowOptions(
-    size: windowSize,
+  WindowOptions windowOptions = WindowOptions(
+    size: WindowController.windowSize,
     center: true,
     backgroundColor: Colors.transparent,
     skipTaskbar: true,
@@ -52,63 +36,24 @@ Future<void> main() async {
   );
 
   windowManager.waitUntilReadyToShow(windowOptions, () async {
-    // await windowManager.setAsFrameless();
-    // await windowManager.hide();
+    await windowManager.setAsFrameless();
+    await windowManager.minimize();
+    await windowManager.hide();
   });
+
+  print(ForegroundWindow.get().path);
+
+  final windowControl = WindowController();
 
   runApp(
     MultiProvider(
       providers: [
+        ChangeNotifierProvider(create: (_) => windowControl.pieMenuProvider),
         ChangeNotifierProvider(create: (_) => MouseCursorProvider()),
-        ChangeNotifierProvider(create: (_) => pieMenuProvider),
       ],
-      child: MyApp(),
+      child: const MyApp(),
     ),
   );
-}
-
-void hideWindow() async {
-  await windowManager.hide();
-}
-
-void showWindow(HotKey hotKey) async {
-  if (await windowManager.isFocused()) {
-    return;
-  }
-
-  String foregroundApp = await getForegroundApp();
-
-  List<Profile> profilesOfForegroundApp =
-      await DB.getProfilesByExe(foregroundApp);
-  Profile? profile = profilesOfForegroundApp.firstOrNull;
-  profile ??= (await DB.getProfiles(ids: [1])).firstOrNull;
-
-  if (profile == null) {
-    throw Exception("Database possibly corrupted");
-  }
-
-  for (HotkeyToPieMenuId hotkeyToPieMenuId in profile.hotkeyToPieMenuIdList) {
-    if (hotkeyToPieMenuId.keyCode == hotKey.keyCode) {
-      try {
-        pieMenuProvider.pieMenu = profile.pieMenus
-            .firstWhere((element) => element.id == hotkeyToPieMenuId.pieMenuId);
-        pieMenuProvider.loadPieItems();
-
-        Offset cursorPos = await screenRetriever.getCursorScreenPoint();
-        await windowManager.setPosition(Offset(
-            cursorPos.dx - windowSize.width / 2,
-            cursorPos.dy - windowSize.height / 2));
-        await windowManager.show();
-        await windowManager.focus();
-      } catch (e) {
-        log("Pie menu does not exist in profile, id: ${hotkeyToPieMenuId.pieMenuId}");
-      }
-    }
-  }
-}
-
-String getForegroundApp() {
-  return "";
 }
 
 class MyApp extends StatelessWidget {
@@ -117,8 +62,8 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    final mousePosition = context
-        .select<MouseCursorProvider, Offset>((value) => value.cursorPosition);
+    final mousePosition = context.select<MouseCursorProvider, Offset>(
+        (value) => value.mouseEvent.position);
     final pieMenu =
         context.select<PieMenuProvider, PieMenu>((value) => value.pieMenu);
     final pieItems = context
@@ -130,11 +75,48 @@ class MyApp extends StatelessWidget {
       home: Scaffold(
         backgroundColor: Colors.transparent,
         body: PieMenuView(
-            mousePosition: mousePosition,
-            pieMenu: pieMenu,
-            pieItems: pieItems,
-            activePieItemId: 0),
+          pieMenu: pieMenu,
+          pieItems: pieItems,
+          activePieItemAt: getActivePieItemOrderIndex(
+            context.read<PieMenuProvider>().pieCenterScreenPosition,
+            mousePosition,
+            pieMenu,
+            pieItems,
+          ),
+        ),
       ),
     );
+  }
+
+  int getActivePieItemOrderIndex(
+    Offset pieCenterPosition,
+    Offset position,
+    PieMenu pieMenu,
+    List<PieItem> pieItems,
+  ) {
+    if (pieItems.isEmpty) {
+      return 0;
+    }
+
+    final dx = position.dx - pieCenterPosition.dx;
+    // 0,0 is top left, so dy is inverted
+    final dy = pieCenterPosition.dy - position.dy;
+    // We want the angle of 12 o'clock to be 0, so we swap dx and dy
+    double pieCenterRotation = atan2(dx, dy);
+
+    if (dx < 0) {
+      pieCenterRotation += 2 * pi;
+    }
+
+    // Offset the rotation by half the angle of a pie item,
+    // which is the detection range
+    pieCenterRotation += 2 * pi / pieItems.length / 2;
+
+    var activeBtnIndex =
+        (pieItems.length * pieCenterRotation / (2 * pi)).floor();
+
+    // Because we offset the rotation by half the angle of a pie item,
+    // we need to mod by the number of pie items to get the correct index
+    return activeBtnIndex % pieItems.length;
   }
 }

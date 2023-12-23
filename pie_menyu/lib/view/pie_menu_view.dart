@@ -7,19 +7,17 @@ import 'package:pie_menyu_core/widgets/pie_item_view.dart';
 import 'package:pie_menyu_core/painter/pie_center_painter.dart';
 
 class PieMenuView extends StatefulWidget {
-  final Offset mousePosition;
   final PieMenu pieMenu;
-  final int activePieItemId;
+  final int activePieItemAt;
   final List<PieItem> pieItems;
 
   final Function(int)? onPieItemClicked;
 
   const PieMenuView(
       {super.key,
-      required this.mousePosition,
       required this.pieMenu,
       required this.pieItems,
-      required this.activePieItemId,
+      required this.activePieItemAt,
       this.onPieItemClicked});
 
   @override
@@ -51,18 +49,21 @@ class _PieMenuViewState extends State<PieMenuView> {
                     widget.pieMenu.centerRadius -
                     widget.pieMenu.centerThickness) /
                 2,
-            child: CustomPaint(
-              size: Size(
-                (widget.pieMenu.centerRadius + widget.pieMenu.centerThickness)
-                    .toDouble(),
-                (widget.pieMenu.centerRadius + widget.pieMenu.centerThickness)
-                    .toDouble(),
+            child: Transform.rotate(
+              angle: getPieCenterRotation(),
+              child: CustomPaint(
+                size: Size(
+                  (widget.pieMenu.centerRadius + widget.pieMenu.centerThickness)
+                      .toDouble(),
+                  (widget.pieMenu.centerRadius + widget.pieMenu.centerThickness)
+                      .toDouble(),
+                ),
+                painter: PieCenterPainter(
+                    centerThickness: widget.pieMenu.centerThickness.toDouble(),
+                    backgroundColor: Color(widget.pieMenu.secondaryColor),
+                    foregroundColor: Color(widget.pieMenu.mainColor),
+                    numberOfPieItems: widget.pieItems.length),
               ),
-              painter: PieCenterPainter(
-                  centerThickness: widget.pieMenu.centerThickness.toDouble(),
-                  backgroundColor: Color(widget.pieMenu.secondaryColor),
-                  foregroundColor: Color(widget.pieMenu.mainColor),
-                  numberOfPieItems: widget.pieItems.length),
             ),
           ),
           for (int i = 0; i < widget.pieItems.length; i++)
@@ -82,10 +83,9 @@ class _PieMenuViewState extends State<PieMenuView> {
                           ? PieItemOffset.toLeft
                           : PieItemOffset.toRight,
                   borderRadius: widget.pieMenu.pieItemRoundness,
-                  backgroundColor:
-                      widget.activePieItemId == widget.pieItems.elementAt(i).id
-                          ? widget.pieMenu.mainColor
-                          : widget.pieMenu.secondaryColor,
+                  backgroundColor: widget.activePieItemAt == i
+                      ? widget.pieMenu.mainColor
+                      : widget.pieMenu.secondaryColor,
                   width: widget.pieMenu.pieItemWidth,
                   iconSize: widget.pieMenu.iconSize.toDouble(),
                 ),
@@ -137,5 +137,10 @@ class _PieMenuViewState extends State<PieMenuView> {
   /// y axis.
   double getYFromBiasedPolar(double angleFromYAxis, int radius) {
     return radius * cos(angleFromYAxis);
+  }
+
+  double getPieCenterRotation() {
+    double result = 2 * pi * widget.activePieItemAt / widget.pieItems.length;
+    return result.isNaN ? 0 : result;
   }
 }

@@ -5,7 +5,15 @@ import 'package:pie_menyu_core/db/pie_menu.dart';
 class PieMenuProvider extends ChangeNotifier {
   PieMenu _pieMenu = PieMenu();
   List<PieItem> _pieItems = [];
-
+  Offset _pieCenterScreenPosition = Offset.zero;
+  
+  Offset get pieCenterScreenPosition => _pieCenterScreenPosition;
+  
+  set pieCenterScreenPosition(Offset value) {
+    _pieCenterScreenPosition = value;
+    notifyListeners();
+  }
+  
   PieMenu get pieMenu => _pieMenu;
 
   set pieMenu(PieMenu value) {
