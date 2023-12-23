@@ -1,19 +1,34 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:pie_menyu_core/db/pie_item.dart';
 import 'package:pie_menyu_core/db/pie_menu.dart';
+import 'package:pie_menyu_core/widgets/pie_item_view.dart';
 import 'package:pie_menyu_core/painter/pie_center_painter.dart';
 
 class PieMenuView extends StatefulWidget {
   final Offset mousePosition;
   final PieMenu pieMenu;
+  final int activePieItemId;
   final List<PieItem> pieItems;
-  const PieMenuView({super.key, required this.mousePosition, required this.pieMenu, required this.pieItems});
+
+  final Function(int)? onPieItemClicked;
+
+  const PieMenuView(
+      {super.key,
+      required this.mousePosition,
+      required this.pieMenu,
+      required this.pieItems,
+      required this.activePieItemId,
+      this.onPieItemClicked});
 
   @override
   State<PieMenuView> createState() => _PieMenuViewState();
 }
 
 class _PieMenuViewState extends State<PieMenuView> {
+  double angleDelta = 0;
+
   @override
   void initState() {
     super.initState();
@@ -21,6 +36,9 @@ class _PieMenuViewState extends State<PieMenuView> {
 
   @override
   Widget build(BuildContext context) {
+    const height = 35;
+    angleDelta = 2 * pi / widget.pieItems.length;
+
     return LayoutBuilder(builder: (context, constraints) {
       return Stack(
         children: [
@@ -35,8 +53,10 @@ class _PieMenuViewState extends State<PieMenuView> {
                 2,
             child: CustomPaint(
               size: Size(
-                (widget.pieMenu.centerRadius + widget.pieMenu.centerThickness).toDouble(),
-                (widget.pieMenu.centerRadius + widget.pieMenu.centerThickness).toDouble(),
+                (widget.pieMenu.centerRadius + widget.pieMenu.centerThickness)
+                    .toDouble(),
+                (widget.pieMenu.centerRadius + widget.pieMenu.centerThickness)
+                    .toDouble(),
               ),
               painter: PieCenterPainter(
                   centerThickness: widget.pieMenu.centerThickness.toDouble(),
@@ -45,36 +65,77 @@ class _PieMenuViewState extends State<PieMenuView> {
                   numberOfPieItems: widget.pieItems.length),
             ),
           ),
-          // for (int i = 0; i < _pieItems.length; i++)
-          //   Positioned(
-          //     left: computeXAdjusted(i, constraints.maxWidth / 2),
-          //     bottom:
-          //     computeYAdjusted(i, constraints.maxHeight / 2 - height / 2),
-          //     child: GestureDetector(
-          //       onTap: () {
-          //         context.read<PieMenuEditorPageViewModel>().currentPieItemId =
-          //             _pieItems.elementAt(i).id;
-          //       },
-          //       child: PieItemView(
-          //         name: _pieItems.elementAt(i).displayName,
-          //         icon: _pieItems.elementAt(i).iconBase64,
-          //         horizontalOffset: i % (_pieItems.length / 2) == 0
-          //             ? PieItemOffset.center
-          //             : i > _pieItems.length / 2
-          //             ? PieItemOffset.toLeft
-          //             : PieItemOffset.toRight,
-          //         borderRadius: widget.pieMenu.pieItemRoundness,
-          //         backgroundColor:
-          //         currentPieMenuId == _pieItems.elementAt(i).id
-          //             ? widget.pieMenu.mainColor
-          //             : widget.pieMenu.secondaryColor,
-          //         width: widget.pieMenu.pieItemWidth,
-          //         iconSize: widget.pieMenu.iconSize.toDouble(),
-          //       ),
-          //     ),
-          //   ),
+          for (int i = 0; i < widget.pieItems.length; i++)
+            Positioned(
+              left: computeXAdjusted(i, constraints.maxWidth / 2),
+              bottom:
+                  computeYAdjusted(i, constraints.maxHeight / 2 - height / 2),
+              child: GestureDetector(
+                onTap: widget.onPieItemClicked
+                    ?.call(widget.pieItems.elementAt(i).id),
+                child: PieItemView(
+                  name: widget.pieItems.elementAt(i).displayName,
+                  icon: widget.pieItems.elementAt(i).iconBase64,
+                  horizontalOffset: i % (widget.pieItems.length / 2) == 0
+                      ? PieItemOffset.center
+                      : i > widget.pieItems.length / 2
+                          ? PieItemOffset.toLeft
+                          : PieItemOffset.toRight,
+                  borderRadius: widget.pieMenu.pieItemRoundness,
+                  backgroundColor:
+                      widget.activePieItemId == widget.pieItems.elementAt(i).id
+                          ? widget.pieMenu.mainColor
+                          : widget.pieMenu.secondaryColor,
+                  width: widget.pieMenu.pieItemWidth,
+                  iconSize: widget.pieMenu.iconSize.toDouble(),
+                ),
+              ),
+            ),
         ],
       );
     });
+  }
+
+  double computeYAdjusted(int i, double originY) {
+    double yAdjusted = originY +
+        getYFromBiasedPolar(angleDelta * i,
+            widget.pieMenu.centerRadius + widget.pieMenu.pieItemSpread);
+
+    if (i == 0) {
+      yAdjusted += 10;
+    }
+
+    if (i == widget.pieItems.length / 2) {
+      yAdjusted -= 10;
+    }
+
+    return yAdjusted;
+  }
+
+  /// Returns the x coordinate relative to the [originX] and adjusted
+  /// the pie item so it looks more like in a circle.
+  double computeXAdjusted(int i, double originX) {
+    double rawX = getXFromBiasedPolar(angleDelta * i,
+        widget.pieMenu.centerRadius + widget.pieMenu.pieItemSpread);
+    double half = widget.pieItems.length / 2;
+    if (i % half != 0) {
+      rawX += i > half
+          ? -widget.pieMenu.pieItemWidth / 2
+          : widget.pieMenu.pieItemWidth / 2;
+    }
+
+    return originX + rawX - widget.pieMenu.pieItemWidth / 2;
+  }
+
+  /// Returns the x coordinate from a polar coordinate system starting from the
+  /// y axis.
+  double getXFromBiasedPolar(double angleFromYAxis, int radius) {
+    return radius * sin(angleFromYAxis);
+  }
+
+  /// Returns the y coordinate from a polar coordinate system starting from the
+  /// y axis.
+  double getYFromBiasedPolar(double angleFromYAxis, int radius) {
+    return radius * cos(angleFromYAxis);
   }
 }

@@ -10,6 +10,7 @@ class PieMenuProvider extends ChangeNotifier {
 
   set pieMenu(PieMenu value) {
     _pieMenu = value;
+
     notifyListeners();
   }
 
@@ -17,6 +18,13 @@ class PieMenuProvider extends ChangeNotifier {
 
   set pieItems(List<PieItem> value) {
     _pieItems = value;
+    notifyListeners();
+  }
+
+  /// Load pie items of current pie menu from database
+  void loadPieItems() async {
+    await _pieMenu.pieItems.load();
+    _pieItems = _pieMenu.pieItems.toList();
     notifyListeners();
   }
 

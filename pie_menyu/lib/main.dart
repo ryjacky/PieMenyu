@@ -23,7 +23,6 @@ const windowSize = Size(1024, 1024);
 final pieMenuProvider = PieMenuProvider();
 
 Future<void> main() async {
-
   WidgetsFlutterBinding.ensureInitialized();
 
   List<Future<dynamic>> asyncInitializers = [
@@ -43,7 +42,6 @@ Future<void> main() async {
     }
   });
 
-
   WindowOptions windowOptions = const WindowOptions(
     size: windowSize,
     center: true,
@@ -54,17 +52,19 @@ Future<void> main() async {
   );
 
   windowManager.waitUntilReadyToShow(windowOptions, () async {
-    await windowManager.setAsFrameless();
-    await windowManager.hide();
+    // await windowManager.setAsFrameless();
+    // await windowManager.hide();
   });
 
-  runApp(MultiProvider(
-    providers: [
-      ChangeNotifierProvider(create: (_) => MouseCursorProvider()),
-      ChangeNotifierProvider(create: (_) => pieMenuProvider),
-    ],
-    child: MyApp(),
-  ),);
+  runApp(
+    MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (_) => MouseCursorProvider()),
+        ChangeNotifierProvider(create: (_) => pieMenuProvider),
+      ],
+      child: MyApp(),
+    ),
+  );
 }
 
 void hideWindow() async {
@@ -92,9 +92,11 @@ void showWindow(HotKey hotKey) async {
       try {
         pieMenuProvider.pieMenu = profile.pieMenus
             .firstWhere((element) => element.id == hotkeyToPieMenuId.pieMenuId);
+        pieMenuProvider.loadPieItems();
 
         Offset cursorPos = await screenRetriever.getCursorScreenPoint();
-        await windowManager.setPosition(Offset(cursorPos.dx - windowSize.width / 2,
+        await windowManager.setPosition(Offset(
+            cursorPos.dx - windowSize.width / 2,
             cursorPos.dy - windowSize.height / 2));
         await windowManager.show();
         await windowManager.focus();
@@ -118,7 +120,7 @@ class MyApp extends StatelessWidget {
     final mousePosition = context
         .select<MouseCursorProvider, Offset>((value) => value.cursorPosition);
     final pieMenu =
-    context.select<PieMenuProvider, PieMenu>((value) => value.pieMenu);
+        context.select<PieMenuProvider, PieMenu>((value) => value.pieMenu);
     final pieItems = context
         .select<PieMenuProvider, List<PieItem>>((value) => value.pieItems);
 
@@ -127,7 +129,11 @@ class MyApp extends StatelessWidget {
       localizationsDelegates: [LocalJsonLocalization.delegate],
       home: Scaffold(
         backgroundColor: Colors.transparent,
-        body: PieMenuView(mousePosition: mousePosition, pieMenu: pieMenu, pieItems: pieItems,),
+        body: PieMenuView(
+            mousePosition: mousePosition,
+            pieMenu: pieMenu,
+            pieItems: pieItems,
+            activePieItemId: 0),
       ),
     );
   }
