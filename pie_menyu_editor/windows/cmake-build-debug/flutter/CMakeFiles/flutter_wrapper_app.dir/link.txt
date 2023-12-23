@@ -1,2 +1,0 @@
-/usr/bin/ar.exe qc libflutter_wrapper_app.a CMakeFiles/flutter_wrapper_app.dir/ephemeral/cpp_client_wrapper/core_implementations.cc.o CMakeFiles/flutter_wrapper_app.dir/ephemeral/cpp_client_wrapper/standard_codec.cc.o CMakeFiles/flutter_wrapper_app.dir/ephemeral/cpp_client_wrapper/flutter_engine.cc.o CMakeFiles/flutter_wrapper_app.dir/ephemeral/cpp_client_wrapper/flutter_view_controller.cc.o
-/usr/bin/ranlib.exe libflutter_wrapper_app.a

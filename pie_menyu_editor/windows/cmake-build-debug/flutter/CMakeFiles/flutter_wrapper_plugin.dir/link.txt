@@ -1,2 +1,0 @@
-/usr/bin/ar.exe qc libflutter_wrapper_plugin.a CMakeFiles/flutter_wrapper_plugin.dir/ephemeral/cpp_client_wrapper/core_implementations.cc.o CMakeFiles/flutter_wrapper_plugin.dir/ephemeral/cpp_client_wrapper/standard_codec.cc.o CMakeFiles/flutter_wrapper_plugin.dir/ephemeral/cpp_client_wrapper/plugin_registrar.cc.o
-/usr/bin/ranlib.exe libflutter_wrapper_plugin.a

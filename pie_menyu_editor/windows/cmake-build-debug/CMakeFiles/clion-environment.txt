@@ -1,4 +1,0 @@
-ToolSet: 3.4.6 (local)@C:\cygwin64
-Options: 
-
-Options:-DCMAKE_MAKE_PROGRAM=/usr/bin/make.exe

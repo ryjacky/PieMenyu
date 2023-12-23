@@ -1,1 +1,0 @@
-/usr/bin/c++.exe -g -shared -Wl,--enable-auto-import -o cygisar_flutter_libs_plugin.dll -Wl,--out-implib,libisar_flutter_libs_plugin.dll.a -Wl,--major-image-version,0,--minor-image-version,0 CMakeFiles/isar_flutter_libs_plugin.dir/isar_flutter_libs_plugin.cpp.o  ../../flutter/libflutter_wrapper_plugin.a ../../../flutter/ephemeral/flutter_windows.dll.lib 
