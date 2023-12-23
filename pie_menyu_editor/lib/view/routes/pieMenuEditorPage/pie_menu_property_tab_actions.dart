@@ -16,14 +16,14 @@ class PieMenuPropertyTabActions extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final currentPieItemId = context.select<PieMenuEditorPageViewModel, int>(
+    final pieItemOrderIndex = context.select<PieMenuEditorPageViewModel, int>(
         (value) => value.pieItemOrderIndex);
 
     return Row(
       children: [
         Expanded(
           flex: 7,
-          child: currentPieItemId == 0
+          child: pieItemOrderIndex == -1
               ? Text(
                   "hint-select-pie-item-first".i18n(),
                   textAlign: TextAlign.center,

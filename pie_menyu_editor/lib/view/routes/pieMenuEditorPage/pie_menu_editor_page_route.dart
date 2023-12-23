@@ -16,7 +16,7 @@ class PieMenuEditorPageRoute extends StatelessWidget {
       providers: [
         ChangeNotifierProvider(
           create: (context) => PieMenuEditorPageViewModel(
-            currentPieItemId: 0,
+            currentPieItemOrderIndex: -1,
             pieMenu: pieMenu,
           ),
         )

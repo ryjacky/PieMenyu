@@ -17,16 +17,16 @@ import 'package:pie_menyu_core/db/pie_item_task.dart';
 import 'package:pie_menyu_core/db/pie_menu.dart';
 
 class PieMenuEditorPageViewModel extends ChangeNotifier {
-  int _currentPieItemId;
+  int _currentPieItemOrderIndex;
 
   PieMenu _pieMenu;
   List<PieItem> _pieItems = [];
   final Map<int, List<PieItemTask>> _tasksOfPieItem = {};
 
   PieMenuEditorPageViewModel({
-    required int currentPieItemId,
+    required int currentPieItemOrderIndex,
     required PieMenu pieMenu,
-  })  : _currentPieItemId = currentPieItemId,
+  })  : _currentPieItemOrderIndex = currentPieItemOrderIndex,
         _pieMenu = pieMenu {
     loadPieItemTasks();
   }
@@ -69,10 +69,10 @@ class PieMenuEditorPageViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
-  int get pieItemOrderIndex => _currentPieItemId;
+  int get pieItemOrderIndex => _currentPieItemOrderIndex;
 
   set pieItemOrderIndex(int value) {
-    _currentPieItemId = value;
+    _currentPieItemOrderIndex = value;
     notifyListeners();
   }
 
@@ -115,8 +115,8 @@ class PieMenuEditorPageViewModel extends ChangeNotifier {
         break;
     }
 
-    _tasksOfPieItem[_currentPieItemId] = [
-      ...(_tasksOfPieItem[_currentPieItemId] ?? []),
+    _tasksOfPieItem[_currentPieItemOrderIndex] = [
+      ...(_tasksOfPieItem[_currentPieItemOrderIndex] ?? []),
       newTask
     ];
     notifyListeners();
@@ -150,16 +150,16 @@ class PieMenuEditorPageViewModel extends ChangeNotifier {
   }
 
   void putPieItemTaskInCurrentPieItem(PieItemTask pieItemTask) {
-    bool pieItemTaskExisted = _tasksOfPieItem[_currentPieItemId]!
+    bool pieItemTaskExisted = _tasksOfPieItem[_currentPieItemOrderIndex]!
         .any((element) => element.id == pieItemTask.id);
 
     if (pieItemTask.id == Isar.autoIncrement || !pieItemTaskExisted) {
-      _tasksOfPieItem[_currentPieItemId] = [
-        ...(_tasksOfPieItem[_currentPieItemId] ?? []),
+      _tasksOfPieItem[_currentPieItemOrderIndex] = [
+        ...(_tasksOfPieItem[_currentPieItemOrderIndex] ?? []),
         pieItemTask
       ];
     } else {
-      _tasksOfPieItem[_currentPieItemId] = _tasksOfPieItem[_currentPieItemId]!
+      _tasksOfPieItem[_currentPieItemOrderIndex] = _tasksOfPieItem[_currentPieItemOrderIndex]!
           .map((e) => e.id == pieItemTask.id ? pieItemTask : e)
           .toList();
     }
