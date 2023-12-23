@@ -72,7 +72,7 @@ class _PieMenuViewState extends State<PieMenuView> {
               bottom:
               computeYAdjusted(i, constraints.maxHeight / 2 - height / 2),
               child: GestureDetector(
-                onTap: widget.onPieItemClicked?.call(i),
+                onTap: () => widget.onPieItemClicked?.call(i),
                 child: PieItemView(
                   name: widget.pieItems
                       .elementAt(i)
