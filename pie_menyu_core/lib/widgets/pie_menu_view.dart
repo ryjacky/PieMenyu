@@ -9,17 +9,16 @@ import 'pie_item_view.dart';
 
 class PieMenuView extends StatefulWidget {
   final PieMenu pieMenu;
-  final int activePieItemAt;
+  final int pieItemOrderIndex;
   final List<PieItem> pieItems;
 
-  final Function(int)? onPieItemClicked;
+  final Function(int pieItemOrderIndex)? onPieItemClicked;
 
-  const PieMenuView(
-      {super.key,
-      required this.pieMenu,
-      required this.pieItems,
-      required this.activePieItemAt,
-      this.onPieItemClicked});
+  const PieMenuView({super.key,
+    required this.pieMenu,
+    required this.pieItems,
+    required this.pieItemOrderIndex,
+    this.onPieItemClicked});
 
   @override
   State<PieMenuView> createState() => _PieMenuViewState();
@@ -43,12 +42,12 @@ class _PieMenuViewState extends State<PieMenuView> {
         children: [
           Positioned(
             left: (constraints.maxWidth -
-                    widget.pieMenu.centerRadius -
-                    widget.pieMenu.centerThickness) /
+                widget.pieMenu.centerRadius -
+                widget.pieMenu.centerThickness) /
                 2,
             bottom: (constraints.maxHeight -
-                    widget.pieMenu.centerRadius -
-                    widget.pieMenu.centerThickness) /
+                widget.pieMenu.centerRadius -
+                widget.pieMenu.centerThickness) /
                 2,
             child: Transform.rotate(
               angle: getPieCenterRotation(),
@@ -71,20 +70,23 @@ class _PieMenuViewState extends State<PieMenuView> {
             Positioned(
               left: computeXAdjusted(i, constraints.maxWidth / 2),
               bottom:
-                  computeYAdjusted(i, constraints.maxHeight / 2 - height / 2),
+              computeYAdjusted(i, constraints.maxHeight / 2 - height / 2),
               child: GestureDetector(
-                onTap: widget.onPieItemClicked
-                    ?.call(widget.pieItems.elementAt(i).id),
+                onTap: widget.onPieItemClicked?.call(i),
                 child: PieItemView(
-                  name: widget.pieItems.elementAt(i).displayName,
-                  icon: widget.pieItems.elementAt(i).iconBase64,
+                  name: widget.pieItems
+                      .elementAt(i)
+                      .displayName,
+                  icon: widget.pieItems
+                      .elementAt(i)
+                      .iconBase64,
                   horizontalOffset: i % (widget.pieItems.length / 2) == 0
                       ? PieItemOffset.center
                       : i > widget.pieItems.length / 2
-                          ? PieItemOffset.toLeft
-                          : PieItemOffset.toRight,
+                      ? PieItemOffset.toLeft
+                      : PieItemOffset.toRight,
                   borderRadius: widget.pieMenu.pieItemRoundness,
-                  backgroundColor: widget.activePieItemAt == i
+                  backgroundColor: widget.pieItemOrderIndex == i
                       ? widget.pieMenu.mainColor
                       : widget.pieMenu.secondaryColor,
                   width: widget.pieMenu.pieItemWidth,
@@ -141,7 +143,7 @@ class _PieMenuViewState extends State<PieMenuView> {
   }
 
   double getPieCenterRotation() {
-    double result = 2 * pi * widget.activePieItemAt / widget.pieItems.length;
+    double result = 2 * pi * widget.pieItemOrderIndex / widget.pieItems.length;
     return result.isNaN ? 0 : result;
   }
 }
