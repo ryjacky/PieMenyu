@@ -34,8 +34,12 @@ class _RightSettingPanelState extends State<RightSettingPanel> {
   loadSettings() async {
     isLaunchAtStartup = await launchAtStartup.isEnabled();
     prefs = await SharedPreferences.getInstance();
-    escapeKey = HotKey.fromJson(
-        jsonDecode(prefs?.getString(SettingKeys.escapeKey.key) ?? '{}'));
+    try {
+      escapeKey = HotKey.fromJson(
+          jsonDecode(prefs?.getString(SettingKeys.escapeKey.key) ?? '{}'));
+    } catch (e) {
+      escapeKey = null;
+    }
 
     setState(() {});
   }
