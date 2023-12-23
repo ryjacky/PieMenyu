@@ -1,10 +1,11 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
-import 'package:pie_menyu_core/db/pie_item.dart';
-import 'package:pie_menyu_core/db/pie_menu.dart';
-import 'package:pie_menyu_core/widgets/pie_item_view.dart';
-import 'package:pie_menyu_core/painter/pie_center_painter.dart';
+
+import '../db/pie_item.dart';
+import '../db/pie_menu.dart';
+import '../painter/pie_center_painter.dart';
+import 'pie_item_view.dart';
 
 class PieMenuView extends StatefulWidget {
   final PieMenu pieMenu;

@@ -9,11 +9,11 @@ import 'package:pie_menyu_core/db/db.dart';
 import 'package:pie_menyu_core/db/pie_item.dart';
 import 'package:pie_menyu_core/db/pie_menu.dart';
 import 'package:pie_menyu_core/providers/pie_menu_provider.dart';
+import 'package:pie_menyu_core/widgets/pie_menu_view.dart';
 import 'package:provider/provider.dart';
 import 'package:window_manager/window_manager.dart';
 
 import 'controller/window_controller.dart';
-import 'view/pie_menu_view.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -35,8 +35,8 @@ Future<void> main() async {
 
   windowManager.waitUntilReadyToShow(windowOptions, () async {
     await windowManager.setAsFrameless();
-    await windowManager.blur();
     await windowManager.hide();
+    await windowManager.blur();
   });
 
   final windowControl = WindowController();
