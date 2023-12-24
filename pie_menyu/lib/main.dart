@@ -14,6 +14,7 @@ import 'package:provider/provider.dart';
 import 'package:window_manager/window_manager.dart';
 
 import 'controller/window_controller.dart';
+import 'executor/executor_service.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -45,7 +46,8 @@ Future<void> main() async {
     MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (_) => windowControl.pieMenuProvider),
-        ChangeNotifierProvider(create: (_) => MouseCursorProvider()),
+        ChangeNotifierProvider(create: (_) => windowControl.executorService),
+        ChangeNotifierProvider(create: (_) => ExecutorService()),
       ],
       child: const MyApp(),
     ),
@@ -65,6 +67,15 @@ class MyApp extends StatelessWidget {
     final pieItems = context
         .select<PieMenuProvider, List<PieItem>>((value) => value.pieItems);
 
+    final activePieItemOrderIndex = getActivePieItemOrderIndex(
+      context.read<PieMenuProvider>().pieCenterScreenPosition,
+      mousePosition,
+      pieMenu,
+      pieItems,
+    );
+
+    context.read<ExecutorService>().activePieItemOrderIndex = activePieItemOrderIndex;
+
     return MaterialApp(
       title: 'PieMenyu',
       localizationsDelegates: [LocalJsonLocalization.delegate],
@@ -73,12 +84,7 @@ class MyApp extends StatelessWidget {
         body: PieMenuView(
           pieMenu: pieMenu,
           pieItems: pieItems,
-          activePieItemAt: getActivePieItemOrderIndex(
-            context.read<PieMenuProvider>().pieCenterScreenPosition,
-            mousePosition,
-            pieMenu,
-            pieItems,
-          ),
+          pieItemOrderIndex: activePieItemOrderIndex
         ),
       ),
     );

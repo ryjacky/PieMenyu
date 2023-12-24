@@ -1,6 +1,7 @@
 import 'dart:developer' as dev;
 import 'dart:ui';
 
+import 'package:flutter/cupertino.dart';
 import 'package:hotkey_manager/hotkey_manager.dart';
 import 'package:pie_menyu_core/db/db.dart';
 import 'package:pie_menyu_core/db/profile.dart';
@@ -8,15 +9,17 @@ import 'package:pie_menyu_core/providers/pie_menu_provider.dart';
 import 'package:screen_retriever/screen_retriever.dart';
 import 'package:window_manager/window_manager.dart';
 
+import '../executor/executor_service.dart';
 import '../system/keyboard/keyboard_event.dart';
 import '../system/keyboard/keyboard_provider.dart';
+import '../system/window/foreground_window.dart';
 
-class WindowController {
+class WindowController extends ChangeNotifier {
   static Size windowSize = const Size(1024, 1024);
 
   final keyboardProvider = KeyboardProvider();
   final pieMenuProvider = PieMenuProvider();
-
+  final executorService = ExecutorService();
 
   WindowController() {
     keyboardProvider.addListener(() {
@@ -35,6 +38,7 @@ class WindowController {
 
   void hideWindow() async {
     await windowManager.hide();
+    // executorService.execute();
   }
 
   void showWindow(HotKey hotKey) async {
@@ -42,7 +46,7 @@ class WindowController {
       return;
     }
 
-    String foregroundApp = "ForegroundWindow.get().path";
+    String foregroundApp = ForegroundWindow.get().path;
 
     List<Profile> profilesOfForegroundApp =
         await DB.getProfilesByExe(foregroundApp);
