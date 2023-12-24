@@ -22,4 +22,9 @@ class OpenUrlTask extends PieItemTask {
   }
 
   String get url => arguments[0];
+
+  @override
+  void execute() {
+    // TODO: implement execute
+  }
 }

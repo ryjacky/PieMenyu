@@ -22,4 +22,9 @@ class OpenFolderTask extends PieItemTask {
   }
 
   String get folderPath => arguments[0];
+
+  @override
+  void execute() {
+    // TODO: implement execute
+  }
 }

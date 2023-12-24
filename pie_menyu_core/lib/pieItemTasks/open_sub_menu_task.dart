@@ -22,4 +22,9 @@ class OpenSubMenuTask extends PieItemTask {
   }
 
   int get subMenuId => int.parse(arguments[0]);
+
+  @override
+  void execute() {
+    // TODO: implement execute
+  }
 }

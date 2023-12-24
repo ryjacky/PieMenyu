@@ -7,4 +7,9 @@ class OpenEditorTask extends PieItemTask {
 
   OpenEditorTask.from(PieItemTask pieItemTask) : super.from(pieItemTask);
 
+  @override
+  void execute() {
+    // TODO: implement execute
+  }
+
 }

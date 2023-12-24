@@ -40,6 +40,11 @@ class MouseClickTask extends PieItemTask {
   int get y {
     return int.tryParse(arguments[2]) ?? 0;
   }
+
+  @override
+  void execute() {
+    // TODO: implement execute
+  }
 }
 
 enum MouseButton {

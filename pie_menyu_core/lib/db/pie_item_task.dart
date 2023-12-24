@@ -24,6 +24,8 @@ class PieItemTask {
     arguments = pieItemTask.arguments;
     id = pieItemTask.id;
   }
+
+  void execute();
 }
 
 enum PieItemTaskType {

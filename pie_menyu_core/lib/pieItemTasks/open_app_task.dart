@@ -23,4 +23,9 @@ class OpenAppTask extends PieItemTask {
   }
 
   String get appPath => arguments[0];
+
+  @override
+  void execute() {
+    // TODO: implement execute
+  }
 }

@@ -4,6 +4,7 @@ import 'dart:ui';
 import 'package:flutter/cupertino.dart';
 import 'package:hotkey_manager/hotkey_manager.dart';
 import 'package:pie_menyu_core/db/db.dart';
+import 'package:pie_menyu_core/db/pie_item_task.dart';
 import 'package:pie_menyu_core/db/profile.dart';
 import 'package:pie_menyu_core/providers/pie_menu_provider.dart';
 import 'package:screen_retriever/screen_retriever.dart';
@@ -38,7 +39,13 @@ class WindowController extends ChangeNotifier {
 
   void hideWindow() async {
     await windowManager.hide();
-    // executorService.execute();
+    final tasks = pieMenuProvider.pieItems[executorService.activePieItemOrderIndex].tasks;
+    tasks.load();
+    for (PieItemTask task in tasks) {
+      executorService.execute(task);
+    }
+
+    executorService.start();
   }
 
   void showWindow(HotKey hotKey) async {
