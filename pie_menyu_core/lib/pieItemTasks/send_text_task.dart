@@ -2,7 +2,9 @@ library pie_menyu_core;
 
 import 'package:pie_menyu_core/db/pie_item_task.dart';
 
-class SendTextTask extends PieItemTask {
+import '../executor/executable.dart';
+
+class SendTextTask extends PieItemTask with Executable {
   SendTextTask() : super(taskType: PieItemTaskType.sendText) {
     _fieldCheck();
   }
@@ -11,7 +13,7 @@ class SendTextTask extends PieItemTask {
     _fieldCheck();
   }
 
-  _fieldCheck(){
+  _fieldCheck() {
     if (arguments.length != 1) {
       arguments = [""];
     }

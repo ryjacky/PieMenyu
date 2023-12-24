@@ -2,7 +2,9 @@ library pie_menyu_core;
 
 import 'package:pie_menyu_core/db/pie_item_task.dart';
 
-class OpenAppTask extends PieItemTask {
+import '../executor/executable.dart';
+
+class OpenAppTask extends PieItemTask with Executable {
   OpenAppTask() : super(taskType: PieItemTaskType.openApp) {
     _fieldCheck();
   }
@@ -11,12 +13,11 @@ class OpenAppTask extends PieItemTask {
     _fieldCheck();
   }
 
-  _fieldCheck(){
+  _fieldCheck() {
     if (arguments.length != 1) {
       arguments = [""];
     }
   }
-
 
   set appPath(String value) {
     arguments = [value];

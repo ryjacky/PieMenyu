@@ -1,7 +1,9 @@
 library pie_menyu_core;
 import 'package:pie_menyu_core/db/pie_item_task.dart';
 
-class MoveWindowTask extends PieItemTask {
+import '../executor/executable.dart';
+
+class MoveWindowTask extends PieItemTask with Executable {
   MoveWindowTask() : super(taskType: PieItemTaskType.moveWindow){
     _fieldCheck();
   }

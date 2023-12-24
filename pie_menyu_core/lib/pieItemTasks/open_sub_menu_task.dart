@@ -2,7 +2,9 @@ library pie_menyu_core;
 
 import 'package:pie_menyu_core/db/pie_item_task.dart';
 
-class OpenSubMenuTask extends PieItemTask {
+import '../executor/executable.dart';
+
+class OpenSubMenuTask extends PieItemTask with Executable {
   OpenSubMenuTask() : super(taskType: PieItemTaskType.openSubMenu) {
     _fieldCheck();
   }
@@ -11,7 +13,7 @@ class OpenSubMenuTask extends PieItemTask {
     _fieldCheck();
   }
 
-  _fieldCheck(){
+  _fieldCheck() {
     if (arguments.length != 1) {
       arguments = ["0"];
     }

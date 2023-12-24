@@ -1,10 +1,12 @@
 library pie_menyu_core;
+
 import 'dart:convert';
 
 import 'package:hotkey_manager/hotkey_manager.dart';
 import 'package:pie_menyu_core/db/pie_item_task.dart';
+import '../executor/executable.dart';
 
-class SendKeyTask extends PieItemTask {
+class SendKeyTask extends PieItemTask with Executable {
   SendKeyTask() : super(taskType: PieItemTaskType.sendKey) {
     _fieldCheck();
   }
@@ -13,7 +15,7 @@ class SendKeyTask extends PieItemTask {
     _fieldCheck();
   }
 
-  _fieldCheck(){
+  _fieldCheck() {
     if (arguments.length != 1) {
       arguments = [""];
     }

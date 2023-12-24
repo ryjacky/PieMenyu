@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:pie_menyu_core/db/pie_item_task.dart';
+
+import 'executable.dart';
 
 class ExecutorService extends ChangeNotifier {
   int _activePieItemOrderIndex = 0;
-  final List<PieItemTask> _pieItemTasks = [];
+  final List<Executable> _pieItemTasks = [];
 
   int get activePieItemOrderIndex => _activePieItemOrderIndex;
 
@@ -12,8 +13,14 @@ class ExecutorService extends ChangeNotifier {
     notifyListeners();
   }
 
-  void execute(PieItemTask task) {
+  void execute(Executable task) {
     _pieItemTasks.add(task);
+  }
+
+  void start() {
+    while (_pieItemTasks.isNotEmpty) {
+      _pieItemTasks.removeAt(0).execute();
+    }
   }
 
 }

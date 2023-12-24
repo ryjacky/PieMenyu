@@ -1,7 +1,8 @@
 library pie_menyu_core;
 import 'package:pie_menyu_core/db/pie_item_task.dart';
+import 'package:pie_menyu_core/executor/executable.dart';
 
-class MouseClickTask extends PieItemTask {
+class MouseClickTask extends PieItemTask with Executable {
   MouseClickTask() : super(taskType: PieItemTaskType.mouseClick){
     _fieldCheck();
   }

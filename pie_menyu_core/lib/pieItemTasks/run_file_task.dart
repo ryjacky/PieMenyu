@@ -2,7 +2,9 @@ library pie_menyu_core;
 
 import 'package:pie_menyu_core/db/pie_item_task.dart';
 
-class RunFileTask extends PieItemTask {
+import '../executor/executable.dart';
+
+class RunFileTask extends PieItemTask with Executable {
   RunFileTask() : super(taskType: PieItemTaskType.runFile) {
     _fieldCheck();
   }
@@ -11,7 +13,7 @@ class RunFileTask extends PieItemTask {
     _fieldCheck();
   }
 
-  _fieldCheck(){
+  _fieldCheck() {
     if (arguments.length != 1) {
       arguments = [""];
     }

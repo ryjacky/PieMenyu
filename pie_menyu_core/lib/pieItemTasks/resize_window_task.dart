@@ -2,7 +2,9 @@ library pie_menyu_core;
 
 import 'package:pie_menyu_core/db/pie_item_task.dart';
 
-class ResizeWindowTask extends PieItemTask {
+import '../executor/executable.dart';
+
+class ResizeWindowTask extends PieItemTask with Executable {
   ResizeWindowTask() : super(taskType: PieItemTaskType.resizeWindow) {
     _fieldCheck();
   }
@@ -11,7 +13,7 @@ class ResizeWindowTask extends PieItemTask {
     _fieldCheck();
   }
 
-  _fieldCheck(){
+  _fieldCheck() {
     if (arguments.length != 2) {
       arguments = ["", ""];
     }
