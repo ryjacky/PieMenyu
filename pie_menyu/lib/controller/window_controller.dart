@@ -1,16 +1,16 @@
 import 'dart:developer' as dev;
-import 'dart:ui';
 
 import 'package:flutter/cupertino.dart';
 import 'package:hotkey_manager/hotkey_manager.dart';
 import 'package:pie_menyu_core/db/db.dart';
 import 'package:pie_menyu_core/db/pie_item_task.dart';
 import 'package:pie_menyu_core/db/profile.dart';
+import 'package:pie_menyu_core/executor/executable.dart';
+import 'package:pie_menyu_core/executor/executor_service.dart';
 import 'package:pie_menyu_core/providers/pie_menu_provider.dart';
 import 'package:screen_retriever/screen_retriever.dart';
 import 'package:window_manager/window_manager.dart';
 
-import '../executor/executor_service.dart';
 import '../system/keyboard/keyboard_event.dart';
 import '../system/keyboard/keyboard_provider.dart';
 import '../system/window/foreground_window.dart';
@@ -42,7 +42,9 @@ class WindowController extends ChangeNotifier {
     final tasks = pieMenuProvider.pieItems[executorService.activePieItemOrderIndex].tasks;
     tasks.load();
     for (PieItemTask task in tasks) {
-      executorService.execute(task);
+      if (task is Executable) {
+        executorService.execute(task as Executable);
+      }
     }
 
     executorService.start();

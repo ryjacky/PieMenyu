@@ -8,13 +8,13 @@ import 'package:pie_menyu/system/pie_menyu_system_tray.dart';
 import 'package:pie_menyu_core/db/db.dart';
 import 'package:pie_menyu_core/db/pie_item.dart';
 import 'package:pie_menyu_core/db/pie_menu.dart';
+import 'package:pie_menyu_core/executor/executor_service.dart';
 import 'package:pie_menyu_core/providers/pie_menu_provider.dart';
 import 'package:pie_menyu_core/widgets/pie_menu_view.dart';
 import 'package:provider/provider.dart';
 import 'package:window_manager/window_manager.dart';
 
 import 'controller/window_controller.dart';
-import 'executor/executor_service.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
