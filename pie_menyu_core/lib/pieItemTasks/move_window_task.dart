@@ -31,7 +31,7 @@ class MoveWindowTask extends PieItemTask with Executable {
   int get y => int.parse(arguments[1]);
 
   @override
-  void execute() {
+  Future<void> execute() async {
     // TODO: implement execute
   }
 }

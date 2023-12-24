@@ -43,7 +43,7 @@ class MouseClickTask extends PieItemTask with Executable {
   }
 
   @override
-  void execute() {
+  Future<void> execute() async {
     // TODO: implement execute
   }
 }

@@ -10,7 +10,7 @@ class OpenEditorTask extends PieItemTask with Executable {
   OpenEditorTask.from(PieItemTask pieItemTask) : super.from(pieItemTask);
 
   @override
-  void execute() {
+  Future<void> execute() async {
     // TODO: implement execute
   }
 }

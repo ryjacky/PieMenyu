@@ -26,7 +26,7 @@ class RunFileTask extends PieItemTask with Executable {
   String get filePath => arguments[0];
 
   @override
-  void execute() {
+  Future<void> execute() async {
     // TODO: implement execute
   }
 }

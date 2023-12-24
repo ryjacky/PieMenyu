@@ -32,7 +32,7 @@ class ResizeWindowTask extends PieItemTask with Executable {
   int get height => int.parse(arguments[1]);
 
   @override
-  void execute() {
+  Future<void> execute() async {
     // TODO: implement execute
   }
 }

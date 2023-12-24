@@ -1,3 +1,3 @@
 mixin Executable {
-  void execute();
+  Future<void> execute();
 }

@@ -26,7 +26,7 @@ class OpenAppTask extends PieItemTask with Executable {
   String get appPath => arguments[0];
 
   @override
-  void execute() {
+  Future<void> execute() async {
     // TODO: implement execute
   }
 }

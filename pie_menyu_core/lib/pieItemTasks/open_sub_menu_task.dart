@@ -26,7 +26,7 @@ class OpenSubMenuTask extends PieItemTask with Executable {
   int get subMenuId => int.parse(arguments[0]);
 
   @override
-  void execute() {
+  Future<void> execute() async {
     // TODO: implement execute
   }
 }
