@@ -1,11 +1,8 @@
 library pie_menyu_core;
 
-import 'dart:convert';
-
 import 'package:flutter_auto_gui/flutter_auto_gui.dart';
-import 'package:hotkey_manager/hotkey_manager.dart';
 import 'package:pie_menyu_core/db/pie_item_task.dart';
-import 'package:pie_menyu_core/flutter_auto_gui/flutter_auto_gui.dart';
+
 import '../executor/executable.dart';
 
 class SendKeyTask extends PieItemTask with Executable {
@@ -68,7 +65,11 @@ class SendKeyTask extends PieItemTask with Executable {
         .map((e) => e.toLowerCase())
         .toList();
 
-    keys.add(key.toLowerCase());
-    await FlutterAutoGUI.hotkey(keys: keys);
+    await FlutterAutoGUI.hotkey(keys: keys, interval: Duration(milliseconds: 50));
+
+    // I've spent so much time debugging this and find out that
+    // FlutterAutoGUI.hotkey is a fake future that returns before hotkey
+    // is pressed.
+    await Future.delayed(Duration(milliseconds: 60));
   }
 }
