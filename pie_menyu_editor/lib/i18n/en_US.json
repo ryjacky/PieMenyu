@@ -57,5 +57,6 @@
   "label-mouse-button": "Mouse Button",
   "label-change": "Change",
   "label-cancel": "Cancel",
-  "label-ok": "OK"
+  "label-ok": "OK",
+  "label-send-key-task": "Send Key Task"
 }
