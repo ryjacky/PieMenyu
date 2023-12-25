@@ -26,8 +26,13 @@ class MouseClickTask extends PieItemTask with Executable {
   }
 
   MouseButton get mouseButton {
-    return MouseButton.values
-        .firstWhere((element) => element.name == arguments[0]);
+    if (arguments[0] == MouseButton.right.name) {
+      return MouseButton.right;
+    } else if (arguments[0] == MouseButton.middle.name) {
+      return MouseButton.middle;
+    } else {
+      return MouseButton.left;
+    }
   }
 
   set x(int value) {
@@ -49,6 +54,7 @@ class MouseClickTask extends PieItemTask with Executable {
   @override
   Future<void> execute() async {
     await FlutterAutoGUI.moveTo(point: Point(x, y));
-    await FlutterAutoGUI.click(button: mouseButton, interval: const Duration(milliseconds: 10));
+    await Future.delayed(const Duration(milliseconds: 10));
+    await FlutterAutoGUI.click(button: mouseButton);
   }
 }
