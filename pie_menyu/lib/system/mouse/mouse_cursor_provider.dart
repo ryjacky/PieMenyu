@@ -1,7 +1,7 @@
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
-import 'package:pie_menyu/system/system_hook.dart';
+import 'package:pie_menyu/system/mouse/mouse_hook.dart';
 import 'package:window_manager/window_manager.dart';
 
 import 'mouse_events.dart';
@@ -16,7 +16,7 @@ class MouseCursorProvider extends ChangeNotifier {
   MouseEvent get mouseEvent => _mouseEvent;
 
   void initializeMouseHook() async {
-    Stream out = await SystemHook.isolated(HookTypes.mouse);
+    Stream out = await MouseHook.isolated();
     out.listen((event) async {
       if (!await windowManager.isFocused()) {
         return;

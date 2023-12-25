@@ -4,6 +4,7 @@ import 'dart:isolate';
 import 'package:flutter/material.dart';
 import 'package:hotkey_manager/hotkey_manager.dart';
 import 'package:pie_menyu/system/keyboard/keyboard_event.dart';
+import 'package:pie_menyu/system/keyboard/keyboard_hook.dart';
 import 'package:pie_menyu_core/db/db.dart';
 import 'package:pie_menyu_core/db/profile.dart';
 import 'package:window_manager/window_manager.dart';
@@ -23,7 +24,7 @@ class KeyboardProvider extends ChangeNotifier {
   get keyEvent => _event;
 
   void initializeKeyboardHook() async {
-    _receivePort = await SystemHook.isolated(HookTypes.keyboard);
+    _receivePort = await KeyboardHook.isolated();
     _receivePort!.listen((event) async {
       if (await windowManager.isFocused()) {
         _event = KeyboardEvent(KeyboardEventType.keyUp, 0);

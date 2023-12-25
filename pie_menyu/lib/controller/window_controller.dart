@@ -22,6 +22,7 @@ import 'package:window_manager/window_manager.dart';
 
 import '../system/keyboard/keyboard_event.dart';
 import '../system/keyboard/keyboard_provider.dart';
+import '../system/mouse/mouse_cursor_provider.dart';
 import '../system/window/foreground_window.dart';
 
 class WindowController extends ChangeNotifier {
@@ -30,6 +31,8 @@ class WindowController extends ChangeNotifier {
   final keyboardProvider = KeyboardProvider();
   final pieMenuProvider = PieMenuProvider();
   final executorService = ExecutorService();
+
+  final mouseCursorProvider = MouseCursorProvider();
 
   WindowController() {
     keyboardProvider.addListener(() {
