@@ -47,7 +47,7 @@ Future<void> main() async {
       providers: [
         ChangeNotifierProvider(create: (_) => windowControl.pieMenuProvider),
         ChangeNotifierProvider(create: (_) => windowControl.executorService),
-        ChangeNotifierProvider(create: (_) => ExecutorService()),
+        ChangeNotifierProvider(create: (_) => MouseCursorProvider()),
       ],
       child: const MyApp(),
     ),
