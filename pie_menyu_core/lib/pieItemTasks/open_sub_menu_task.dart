@@ -17,6 +17,7 @@ class OpenSubMenuTask extends PieItemTask with Executable {
     if (arguments.length != 1) {
       arguments = ["0"];
     }
+    taskType = PieItemTaskType.openSubMenu;
   }
 
   set subMenuId(int pieMenuId) {

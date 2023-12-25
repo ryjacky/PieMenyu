@@ -21,6 +21,7 @@ class SendKeyTask extends PieItemTask with Executable {
     if (arguments.length != 4) {
       arguments = ["", "", "", ""];
     }
+    taskType = PieItemTaskType.sendKey;
   }
 
   set ctrl(bool value) {

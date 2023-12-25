@@ -16,6 +16,7 @@ class MoveWindowTask extends PieItemTask with Executable {
     if (arguments.length != 2) {
       arguments = ["", ""];
     }
+    taskType = PieItemTaskType.moveWindow;
   }
 
   set x(int value) {

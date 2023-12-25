@@ -7,7 +7,16 @@ import '../executor/executable.dart';
 class OpenEditorTask extends PieItemTask with Executable {
   OpenEditorTask() : super(taskType: PieItemTaskType.openEditor);
 
-  OpenEditorTask.from(PieItemTask pieItemTask) : super.from(pieItemTask);
+  OpenEditorTask.from(PieItemTask pieItemTask) : super.from(pieItemTask) {
+    _fieldCheck();
+  }
+
+  _fieldCheck() {
+    if (arguments.length != 1) {
+      arguments = [""];
+    }
+    taskType = PieItemTaskType.openEditor;
+  }
 
   @override
   Future<void> execute() async {

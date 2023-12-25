@@ -17,6 +17,7 @@ class OpenUrlTask extends PieItemTask with Executable {
     if (arguments.length != 1) {
       arguments = [""];
     }
+    taskType = PieItemTaskType.openUrl;
   }
 
   set url(String value) {

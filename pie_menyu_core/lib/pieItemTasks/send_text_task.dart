@@ -17,6 +17,7 @@ class SendTextTask extends PieItemTask with Executable {
     if (arguments.length != 1) {
       arguments = [""];
     }
+    taskType = PieItemTaskType.sendText;
   }
 
   set text(String value) {

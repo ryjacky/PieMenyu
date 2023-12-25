@@ -1,4 +1,7 @@
 library pie_menyu_core;
+import 'dart:math';
+
+import 'package:flutter_auto_gui/flutter_auto_gui.dart';
 import 'package:pie_menyu_core/db/pie_item_task.dart';
 import 'package:pie_menyu_core/executor/executable.dart';
 
@@ -15,6 +18,7 @@ class MouseClickTask extends PieItemTask with Executable {
     if (arguments.length != 3) {
       arguments = ["", "", ""];
     }
+    taskType = PieItemTaskType.mouseClick;
   }
 
   set mouseButton(MouseButton value) {
@@ -44,13 +48,7 @@ class MouseClickTask extends PieItemTask with Executable {
 
   @override
   Future<void> execute() async {
-    // TODO: implement execute
+    await FlutterAutoGUI.moveTo(point: Point(x, y));
+    await FlutterAutoGUI.click(button: mouseButton, interval: const Duration(milliseconds: 10));
   }
-}
-
-enum MouseButton {
-  left,
-  right,
-  middle,
-  fourth,
 }

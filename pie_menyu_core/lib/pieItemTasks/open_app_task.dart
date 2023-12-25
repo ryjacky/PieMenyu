@@ -17,6 +17,7 @@ class OpenAppTask extends PieItemTask with Executable {
     if (arguments.length != 1) {
       arguments = [""];
     }
+    taskType = PieItemTaskType.openApp;
   }
 
   set appPath(String value) {

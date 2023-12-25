@@ -17,6 +17,7 @@ class ResizeWindowTask extends PieItemTask with Executable {
     if (arguments.length != 2) {
       arguments = ["", ""];
     }
+    taskType = PieItemTaskType.resizeWindow;
   }
 
   set width(int value) {
