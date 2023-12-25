@@ -21,14 +21,16 @@ class SendKeyTaskCard extends StatelessWidget {
         children: [
           ListTile(
               leading: Text("label-hotkey".i18n()),
-              title: Text(sendKeyTask.hotkeyString),
+              title: Text(sendKeyTask.hotkeyStrings.join("+")),
               trailing: TextButton(
                 onPressed: () async {
-                  SendKeyTask task = await showKeyboardDialog(context);
-                  context
-                      .read<PieMenuEditorPageViewModel>()
-                      .replacePieItemTaskInCurrentPieItemAt(
-                      order, task);
+                  SendKeyTask? task = await showKeyboardDialog(context);
+                  if (task != null) {
+                    context
+                        .read<PieMenuEditorPageViewModel>()
+                        .replacePieItemTaskInCurrentPieItemAt(
+                        order, task);
+                  }
                 },
                 style: TextButton.styleFrom(
                     backgroundColor: Theme.of(context).colorScheme.background),
@@ -54,6 +56,7 @@ class SendKeyTaskCard extends StatelessWidget {
             width: 1000,
             height: 300,
             child: KeyboardView(
+              initialKeys: sendKeyTask.hotkeyStrings,
               onKeyPressed: (String key) {
                 if (key == "Ctrl") {
                   sendKeyTask.ctrl = !sendKeyTask.ctrl;
