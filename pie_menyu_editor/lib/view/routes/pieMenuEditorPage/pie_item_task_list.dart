@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:localization/localization.dart';
+import 'package:pie_menyu_core/db/pie_item_task.dart';
 import 'package:pie_menyu_core/pieItemTasks/mouse_click_task.dart';
 import 'package:pie_menyu_core/pieItemTasks/send_key_task.dart';
 import 'package:pie_menyu_editor/view/widgets/draggable_number_field.dart';
-import 'package:pie_menyu_editor/view/widgets/pie_item_task_card.dart';
-import 'package:pie_menyu_editor/view/widgets/send_key_task_card.dart';
-import 'package:pie_menyu_core/db/pie_item_task.dart';
+import 'package:pie_menyu_editor/view/widgets/pieItemTask/pie_item_task_card.dart';
+import 'package:pie_menyu_editor/view/widgets/pieItemTask/send_key_task_card.dart';
 import 'package:provider/provider.dart';
 
 import 'pie_menu_editor_page_view_model.dart';
@@ -20,32 +20,28 @@ class PieItemTaskList extends StatefulWidget {
 class _PieItemTaskListState extends State<PieItemTaskList> {
   @override
   Widget build(BuildContext context) {
-    final currentPieItemId = context.select<PieMenuEditorPageViewModel, int>(
-        (value) => value.pieItemOrderIndex);
-
     final List<PieItemTask> pieItemTasks =
         context.select<PieMenuEditorPageViewModel, List<PieItemTask>>(
-            (viewModel) => viewModel.tasksOfPieItem[currentPieItemId] ?? []);
+            (viewModel) => viewModel.currentPieItemTasks);
 
-    return ListView(
-      children: [
-        for (final PieItemTask pieItemTask in pieItemTasks)
-          getTaskCard(pieItemTask),
-      ],
+    return Theme(
+      data: ThemeData(
+          useMaterial3: true,
+          colorScheme: Theme.of(context).colorScheme,
+          textTheme: Theme.of(context).textTheme),
+      child: ListView(
+        children: [
+          for (int i = 0; i < pieItemTasks.length; i++)
+            getTaskCard(pieItemTasks[i], i),
+        ],
+      ),
     );
   }
 
-  getTaskCard(PieItemTask pieItemTask) {
+  getTaskCard(PieItemTask pieItemTask, int order) {
     switch (pieItemTask.taskType) {
       case PieItemTaskType.sendKey:
-        return SendKeyTaskCard(
-          sendKeyTask: SendKeyTask.from(pieItemTask),
-          onSendKeyTaskChange: (sendKeyTask) {
-            context
-                .read<PieMenuEditorPageViewModel>()
-                .putPieItemTaskInCurrentPieItem(sendKeyTask);
-          },
-        );
+        return SendKeyTaskCard(sendKeyTask: SendKeyTask.from(pieItemTask), order: order);
       case PieItemTaskType.mouseClick:
         final mouseClickTask = MouseClickTask.from(pieItemTask);
         return PieItemTaskCard(
