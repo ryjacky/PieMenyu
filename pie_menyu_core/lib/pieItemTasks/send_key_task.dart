@@ -66,7 +66,9 @@ class SendKeyTask extends PieItemTask with Executable {
   Future<void> execute() async {
     final keys = hotkeyStrings
         .map((e) => e.toLowerCase())
-        .add(key.toLowerCase());
+        .toList();
+
+    keys.add(key.toLowerCase());
     await FlutterAutoGUI.hotkey(keys: keys);
   }
 }
