@@ -47,7 +47,7 @@ class SendKeyTask extends PieItemTask with Executable {
 
   String get key => arguments[3];
 
-  String get hotkeyString {
+  List<String> get hotkeyStrings {
     final keys = <String>[];
     if (ctrl) {
       keys.add("Ctrl");
@@ -59,22 +59,14 @@ class SendKeyTask extends PieItemTask with Executable {
       keys.add("Alt");
     }
     keys.add(key);
-    return keys.join("+");
+    return keys;
   }
 
   @override
   Future<void> execute() async {
-    final keys = <String>[];
-    if (ctrl) {
-      keys.add("ctrl");
-    }
-    if (shift) {
-      keys.add("shift");
-    }
-    if (alt) {
-      keys.add("alt");
-    }
-    keys.add(key.toLowerCase());
+    final keys = hotkeyStrings
+        .map((e) => e.toLowerCase())
+        .add(key.toLowerCase());
     await FlutterAutoGUI.hotkey(keys: keys);
   }
 }
