@@ -8,7 +8,7 @@ class KeyboardView extends StatefulWidget {
   const KeyboardView({super.key,
     required this.onKeyPressed,
     this.boxDecoration = const BoxDecoration(
-      borderRadius: BorderRadius.all(Radius.circular(5)),
+      borderRadius: BorderRadius.all(Radius.circular(10)),
       color: Colors.white,
     ),
   });
@@ -41,9 +41,15 @@ class _KeyboardViewState extends State<KeyboardView> {
     ['0', '.', 'Enter'],
   ];
 
+  final List<List<String>> functionKeys = [
+    ['F1', 'F2', 'F3', 'F4', 'F5', 'F6', 'F7', 'F8', 'F9', 'F10', 'F11', 'F12'],
+    ['F13', 'F14', 'F15', 'F16', 'F17', 'F18', 'F19', 'F20', 'F21', 'F22', 'F23', 'F24'],
+  ];
+
   List<List<bool>> qwertyKeyToggledStates = [];
   List<List<bool>> arrowKeyToggledStates = [];
   List<List<bool>> numpadKeyToggledStates = [];
+  List<List<bool>> functionKeyToggledStates = [];
 
   @override
   void initState() {
@@ -59,6 +65,10 @@ class _KeyboardViewState extends State<KeyboardView> {
     numpadKeyToggledStates = List.generate(
       numpadKeys.length,
           (_) => List.filled(numpadKeys[0].length, false),
+    );
+    functionKeyToggledStates = List.generate(
+      functionKeys.length,
+          (_) => List.filled(functionKeys[0].length, false),
     );
   }
 
@@ -80,6 +90,7 @@ class _KeyboardViewState extends State<KeyboardView> {
     if (!clear) {
       toggleArrowKeyState(0, 0, clear: true);
       toggleNumpadKeyState(0, 0, clear: true);
+      toggleFunctionKeyState(0, 0, clear: true);
     }
 
     // Toggle the state of the selected key
@@ -105,6 +116,7 @@ class _KeyboardViewState extends State<KeyboardView> {
     if (!clear) {
       toggleQwertyKeyState(0, 0, clear: true);
       toggleNumpadKeyState(0, 0, clear: true);
+      toggleFunctionKeyState(0, 0, clear: true);
     }
 
     // Toggle the state of the selected key
@@ -129,12 +141,38 @@ class _KeyboardViewState extends State<KeyboardView> {
     if (!clear) {
       toggleArrowKeyState(0, 0, clear: true);
       toggleQwertyKeyState(0, 0, clear: true);
+      toggleFunctionKeyState(0, 0, clear: true);
     }
 
     // Toggle the state of the selected key
     setState(() {
       if (!clear) {
         numpadKeyToggledStates[row][col] = !numpadKeyToggledStates[row][col];
+      }
+    });
+  }
+  void toggleFunctionKeyState(int row, int col, {bool clear = false}) {
+    // Deselect all other function keys except Ctrl, Shift, and Alt
+    for (int i = 0; i < functionKeys.length; i++) {
+      for (int j = 0; j < functionKeys[i].length; j++) {
+        if (i != row || j != col || clear) {
+          if (functionKeys[i][j] != 'Ctrl' && functionKeys[i][j] != 'Shift' && functionKeys[i][j] != 'Alt') {
+            functionKeyToggledStates[i][j] = false;
+          }
+        }
+      }
+    }
+
+    if (!clear) {
+      toggleArrowKeyState(0, 0, clear: true);
+      toggleQwertyKeyState(0, 0, clear: true);
+      toggleNumpadKeyState(0, 0, clear: true);
+    }
+
+    // Toggle the state of the selected key
+    setState(() {
+      if (!clear) {
+        functionKeyToggledStates[row][col] = !functionKeyToggledStates[row][col];
       }
     });
   }
@@ -171,88 +209,112 @@ class _KeyboardViewState extends State<KeyboardView> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      color: Theme.of(context).colorScheme.secondaryContainer,
-      padding: const EdgeInsets.all(10.0),
-      child: Row(
-        children: [
-          Expanded(
-            flex: 6,
-            child: Column(
-              children: qwertyKeys.asMap().entries.map((entry) {
-                final row = entry.key;
-                final keys = entry.value;
+    return Column(
+      children: [
+        Row(
+          children: functionKeys.asMap().entries.map((entry) {
+            final row = entry.key;
+            final keys = entry.value;
 
-                return Expanded(
-                  child: Row(
-                    children: keys.asMap().entries.map((keyEntry) {
-                      final col = keyEntry.key;
+            return Expanded(
+              child: Row(
+                children: keys.asMap().entries.map((keyEntry) {
+                  final col = keyEntry.key;
 
-                      return buildKey(
-                        qwertyKeys,
-                        qwertyKeyToggledStates,
-                        row,
-                        col,
-                        toggleQwertyKeyState,
-                      );
-                    }).toList(),
-                  ),
-                );
-              }).toList(),
-            ),
+                  return buildKey(
+                    functionKeys,
+                    functionKeyToggledStates,
+                    row,
+                    col,
+                    toggleFunctionKeyState,
+                  );
+                }).toList(),
+              ),
+            );
+          }).toList(),
+        ),
+        Expanded(
+          child: Row(
+            children: [
+              Expanded(
+                flex: 6,
+                child: Column(
+                  children: qwertyKeys.asMap().entries.map((entry) {
+                    final row = entry.key;
+                    final keys = entry.value;
+
+                    return Expanded(
+                      child: Row(
+                        children: keys.asMap().entries.map((keyEntry) {
+                          final col = keyEntry.key;
+
+                          return buildKey(
+                            qwertyKeys,
+                            qwertyKeyToggledStates,
+                            row,
+                            col,
+                            toggleQwertyKeyState,
+                          );
+                        }).toList(),
+                      ),
+                    );
+                  }).toList(),
+                ),
+              ),
+              Expanded(
+                flex: 2,
+                child: Column(
+                  children: arrowKeys.asMap().entries.map((entry) {
+                    final row = entry.key;
+                    final keys = entry.value;
+
+                    return Expanded(
+                      child: Row(
+                        children: keys.asMap().entries.map((keyEntry) {
+                          final col = keyEntry.key;
+
+                          return buildKey(
+                            arrowKeys,
+                            arrowKeyToggledStates,
+                            row,
+                            col,
+                            toggleArrowKeyState,
+                          );
+                        }).toList(),
+                      ),
+                    );
+                  }).toList(),
+                ),
+              ),
+              Expanded(
+                flex: 2,
+                child: Column(
+                  children: numpadKeys.asMap().entries.map((entry) {
+                    final row = entry.key;
+                    final keys = entry.value;
+
+                    return Expanded(
+                      child: Row(
+                        children: keys.asMap().entries.map((keyEntry) {
+                          final col = keyEntry.key;
+
+                          return buildKey(
+                            numpadKeys,
+                            numpadKeyToggledStates,
+                            row,
+                            col,
+                            toggleNumpadKeyState,
+                          );
+                        }).toList(),
+                      ),
+                    );
+                  }).toList(),
+                ),
+              ),
+            ],
           ),
-          Expanded(
-            flex: 2,
-            child: Column(
-              children: arrowKeys.asMap().entries.map((entry) {
-                final row = entry.key;
-                final keys = entry.value;
-
-                return Expanded(
-                  child: Row(
-                    children: keys.asMap().entries.map((keyEntry) {
-                      final col = keyEntry.key;
-
-                      return buildKey(
-                        arrowKeys,
-                        arrowKeyToggledStates,
-                        row,
-                        col,
-                        toggleArrowKeyState,
-                      );
-                    }).toList(),
-                  ),
-                );
-              }).toList(),
-            ),
-          ),
-          Expanded(
-            flex: 2,
-            child: Column(
-              children: numpadKeys.asMap().entries.map((entry) {
-                final row = entry.key;
-                final keys = entry.value;
-
-                return Expanded(
-                  child: Row(
-                    children: keys.asMap().entries.map((keyEntry) {
-                      final col = keyEntry.key;
-
-                      return buildKey(
-                        numpadKeys,
-                        numpadKeyToggledStates,
-                        row,
-                        col,
-                        toggleNumpadKeyState,
-                      );
-                    }).toList(),
-                  ),
-                );
-              }).toList(),
-            ),
-          ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 }
