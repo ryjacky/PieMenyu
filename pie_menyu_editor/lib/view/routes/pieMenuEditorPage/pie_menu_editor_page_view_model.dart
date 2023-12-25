@@ -1,6 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:isar/isar.dart';
 import 'package:localization/localization.dart';
+import 'package:pie_menyu_core/db/db.dart';
+import 'package:pie_menyu_core/db/pie_item.dart';
+import 'package:pie_menyu_core/db/pie_item_task.dart';
+import 'package:pie_menyu_core/db/pie_menu.dart';
 import 'package:pie_menyu_core/pieItemTasks/mouse_click_task.dart';
 import 'package:pie_menyu_core/pieItemTasks/move_window_task.dart';
 import 'package:pie_menyu_core/pieItemTasks/open_app_task.dart';
@@ -11,10 +15,6 @@ import 'package:pie_menyu_core/pieItemTasks/open_url_task.dart';
 import 'package:pie_menyu_core/pieItemTasks/resize_window_task.dart';
 import 'package:pie_menyu_core/pieItemTasks/run_file_task.dart';
 import 'package:pie_menyu_core/pieItemTasks/send_text_task.dart';
-import 'package:pie_menyu_core/db/db.dart';
-import 'package:pie_menyu_core/db/pie_item.dart';
-import 'package:pie_menyu_core/db/pie_item_task.dart';
-import 'package:pie_menyu_core/db/pie_menu.dart';
 
 class PieMenuEditorPageViewModel extends ChangeNotifier {
   int _currentPieItemOrderIndex;
@@ -169,6 +169,14 @@ class PieMenuEditorPageViewModel extends ChangeNotifier {
           .map((e) => e.id == pieItemTask.id ? pieItemTask : e)
           .toList();
     }
+    notifyListeners();
+  }
+
+  void replacePieItemTaskInCurrentPieItemAt(int order, PieItemTask sendKeyTask) {
+    final pieItemId = _pieItems[_currentPieItemOrderIndex].id;
+    final List<PieItemTask> newTasks = [...(_tasksOfPieItem[pieItemId] ?? [])];
+    newTasks[order] = sendKeyTask;
+    _tasksOfPieItem[pieItemId] = newTasks;
     notifyListeners();
   }
 }
