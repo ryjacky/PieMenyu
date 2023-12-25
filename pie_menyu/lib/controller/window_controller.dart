@@ -7,6 +7,16 @@ import 'package:pie_menyu_core/db/pie_item_task.dart';
 import 'package:pie_menyu_core/db/profile.dart';
 import 'package:pie_menyu_core/executor/executable.dart';
 import 'package:pie_menyu_core/executor/executor_service.dart';
+import 'package:pie_menyu_core/pieItemTasks/mouse_click_task.dart';
+import 'package:pie_menyu_core/pieItemTasks/move_window_task.dart';
+import 'package:pie_menyu_core/pieItemTasks/open_app_task.dart';
+import 'package:pie_menyu_core/pieItemTasks/open_editor_task.dart';
+import 'package:pie_menyu_core/pieItemTasks/open_folder_task.dart';
+import 'package:pie_menyu_core/pieItemTasks/open_sub_menu_task.dart';
+import 'package:pie_menyu_core/pieItemTasks/open_url_task.dart';
+import 'package:pie_menyu_core/pieItemTasks/resize_window_task.dart';
+import 'package:pie_menyu_core/pieItemTasks/run_file_task.dart';
+import 'package:pie_menyu_core/pieItemTasks/send_key_task.dart';
 import 'package:pie_menyu_core/providers/pie_menu_provider.dart';
 import 'package:screen_retriever/screen_retriever.dart';
 import 'package:window_manager/window_manager.dart';
@@ -22,38 +32,66 @@ class WindowController extends ChangeNotifier {
   final pieMenuProvider = PieMenuProvider();
   final executorService = ExecutorService();
 
+  bool isWindowVisible = false;
+
   WindowController() {
+    executorService.addListener(() {
+      if (executorService.isExecuting) {
+        hotKeyManager.unregisterAll();
+      } else {
+        keyboardProvider.initializeKeyDownHook();
+      }
+    });
+
     keyboardProvider.addListener(() {
       if (keyboardProvider.keyEvent.type == KeyboardEventType.keyDown) {
-        if (keyboardProvider.keyEvent.hotkey != null) {
+        if (!isWindowVisible && !executorService.isExecuting && keyboardProvider.keyEvent.hotkey != null) {
           showWindow(keyboardProvider.keyEvent.hotkey!);
-        } else {
-          dev.log("Hotkey is null");
         }
       }
       if (keyboardProvider.keyEvent.type == KeyboardEventType.keyUp) {
-        hideWindow();
+        executeAfterHideWindow();
       }
     });
   }
 
-  void hideWindow() async {
+  void executeAfterHideWindow() async {
     await windowManager.hide();
     final tasks = pieMenuProvider.pieItems[executorService.activePieItemOrderIndex].tasks;
-    tasks.load();
+    await tasks.load();
     for (PieItemTask task in tasks) {
-      if (task is Executable) {
-        executorService.execute(task as Executable);
+      switch (task.taskType) {
+        case PieItemTaskType.sendKey:
+          executorService.execute(SendKeyTask.from(task));
+        case PieItemTaskType.mouseClick:
+          executorService.execute(MouseClickTask.from(task));
+        case PieItemTaskType.runFile:
+          executorService.execute(RunFileTask.from(task));
+        case PieItemTaskType.openSubMenu:
+          executorService.execute(OpenSubMenuTask.from(task));
+        case PieItemTaskType.openFolder:
+          executorService.execute(OpenFolderTask.from(task));
+        case PieItemTaskType.openApp:
+          executorService.execute(OpenAppTask.from(task));
+        case PieItemTaskType.openUrl:
+          executorService.execute(OpenUrlTask.from(task));
+        case PieItemTaskType.openEditor:
+          executorService.execute(OpenEditorTask.from(task));
+        case PieItemTaskType.resizeWindow:
+          executorService.execute(ResizeWindowTask.from(task));
+        case PieItemTaskType.moveWindow:
+          executorService.execute(MoveWindowTask.from(task));
+        case PieItemTaskType.sendText:
+          executorService.execute(SendKeyTask.from(task));
       }
     }
 
+    isWindowVisible = false;
     executorService.start();
   }
 
   void showWindow(HotKey hotKey) async {
-    if (await windowManager.isFocused()) {
-      return;
-    }
+    isWindowVisible = true;
 
     String foregroundApp = ForegroundWindow.get().path;
 
