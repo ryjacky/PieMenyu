@@ -196,15 +196,15 @@ class _PieMenuPropertiesState extends State<PieMenuProperties> {
                                     )
                                   ],
                                 ),
-                                Gap(rowGap),
-                                const Row(
-                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Text("Activation Mode"),
-                                    SizedBox(
-                                        width: 10, height: 10, child: Placeholder()),
-                                  ],
-                                ),
+                                // Gap(rowGap),
+                                // const Row(
+                                //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                //   children: [
+                                //     Text("Activation Mode"),
+                                //     SizedBox(
+                                //         width: 10, height: 10, child: Placeholder()),
+                                //   ],
+                                // ),
                                 Gap(rowGap),
                                 Column(
                                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
