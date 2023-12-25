@@ -31,20 +31,10 @@ class WindowController extends ChangeNotifier {
   final pieMenuProvider = PieMenuProvider();
   final executorService = ExecutorService();
 
-  bool isWindowVisible = false;
-
   WindowController() {
-    executorService.addListener(() {
-      if (executorService.isExecuting) {
-        hotKeyManager.unregisterAll();
-      } else {
-        keyboardProvider.initializeKeyDownHook();
-      }
-    });
-
     keyboardProvider.addListener(() {
       if (keyboardProvider.keyEvent.type == KeyboardEventType.keyDown) {
-        if (!isWindowVisible && !executorService.isExecuting && keyboardProvider.keyEvent.hotkey != null) {
+        if (!executorService.isExecuting && keyboardProvider.keyEvent.hotkey != null) {
           showWindow(keyboardProvider.keyEvent.hotkey!);
         }
       }
@@ -85,12 +75,13 @@ class WindowController extends ChangeNotifier {
       }
     }
 
-    isWindowVisible = false;
     executorService.start();
   }
 
   void showWindow(HotKey hotKey) async {
-    isWindowVisible = true;
+    if (await windowManager.isFocused()) {
+      return;
+    }
 
     String foregroundApp = ForegroundWindow.get().path;
 
