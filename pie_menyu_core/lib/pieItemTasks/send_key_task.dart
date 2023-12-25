@@ -74,7 +74,7 @@ class SendKeyTask extends PieItemTask with Executable {
     if (alt) {
       keys.add("alt");
     }
-    keys.add(key);
+    keys.add(key.toLowerCase());
     await FlutterAutoGUI.hotkey(keys: keys);
   }
 }
