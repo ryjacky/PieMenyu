@@ -14,7 +14,7 @@ class KeyboardView extends StatefulWidget {
   });
 
   @override
-  _KeyboardViewState createState() => _KeyboardViewState();
+  State<KeyboardView> createState() => _KeyboardViewState();
 }
 
 class _KeyboardViewState extends State<KeyboardView> {
@@ -67,7 +67,7 @@ class _KeyboardViewState extends State<KeyboardView> {
     if (qwertyKeys[row][col] != 'Ctrl' && qwertyKeys[row][col] != 'Shift' && qwertyKeys[row][col] != 'Alt') {
       for (int i = 0; i < qwertyKeys.length; i++) {
         for (int j = 0; j < qwertyKeys[i].length; j++) {
-          if (i != row || j != col) {
+          if (i != row || j != col || clear) {
             if (qwertyKeys[i][j] != 'Ctrl' && qwertyKeys[i][j] != 'Shift' &&
                 qwertyKeys[i][j] != 'Alt') {
               qwertyKeyToggledStates[i][j] = false;
@@ -94,7 +94,7 @@ class _KeyboardViewState extends State<KeyboardView> {
     // Deselect all other arrow keys except Ctrl, Shift, and Alt
     for (int i = 0; i < arrowKeys.length; i++) {
       for (int j = 0; j < arrowKeys[i].length; j++) {
-        if (i != row || j != col) {
+        if (i != row || j != col || clear) {
           if (arrowKeys[i][j] != 'Ctrl' && arrowKeys[i][j] != 'Shift' && arrowKeys[i][j] != 'Alt') {
             arrowKeyToggledStates[i][j] = false;
           }
@@ -118,7 +118,7 @@ class _KeyboardViewState extends State<KeyboardView> {
     // Deselect all other numpad keys except Ctrl, Shift, and Alt
     for (int i = 0; i < numpadKeys.length; i++) {
       for (int j = 0; j < numpadKeys[i].length; j++) {
-        if (i != row || j != col) {
+        if (i != row || j != col || clear) {
           if (numpadKeys[i][j] != 'Ctrl' && numpadKeys[i][j] != 'Shift' && numpadKeys[i][j] != 'Alt') {
             numpadKeyToggledStates[i][j] = false;
           }
@@ -155,9 +155,9 @@ class _KeyboardViewState extends State<KeyboardView> {
           widget.onKeyPressed(key);
         },
         child: Container(
-          margin: EdgeInsets.all(4.0),
+          margin: const EdgeInsets.all(4.0),
           decoration: widget.boxDecoration.copyWith(
-            color: isToggled ? Colors.grey[300] : Colors.white,
+            color: isToggled ? Theme.of(context).colorScheme.onSecondary : Theme.of(context).colorScheme.background,
           ),
           child: Center(
             child: Text(
@@ -172,7 +172,8 @@ class _KeyboardViewState extends State<KeyboardView> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: Colors.grey[200],
+      color: Theme.of(context).colorScheme.secondaryContainer,
+      padding: const EdgeInsets.all(10.0),
       child: Row(
         children: [
           Expanded(
