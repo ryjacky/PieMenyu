@@ -78,6 +78,30 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.0"
+  flutter_auto_gui:
+    dependency: "direct main"
+    description:
+      name: flutter_auto_gui
+      sha256: "39dc7f1180ba73e77c577502f670dcaaec2d652ea7e53c54742d5adac0458729"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.0.3"
+  flutter_auto_gui_platform_interface:
+    dependency: transitive
+    description:
+      name: flutter_auto_gui_platform_interface
+      sha256: f4b4e8272db4c3ed07469aae2f962ff71b6a7eb0c6fd352dda371584d5b8e0e2
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.0.3"
+  flutter_auto_gui_windows:
+    dependency: transitive
+    description:
+      name: flutter_auto_gui_windows
+      sha256: "8493d57c564ffdf0c042fa53b801da3feb03cb7654f8eac5f9043dc0cd6a24b5"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.0.3"
   flutter_lints:
     dependency: "direct dev"
     description:
