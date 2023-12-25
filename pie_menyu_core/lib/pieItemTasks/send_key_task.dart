@@ -18,32 +18,48 @@ class SendKeyTask extends PieItemTask with Executable {
   }
 
   _fieldCheck() {
-    if (arguments.length != 1) {
+    if (arguments.length != 4) {
       arguments = [""];
     }
   }
 
-  set hotkey(HotKey? value) {
-    if (value == null) {
-      arguments = [];
-      return;
-    }
-
-    arguments = [jsonEncode(value.toJson())];
+  set ctrl(bool value) {
+    arguments[0] = value.toString();
   }
 
-  HotKey? get hotkey {
-    try {
-      return HotKey.fromJson(jsonDecode(arguments[0]));
-    } catch (e) {
-      return null;
-    }
+  bool get ctrl => arguments[0] == "true";
+
+  set shift(bool value) {
+    arguments[1] = value.toString();
   }
+
+  bool get shift => arguments[1] == "true";
+
+  set alt(bool value) {
+    arguments[2] = value.toString();
+  }
+
+  bool get alt => arguments[2] == "true";
+
+  set key(String value) {
+    arguments[3] = value;
+  }
+
+  String get key => arguments[3];
 
   @override
   Future<void> execute() async {
-    if (hotkey != null) {
-      await AutoGUI.hotkey(keys: hotkey!);
+    final keys = <String>[];
+    if (ctrl) {
+      keys.add("ctrl");
     }
+    if (shift) {
+      keys.add("shift");
+    }
+    if (alt) {
+      keys.add("alt");
+    }
+    keys.add(key);
+    await FlutterAutoGUI.hotkey(keys: keys);
   }
 }
