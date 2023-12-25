@@ -50,13 +50,13 @@ class SendKeyTask extends PieItemTask with Executable {
   String get hotkeyString {
     final keys = <String>[];
     if (ctrl) {
-      keys.add("ctrl");
+      keys.add("Ctrl");
     }
     if (shift) {
-      keys.add("shift");
+      keys.add("Shift");
     }
     if (alt) {
-      keys.add("alt");
+      keys.add("Alt");
     }
     keys.add(key);
     return keys.join("+");
