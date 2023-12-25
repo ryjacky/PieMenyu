@@ -19,7 +19,7 @@ class SendKeyTask extends PieItemTask with Executable {
 
   _fieldCheck() {
     if (arguments.length != 4) {
-      arguments = [""];
+      arguments = ["", "", "", ""];
     }
   }
 
@@ -46,6 +46,21 @@ class SendKeyTask extends PieItemTask with Executable {
   }
 
   String get key => arguments[3];
+
+  String get hotkeyString {
+    final keys = <String>[];
+    if (ctrl) {
+      keys.add("ctrl");
+    }
+    if (shift) {
+      keys.add("shift");
+    }
+    if (alt) {
+      keys.add("alt");
+    }
+    keys.add(key);
+    return keys.join("+");
+  }
 
   @override
   Future<void> execute() async {
