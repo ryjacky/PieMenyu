@@ -7,12 +7,15 @@ class KeyboardView extends StatefulWidget {
   final Function(String) onKeyPressed;
   final BoxDecoration boxDecoration;
 
+  final List<String> initialKeys;
+
   const KeyboardView({super.key,
     required this.onKeyPressed,
     this.boxDecoration = const BoxDecoration(
       borderRadius: BorderRadius.all(Radius.circular(10)),
       color: Colors.white,
     ),
+    this.initialKeys = const [],
   });
 
   @override
@@ -56,22 +59,35 @@ class _KeyboardViewState extends State<KeyboardView> {
   @override
   void initState() {
     super.initState();
-    qwertyKeyToggledStates = List.generate(
-      qwertyKeys.length,
-          (_) => List.filled(qwertyKeys[0].length, false),
-    );
-    arrowKeyToggledStates = List.generate(
-      arrowKeys.length,
-          (_) => List.filled(arrowKeys[0].length, false),
-    );
-    numpadKeyToggledStates = List.generate(
-      numpadKeys.length,
-          (_) => List.filled(numpadKeys[0].length, false),
-    );
-    functionKeyToggledStates = List.generate(
-      functionKeys.length,
-          (_) => List.filled(functionKeys[0].length, false),
-    );
+    // Helper function to generate key states
+    List<List<bool>> generateKeyStates(List<List<String>> keys) {
+      return List.generate(
+        keys.length,
+            (_) => List.filled(keys[0].length, false),
+      );
+    }
+
+    qwertyKeyToggledStates = generateKeyStates(qwertyKeys);
+    arrowKeyToggledStates = generateKeyStates(arrowKeys);
+    numpadKeyToggledStates = generateKeyStates(numpadKeys);
+    functionKeyToggledStates = generateKeyStates(functionKeys);
+
+    // Helper function to toggle initial keys
+    final initialKeys = widget.initialKeys.map((e) => e.toLowerCase());
+    void toggleInitialKeys(List<List<String>> keys, List<List<bool>> keyStates, Function(int, int) toggleKeyState) {
+      for (int i = 0; i < keys.length; i++) {
+        for (int j = 0; j < keys[i].length; j++) {
+          if (initialKeys.contains(keys[i][j].toLowerCase())) {
+            toggleKeyState(i, j);
+          }
+        }
+      }
+    }
+
+    toggleInitialKeys(qwertyKeys, qwertyKeyToggledStates, toggleQwertyKeyState);
+    toggleInitialKeys(arrowKeys, arrowKeyToggledStates, toggleArrowKeyState);
+    toggleInitialKeys(numpadKeys, numpadKeyToggledStates, toggleNumpadKeyState);
+    toggleInitialKeys(functionKeys, functionKeyToggledStates, toggleFunctionKeyState);
   }
 
   void toggleQwertyKeyState(int row, int col, {bool clear = false}) {
