@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 
 /// By Gemini and me :)
@@ -22,8 +24,8 @@ class _KeyboardViewState extends State<KeyboardView> {
     ['`', '1', '2', '3', '4', '5', '6', '7', '8', '9', '0', '-', '=', 'Backspace'],
     ['Tab', 'Q', 'W', 'E', 'R', 'T', 'Y', 'U', 'I', 'O', 'P', '[', ']', '\\'],
     ['Caps Lock', 'A', 'S', 'D', 'F', 'G', 'H', 'J', 'K', 'L', ';', '\'', 'Enter'],
-    ['Shift', 'Z', 'X', 'C', 'V', 'B', 'N', 'M', ',', '.', '/', 'Shift'],
-    ['Ctrl', 'Win', 'Alt', 'Space', 'Alt', 'Ctrl'],
+    ['Shift', 'Z', 'X', 'C', 'V', 'B', 'N', 'M', ',', '.', '/'],
+    ['Ctrl', 'Win', 'Alt', 'Spaaaaaaaaaaaaaaaaace'],
   ];
 
   final List<List<String>> arrowKeys = [
@@ -187,6 +189,7 @@ class _KeyboardViewState extends State<KeyboardView> {
     final isToggled = toggledStates[row][col];
 
     return Expanded(
+      flex: max(key.length, 3),
       child: GestureDetector(
         onTap: () {
           toggleKeyState(row, col);
