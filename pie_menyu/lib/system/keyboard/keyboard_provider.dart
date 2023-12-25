@@ -17,7 +17,7 @@ class KeyboardProvider extends ChangeNotifier {
 
   KeyboardProvider() {
     initializeKeyboardHook();
-    _initializeKeyDownHook();
+    initializeKeyDownHook();
   }
 
   get keyEvent => _event;
@@ -37,7 +37,7 @@ class KeyboardProvider extends ChangeNotifier {
     super.dispose();
   }
 
-  void _initializeKeyDownHook() async {
+  void initializeKeyDownHook() async {
     await hotKeyManager.unregisterAll();
     List<Profile> profiles = await DB.getProfiles();
     for (Profile profile in profiles) {
