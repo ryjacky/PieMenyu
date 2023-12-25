@@ -5,7 +5,6 @@ import 'package:hotkey_manager/hotkey_manager.dart';
 import 'package:pie_menyu_core/db/db.dart';
 import 'package:pie_menyu_core/db/pie_item_task.dart';
 import 'package:pie_menyu_core/db/profile.dart';
-import 'package:pie_menyu_core/executor/executable.dart';
 import 'package:pie_menyu_core/executor/executor_service.dart';
 import 'package:pie_menyu_core/pieItemTasks/mouse_click_task.dart';
 import 'package:pie_menyu_core/pieItemTasks/move_window_task.dart';
