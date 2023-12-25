@@ -172,10 +172,10 @@ class PieMenuEditorPageViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
-  void replacePieItemTaskInCurrentPieItemAt(int order, PieItemTask sendKeyTask) {
+  void replacePieItemTaskInCurrentPieItemAt(int order, PieItemTask pieItemTask) {
     final pieItemId = _pieItems[_currentPieItemOrderIndex].id;
     final List<PieItemTask> newTasks = [...(_tasksOfPieItem[pieItemId] ?? [])];
-    newTasks[order] = sendKeyTask;
+    newTasks[order] = pieItemTask;
     _tasksOfPieItem[pieItemId] = newTasks;
     notifyListeners();
   }

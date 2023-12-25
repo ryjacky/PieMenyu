@@ -17,7 +17,7 @@ class SendKeyTaskCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return PieItemTaskCard(
         pieItemTask: sendKeyTask,
-        label: "label-mouse-click-task".i18n(),
+        label: "label-send-key-task".i18n(),
         children: [
           ListTile(
               leading: Text("label-hotkey".i18n()),

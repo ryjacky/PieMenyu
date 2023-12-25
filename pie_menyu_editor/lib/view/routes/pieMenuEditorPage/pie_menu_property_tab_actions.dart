@@ -57,15 +57,15 @@ class PieMenuPropertyTabActions extends StatelessWidget {
               ),
             ),
             Gap(gap),
-            // Tooltip(
-            //   message: "tooltip-add-mouse-click-task".i18n(),
-            //   child: MonochromeIconButton(
-            //     icon: FontAwesomeIcons.handPointer,
-            //     onPressed: () => context
-            //         .read<PieMenuEditorPageViewModel>()
-            //         .createTaskInCurrentPieItem(PieItemTaskType.mouseClick),
-            //   ),
-            // ),
+            Tooltip(
+              message: "tooltip-add-mouse-click-task".i18n(),
+              child: MonochromeIconButton(
+                icon: FontAwesomeIcons.handPointer,
+                onPressed: () => context
+                    .read<PieMenuEditorPageViewModel>()
+                    .createTaskInCurrentPieItem(PieItemTaskType.mouseClick),
+              ),
+            ),
             // Gap(gap),
             // Tooltip(
             //   message: "tooltip-add-run-file-task".i18n(),
