@@ -54,5 +54,8 @@
   "label-mouse-click-task": "Mouse Click Task",
   "label-x": "X",
   "label-y": "Y",
-  "label-mouse-button": "Mouse Button"
+  "label-mouse-button": "Mouse Button",
+  "label-change": "Change",
+  "label-cancel": "Cancel",
+  "label-ok": "OK"
 }
