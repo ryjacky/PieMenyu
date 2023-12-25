@@ -31,6 +31,8 @@ class PieMenuEditorPageViewModel extends ChangeNotifier {
     loadPieItemTasks();
   }
 
+  get currentPieItemTasks => _tasksOfPieItem[_pieItems[_currentPieItemOrderIndex].id] ?? [];
+
   loadPieItemTasks() async {
     await _pieMenu.pieItems.load();
     _pieItems = _pieMenu.pieItems.toList();
@@ -115,10 +117,12 @@ class PieMenuEditorPageViewModel extends ChangeNotifier {
         break;
     }
 
-    _tasksOfPieItem[_currentPieItemOrderIndex] = [
-      ...(_tasksOfPieItem[_currentPieItemOrderIndex] ?? []),
+    final pieItemId = _pieItems[_currentPieItemOrderIndex].id;
+    _tasksOfPieItem[pieItemId] = [
+      ...(_tasksOfPieItem[pieItemId] ?? []),
       newTask
     ];
+
     notifyListeners();
   }
 
@@ -150,16 +154,18 @@ class PieMenuEditorPageViewModel extends ChangeNotifier {
   }
 
   void putPieItemTaskInCurrentPieItem(PieItemTask pieItemTask) {
-    bool pieItemTaskExisted = _tasksOfPieItem[_currentPieItemOrderIndex]!
+    final pieItemId = _pieItems[_currentPieItemOrderIndex].id;
+
+    bool pieItemTaskExisted = _tasksOfPieItem[pieItemId]!
         .any((element) => element.id == pieItemTask.id);
 
     if (pieItemTask.id == Isar.autoIncrement || !pieItemTaskExisted) {
-      _tasksOfPieItem[_currentPieItemOrderIndex] = [
-        ...(_tasksOfPieItem[_currentPieItemOrderIndex] ?? []),
+      _tasksOfPieItem[pieItemId] = [
+        ...(_tasksOfPieItem[pieItemId] ?? []),
         pieItemTask
       ];
     } else {
-      _tasksOfPieItem[_currentPieItemOrderIndex] = _tasksOfPieItem[_currentPieItemOrderIndex]!
+      _tasksOfPieItem[pieItemId] = _tasksOfPieItem[pieItemId]!
           .map((e) => e.id == pieItemTask.id ? pieItemTask : e)
           .toList();
     }
