@@ -90,11 +90,11 @@ class SendKeyTask extends PieItemTask with Executable {
         .map((e) => e.toLowerCase())
         .toList();
 
-    await FlutterAutoGUI.hotkey(keys: keys, interval: Duration(milliseconds: 10));
+    await FlutterAutoGUI.hotkey(keys: keys, interval: const Duration(milliseconds: 10));
 
     // I've spent so much time debugging this and find out that
     // FlutterAutoGUI.hotkey is a fake future that returns before hotkey
     // is pressed.
-    await Future.delayed(Duration(milliseconds: 50));
+    await Future.delayed(const Duration(milliseconds: 50));
   }
 }
