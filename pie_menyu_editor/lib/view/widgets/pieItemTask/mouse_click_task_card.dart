@@ -1,19 +1,21 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_auto_gui/flutter_auto_gui.dart';
+import 'package:gap/gap.dart';
 import 'package:localization/localization.dart';
 import 'package:pie_menyu_core/pieItemTasks/mouse_click_task.dart';
-import 'package:pie_menyu_core/pieItemTasks/send_key_task.dart';
 import 'package:provider/provider.dart';
+import 'package:screen_retriever/screen_retriever.dart';
 
 import '../../routes/pieMenuEditorPage/pie_menu_editor_page_view_model.dart';
-import '../draggable_number_field.dart';
-import '../keyboard_view.dart';
 import 'pie_item_task_card.dart';
 
 class MouseClickTaskCard extends StatefulWidget {
   final MouseClickTask mouseClickTask;
   final int order;
-  const MouseClickTaskCard({super.key, required this.mouseClickTask, required this.order});
+
+  const MouseClickTaskCard(
+      {super.key, required this.mouseClickTask, required this.order});
 
   @override
   State<MouseClickTaskCard> createState() => _MouseClickTaskCardState();
@@ -21,9 +23,12 @@ class MouseClickTaskCard extends StatefulWidget {
 
 class _MouseClickTaskCardState extends State<MouseClickTaskCard> {
   final List<bool> _isSelected = [true, false, false];
+  bool _isListening = false;
 
   @override
   void initState() {
+    HardwareKeyboard.instance.addHandler(handleEnter);
+
     switch (widget.mouseClickTask.mouseButton) {
       case MouseButton.left:
         _isSelected[0] = true;
@@ -51,68 +56,92 @@ class _MouseClickTaskCardState extends State<MouseClickTaskCard> {
         label: "label-mouse-click-task".i18n(),
         children: [
           ListTile(
-            title: Text("label-x".i18n()),
-            trailing: SizedBox(
-              width: 160,
-              child: DraggableNumberField(
-                value: widget.mouseClickTask.x,
-                onChanged: (value) {
-                  context
-                      .read<PieMenuEditorPageViewModel>()
-                      .replacePieItemTaskInCurrentPieItemAt(
-                      widget.order, widget.mouseClickTask..x = value);
-                },
-              ),
+            leading: Text("label-position".i18n()),
+            title: Text(
+                "(${widget.mouseClickTask.x}, ${widget.mouseClickTask.y})"),
+            trailing: TextButton(
+              style: TextButton.styleFrom(
+                  backgroundColor: Theme
+                      .of(context)
+                      .colorScheme
+                      .background),
+              onPressed: () {
+                ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                    backgroundColor: Theme.of(context).colorScheme.secondary,
+                    content: Text("hint-select-mouse-pos".i18n())));
+                setState(() {
+                  _isListening = !_isListening;
+                });
+              },
+              child: Text(
+                  (_isListening ? "label-listening" : "label-listen").i18n()),
             ),
           ),
           ListTile(
-            title: Text("label-y".i18n()),
-            trailing: SizedBox(
-              width: 160,
-              child: DraggableNumberField(
-                value: widget.mouseClickTask.y,
-                onChanged: (value) {
+            leading: Text(
+              "label-button".i18n(),
+            ),
+            trailing: ToggleButtons(
+              borderRadius: BorderRadius.circular(10),
+              isSelected: _isSelected,
+              onPressed: (index) {
+                setState(() {
+                  for (int i = 0; i < _isSelected.length; i++) {
+                    _isSelected[i] = (i == index);
+                  }
+
+                  MouseButton btn = MouseButton.left;
+                  if (index == 1) {
+                    btn = MouseButton.middle;
+                  } else if (index == 2) {
+                    btn = MouseButton.right;
+                  }
+
                   context
                       .read<PieMenuEditorPageViewModel>()
-                      .replacePieItemTaskInCurrentPieItemAt(
-                      widget.order, widget.mouseClickTask..y = value);
-                },
-              ),
+                      .replacePieItemTaskInCurrentPieItemAt(widget.order,
+                      widget.mouseClickTask..mouseButton = btn);
+                });
+              },
+              children: [
+                Text("label-left-short".i18n()),
+                Text("label-middle-short".i18n()),
+                Text("label-right-short".i18n()),
+              ],
             ),
           ),
-          ListTile(
-            title: Text("label-mouse-button".i18n()),
-            trailing: SizedBox(
-              width: 160,
-              child: ToggleButtons(
-                children: const [
-                  Text("Left"),
-                  Text("Middle"),
-                  Text("Right"),
-                ],
-                isSelected: _isSelected,
-                onPressed: (index) {
-                  setState(() {
-                    for (int i = 0; i < _isSelected.length; i++) {
-                      _isSelected[i] = (i == index);
-                    }
-
-                    MouseButton btn = MouseButton.left;
-                    if (index == 1) {
-                      btn = MouseButton.middle;
-                    } else if (index == 2) {
-                      btn = MouseButton.right;
-                    }
-
-                    context
-                        .read<PieMenuEditorPageViewModel>()
-                        .replacePieItemTaskInCurrentPieItemAt(
-                        widget.order, widget.mouseClickTask..mouseButton = btn);
-                  });
-                },
-              ),
-            ),
-          )
+          const Gap(10),
         ]);
+  }
+
+  bool handleEnter(KeyEvent event) {
+    if (!_isListening || event.logicalKey != LogicalKeyboardKey.enter) {
+      return false;
+    }
+
+    screenRetriever.getCursorScreenPoint().then((mousePos) {
+      widget.mouseClickTask
+        ..x = mousePos.dx.toInt()
+        ..y = mousePos.dy.toInt();
+
+      context
+          .read<PieMenuEditorPageViewModel>()
+          .replacePieItemTaskInCurrentPieItemAt(
+        widget.order,
+        widget.mouseClickTask,
+      );
+
+      setState(() {
+        _isListening = false;
+      });
+    });
+
+    return true;
+  }
+
+  @override
+  void dispose() {
+    HardwareKeyboard.instance.removeHandler(handleEnter);
+    super.dispose();
   }
 }
