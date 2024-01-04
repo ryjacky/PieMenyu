@@ -51,6 +51,7 @@
   "button-save": "Save",
   "button-reset": "Reset",
   "hint-select-pie-item-first": "Select Pie Item first",
+  "hint-select-mouse-pos": "Move mouse to desired position and hit Enter",
   "label-mouse-click-task": "Mouse Click Task",
   "label-x": "X",
   "label-y": "Y",
@@ -58,5 +59,13 @@
   "label-change": "Change",
   "label-cancel": "Cancel",
   "label-ok": "OK",
-  "label-send-key-task": "Send Key Task"
+  "label-send-key-task": "Send Key Task",
+  "label-position": "Position",
+  "label-select": "Select",
+  "label-left-short": "Left",
+  "label-middle-short": "Mid",
+  "label-right-short": "Right",
+  "label-button": "Button",
+  "label-listen": "Listen",
+  "label-listening": "Listening..."
 }
