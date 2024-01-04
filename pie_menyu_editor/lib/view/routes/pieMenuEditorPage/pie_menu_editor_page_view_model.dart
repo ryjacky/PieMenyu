@@ -131,7 +131,7 @@ class PieMenuEditorPageViewModel extends ChangeNotifier {
       final pieItemTasks = tasksOfPieItem[pieItem.id];
       if (pieItemTasks != null) {
         await DB.putPieItemTasks(pieItemTasks);
-        await DB.addTasksToPieItem(pieItemTasks, pieItem);
+        await DB.updatePieItemTasks(pieItemTasks, pieItem);
       }
       await DB.putPieItem(pieItem);
     }
@@ -176,6 +176,14 @@ class PieMenuEditorPageViewModel extends ChangeNotifier {
     final pieItemId = _pieItems[_currentPieItemOrderIndex].id;
     final List<PieItemTask> newTasks = [...(_tasksOfPieItem[pieItemId] ?? [])];
     newTasks[order] = pieItemTask;
+    _tasksOfPieItem[pieItemId] = newTasks;
+    notifyListeners();
+  }
+
+  void removePieItemTaskAt(int order) {
+    final pieItemId = _pieItems[_currentPieItemOrderIndex].id;
+    final List<PieItemTask> newTasks = [...(_tasksOfPieItem[pieItemId] ?? [])];
+    newTasks.removeAt(order);
     _tasksOfPieItem[pieItemId] = newTasks;
     notifyListeners();
   }

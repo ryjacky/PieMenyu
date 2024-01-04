@@ -10,14 +10,19 @@ import 'pie_item_task_card.dart';
 class SendKeyTaskCard extends StatelessWidget {
   final SendKeyTask sendKeyTask;
   final int order;
+  final VoidCallback? onDelete;
 
-  const SendKeyTaskCard({super.key, required this.sendKeyTask, required this.order});
+  const SendKeyTaskCard(
+      {super.key,
+      required this.sendKeyTask,
+      required this.order,
+      this.onDelete});
 
   @override
   Widget build(BuildContext context) {
     return PieItemTaskCard(
-        pieItemTask: sendKeyTask,
         label: "label-send-key-task".i18n(),
+        onDelete: onDelete,
         children: [
           ListTile(
               leading: Text("label-hotkey".i18n()),
@@ -28,8 +33,7 @@ class SendKeyTaskCard extends StatelessWidget {
                   if (task != null) {
                     context
                         .read<PieMenuEditorPageViewModel>()
-                        .replacePieItemTaskInCurrentPieItemAt(
-                        order, task);
+                        .replacePieItemTaskInCurrentPieItemAt(order, task);
                   }
                 },
                 style: TextButton.styleFrom(
@@ -50,8 +54,7 @@ class SendKeyTaskCard extends StatelessWidget {
         child: AlertDialog(
           scrollable: true,
           contentPadding: const EdgeInsets.all(20),
-          backgroundColor:
-          Theme.of(context).colorScheme.secondaryContainer,
+          backgroundColor: Theme.of(context).colorScheme.secondaryContainer,
           content: SizedBox(
             width: 1000,
             height: 300,
@@ -76,17 +79,14 @@ class SendKeyTaskCard extends StatelessWidget {
                 Navigator.pop(context);
               },
               style: TextButton.styleFrom(
-                  backgroundColor:
-                  Theme.of(context).colorScheme.background),
+                  backgroundColor: Theme.of(context).colorScheme.background),
               child: Text("label-cancel".i18n()),
             ),
             TextButton(
               style: TextButton.styleFrom(
-                  backgroundColor:
-                  Theme.of(context).colorScheme.background),
+                  backgroundColor: Theme.of(context).colorScheme.background),
               onPressed: () {
                 Navigator.pop(context, sendKeyTask);
-
               },
               child: Text("label-ok".i18n()),
             ),

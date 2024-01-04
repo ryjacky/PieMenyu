@@ -15,12 +15,9 @@ class DB {
 
   static initialize() async {
     final dir = await getApplicationSupportDirectory();
-    DB._isar = await Isar.open([
-      ProfileSchema,
-      PieMenuSchema,
-      PieItemSchema,
-      PieItemTaskSchema
-    ], directory: dir.path);
+    DB._isar = await Isar.open(
+        [ProfileSchema, PieMenuSchema, PieItemSchema, PieItemTaskSchema],
+        directory: dir.path);
 
     // Create initial record if not existed
     if (await _isar.profiles.count() == 0) {
@@ -39,7 +36,11 @@ class DB {
   }
 
   static Future<List<Profile>> getProfilesByExe(String exe) async {
-    return (await _isar.profiles.where().filter().exesElementContains(exe).findAll())
+    return (await _isar.profiles
+            .where()
+            .filter()
+            .exesElementContains(exe)
+            .findAll())
         .whereType<Profile>()
         .toList();
   }
@@ -164,8 +165,25 @@ class DB {
     });
   }
 
+  @Deprecated("Use updatePieItemTasks instead")
   static addTasksToPieItem(List<PieItemTask> tasks, PieItem pieItem) {
     pieItem.tasks.addAll(tasks);
+    _isar.writeTxn(() async {
+      pieItem.tasks.save();
+    });
+  }
+
+  static updatePieItemTasks(List<PieItemTask> tasks, PieItem pieItem) {
+    final taskToDelete = [];
+    for (PieItemTask task in pieItem.tasks) {
+      if (!tasks.contains(task)) {
+        taskToDelete.add(task);
+      }
+    }
+
+    pieItem.tasks.removeAll(taskToDelete);
+    pieItem.tasks.addAll(tasks);
+
     _isar.writeTxn(() async {
       pieItem.tasks.save();
     });

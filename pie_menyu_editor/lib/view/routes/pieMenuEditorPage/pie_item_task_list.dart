@@ -39,10 +39,22 @@ class _PieItemTaskListState extends State<PieItemTaskList> {
   getTaskCard(PieItemTask pieItemTask, int order) {
     switch (pieItemTask.taskType) {
       case PieItemTaskType.sendKey:
-        return SendKeyTaskCard(sendKeyTask: SendKeyTask.from(pieItemTask), order: order);
+        return SendKeyTaskCard(
+          sendKeyTask: SendKeyTask.from(pieItemTask),
+          order: order,
+          onDelete: () => context
+              .read<PieMenuEditorPageViewModel>()
+              .removePieItemTaskAt(order),
+        );
       case PieItemTaskType.mouseClick:
         final mouseClickTask = MouseClickTask.from(pieItemTask);
-        return MouseClickTaskCard(mouseClickTask: mouseClickTask, order: order);
+        return MouseClickTaskCard(
+          mouseClickTask: mouseClickTask,
+          order: order,
+          onDelete: () => context
+              .read<PieMenuEditorPageViewModel>()
+              .removePieItemTaskAt(order),
+        );
       case PieItemTaskType.runFile:
       // TODO: Handle this case.
       case PieItemTaskType.openSubMenu:
