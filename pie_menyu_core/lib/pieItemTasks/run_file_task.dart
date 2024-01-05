@@ -1,7 +1,8 @@
 library pie_menyu_core;
 
-import 'package:pie_menyu_core/db/pie_item_task.dart';
+import 'dart:io';
 
+import 'package:pie_menyu_core/db/pie_item_task.dart';
 import '../executor/executable.dart';
 
 class RunFileTask extends PieItemTask with Executable {
@@ -28,6 +29,6 @@ class RunFileTask extends PieItemTask with Executable {
 
   @override
   Future<void> execute() async {
-    // TODO: implement execute
+    await Process.run(filePath, [], runInShell: true);
   }
 }
