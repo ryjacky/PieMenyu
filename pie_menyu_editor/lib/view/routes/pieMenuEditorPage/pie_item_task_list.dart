@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:pie_menyu_core/db/pie_item_task.dart';
 import 'package:pie_menyu_core/pieItemTasks/mouse_click_task.dart';
+import 'package:pie_menyu_core/pieItemTasks/run_file_task.dart';
 import 'package:pie_menyu_core/pieItemTasks/send_key_task.dart';
 import 'package:pie_menyu_editor/view/widgets/pieItemTask/send_key_task_card.dart';
 import 'package:provider/provider.dart';
 
 import '../../widgets/pieItemTask/mouse_click_task_card.dart';
+import '../../widgets/pieItemTask/run_file_task_card.dart';
 import 'pie_menu_editor_page_view_model.dart';
 
 class PieItemTaskList extends StatefulWidget {
@@ -56,7 +58,14 @@ class _PieItemTaskListState extends State<PieItemTaskList> {
               .removePieItemTaskAt(order),
         );
       case PieItemTaskType.runFile:
-      // TODO: Handle this case.
+        final runFileTask = RunFileTask.from(pieItemTask);
+        return RunFileTaskCard(
+          task: runFileTask,
+          order: order,
+          onDelete: () => context
+              .read<PieMenuEditorPageViewModel>()
+              .removePieItemTaskAt(order),
+        );
       case PieItemTaskType.openSubMenu:
       // TODO: Handle this case.
       case PieItemTaskType.openFolder:
