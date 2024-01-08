@@ -2,9 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:pie_menyu_core/db/pie_item.dart';
 import 'package:pie_menyu_core/db/pie_item_task.dart';
 import 'package:pie_menyu_core/pieItemTasks/mouse_click_task.dart';
+import 'package:pie_menyu_core/pieItemTasks/open_sub_menu_task.dart';
 import 'package:pie_menyu_core/pieItemTasks/run_file_task.dart';
 import 'package:pie_menyu_core/pieItemTasks/send_key_task.dart';
 import 'package:pie_menyu_editor/view/routes/pieMenuEditorPage/pie_menu_state.dart';
+import 'package:pie_menyu_editor/view/widgets/pieItemTask/open_sub_menu_task_card.dart';
 import 'package:pie_menyu_editor/view/widgets/pieItemTask/send_key_task_card.dart';
 import 'package:provider/provider.dart';
 
@@ -81,7 +83,18 @@ class _PieItemTaskListState extends State<PieItemTaskList> {
           },
         );
       case PieItemTaskType.openSubMenu:
-      // TODO: Handle this case.
+        final openSubMenuTask = OpenSubMenuTask.from(pieItemTask);
+        return OpenSubMenuTaskCard(
+          task: openSubMenuTask,
+          order: order,
+          onDelete: () {
+            final state = context.read<PieMenuState>();
+            final pieItem = state.activePieItem;
+            if (pieItem != null) {
+              state.removeTaskFrom(pieItem, pieItemTask);
+            }
+          },
+        );
       case PieItemTaskType.openFolder:
       // TODO: Handle this case.
       case PieItemTaskType.openApp:

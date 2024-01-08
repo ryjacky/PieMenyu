@@ -55,6 +55,7 @@ dependencies:
   provider: ^6.1.1
   flutter_auto_gui: ^0.0.3
   screen_retriever: ^0.1.9
+  flutter_typeahead: ^5.0.1
 
 
 dev_dependencies:
