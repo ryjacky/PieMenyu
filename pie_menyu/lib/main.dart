@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:io';
 import 'dart:math';
 
 import 'package:flutter/material.dart';
@@ -18,6 +19,10 @@ import 'controller/window_controller.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
+  if (checkRunning()){
+    exit(0);
+  }
 
   List<Future<dynamic>> asyncInitializers = [
     windowManager.ensureInitialized(),
@@ -52,6 +57,10 @@ Future<void> main() async {
       child: const MyApp(),
     ),
   );
+}
+
+bool checkRunning() {
+  return false;
 }
 
 class MyApp extends StatelessWidget {

@@ -4,10 +4,10 @@ import 'package:flutter_auto_gui/flutter_auto_gui.dart';
 import 'package:gap/gap.dart';
 import 'package:localization/localization.dart';
 import 'package:pie_menyu_core/pieItemTasks/mouse_click_task.dart';
+import 'package:pie_menyu_editor/view/routes/pieMenuEditorPage/pie_menu_state.dart';
 import 'package:provider/provider.dart';
 import 'package:screen_retriever/screen_retriever.dart';
 
-import '../../routes/pieMenuEditorPage/pie_menu_editor_page_view_model.dart';
 import 'pie_item_task_card.dart';
 
 class MouseClickTaskCard extends StatefulWidget {
@@ -86,23 +86,27 @@ class _MouseClickTaskCardState extends State<MouseClickTaskCard> {
             borderRadius: BorderRadius.circular(10),
             isSelected: _isSelected,
             onPressed: (index) {
-              setState(() {
-                for (int i = 0; i < _isSelected.length; i++) {
-                  _isSelected[i] = (i == index);
-                }
+              setState(
+                () {
+                  for (int i = 0; i < _isSelected.length; i++) {
+                    _isSelected[i] = (i == index);
+                  }
 
-                MouseButton btn = MouseButton.left;
-                if (index == 1) {
-                  btn = MouseButton.middle;
-                } else if (index == 2) {
-                  btn = MouseButton.right;
-                }
+                  MouseButton btn = MouseButton.left;
+                  if (index == 1) {
+                    btn = MouseButton.middle;
+                  } else if (index == 2) {
+                    btn = MouseButton.right;
+                  }
 
-                context
-                    .read<PieMenuEditorPageViewModel>()
-                    .replacePieItemTaskInCurrentPieItemAt(
-                        widget.order, widget.mouseClickTask..mouseButton = btn);
-              },);
+                  final state = context.read<PieMenuState>();
+                  final pieItem = state.activePieItem;
+                  if (pieItem != null) {
+                    state.updateTaskIn(
+                        pieItem, widget.mouseClickTask..mouseButton = btn);
+                  }
+                },
+              );
             },
             children: [
               Text("label-left-short".i18n()),
@@ -126,12 +130,11 @@ class _MouseClickTaskCardState extends State<MouseClickTaskCard> {
         ..x = mousePos.dx.toInt()
         ..y = mousePos.dy.toInt();
 
-      context
-          .read<PieMenuEditorPageViewModel>()
-          .replacePieItemTaskInCurrentPieItemAt(
-            widget.order,
-            widget.mouseClickTask,
-          );
+      final state = context.read<PieMenuState>();
+      final pieItem = state.activePieItem;
+      if (pieItem != null) {
+        state.updateTaskIn(pieItem, widget.mouseClickTask);
+      }
 
       setState(() {
         _isListening = false;

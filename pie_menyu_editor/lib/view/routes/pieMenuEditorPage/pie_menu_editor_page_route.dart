@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:pie_menyu_core/db/pie_menu.dart';
 import 'package:pie_menyu_editor/view/routes/pieMenuEditorPage/pie_menu_editor_page.dart';
+import 'package:pie_menyu_editor/view/routes/pieMenuEditorPage/pie_menu_state.dart';
 import 'package:provider/provider.dart';
-
-import 'pie_menu_editor_page_view_model.dart';
 
 class PieMenuEditorPageRoute extends StatelessWidget {
   final PieMenu pieMenu;
@@ -14,12 +13,10 @@ class PieMenuEditorPageRoute extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
-        ChangeNotifierProvider(
-          create: (context) => PieMenuEditorPageViewModel(
-            currentPieItemOrderIndex: -1,
-            pieMenu: pieMenu,
-          ),
+        ChangeNotifierProvider(create: (_) => PieMenuState(
+          pieMenu: pieMenu,
         )
+        ),
       ],
       child: const PieMenuEditorPage(),
     );

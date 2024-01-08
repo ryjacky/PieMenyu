@@ -2,9 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:pie_menyu_core/db/pie_item.dart';
 import 'package:pie_menyu_core/widgets/pie_menu_view.dart';
 import 'package:pie_menyu_editor/view/routes/pieMenuEditorPage/pie_menu_editor_page_title_bar.dart';
-import 'package:pie_menyu_editor/view/routes/pieMenuEditorPage/pie_menu_editor_page_view_model.dart';
 import 'package:pie_menyu_editor/view/routes/pieMenuEditorPage/pie_menu_properties.dart';
-import 'package:pie_menyu_core/db/pie_menu.dart';
+import 'package:pie_menyu_editor/view/routes/pieMenuEditorPage/pie_menu_state.dart';
 import 'package:provider/provider.dart';
 
 class PieMenuEditorPage extends StatefulWidget {
@@ -15,14 +14,11 @@ class PieMenuEditorPage extends StatefulWidget {
 }
 
 class _PieMenuEditorPageState extends State<PieMenuEditorPage> {
-
-
   @override
   Widget build(BuildContext context) {
-    final pieItemOrderIndex = context.select<PieMenuEditorPageViewModel, int>(
-        (value) => value.pieItemOrderIndex);
-    final pieMenu = context.watch<PieMenuEditorPageViewModel>().pieMenu;
-    final pieItems = context.select<PieMenuEditorPageViewModel, List<PieItem>>(
+    final pieItemOrderIndex = 0;
+    final pieMenu = context.watch<PieMenuState>().pieMenu;
+    final pieItems = context.select<PieMenuState, Set<PieItem>>(
         (value) => value.pieItems);
 
     return Scaffold(
@@ -40,11 +36,10 @@ class _PieMenuEditorPageState extends State<PieMenuEditorPage> {
                     child: PieMenuView(
                       pieItemOrderIndex: pieItemOrderIndex,
                       pieMenu: pieMenu,
-                      pieItems: pieItems,
-                      onPieItemClicked: (pieItemOrderIndex) {
-                        context
-                            .read<PieMenuEditorPageViewModel>()
-                            .pieItemOrderIndex = pieItemOrderIndex;
+                      pieItems: pieItems.toList(),
+                      onPieItemClicked: (pieItemIndex) {
+                        context.read<PieMenuState>().setActivePieItem(
+                            pieItems.elementAt(pieItemIndex));
                       },
                     ),
                   ),

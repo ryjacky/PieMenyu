@@ -1,14 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:pie_menyu_core/db/pie_item.dart';
 import 'package:pie_menyu_core/db/pie_item_task.dart';
 import 'package:pie_menyu_core/pieItemTasks/mouse_click_task.dart';
 import 'package:pie_menyu_core/pieItemTasks/run_file_task.dart';
 import 'package:pie_menyu_core/pieItemTasks/send_key_task.dart';
+import 'package:pie_menyu_editor/view/routes/pieMenuEditorPage/pie_menu_state.dart';
 import 'package:pie_menyu_editor/view/widgets/pieItemTask/send_key_task_card.dart';
 import 'package:provider/provider.dart';
 
 import '../../widgets/pieItemTask/mouse_click_task_card.dart';
 import '../../widgets/pieItemTask/run_file_task_card.dart';
-import 'pie_menu_editor_page_view_model.dart';
 
 class PieItemTaskList extends StatefulWidget {
   const PieItemTaskList({super.key});
@@ -20,9 +21,10 @@ class PieItemTaskList extends StatefulWidget {
 class _PieItemTaskListState extends State<PieItemTaskList> {
   @override
   Widget build(BuildContext context) {
-    final List<PieItemTask> pieItemTasks =
-        context.select<PieMenuEditorPageViewModel, List<PieItemTask>>(
-            (viewModel) => viewModel.currentPieItemTasks);
+    final state = context.read<PieMenuState>();
+    final Set<PieItemTask> pieItemTasks =
+        context.select<PieMenuState, Set<PieItemTask>>(
+            (viewModel) => viewModel.getTasksOf(state.activePieItem ?? PieItem()));
 
     return Theme(
       data: ThemeData(
@@ -32,7 +34,7 @@ class _PieItemTaskListState extends State<PieItemTaskList> {
       child: ListView(
         children: [
           for (int i = 0; i < pieItemTasks.length; i++)
-            getTaskCard(pieItemTasks[i], i),
+            getTaskCard(pieItemTasks.elementAt(i), i),
         ],
       ),
     );
@@ -44,27 +46,39 @@ class _PieItemTaskListState extends State<PieItemTaskList> {
         return SendKeyTaskCard(
           sendKeyTask: SendKeyTask.from(pieItemTask),
           order: order,
-          onDelete: () => context
-              .read<PieMenuEditorPageViewModel>()
-              .removePieItemTaskAt(order),
+          onDelete: () {
+            final state = context.read<PieMenuState>();
+            final pieItem = state.activePieItem;
+            if (pieItem != null) {
+              state.removeTaskFrom(pieItem, pieItemTask);
+            }
+          },
         );
       case PieItemTaskType.mouseClick:
         final mouseClickTask = MouseClickTask.from(pieItemTask);
         return MouseClickTaskCard(
           mouseClickTask: mouseClickTask,
           order: order,
-          onDelete: () => context
-              .read<PieMenuEditorPageViewModel>()
-              .removePieItemTaskAt(order),
+          onDelete: () {
+            final state = context.read<PieMenuState>();
+            final pieItem = state.activePieItem;
+            if (pieItem != null) {
+              state.removeTaskFrom(pieItem, pieItemTask);
+            }
+          },
         );
       case PieItemTaskType.runFile:
         final runFileTask = RunFileTask.from(pieItemTask);
         return RunFileTaskCard(
           task: runFileTask,
           order: order,
-          onDelete: () => context
-              .read<PieMenuEditorPageViewModel>()
-              .removePieItemTaskAt(order),
+          onDelete: () {
+            final state = context.read<PieMenuState>();
+            final pieItem = state.activePieItem;
+            if (pieItem != null) {
+              state.removeTaskFrom(pieItem, pieItemTask);
+            }
+          },
         );
       case PieItemTaskType.openSubMenu:
       // TODO: Handle this case.

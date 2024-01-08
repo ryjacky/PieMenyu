@@ -5,7 +5,7 @@ import 'package:localization/localization.dart';
 import 'package:pie_menyu_core/pieItemTasks/run_file_task.dart';
 import 'package:provider/provider.dart';
 
-import '../../routes/pieMenuEditorPage/pie_menu_editor_page_view_model.dart';
+import '../../routes/pieMenuEditorPage/pie_menu_state.dart';
 import 'pie_item_task_card.dart';
 
 class RunFileTaskCard extends StatelessWidget {
@@ -31,10 +31,12 @@ class RunFileTaskCard extends StatelessWidget {
             FilePickerResult? result = await FilePicker.platform.pickFiles();
 
             if (result != null) {
-              context
-                  .read<PieMenuEditorPageViewModel>()
-                  .replacePieItemTaskInCurrentPieItemAt(
-                      order, task..filePath = result.files.single.path!);
+              final state = context.read<PieMenuState>();
+              final pieItem = state.activePieItem;
+              if (pieItem != null) {
+                state.updateTaskIn(pieItem, task..filePath = result.files.single.path!);
+              }
+
             } else {
               // User canceled the picker
             }

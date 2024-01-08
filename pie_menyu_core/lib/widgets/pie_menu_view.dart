@@ -26,10 +26,13 @@ class PieMenuView extends StatefulWidget {
 
 class _PieMenuViewState extends State<PieMenuView> {
   double angleDelta = 0;
+  int pieItemOrderIndex = 0;
 
   @override
   void initState() {
     super.initState();
+
+    pieItemOrderIndex = widget.pieItemOrderIndex;
   }
 
   @override
@@ -72,7 +75,10 @@ class _PieMenuViewState extends State<PieMenuView> {
               bottom:
               computeYAdjusted(i, constraints.maxHeight / 2 - height / 2),
               child: GestureDetector(
-                onTap: () => widget.onPieItemClicked?.call(i),
+                onTap: () {
+                  widget.onPieItemClicked?.call(i);
+                  pieItemOrderIndex = i;
+                },
                 child: PieItemView(
                   name: widget.pieItems
                       .elementAt(i)
@@ -86,7 +92,7 @@ class _PieMenuViewState extends State<PieMenuView> {
                       ? PieItemOffset.toLeft
                       : PieItemOffset.toRight,
                   borderRadius: widget.pieMenu.pieItemRoundness,
-                  backgroundColor: widget.pieItemOrderIndex == i
+                  backgroundColor: pieItemOrderIndex == i
                       ? widget.pieMenu.mainColor
                       : widget.pieMenu.secondaryColor,
                   width: widget.pieMenu.pieItemWidth,

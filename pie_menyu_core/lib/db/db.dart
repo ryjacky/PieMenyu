@@ -13,6 +13,8 @@ import 'profile.dart';
 class DB {
   static late Isar _isar;
 
+  static Isar get isar => _isar;
+
   static initialize() async {
     final dir = await getApplicationSupportDirectory();
     DB._isar = await Isar.open(
