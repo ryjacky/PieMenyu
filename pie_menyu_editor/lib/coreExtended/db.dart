@@ -7,20 +7,19 @@ import 'package:pie_menyu_editor/view/routes/pieMenuEditorPage/pie_menu_state.da
 
 extension DBExtended on DB {
   static save(PieMenuState state) async {
-    await DB.putPieMenu(state.pieMenu);
-
     for (PieItem pieItem in state.pieItems) {
+      List<PieItemTask> putTasks =
+          await putPieItemTask(state.pieItemTasks[pieItem.id] ?? {});
+
       if (pieItem.id < 0) {
         pieItem.id = Isar.autoIncrement;
         await DB.putPieItem(pieItem);
       }
-
-      List<PieItemTask> putTasks =
-          await putPieItemTask(state.pieItemTasks[pieItem.id] ?? {});
-
       await saveTaskTo(pieItem, putTasks);
+
     }
 
+    await DB.putPieMenu(state.pieMenu);
     await savePieItemsTo(state.pieMenu, state.pieItems.toList());
   }
 
