@@ -147,7 +147,7 @@ class _RightHomePanelState extends State<RightHomePanel> {
                                   child: TableActionButton(
                                     icon: FontAwesomeIcons.trash,
                                     onLongPress: () {
-                                      removePieMenuLink(pieMenu);
+                                      homePageViewModel.removePieMenuFrom(widget.profile, pieMenu);
                                     },
                                     color: Theme.of(context)
                                         .colorScheme
@@ -221,17 +221,6 @@ class _RightHomePanelState extends State<RightHomePanel> {
     } catch (e) {
       return null;
     }
-  }
-
-  removePieMenuLink(PieMenu pieMenu) async {
-    setState(() {
-      widget.profile.pieMenus.remove(pieMenu);
-      widget.profile.hotkeyToPieMenuIdList = widget
-          .profile.hotkeyToPieMenuIdList
-          .where((element) => element.pieMenuId != pieMenu.id)
-          .toList();
-    });
-    await DB.updateProfileToPieMenuLinks(widget.profile);
   }
 
   addHotkeyToProfile(HotKey hotKey, int pieMenuId) async {

@@ -29,9 +29,8 @@ class HomePageViewModel extends ChangeNotifier {
   }
 
   Iterable<PieMenu> getAllPieMenusExceptIn(Profile profile) {
-    return pieMenus.where((element) => element.profiles
-        .where((element) => element.id == profile.id)
-        .isEmpty);
+    return pieMenus.where((element) =>
+        element.profiles.where((element) => element.id == profile.id).isEmpty);
   }
 
   Future<void> createProfile(
@@ -52,6 +51,12 @@ class HomePageViewModel extends ChangeNotifier {
 
   void addPieMenuTo(Profile profile, PieMenu pieMenu) async {
     await DB.addPieMenuToProfile(pieMenu.id, profile.id);
+    await fetchState();
+  }
+
+  void removePieMenuFrom(Profile profile, PieMenu pieMenu) async {
+    profile.pieMenus.remove(pieMenu);
+    await DB.updateProfileToPieMenuLinks(profile);
     await fetchState();
   }
 }
