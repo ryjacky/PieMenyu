@@ -22,6 +22,12 @@ class HomePageViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
+  Iterable<PieMenu> getPieMenusOf(Profile profile) {
+    return pieMenus.where((element) => element.profiles
+        .where((element) => element.id == profile.id)
+        .isNotEmpty);
+  }
+
   Iterable<PieMenu> getAllPieMenusExceptIn(Profile profile) {
     return pieMenus.where((element) => element.profiles
         .where((element) => element.id == profile.id)

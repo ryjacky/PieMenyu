@@ -27,9 +27,11 @@ class _RightHomePanelState extends State<RightHomePanel> {
 
   @override
   Widget build(BuildContext context) {
-    final homePageViewModel = context.read<HomePageViewModel>();
+    final homePageViewModel = context.watch<HomePageViewModel>();
     final allPieMenuExceptInProfile =
         homePageViewModel.getAllPieMenusExceptIn(widget.profile);
+    final allPieMenuInProfile =
+        homePageViewModel.getPieMenusOf(widget.profile);
 
     return Container(
       padding: const EdgeInsets.fromLTRB(20, 50, 20, 20),
@@ -79,7 +81,7 @@ class _RightHomePanelState extends State<RightHomePanel> {
                             style: Theme.of(context).textTheme.labelMedium),
                       ],
                     ),
-                    for (var pieMenu in widget.profile.pieMenus)
+                    for (var pieMenu in allPieMenuInProfile)
                       TableRow(
                         children: [
                           Container(
