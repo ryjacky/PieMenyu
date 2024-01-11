@@ -28,7 +28,9 @@ class PieMenyuSystemTray {
     systemTray.registerSystemTrayEventHandler((eventName) {
       switch (eventName){
         case kSystemTrayEventClick:
-          Platform.isWindows ? appWindow.show() : systemTray.popUpContextMenu();
+          if (!Platform.isWindows) {
+            systemTray.popUpContextMenu();
+          }
         case kSystemTrayEventRightClick:
           Platform.isWindows ? systemTray.popUpContextMenu() : appWindow.show();
         case kSystemTrayEventDoubleClick:
