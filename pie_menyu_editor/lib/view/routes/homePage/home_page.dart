@@ -4,7 +4,9 @@ import 'package:flutter/material.dart';
 import 'package:pie_menyu_core/db/db.dart';
 import 'package:pie_menyu_core/db/pie_menu.dart';
 import 'package:pie_menyu_core/db/profile.dart';
+import 'package:provider/provider.dart';
 
+import 'home_page_view_model.dart';
 import 'right_create_profile_panel.dart';
 import 'right_setting_panel.dart';
 import 'home_page_titlebar.dart';
@@ -60,33 +62,38 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
         backgroundColor: Theme.of(context).colorScheme.background,
-        body: Column(
-          children: [
-            const HomePageTitleBar(),
-            Expanded(
-              child: Row(
-                children: [
-                  Expanded(
-                      flex: 3,
-                      child: LeftHomePanel(
-                        onSettingPressed: () {
-                          setState(() {
-                            currentRightPanelType = RightPanelType.setting;
-                          });
-                        },
-                        onCreateProfile: () {
-                          setState(() {
-                            currentRightPanelType =
-                                RightPanelType.pieMenuEditor;
-                          });
-                        },
-                        onProfileSelected: updateSelectedProfile,
-                      )),
-                  Expanded(flex: 7, child: getRightPanel()),
-                ],
-              ),
-            ),
+        body: MultiProvider(
+          providers: [
+            ChangeNotifierProvider(create: (_) => HomePageViewModel()),
           ],
+          child: Column(
+            children: [
+              const HomePageTitleBar(),
+              Expanded(
+                child: Row(
+                  children: [
+                    Expanded(
+                        flex: 3,
+                        child: LeftHomePanel(
+                          onSettingPressed: () {
+                            setState(() {
+                              currentRightPanelType = RightPanelType.setting;
+                            });
+                          },
+                          onCreateProfile: () {
+                            setState(() {
+                              currentRightPanelType =
+                                  RightPanelType.pieMenuEditor;
+                            });
+                          },
+                          onProfileSelected: updateSelectedProfile,
+                        )),
+                    Expanded(flex: 7, child: getRightPanel()),
+                  ],
+                ),
+              ),
+            ],
+          ),
         ));
   }
 
