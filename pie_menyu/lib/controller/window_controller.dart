@@ -49,6 +49,10 @@ class WindowController extends ChangeNotifier {
 
   void executeAfterHideWindow() async {
     await windowManager.hide();
+
+    if (pieMenuProvider.pieItems.isEmpty) {
+      return;
+    }
     final tasks = pieMenuProvider.pieItems[executorService.activePieItemOrderIndex].tasks;
     await tasks.load();
     for (PieItemTask task in tasks) {
