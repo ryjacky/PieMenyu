@@ -2,22 +2,30 @@ import 'dart:developer';
 
 import 'package:flutter/cupertino.dart';
 import 'package:pie_menyu_core/db/db.dart';
+import 'package:pie_menyu_core/db/pie_menu.dart';
 import 'package:pie_menyu_core/db/profile.dart';
 
 class HomePageViewModel extends ChangeNotifier {
   List<Profile> profiles = [];
+  List<PieMenu> pieMenus = [];
 
   HomePageViewModel() {
-    fetchProfiles();
+    fetchState();
   }
 
-  fetchProfiles() async {
+  fetchState() async {
     log("Fetching state...");
 
     profiles = await DB.getProfiles();
-    log("There is ${profiles.length} profiles");
+    pieMenus = await DB.getPieMenus();
 
     notifyListeners();
+  }
+
+  Iterable<PieMenu> getAllPieMenusExceptIn(Profile profile) {
+    return pieMenus.where((element) => element.profiles
+        .where((element) => element.id == profile.id)
+        .isEmpty);
   }
 
   Future<void> createProfile(
@@ -33,6 +41,11 @@ class HomePageViewModel extends ChangeNotifier {
       ..exes.add(exePath)
       ..iconBase64 = profIcon);
 
-    await fetchProfiles();
+    await fetchState();
+  }
+
+  void addPieMenuTo(Profile profile, PieMenu pieMenu) async {
+    await DB.addPieMenuToProfile(pieMenu.id, profile.id);
+    await fetchState();
   }
 }
