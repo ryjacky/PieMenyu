@@ -20,7 +20,8 @@ import 'controller/window_controller.dart';
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  if (checkRunning()){
+  if (await isRunning()) {
+    print("PieMenyu is already running");
     exit(0);
   }
 
@@ -52,15 +53,22 @@ Future<void> main() async {
       providers: [
         ChangeNotifierProvider(create: (_) => windowControl.pieMenuProvider),
         ChangeNotifierProvider(create: (_) => windowControl.executorService),
-        ChangeNotifierProvider(create: (_) => windowControl.mouseCursorProvider),
+        ChangeNotifierProvider(
+            create: (_) => windowControl.mouseCursorProvider),
       ],
       child: const MyApp(),
     ),
   );
 }
 
-bool checkRunning() {
-  return false;
+Future<bool> isRunning() async {
+  final exeName =
+      Platform.resolvedExecutable.split(Platform.pathSeparator).last;
+
+  final cmdQueryProcess = "tasklist /FI \"imagename eq $exeName\"";
+
+  final result = await Process.run(cmdQueryProcess, []);
+  return exeName.allMatches(result.stdout.toString()).length > 1;
 }
 
 class MyApp extends StatelessWidget {
@@ -83,7 +91,8 @@ class MyApp extends StatelessWidget {
       pieItems,
     );
 
-    context.read<ExecutorService>().activePieItemOrderIndex = activePieItemOrderIndex;
+    context.read<ExecutorService>().activePieItemOrderIndex =
+        activePieItemOrderIndex;
 
     return MaterialApp(
       title: 'PieMenyu',
@@ -91,10 +100,9 @@ class MyApp extends StatelessWidget {
       home: Scaffold(
         backgroundColor: Colors.transparent,
         body: PieMenuView(
-          pieMenu: pieMenu,
-          pieItems: pieItems,
-          pieItemOrderIndex: activePieItemOrderIndex
-        ),
+            pieMenu: pieMenu,
+            pieItems: pieItems,
+            pieItemOrderIndex: activePieItemOrderIndex),
       ),
     );
   }
