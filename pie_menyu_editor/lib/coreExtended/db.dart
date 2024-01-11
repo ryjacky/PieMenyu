@@ -13,8 +13,9 @@ extension DBExtended on DB {
 
       if (pieItem.id < 0) {
         pieItem.id = Isar.autoIncrement;
-        await DB.putPieItem(pieItem);
       }
+      await DB.putPieItem(pieItem);
+
       await saveTaskTo(pieItem, putTasks);
 
     }
