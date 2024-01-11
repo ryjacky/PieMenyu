@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:localization/localization.dart';
 import 'package:pie_menyu_editor/system/task_bar_process_info.dart';
+import 'package:pie_menyu_editor/view/routes/homePage/home_page_view_model.dart';
+import 'package:provider/provider.dart';
 
 class RightCreateProfilePanel extends StatefulWidget {
   const RightCreateProfilePanel({super.key});
@@ -60,37 +62,51 @@ class _RightCreateProfilePanelState extends State<RightCreateProfilePanel> {
             ),
           ),
           Expanded(
-              child: ListView(
-            children: [
-              for (TaskBarProcessInfo activeApp in activeApps)
-                Padding(
-                  padding: const EdgeInsets.fromLTRB(0, 10, 0, 0),
-                  child: Container(
-                    decoration: BoxDecoration(
-                      border: Border.all(
+            child: ListView(
+              children: [
+                for (TaskBarProcessInfo activeApp in activeApps)
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(0, 10, 0, 0),
+                    child: Container(
+                      decoration: BoxDecoration(
+                        border: Border.all(
+                          color: Theme.of(context).colorScheme.surface,
+                        ),
+                        borderRadius: BorderRadius.circular(5),
                         color: Theme.of(context).colorScheme.surface,
                       ),
-                      borderRadius: BorderRadius.circular(5),
-                      color: Theme.of(context).colorScheme.surface,
-                    ),
-                    child: ListTile(
-                      title: Text(activeApp.processName),
-                      subtitle: Text(activeApp.exePath),
-                      leading: Image.memory(
-                        base64Decode(activeApp.base64Icon),
-                        errorBuilder: (context, error, stackTrace) {
-                          return const Icon(FontAwesomeIcons.question,
-                              size: 32);
+                      child: ListTile(
+                        title: Text(activeApp.processName),
+                        subtitle: Text(activeApp.exePath),
+                        leading: Image.memory(
+                          base64Decode(activeApp.base64Icon),
+                          errorBuilder: (context, error, stackTrace) {
+                            return const Icon(FontAwesomeIcons.question,
+                                size: 32);
+                          },
+                        ),
+                        onTap: () {
+                          context
+                              .read<HomePageViewModel>()
+                              .createProfile(activeApp.processName,
+                                  activeApp.exePath, activeApp.base64Icon)
+                              .onError(
+                                (error, stackTrace) =>
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(
+                                    backgroundColor:
+                                        Theme.of(context).colorScheme.error,
+                                    content: Text(error.toString()),
+                                  ),
+                                ),
+                              );
                         },
                       ),
-                      onTap: () {
-                        print(activeApp.processName);
-                      },
                     ),
-                  ),
-                )
-            ],
-          ))
+                  )
+              ],
+            ),
+          )
         ],
       ),
     );

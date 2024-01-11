@@ -1,12 +1,12 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:localization/localization.dart';
 import 'package:pie_menyu_core/db/db.dart';
 import 'package:pie_menyu_core/db/profile.dart';
+import 'package:pie_menyu_editor/view/routes/homePage/home_page_view_model.dart';
 import 'package:pie_menyu_editor/view/widgets/PrimaryButton.dart';
 import 'package:pie_menyu_editor/view/widgets/profile_list_item.dart';
+import 'package:provider/provider.dart';
 
 class LeftHomePanel extends StatefulWidget {
   final VoidCallback onCreateProfile;
@@ -24,30 +24,13 @@ class LeftHomePanel extends StatefulWidget {
 }
 
 class _LeftHomePanelState extends State<LeftHomePanel> {
-  List<Profile> profiles = [];
   int iProfileSelected = 0;
-
-  fetchState() async {
-    log("Fetching state...");
-
-    List<Profile> tempProfiles = await DB.getProfiles();
-    log("There is ${tempProfiles.length} profiles");
-
-    setState(() {
-      profiles = tempProfiles;
-
-      log("LeftHomePanel state updated");
-    });
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    fetchState();
-  }
 
   @override
   Widget build(BuildContext context) {
+    final profiles = context
+        .select<HomePageViewModel, List<Profile>>((value) => value.profiles);
+
     return Container(
       color: Theme.of(context).colorScheme.surface,
       padding: const EdgeInsets.fromLTRB(20, 50, 20, 20),
