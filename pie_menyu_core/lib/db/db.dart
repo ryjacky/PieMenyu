@@ -81,6 +81,15 @@ class DB {
     });
   }
 
+  static Future<int> putProfile(Profile profile) async {
+    late int profileId;
+    await _isar.writeTxn(() async {
+      profileId = await _isar.profiles.put(profile);
+    });
+
+    return profileId;
+  }
+
   /// Insert when not existed, update when existed.
   static Future<int> putPieMenu(PieMenu pieMenu) async {
     late int pieMenuId;
