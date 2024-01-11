@@ -1,6 +1,7 @@
 import 'dart:developer';
 
 import 'package:flutter/cupertino.dart';
+import 'package:isar/isar.dart';
 import 'package:pie_menyu_core/db/db.dart';
 import 'package:pie_menyu_core/db/pie_menu.dart';
 import 'package:pie_menyu_core/db/profile.dart';
@@ -49,14 +50,21 @@ class HomePageViewModel extends ChangeNotifier {
     await fetchState();
   }
 
-  void addPieMenuTo(Profile profile, PieMenu pieMenu) async {
+  Future<void> addPieMenuTo(Profile profile, PieMenu pieMenu) async {
     await DB.addPieMenuToProfile(pieMenu.id, profile.id);
     await fetchState();
   }
 
-  void removePieMenuFrom(Profile profile, PieMenu pieMenu) async {
+  Future<void> removePieMenuFrom(Profile profile, PieMenu pieMenu) async {
     profile.pieMenus.remove(pieMenu);
     await DB.updateProfileToPieMenuLinks(profile);
     await fetchState();
+  }
+
+  void makePieMenuUniqueIn(Profile profile, PieMenu pieMenu) async {
+    await removePieMenuFrom(profile, pieMenu);
+    pieMenu.id = Isar.autoIncrement;
+    await DB.putPieMenu(pieMenu);
+    await addPieMenuTo(profile, pieMenu);
   }
 }

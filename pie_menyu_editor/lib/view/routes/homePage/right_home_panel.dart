@@ -100,7 +100,9 @@ class _RightHomePanelState extends State<RightHomePanel> {
                                         borderRadius: BorderRadius.circular(5)),
                                     minimumSize: const Size(32, 32),
                                   ),
-                                  onPressed: () {},
+                                  onPressed: () {
+                                    homePageViewModel.makePieMenuUniqueIn(widget.profile, pieMenu);
+                                  },
                                   child:
                                       Text(pieMenu.profiles.length.toString())),
                             ),
