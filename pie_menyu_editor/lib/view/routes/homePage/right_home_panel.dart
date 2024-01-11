@@ -30,8 +30,7 @@ class _RightHomePanelState extends State<RightHomePanel> {
     final homePageViewModel = context.watch<HomePageViewModel>();
     final allPieMenuExceptInProfile =
         homePageViewModel.getAllPieMenusExceptIn(widget.profile);
-    final allPieMenuInProfile =
-        homePageViewModel.getPieMenusOf(widget.profile);
+    final allPieMenuInProfile = homePageViewModel.getPieMenusOf(widget.profile);
 
     return Container(
       padding: const EdgeInsets.fromLTRB(20, 50, 20, 20),
@@ -95,16 +94,18 @@ class _RightHomePanelState extends State<RightHomePanel> {
                                 style: Theme.of(context).textTheme.labelMedium,
                               ),
                               child: TextButton(
-                                  style: TextButton.styleFrom(
-                                    shape: RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.circular(5)),
-                                    minimumSize: const Size(32, 32),
+                                style: TextButton.styleFrom(
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(5),
                                   ),
-                                  onPressed: () {
-                                    homePageViewModel.makePieMenuUniqueIn(widget.profile, pieMenu);
-                                  },
-                                  child:
-                                      Text(pieMenu.profiles.length.toString())),
+                                  minimumSize: const Size(32, 32),
+                                ),
+                                onPressed: () {
+                                  homePageViewModel.makePieMenuUniqueIn(
+                                      widget.profile, pieMenu);
+                                },
+                                child: Text(pieMenu.profiles.length.toString()),
+                              ),
                             ),
                           ),
                           Padding(
@@ -149,7 +150,8 @@ class _RightHomePanelState extends State<RightHomePanel> {
                                   child: TableActionButton(
                                     icon: FontAwesomeIcons.trash,
                                     onLongPress: () {
-                                      homePageViewModel.removePieMenuFrom(widget.profile, pieMenu);
+                                      homePageViewModel.removePieMenuFrom(
+                                          widget.profile, pieMenu);
                                     },
                                     color: Theme.of(context)
                                         .colorScheme

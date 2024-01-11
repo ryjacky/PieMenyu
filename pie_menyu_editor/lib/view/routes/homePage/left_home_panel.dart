@@ -28,6 +28,7 @@ class _LeftHomePanelState extends State<LeftHomePanel> {
 
   @override
   Widget build(BuildContext context) {
+    final homePageViewModel = context.read<HomePageViewModel>();
     final profiles = context
         .select<HomePageViewModel, List<Profile>>((value) => value.profiles);
 
@@ -67,12 +68,13 @@ class _LeftHomePanelState extends State<LeftHomePanel> {
                   padding: const EdgeInsets.fromLTRB(0, 0, 0, 5),
                   child: DragTarget(
                     onAccept: (int? pieMenuId) async {
-                      if (pieMenuId == null) {
+                      final pieMenu = homePageViewModel.pieMenus.where((element) => element.id == pieMenuId).firstOrNull;
+
+                      if (pieMenu == null) {
                         return;
                       }
 
-                      await DB.addPieMenuToProfile(
-                          pieMenuId, profiles[index].id);
+                      await homePageViewModel.addPieMenuTo(profiles[index], pieMenu);
                       widget.onProfileSelected(profiles[iProfileSelected].id);
                     },
                     builder: (context, List<int?> candidateData, rejectedData) {
