@@ -40,7 +40,7 @@ class WindowController extends ChangeNotifier {
       if (keyboardProvider.keyEvent.type == KeyboardEventType.keyDown) {
         if (!executorService.isExecuting &&
             keyboardProvider.keyEvent.hotkey != null) {
-          showWindow(keyboardProvider.keyEvent.hotkey!);
+          showPieMenuWindow(keyboardProvider.keyEvent.hotkey!);
         }
       }
       if (keyboardProvider.keyEvent.type == KeyboardEventType.keyUp) {
@@ -88,7 +88,7 @@ class WindowController extends ChangeNotifier {
     executorService.start();
   }
 
-  void showWindow(HotKey hotKey) async {
+  void showPieMenuWindow(HotKey hotKey) async {
     if (await windowManager.isFocused()) {
       return;
     }
