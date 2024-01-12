@@ -41,17 +41,20 @@ class _OpenAppTaskCardState extends State<OpenAppTaskCard> {
       children: [
         ListTile(
           leading: Text("label-window-title".i18n()),
-          title: MinimalTextField(
-            content: task.windowTitle,
-            onSubmitted: (value) {
-              setState(() {
-                task = task..windowTitle = value;
-              });
-              final pieItem = state.activePieItem;
-              if (pieItem != null) {
-                state.updateTaskIn(pieItem, task);
-              }
-            },
+          title: Tooltip(
+            message: "tooltip-always-launch-if-empty-window-title".i18n(),
+            child: MinimalTextField(
+              content: task.windowTitle,
+              onSubmitted: (value) {
+                setState(() {
+                  task = task..windowTitle = value;
+                });
+                final pieItem = state.activePieItem;
+                if (pieItem != null) {
+                  state.updateTaskIn(pieItem, task);
+                }
+              },
+            ),
           ),
         ),
         ListTile(

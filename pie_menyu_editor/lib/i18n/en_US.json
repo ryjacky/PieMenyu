@@ -49,6 +49,7 @@
   "tooltip-add-resize-window-task": "Add Resize Window Task - Resize active window",
   "tooltip-add-move-window-task": "Add Move Window Task - Move active window to certain position",
   "tooltip-long-press-to-delete": "Long press to delete",
+  "tooltip-always-launch-if-empty-window-title": "Always open a new instance if window title is empty",
   "button-save": "Save",
   "button-reset": "Reset",
   "hint-select-pie-item-first": "Select Pie Item first",
