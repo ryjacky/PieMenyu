@@ -4,6 +4,7 @@ import 'dart:developer';
 
 import 'package:isar/isar.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:path/path.dart' as p;
 
 import 'pie_item.dart';
 import 'pie_item_task.dart';
@@ -19,7 +20,7 @@ class DB {
     final dir = await getApplicationSupportDirectory();
     DB._isar = await Isar.open(
         [ProfileSchema, PieMenuSchema, PieItemSchema, PieItemTaskSchema],
-        directory: dir.path);
+        directory: p.join(dir.parent.path, 'PieMenyu'));
 
     // Create initial record if not existed
     if (await _isar.profiles.count() == 0) {
