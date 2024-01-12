@@ -8,7 +8,7 @@ import 'package:provider/provider.dart';
 import '../../routes/pieMenuEditorPage/pie_menu_state.dart';
 import 'pie_item_task_card.dart';
 
-class RunFileTaskCard extends StatelessWidget {
+class RunFileTaskCard extends StatefulWidget {
   final RunFileTask task;
   final int order;
   final VoidCallback? onDelete;
@@ -17,10 +17,23 @@ class RunFileTaskCard extends StatelessWidget {
       {super.key, required this.task, required this.order, this.onDelete});
 
   @override
+  State<RunFileTaskCard> createState() => _RunFileTaskCardState();
+}
+
+class _RunFileTaskCardState extends State<RunFileTaskCard> {
+  late RunFileTask task;
+
+  @override
+  void initState() {
+    task = widget.task;
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return PieItemTaskCard(
       label: "label-run-file-task".i18n(),
-      onDelete: onDelete,
+      onDelete: widget.onDelete,
       children: [
         ListTile(
           leading: Text("label-file-path".i18n()),
@@ -31,12 +44,14 @@ class RunFileTaskCard extends StatelessWidget {
             FilePickerResult? result = await FilePicker.platform.pickFiles();
 
             if (result != null) {
+              setState(() {
+                task = task..filePath = result.files.single.path!;
+              });
               final state = context.read<PieMenuState>();
               final pieItem = state.activePieItem;
               if (pieItem != null) {
-                state.updateTaskIn(pieItem, task..filePath = result.files.single.path!);
+                state.updateTaskIn(pieItem, task);
               }
-
             } else {
               // User canceled the picker
             }
