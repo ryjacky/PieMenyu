@@ -4,7 +4,6 @@ import 'package:gap/gap.dart';
 import 'package:localization/localization.dart';
 import 'package:pie_menyu_core/db/pie_item.dart';
 import 'package:pie_menyu_core/pieItemTasks/mouse_click_task.dart';
-import 'package:pie_menyu_core/pieItemTasks/open_sub_menu_task.dart';
 import 'package:pie_menyu_core/pieItemTasks/open_app_task.dart';
 import 'package:pie_menyu_core/pieItemTasks/open_folder_task.dart';
 import 'package:pie_menyu_core/pieItemTasks/open_url_task.dart';
