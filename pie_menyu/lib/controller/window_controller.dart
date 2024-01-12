@@ -95,15 +95,32 @@ class WindowController extends ChangeNotifier {
 
     String foregroundApp = ForegroundWindow.get().path;
 
-    List<Profile> profilesOfForegroundApp =
-        await DB.getProfilesByExe(foregroundApp);
-    Profile? profile = profilesOfForegroundApp.firstOrNull;
-    profile ??= (await DB.getProfiles(ids: [1])).firstOrNull;
-
-    if (profile == null) {
-      throw Exception("Database possibly corrupted");
+    List<Profile> profiles = await DB.getProfilesByExe(foregroundApp);
+    final defaultProf = (await DB.getProfiles(ids: [1])).firstOrNull;
+    if (defaultProf != null) {
+      profiles.add(defaultProf);
     }
 
+    if (profiles.isEmpty) {
+      dev.log("Database possibly corrupted");
+    }
+
+    for (Profile profile in profiles) {
+      if (await loadCorrespondingPieMenu(profile, hotKey)){
+        final pieCenterScreenPosition =
+        await screenRetriever.getCursorScreenPoint();
+
+        await windowManager.setPosition(Offset(
+            pieCenterScreenPosition.dx - windowSize.width / 2,
+            pieCenterScreenPosition.dy - windowSize.height / 2));
+        await windowManager.show();
+        await windowManager.focus();
+        pieMenuProvider.pieCenterScreenPosition = pieCenterScreenPosition;
+      }
+    }
+  }
+
+  Future<bool> loadCorrespondingPieMenu(Profile profile, HotKey hotKey) async {
     for (HotkeyToPieMenuId hotkeyToPieMenuId in profile.hotkeyToPieMenuIdList) {
       if (hotkeyToPieMenuId.keyCode == hotKey.keyCode &&
           hotkeyToPieMenuId.keyModifiers.contains(KeyModifier.shift) ==
@@ -114,24 +131,16 @@ class WindowController extends ChangeNotifier {
               hotKey.modifiers?.contains(KeyModifier.alt)) {
         try {
           pieMenuProvider.pieMenu = profile.pieMenus.firstWhere(
-              (element) => element.id == hotkeyToPieMenuId.pieMenuId);
+                  (element) => element.id == hotkeyToPieMenuId.pieMenuId);
           pieMenuProvider.loadPieItems();
 
-          final pieCenterScreenPosition =
-              await screenRetriever.getCursorScreenPoint();
-
-          await windowManager.setPosition(Offset(
-              pieCenterScreenPosition.dx - windowSize.width / 2,
-              pieCenterScreenPosition.dy - windowSize.height / 2));
-          await windowManager.show();
-          await windowManager.focus();
-
-          pieMenuProvider.pieCenterScreenPosition = pieCenterScreenPosition;
+          return true;
         } catch (e) {
           dev.log(
               "Pie menu does not exist in profile, id: ${hotkeyToPieMenuId.pieMenuId}");
         }
       }
     }
+    return false;
   }
 }
