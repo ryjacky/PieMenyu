@@ -2,11 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:pie_menyu_core/db/pie_item.dart';
 import 'package:pie_menyu_core/db/pie_item_task.dart';
 import 'package:pie_menyu_core/pieItemTasks/mouse_click_task.dart';
+import 'package:pie_menyu_core/pieItemTasks/open_app_task.dart';
 import 'package:pie_menyu_core/pieItemTasks/open_folder_task.dart';
 import 'package:pie_menyu_core/pieItemTasks/open_sub_menu_task.dart';
 import 'package:pie_menyu_core/pieItemTasks/run_file_task.dart';
 import 'package:pie_menyu_core/pieItemTasks/send_key_task.dart';
 import 'package:pie_menyu_editor/view/routes/pieMenuEditorPage/pie_menu_state.dart';
+import 'package:pie_menyu_editor/view/widgets/pieItemTask/open_app_task_card.dart';
 import 'package:pie_menyu_editor/view/widgets/pieItemTask/open_folder_task_card.dart';
 import 'package:pie_menyu_editor/view/widgets/pieItemTask/open_sub_menu_task_card.dart';
 import 'package:pie_menyu_editor/view/widgets/pieItemTask/send_key_task_card.dart';
@@ -81,8 +83,12 @@ class _PieItemTaskListState extends State<PieItemTaskList> {
           onDelete: () => removeTask(pieItemTask),
         );
       case PieItemTaskType.openApp:
-      // TODO: Handle this case.
-      case PieItemTaskType.openUrl:
+        final task = OpenAppTask.from(pieItemTask);
+        return OpenAppTaskCard(
+          task: task,
+          order: order,
+          onDelete: () => removeTask(pieItemTask),
+        );      case PieItemTaskType.openUrl:
       // TODO: Handle this case.
       case PieItemTaskType.openEditor:
       // TODO: Handle this case.

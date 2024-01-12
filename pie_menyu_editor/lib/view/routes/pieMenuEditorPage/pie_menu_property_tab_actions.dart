@@ -5,6 +5,7 @@ import 'package:localization/localization.dart';
 import 'package:pie_menyu_core/db/pie_item.dart';
 import 'package:pie_menyu_core/pieItemTasks/mouse_click_task.dart';
 import 'package:pie_menyu_core/pieItemTasks/open_sub_menu_task.dart';
+import 'package:pie_menyu_core/pieItemTasks/open_app_task.dart';
 import 'package:pie_menyu_core/pieItemTasks/open_folder_task.dart';
 import 'package:pie_menyu_core/pieItemTasks/run_file_task.dart';
 import 'package:pie_menyu_core/pieItemTasks/send_key_task.dart';
@@ -118,9 +119,11 @@ class PieMenuPropertyTabActions extends StatelessWidget {
               message: "tooltip-add-open-app-task".i18n(),
               child: MonochromeIconButton(
                 icon: Icons.play_arrow_rounded,
-                onPressed: () => context
-                    .read<PieMenuEditorPageViewModel>()
-                    .createTaskInCurrentPieItem(PieItemTaskType.openApp),
+                onPressed: () {
+                  if (activePieItem != null) {
+                    pieMenuState.addTaskTo(activePieItem, OpenAppTask());
+                  }
+                },
               ),
             ),
             // Gap(gap),
