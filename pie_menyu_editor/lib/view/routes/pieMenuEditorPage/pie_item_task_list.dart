@@ -3,6 +3,7 @@ import 'package:pie_menyu_core/db/pie_item.dart';
 import 'package:pie_menyu_core/db/pie_item_task.dart';
 import 'package:pie_menyu_core/pieItemTasks/mouse_click_task.dart';
 import 'package:pie_menyu_core/pieItemTasks/open_app_task.dart';
+import 'package:pie_menyu_core/pieItemTasks/open_url_task.dart';
 import 'package:pie_menyu_core/pieItemTasks/open_folder_task.dart';
 import 'package:pie_menyu_core/pieItemTasks/open_sub_menu_task.dart';
 import 'package:pie_menyu_core/pieItemTasks/run_file_task.dart';
@@ -15,6 +16,7 @@ import 'package:pie_menyu_editor/view/widgets/pieItemTask/send_key_task_card.dar
 import 'package:provider/provider.dart';
 
 import '../../widgets/pieItemTask/mouse_click_task_card.dart';
+import '../../widgets/pieItemTask/open_url_task_card.dart';
 import '../../widgets/pieItemTask/run_file_task_card.dart';
 
 class PieItemTaskList extends StatefulWidget {
@@ -88,8 +90,14 @@ class _PieItemTaskListState extends State<PieItemTaskList> {
           task: task,
           order: order,
           onDelete: () => removeTask(pieItemTask),
-        );      case PieItemTaskType.openUrl:
-      // TODO: Handle this case.
+        );
+      case PieItemTaskType.openUrl:
+        final task = OpenUrlTask.from(pieItemTask);
+        return OpenUrlTaskCard(
+          task: task,
+          order: order,
+          onDelete: () => removeTask(pieItemTask),
+        );
       case PieItemTaskType.openEditor:
       // TODO: Handle this case.
       case PieItemTaskType.resizeWindow:

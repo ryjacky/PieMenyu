@@ -1,6 +1,7 @@
 library pie_menyu_core;
 
 import 'package:pie_menyu_core/db/pie_item_task.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../executor/executable.dart';
 
@@ -28,6 +29,11 @@ class OpenUrlTask extends PieItemTask with Executable {
 
   @override
   Future<void> execute() async {
-    // TODO: implement execute
+    String url = this.url;
+    if (!url.contains("://")) {
+      url = "https://$url";
+    }
+
+    launchUrl(Uri.parse(url));
   }
 }

@@ -57,6 +57,8 @@
   "label-mouse-click-task": "Mouse Click Task",
   "label-x": "X",
   "label-y": "Y",
+  "label-open-url-task": "Open URL Task",
+  "label-url": "URL",
   "label-run-file-task": "Run File Task",
   "label-file-path": "File path",
   "label-pick-file": "Pick file",

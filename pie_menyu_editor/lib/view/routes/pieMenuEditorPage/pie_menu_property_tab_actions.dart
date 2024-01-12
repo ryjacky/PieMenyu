@@ -7,6 +7,7 @@ import 'package:pie_menyu_core/pieItemTasks/mouse_click_task.dart';
 import 'package:pie_menyu_core/pieItemTasks/open_sub_menu_task.dart';
 import 'package:pie_menyu_core/pieItemTasks/open_app_task.dart';
 import 'package:pie_menyu_core/pieItemTasks/open_folder_task.dart';
+import 'package:pie_menyu_core/pieItemTasks/open_url_task.dart';
 import 'package:pie_menyu_core/pieItemTasks/run_file_task.dart';
 import 'package:pie_menyu_core/pieItemTasks/send_key_task.dart';
 import 'package:pie_menyu_editor/view/routes/pieMenuEditorPage/pie_menu_state.dart';
@@ -126,16 +127,18 @@ class PieMenuPropertyTabActions extends StatelessWidget {
                 },
               ),
             ),
-            // Gap(gap),
-            // Tooltip(
-            //   message: "tooltip-add-open-url-task".i18n(),
-            //   child: MonochromeIconButton(
-            //     icon: Icons.link,
-            //     onPressed: () => context
-            //         .read<PieMenuEditorPageViewModel>()
-            //         .createTaskInCurrentPieItem(PieItemTaskType.openUrl),
-            //   ),
-            // ),
+            Gap(gap),
+            Tooltip(
+              message: "tooltip-add-open-url-task".i18n(),
+              child: MonochromeIconButton(
+                icon: Icons.link,
+                onPressed: () {
+                  if (activePieItem != null) {
+                    pieMenuState.addTaskTo(activePieItem, OpenUrlTask());
+                  }
+                },
+              ),
+            ),
             // Gap(gap),
             // Tooltip(
             //   message: "tooltip-add-open-editor-task".i18n(),
