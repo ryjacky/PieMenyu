@@ -48,7 +48,8 @@ class _RightHomePanelState extends State<RightHomePanel> {
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 10),
                 child: PrimaryButton(
-                  onPressed: createPieMenu,
+                  onPressed: () =>
+                      homePageViewModel.createPieMenuIn(widget.profile),
                   icon: FontAwesomeIcons.plus,
                   label: Text("button-new-pie-menu".i18n()),
                 ),
@@ -190,18 +191,6 @@ class _RightHomePanelState extends State<RightHomePanel> {
         ],
       ),
     );
-  }
-
-  void createPieMenu() async {
-    PieMenu newPieMenu = PieMenu(
-      name: "New Pie Menu",
-    );
-    int pieMenuId = await DB.putPieMenu(newPieMenu);
-    await DB.addPieMenuToProfile(pieMenuId, widget.profile.id);
-
-    setState(() {
-      widget.profile.pieMenus.add(newPieMenu);
-    });
   }
 
   void setPieMenuName(String name, PieMenu pieMenu) async {
