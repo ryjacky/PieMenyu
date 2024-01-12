@@ -38,7 +38,8 @@ class WindowController extends ChangeNotifier {
   WindowController() {
     keyboardProvider.addListener(() {
       if (keyboardProvider.keyEvent.type == KeyboardEventType.keyDown) {
-        if (!executorService.isExecuting && keyboardProvider.keyEvent.hotkey != null) {
+        if (!executorService.isExecuting &&
+            keyboardProvider.keyEvent.hotkey != null) {
           showWindow(keyboardProvider.keyEvent.hotkey!);
         }
       }
@@ -54,7 +55,8 @@ class WindowController extends ChangeNotifier {
     if (pieMenuProvider.pieItems.isEmpty) {
       return;
     }
-    final tasks = pieMenuProvider.pieItems[executorService.activePieItemOrderIndex].tasks;
+    final tasks =
+        pieMenuProvider.pieItems[executorService.activePieItemOrderIndex].tasks;
     await tasks.load();
     for (PieItemTask task in tasks) {
       switch (task.taskType) {
@@ -103,13 +105,20 @@ class WindowController extends ChangeNotifier {
     }
 
     for (HotkeyToPieMenuId hotkeyToPieMenuId in profile.hotkeyToPieMenuIdList) {
-      if (hotkeyToPieMenuId.keyCode == hotKey.keyCode) {
+      if (hotkeyToPieMenuId.keyCode == hotKey.keyCode &&
+          hotkeyToPieMenuId.keyModifiers.contains(KeyModifier.shift) ==
+              hotKey.modifiers?.contains(KeyModifier.shift) &&
+          hotkeyToPieMenuId.keyModifiers.contains(KeyModifier.control) ==
+              hotKey.modifiers?.contains(KeyModifier.control) &&
+          hotkeyToPieMenuId.keyModifiers.contains(KeyModifier.alt) ==
+              hotKey.modifiers?.contains(KeyModifier.alt)) {
         try {
           pieMenuProvider.pieMenu = profile.pieMenus.firstWhere(
               (element) => element.id == hotkeyToPieMenuId.pieMenuId);
           pieMenuProvider.loadPieItems();
 
-          final pieCenterScreenPosition = await screenRetriever.getCursorScreenPoint();
+          final pieCenterScreenPosition =
+              await screenRetriever.getCursorScreenPoint();
 
           await windowManager.setPosition(Offset(
               pieCenterScreenPosition.dx - windowSize.width / 2,
