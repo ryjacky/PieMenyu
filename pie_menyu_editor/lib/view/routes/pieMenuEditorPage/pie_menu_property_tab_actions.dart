@@ -141,7 +141,7 @@ class PieMenuPropertyTabActions extends StatelessWidget {
             ),
             Gap(gap),
             Tooltip(
-              message: "tooltip-send-text-task".i18n(),
+              message: "tooltip-paste-text-task".i18n(),
               child: MonochromeIconButton(
                 icon: Icons.text_fields,
                 onPressed: () {

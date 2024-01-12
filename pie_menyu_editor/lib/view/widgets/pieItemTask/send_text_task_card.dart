@@ -33,7 +33,7 @@ class _PasteTextTaskCardState extends State<PasteTextTaskCard> {
     final state = context.read<PieMenuState>();
 
     return PieItemTaskCard(
-      label: "label-send-text-task".i18n(),
+      label: "label-paste-text-task".i18n(),
       onDelete: widget.onDelete,
       children: [
         ListTile(
