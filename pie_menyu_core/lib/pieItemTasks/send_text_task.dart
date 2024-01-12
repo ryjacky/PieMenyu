@@ -7,12 +7,12 @@ import 'package:pie_menyu_core/pieItemTasks/send_key_task.dart';
 
 import '../executor/executable.dart';
 
-class SendTextTask extends PieItemTask with Executable {
-  SendTextTask() : super(taskType: PieItemTaskType.sendText) {
+class PasteTextTask extends PieItemTask with Executable {
+  PasteTextTask() : super(taskType: PieItemTaskType.sendText) {
     _fieldCheck();
   }
 
-  SendTextTask.from(PieItemTask pieItemTask) : super.from(pieItemTask) {
+  PasteTextTask.from(PieItemTask pieItemTask) : super.from(pieItemTask) {
     _fieldCheck();
   }
 

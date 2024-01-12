@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:localization/localization.dart';
-import 'package:pie_menyu_core/pieItemTasks/open_url_task.dart';
 import 'package:pie_menyu_core/pieItemTasks/send_text_task.dart';
 import 'package:pie_menyu_editor/view/widgets/minimal_text_field.dart';
 import 'package:provider/provider.dart';
@@ -8,20 +7,20 @@ import 'package:provider/provider.dart';
 import '../../routes/pieMenuEditorPage/pie_menu_state.dart';
 import 'pie_item_task_card.dart';
 
-class SendTextTaskCard extends StatefulWidget {
-  final SendTextTask task;
+class PasteTextTaskCard extends StatefulWidget {
+  final PasteTextTask task;
   final int order;
   final VoidCallback? onDelete;
 
-  const SendTextTaskCard(
+  const PasteTextTaskCard(
       {super.key, required this.task, required this.order, this.onDelete});
 
   @override
-  State<SendTextTaskCard> createState() => _SendTextTaskCardState();
+  State<PasteTextTaskCard> createState() => _PasteTextTaskCardState();
 }
 
-class _SendTextTaskCardState extends State<SendTextTaskCard> {
-  late SendTextTask task;
+class _PasteTextTaskCardState extends State<PasteTextTaskCard> {
+  late PasteTextTask task;
 
   @override
   void initState() {

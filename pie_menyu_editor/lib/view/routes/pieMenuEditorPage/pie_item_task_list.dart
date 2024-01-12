@@ -3,9 +3,9 @@ import 'package:pie_menyu_core/db/pie_item.dart';
 import 'package:pie_menyu_core/db/pie_item_task.dart';
 import 'package:pie_menyu_core/pieItemTasks/mouse_click_task.dart';
 import 'package:pie_menyu_core/pieItemTasks/open_app_task.dart';
-import 'package:pie_menyu_core/pieItemTasks/open_url_task.dart';
 import 'package:pie_menyu_core/pieItemTasks/open_folder_task.dart';
 import 'package:pie_menyu_core/pieItemTasks/open_sub_menu_task.dart';
+import 'package:pie_menyu_core/pieItemTasks/open_url_task.dart';
 import 'package:pie_menyu_core/pieItemTasks/run_file_task.dart';
 import 'package:pie_menyu_core/pieItemTasks/send_key_task.dart';
 import 'package:pie_menyu_core/pieItemTasks/send_text_task.dart';
@@ -103,8 +103,8 @@ class _PieItemTaskListState extends State<PieItemTaskList> {
       case PieItemTaskType.openEditor:
       // TODO: Handle this case.
       case PieItemTaskType.sendText:
-        final task = SendTextTask.from(pieItemTask);
-        return SendTextTaskCard(
+        final task = PasteTextTask.from(pieItemTask);
+        return PasteTextTaskCard(
           task: task,
           order: order,
           onDelete: () => removeTask(pieItemTask),
