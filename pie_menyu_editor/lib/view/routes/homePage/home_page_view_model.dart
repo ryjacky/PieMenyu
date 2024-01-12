@@ -11,10 +11,10 @@ class HomePageViewModel extends ChangeNotifier {
   List<PieMenu> pieMenus = [];
 
   HomePageViewModel() {
-    fetchState();
+    updateState();
   }
 
-  fetchState() async {
+  updateState() async {
     log("Fetching state...");
 
     profiles = await DB.getProfiles();
@@ -47,18 +47,18 @@ class HomePageViewModel extends ChangeNotifier {
       ..exes.add(exePath)
       ..iconBase64 = profIcon);
 
-    await fetchState();
+    await updateState();
   }
 
   Future<void> addPieMenuTo(Profile profile, PieMenu pieMenu) async {
     await DB.addPieMenuToProfile(pieMenu.id, profile.id);
-    await fetchState();
+    await updateState();
   }
 
   Future<void> removePieMenuFrom(Profile profile, PieMenu pieMenu) async {
     profile.pieMenus.remove(pieMenu);
     await DB.updateProfileToPieMenuLinks(profile);
-    await fetchState();
+    await updateState();
   }
 
   void makePieMenuUniqueIn(Profile profile, PieMenu pieMenu) async {
@@ -66,5 +66,16 @@ class HomePageViewModel extends ChangeNotifier {
     pieMenu.id = Isar.autoIncrement;
     await DB.putPieMenu(pieMenu);
     await addPieMenuTo(profile, pieMenu);
+  }
+
+  void createPieMenuIn(Profile profile) async {
+    PieMenu newPieMenu = PieMenu(
+      name: "New Pie Menu",
+    );
+
+    int pieMenuId = await DB.putPieMenu(newPieMenu);
+    await DB.addPieMenuToProfile(pieMenuId, profile.id);
+
+    updateState();
   }
 }
