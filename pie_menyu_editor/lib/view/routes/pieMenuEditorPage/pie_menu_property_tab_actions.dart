@@ -23,6 +23,7 @@ class PieMenuPropertyTabActions extends StatelessWidget {
   Widget build(BuildContext context) {
     final activePieItem =
         context.select<PieMenuState, PieItem?>((state) => state.activePieItem);
+    final pieMenuState = context.read<PieMenuState>();
 
     return Row(
       children: [
@@ -57,7 +58,6 @@ class PieMenuPropertyTabActions extends StatelessWidget {
               child: MonochromeIconButton(
                 icon: Icons.keyboard,
                 onPressed: () {
-                  final pieMenuState = context.read<PieMenuState>();
                   if (activePieItem != null) {
                     pieMenuState.addTaskTo(activePieItem, SendKeyTask());
                   }
@@ -70,7 +70,6 @@ class PieMenuPropertyTabActions extends StatelessWidget {
               child: MonochromeIconButton(
                 icon: FontAwesomeIcons.handPointer,
                 onPressed: () {
-                  final pieMenuState = context.read<PieMenuState>();
                   if (activePieItem != null) {
                     pieMenuState.addTaskTo(activePieItem, MouseClickTask());
                   }
@@ -83,7 +82,6 @@ class PieMenuPropertyTabActions extends StatelessWidget {
               child: MonochromeIconButton(
                 icon: Icons.file_open,
                 onPressed: () {
-                  final pieMenuState = context.read<PieMenuState>();
                   if (activePieItem != null) {
                     pieMenuState.addTaskTo(activePieItem, RunFileTask());
                   }
@@ -109,23 +107,22 @@ class PieMenuPropertyTabActions extends StatelessWidget {
               child: MonochromeIconButton(
                 icon: Icons.folder,
                 onPressed: () {
-                  final pieMenuState = context.read<PieMenuState>();
                   if (activePieItem != null) {
                     pieMenuState.addTaskTo(activePieItem, OpenFolderTask());
                   }
                 },
               ),
             ),
-            // Gap(gap),
-            // Tooltip(
-            //   message: "tooltip-add-open-app-task".i18n(),
-            //   child: MonochromeIconButton(
-            //     icon: Icons.play_arrow_rounded,
-            //     onPressed: () => context
-            //         .read<PieMenuEditorPageViewModel>()
-            //         .createTaskInCurrentPieItem(PieItemTaskType.openApp),
-            //   ),
-            // ),
+            Gap(gap),
+            Tooltip(
+              message: "tooltip-add-open-app-task".i18n(),
+              child: MonochromeIconButton(
+                icon: Icons.play_arrow_rounded,
+                onPressed: () => context
+                    .read<PieMenuEditorPageViewModel>()
+                    .createTaskInCurrentPieItem(PieItemTaskType.openApp),
+              ),
+            ),
             // Gap(gap),
             // Tooltip(
             //   message: "tooltip-add-open-url-task".i18n(),
