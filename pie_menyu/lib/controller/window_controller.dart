@@ -79,7 +79,7 @@ class WindowController extends ChangeNotifier {
         case PieItemTaskType.moveWindow:
           executorService.execute(MoveWindowTask.from(task));
         case PieItemTaskType.sendText:
-          executorService.execute(SendTextTask.from(task));
+          executorService.execute(PasteTextTask.from(task));
       }
     }
 

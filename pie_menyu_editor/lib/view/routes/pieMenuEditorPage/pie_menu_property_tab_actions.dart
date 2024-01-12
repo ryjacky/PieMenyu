@@ -147,7 +147,7 @@ class PieMenuPropertyTabActions extends StatelessWidget {
                 icon: Icons.text_fields,
                 onPressed: () {
                   if (activePieItem != null) {
-                    pieMenuState.addTaskTo(activePieItem, SendTextTask());
+                    pieMenuState.addTaskTo(activePieItem, PasteTextTask());
                   }
                 },
               ),
