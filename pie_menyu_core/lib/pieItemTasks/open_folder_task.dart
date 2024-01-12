@@ -1,5 +1,7 @@
 library pie_menyu_core;
 
+import 'dart:io';
+
 import 'package:pie_menyu_core/db/pie_item_task.dart';
 
 import '../executor/executable.dart';
@@ -28,6 +30,12 @@ class OpenFolderTask extends PieItemTask with Executable {
 
   @override
   Future<void> execute() async {
-    // TODO: implement execute
+    if (Platform.isWindows) {
+      await Process.run("explorer", [folderPath], runInShell: true);
+    } else if (Platform.isMacOS) {
+      await Process.run("open", [folderPath], runInShell: true);
+    } else if (Platform.isLinux) {
+      await Process.run("xdg-open", [folderPath], runInShell: true);
+    }
   }
 }
