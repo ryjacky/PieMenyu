@@ -1,9 +1,11 @@
 library pie_menyu_core;
+import 'dart:io';
 import 'dart:math';
 
 import 'package:flutter_auto_gui/flutter_auto_gui.dart';
 import 'package:pie_menyu_core/db/pie_item_task.dart';
 import 'package:pie_menyu_core/executor/executable.dart';
+import 'package:win32/win32.dart';
 
 class MouseClickTask extends PieItemTask with Executable {
   MouseClickTask() : super(taskType: PieItemTaskType.mouseClick){
@@ -53,7 +55,11 @@ class MouseClickTask extends PieItemTask with Executable {
 
   @override
   Future<void> execute() async {
-    await FlutterAutoGUI.moveTo(point: Point(x, y));
+    if (Platform.isWindows) {
+      SetCursorPos(x, y);
+    } else {
+      await FlutterAutoGUI.moveTo(point: Point(x, y));
+    }
     await Future.delayed(const Duration(milliseconds: 10));
     await FlutterAutoGUI.click(button: mouseButton);
   }
