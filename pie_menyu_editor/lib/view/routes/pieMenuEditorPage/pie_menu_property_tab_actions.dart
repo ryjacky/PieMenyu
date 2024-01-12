@@ -10,6 +10,7 @@ import 'package:pie_menyu_core/pieItemTasks/open_folder_task.dart';
 import 'package:pie_menyu_core/pieItemTasks/open_url_task.dart';
 import 'package:pie_menyu_core/pieItemTasks/run_file_task.dart';
 import 'package:pie_menyu_core/pieItemTasks/send_key_task.dart';
+import 'package:pie_menyu_core/pieItemTasks/send_text_task.dart';
 import 'package:pie_menyu_editor/view/routes/pieMenuEditorPage/pie_menu_state.dart';
 import 'package:pie_menyu_editor/view/widgets/icon_button.dart';
 import 'package:provider/provider.dart';
@@ -139,6 +140,18 @@ class PieMenuPropertyTabActions extends StatelessWidget {
                 },
               ),
             ),
+            Gap(gap),
+            Tooltip(
+              message: "tooltip-send-text-task".i18n(),
+              child: MonochromeIconButton(
+                icon: Icons.text_fields,
+                onPressed: () {
+                  if (activePieItem != null) {
+                    pieMenuState.addTaskTo(activePieItem, SendTextTask());
+                  }
+                },
+              ),
+            ),
             // Gap(gap),
             // Tooltip(
             //   message: "tooltip-add-open-editor-task".i18n(),
@@ -170,6 +183,7 @@ class PieMenuPropertyTabActions extends StatelessWidget {
             //   ),
             // ),
             // Gap(gap),
+
           ]),
         ),
       ],

@@ -16,6 +16,7 @@ import 'package:pie_menyu_core/pieItemTasks/open_url_task.dart';
 import 'package:pie_menyu_core/pieItemTasks/resize_window_task.dart';
 import 'package:pie_menyu_core/pieItemTasks/run_file_task.dart';
 import 'package:pie_menyu_core/pieItemTasks/send_key_task.dart';
+import 'package:pie_menyu_core/pieItemTasks/send_text_task.dart';
 import 'package:pie_menyu_core/providers/pie_menu_provider.dart';
 import 'package:screen_retriever/screen_retriever.dart';
 import 'package:window_manager/window_manager.dart';
@@ -78,7 +79,7 @@ class WindowController extends ChangeNotifier {
         case PieItemTaskType.moveWindow:
           executorService.execute(MoveWindowTask.from(task));
         case PieItemTaskType.sendText:
-          executorService.execute(SendKeyTask.from(task));
+          executorService.execute(SendTextTask.from(task));
       }
     }
 

@@ -1,6 +1,9 @@
 library pie_menyu_core;
 
+import 'package:clipboard/clipboard.dart';
+import 'package:flutter_auto_gui/flutter_auto_gui.dart';
 import 'package:pie_menyu_core/db/pie_item_task.dart';
+import 'package:pie_menyu_core/pieItemTasks/send_key_task.dart';
 
 import '../executor/executable.dart';
 
@@ -21,13 +24,14 @@ class SendTextTask extends PieItemTask with Executable {
   }
 
   set text(String value) {
-    arguments = [value];
+    arguments[0] = value;
   }
 
   String get text => arguments[0];
 
   @override
   Future<void> execute() async {
-    // TODO: implement execute
+    await FlutterClipboard.copy(text);
+    SendKeyTask()..ctrl = true..key = "v"..execute();
   }
 }
