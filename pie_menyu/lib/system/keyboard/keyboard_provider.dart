@@ -14,7 +14,7 @@ import '../system_hook.dart';
 class KeyboardProvider extends ChangeNotifier {
   KeyboardEvent _event = KeyboardEvent(KeyboardEventType.keyUp, 0);
 
-  ReceivePort? _receivePort;
+  KeyboardHookIsolate? _keyboardHookIsolate;
 
   KeyboardProvider() {
     initializeKeyboardHook();
@@ -24,8 +24,8 @@ class KeyboardProvider extends ChangeNotifier {
   get keyEvent => _event;
 
   void initializeKeyboardHook() async {
-    _receivePort = await KeyboardHook.isolated();
-    _receivePort!.listen((event) async {
+    _keyboardHookIsolate = KeyboardHookIsolate();
+    _keyboardHookIsolate!.addMouseMoveListener((x, y) async {
       if (await windowManager.isFocused()) {
         _event = KeyboardEvent(KeyboardEventType.keyUp, 0);
         notifyListeners();
