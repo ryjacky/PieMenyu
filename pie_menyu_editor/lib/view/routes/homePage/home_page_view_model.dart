@@ -36,16 +36,16 @@ class HomePageViewModel extends ChangeNotifier {
 
   Future<void> createProfile(
       String profName, String exePath, String profIcon) async {
-    if (profiles
-        .where((element) => element.exes.contains(exePath))
-        .isNotEmpty) {
+    if (await DB.getProfileByExe(exePath) != null) {
       throw Exception("This application is already added to a profile.");
     }
 
-    await DB.putProfile(Profile()
+    final profile = Profile()
       ..name = profName
-      ..exes.add(exePath)
-      ..iconBase64 = profIcon);
+      ..iconBase64 = profIcon;
+
+    await DB.putProfile(profile);
+    await DB.linkProfileToExe(profile, exePath);
 
     await updateState();
   }

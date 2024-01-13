@@ -95,20 +95,19 @@ class WindowController extends ChangeNotifier {
 
     String foregroundApp = ForegroundWindow.get().path;
 
-    List<Profile> profiles = await DB.getProfilesByExe(foregroundApp);
-    final defaultProf = (await DB.getProfiles(ids: [1])).firstOrNull;
-    if (defaultProf != null) {
-      profiles.add(defaultProf);
-    }
+    List<Profile> profiles = [
+      await DB.getProfileByExe(foregroundApp),
+      (await DB.getProfiles(ids: [1])).firstOrNull
+    ].whereType<Profile>().toList();
 
     if (profiles.isEmpty) {
       dev.log("Database possibly corrupted");
     }
 
     for (Profile profile in profiles) {
-      if (await loadCorrespondingPieMenu(profile, hotKey)){
+      if (await loadCorrespondingPieMenu(profile, hotKey)) {
         final pieCenterScreenPosition =
-        await screenRetriever.getCursorScreenPoint();
+            await screenRetriever.getCursorScreenPoint();
 
         await windowManager.setPosition(Offset(
             pieCenterScreenPosition.dx - windowSize.width / 2,
@@ -131,7 +130,7 @@ class WindowController extends ChangeNotifier {
               hotKey.modifiers?.contains(KeyModifier.alt)) {
         try {
           pieMenuProvider.pieMenu = profile.pieMenus.firstWhere(
-                  (element) => element.id == hotkeyToPieMenuId.pieMenuId);
+              (element) => element.id == hotkeyToPieMenuId.pieMenuId);
           pieMenuProvider.loadPieItems();
 
           return true;

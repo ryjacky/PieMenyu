@@ -22,24 +22,19 @@ const ProfileSchema = CollectionSchema(
       name: r'enabled',
       type: IsarType.bool,
     ),
-    r'exes': PropertySchema(
-      id: 1,
-      name: r'exes',
-      type: IsarType.stringList,
-    ),
     r'hotkeyToPieMenuIdList': PropertySchema(
-      id: 2,
+      id: 1,
       name: r'hotkeyToPieMenuIdList',
       type: IsarType.objectList,
       target: r'HotkeyToPieMenuId',
     ),
     r'iconBase64': PropertySchema(
-      id: 3,
+      id: 2,
       name: r'iconBase64',
       type: IsarType.string,
     ),
     r'name': PropertySchema(
-      id: 4,
+      id: 3,
       name: r'name',
       type: IsarType.string,
     )
@@ -51,6 +46,13 @@ const ProfileSchema = CollectionSchema(
   idName: r'id',
   indexes: {},
   links: {
+    r'exes': LinkSchema(
+      id: -8697642031775185937,
+      name: r'exes',
+      target: r'ProfileExe',
+      single: false,
+      linkName: r'profile',
+    ),
     r'pieMenus': LinkSchema(
       id: 7685601216207819822,
       name: r'pieMenus',
@@ -71,13 +73,6 @@ int _profileEstimateSize(
   Map<Type, List<int>> allOffsets,
 ) {
   var bytesCount = offsets.last;
-  bytesCount += 3 + object.exes.length * 3;
-  {
-    for (var i = 0; i < object.exes.length; i++) {
-      final value = object.exes[i];
-      bytesCount += value.length * 3;
-    }
-  }
   bytesCount += 3 + object.hotkeyToPieMenuIdList.length * 3;
   {
     final offsets = allOffsets[HotkeyToPieMenuId]!;
@@ -99,15 +94,14 @@ void _profileSerialize(
   Map<Type, List<int>> allOffsets,
 ) {
   writer.writeBool(offsets[0], object.enabled);
-  writer.writeStringList(offsets[1], object.exes);
   writer.writeObjectList<HotkeyToPieMenuId>(
-    offsets[2],
+    offsets[1],
     allOffsets,
     HotkeyToPieMenuIdSchema.serialize,
     object.hotkeyToPieMenuIdList,
   );
-  writer.writeString(offsets[3], object.iconBase64);
-  writer.writeString(offsets[4], object.name);
+  writer.writeString(offsets[2], object.iconBase64);
+  writer.writeString(offsets[3], object.name);
 }
 
 Profile _profileDeserialize(
@@ -118,12 +112,11 @@ Profile _profileDeserialize(
 ) {
   final object = Profile(
     enabled: reader.readBoolOrNull(offsets[0]) ?? true,
-    iconBase64: reader.readStringOrNull(offsets[3]) ?? "",
-    name: reader.readStringOrNull(offsets[4]) ?? 'New Profile',
+    iconBase64: reader.readStringOrNull(offsets[2]) ?? "",
+    name: reader.readStringOrNull(offsets[3]) ?? 'New Profile',
   );
-  object.exes = reader.readStringList(offsets[1]) ?? [];
   object.hotkeyToPieMenuIdList = reader.readObjectList<HotkeyToPieMenuId>(
-        offsets[2],
+        offsets[1],
         HotkeyToPieMenuIdSchema.deserialize,
         allOffsets,
         HotkeyToPieMenuId(),
@@ -143,8 +136,6 @@ P _profileDeserializeProp<P>(
     case 0:
       return (reader.readBoolOrNull(offset) ?? true) as P;
     case 1:
-      return (reader.readStringList(offset) ?? []) as P;
-    case 2:
       return (reader.readObjectList<HotkeyToPieMenuId>(
             offset,
             HotkeyToPieMenuIdSchema.deserialize,
@@ -152,9 +143,9 @@ P _profileDeserializeProp<P>(
             HotkeyToPieMenuId(),
           ) ??
           []) as P;
-    case 3:
+    case 2:
       return (reader.readStringOrNull(offset) ?? "") as P;
-    case 4:
+    case 3:
       return (reader.readStringOrNull(offset) ?? 'New Profile') as P;
     default:
       throw IsarError('Unknown property with id $propertyId');
@@ -166,11 +157,12 @@ Id _profileGetId(Profile object) {
 }
 
 List<IsarLinkBase<dynamic>> _profileGetLinks(Profile object) {
-  return [object.pieMenus];
+  return [object.exes, object.pieMenus];
 }
 
 void _profileAttach(IsarCollection<dynamic> col, Id id, Profile object) {
   object.id = id;
+  object.exes.attach(col, col.isar.collection<ProfileExe>(), r'exes', id);
   object.pieMenus.attach(col, col.isar.collection<PieMenu>(), r'pieMenus', id);
 }
 
@@ -258,221 +250,6 @@ extension ProfileQueryFilter
         property: r'enabled',
         value: value,
       ));
-    });
-  }
-
-  QueryBuilder<Profile, Profile, QAfterFilterCondition> exesElementEqualTo(
-    String value, {
-    bool caseSensitive = true,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.equalTo(
-        property: r'exes',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<Profile, Profile, QAfterFilterCondition> exesElementGreaterThan(
-    String value, {
-    bool include = false,
-    bool caseSensitive = true,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.greaterThan(
-        include: include,
-        property: r'exes',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<Profile, Profile, QAfterFilterCondition> exesElementLessThan(
-    String value, {
-    bool include = false,
-    bool caseSensitive = true,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.lessThan(
-        include: include,
-        property: r'exes',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<Profile, Profile, QAfterFilterCondition> exesElementBetween(
-    String lower,
-    String upper, {
-    bool includeLower = true,
-    bool includeUpper = true,
-    bool caseSensitive = true,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.between(
-        property: r'exes',
-        lower: lower,
-        includeLower: includeLower,
-        upper: upper,
-        includeUpper: includeUpper,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<Profile, Profile, QAfterFilterCondition> exesElementStartsWith(
-    String value, {
-    bool caseSensitive = true,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.startsWith(
-        property: r'exes',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<Profile, Profile, QAfterFilterCondition> exesElementEndsWith(
-    String value, {
-    bool caseSensitive = true,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.endsWith(
-        property: r'exes',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<Profile, Profile, QAfterFilterCondition> exesElementContains(
-      String value,
-      {bool caseSensitive = true}) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.contains(
-        property: r'exes',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<Profile, Profile, QAfterFilterCondition> exesElementMatches(
-      String pattern,
-      {bool caseSensitive = true}) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.matches(
-        property: r'exes',
-        wildcard: pattern,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<Profile, Profile, QAfterFilterCondition> exesElementIsEmpty() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.equalTo(
-        property: r'exes',
-        value: '',
-      ));
-    });
-  }
-
-  QueryBuilder<Profile, Profile, QAfterFilterCondition>
-      exesElementIsNotEmpty() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.greaterThan(
-        property: r'exes',
-        value: '',
-      ));
-    });
-  }
-
-  QueryBuilder<Profile, Profile, QAfterFilterCondition> exesLengthEqualTo(
-      int length) {
-    return QueryBuilder.apply(this, (query) {
-      return query.listLength(
-        r'exes',
-        length,
-        true,
-        length,
-        true,
-      );
-    });
-  }
-
-  QueryBuilder<Profile, Profile, QAfterFilterCondition> exesIsEmpty() {
-    return QueryBuilder.apply(this, (query) {
-      return query.listLength(
-        r'exes',
-        0,
-        true,
-        0,
-        true,
-      );
-    });
-  }
-
-  QueryBuilder<Profile, Profile, QAfterFilterCondition> exesIsNotEmpty() {
-    return QueryBuilder.apply(this, (query) {
-      return query.listLength(
-        r'exes',
-        0,
-        false,
-        999999,
-        true,
-      );
-    });
-  }
-
-  QueryBuilder<Profile, Profile, QAfterFilterCondition> exesLengthLessThan(
-    int length, {
-    bool include = false,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.listLength(
-        r'exes',
-        0,
-        true,
-        length,
-        include,
-      );
-    });
-  }
-
-  QueryBuilder<Profile, Profile, QAfterFilterCondition> exesLengthGreaterThan(
-    int length, {
-    bool include = false,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.listLength(
-        r'exes',
-        length,
-        include,
-        999999,
-        true,
-      );
-    });
-  }
-
-  QueryBuilder<Profile, Profile, QAfterFilterCondition> exesLengthBetween(
-    int lower,
-    int upper, {
-    bool includeLower = true,
-    bool includeUpper = true,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.listLength(
-        r'exes',
-        lower,
-        includeLower,
-        upper,
-        includeUpper,
-      );
     });
   }
 
@@ -890,6 +667,62 @@ extension ProfileQueryObject
 
 extension ProfileQueryLinks
     on QueryBuilder<Profile, Profile, QFilterCondition> {
+  QueryBuilder<Profile, Profile, QAfterFilterCondition> exes(
+      FilterQuery<ProfileExe> q) {
+    return QueryBuilder.apply(this, (query) {
+      return query.link(q, r'exes');
+    });
+  }
+
+  QueryBuilder<Profile, Profile, QAfterFilterCondition> exesLengthEqualTo(
+      int length) {
+    return QueryBuilder.apply(this, (query) {
+      return query.linkLength(r'exes', length, true, length, true);
+    });
+  }
+
+  QueryBuilder<Profile, Profile, QAfterFilterCondition> exesIsEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.linkLength(r'exes', 0, true, 0, true);
+    });
+  }
+
+  QueryBuilder<Profile, Profile, QAfterFilterCondition> exesIsNotEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.linkLength(r'exes', 0, false, 999999, true);
+    });
+  }
+
+  QueryBuilder<Profile, Profile, QAfterFilterCondition> exesLengthLessThan(
+    int length, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.linkLength(r'exes', 0, true, length, include);
+    });
+  }
+
+  QueryBuilder<Profile, Profile, QAfterFilterCondition> exesLengthGreaterThan(
+    int length, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.linkLength(r'exes', length, include, 999999, true);
+    });
+  }
+
+  QueryBuilder<Profile, Profile, QAfterFilterCondition> exesLengthBetween(
+    int lower,
+    int upper, {
+    bool includeLower = true,
+    bool includeUpper = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.linkLength(
+          r'exes', lower, includeLower, upper, includeUpper);
+    });
+  }
+
   QueryBuilder<Profile, Profile, QAfterFilterCondition> pieMenus(
       FilterQuery<PieMenu> q) {
     return QueryBuilder.apply(this, (query) {
@@ -1045,12 +878,6 @@ extension ProfileQueryWhereDistinct
     });
   }
 
-  QueryBuilder<Profile, Profile, QDistinct> distinctByExes() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addDistinctBy(r'exes');
-    });
-  }
-
   QueryBuilder<Profile, Profile, QDistinct> distinctByIconBase64(
       {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
@@ -1077,12 +904,6 @@ extension ProfileQueryProperty
   QueryBuilder<Profile, bool, QQueryOperations> enabledProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'enabled');
-    });
-  }
-
-  QueryBuilder<Profile, List<String>, QQueryOperations> exesProperty() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addPropertyName(r'exes');
     });
   }
 

@@ -4,6 +4,7 @@ import 'dart:developer';
 
 import 'package:isar/isar.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:pie_menyu_core/db/profile_exe.dart';
 
 import 'pie_item.dart';
 import 'pie_item_task.dart';
@@ -18,7 +19,7 @@ class DB {
   static initialize() async {
     final dir = await getApplicationSupportDirectory();
     DB._isar = await Isar.open(
-        [ProfileSchema, PieMenuSchema, PieItemSchema, PieItemTaskSchema],
+        [ProfileSchema, PieMenuSchema, PieItemSchema, PieItemTaskSchema, ProfileExeSchema],
         directory: dir.parent.path);
 
     // Create initial record if not existed
@@ -37,14 +38,27 @@ class DB {
     return (await _isar.profiles.getAll(ids)).whereType<Profile>().toList();
   }
 
-  static Future<List<Profile>> getProfilesByExe(String exe) async {
-    return (await _isar.profiles
-            .where()
-            .filter()
-            .exesElementContains(exe)
-            .findAll())
-        .whereType<Profile>()
-        .toList();
+  static Future<Profile?> getProfileByExe(String path) async {
+    ProfileExe? profileExe = await _isar.profileExes.where().pathEqualTo(path).findFirst();
+
+    if (profileExe == null) {
+      return null;
+    }
+
+    await profileExe.profile.load();
+    return profileExe.profile.value;
+  }
+
+  static Future<void> linkProfileToExe(Profile profile, String path) async {
+    ProfileExe? profileExe = await _isar.profileExes.where().pathEqualTo(path).findFirst();
+    profileExe ??= ProfileExe(path: path);
+
+    profileExe.profile.value = profile;
+
+    await isar.writeTxn(() async {
+      await isar.profileExes.put(profileExe!);
+      await profileExe.profile.save();
+    });
   }
 
   static Future<List<PieMenu>> getPieMenus(
