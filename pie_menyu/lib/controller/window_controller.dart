@@ -21,9 +21,9 @@ import 'package:pie_menyu_core/providers/pie_menu_provider.dart';
 import 'package:screen_retriever/screen_retriever.dart';
 import 'package:window_manager/window_manager.dart';
 
-import '../system/keyboard/keyboard_event.dart';
-import '../system/keyboard/keyboard_provider.dart';
-import '../system/mouse/mouse_cursor_provider.dart';
+import '../system/hooks/keyboard/keyboard_event.dart';
+import '../system/hooks/keyboard/keyboard_provider.dart';
+import '../system/hooks/mouse/mouse_cursor_provider.dart';
 import '../system/window/foreground_window.dart';
 
 class WindowController extends ChangeNotifier {

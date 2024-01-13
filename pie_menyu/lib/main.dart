@@ -4,7 +4,6 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:localization/localization.dart';
-import 'package:pie_menyu/system/mouse/mouse_cursor_provider.dart';
 import 'package:pie_menyu/system/pie_menyu_system_tray.dart';
 import 'package:pie_menyu_core/db/db.dart';
 import 'package:pie_menyu_core/db/pie_item.dart';
@@ -16,6 +15,7 @@ import 'package:provider/provider.dart';
 import 'package:window_manager/window_manager.dart';
 
 import 'controller/window_controller.dart';
+import 'system/hooks/mouse/mouse_cursor_provider.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();

@@ -3,13 +3,12 @@ import 'dart:isolate';
 
 import 'package:flutter/material.dart';
 import 'package:hotkey_manager/hotkey_manager.dart';
-import 'package:pie_menyu/system/keyboard/keyboard_event.dart';
-import 'package:pie_menyu/system/keyboard/keyboard_hook.dart';
 import 'package:pie_menyu_core/db/db.dart';
 import 'package:pie_menyu_core/db/profile.dart';
 import 'package:window_manager/window_manager.dart';
 
-import '../system_hook.dart';
+import 'keyboard_event.dart';
+import 'keyboard_hook.dart';
 
 class KeyboardProvider extends ChangeNotifier {
   KeyboardEvent _event = KeyboardEvent(KeyboardEventType.keyUp, 0);
