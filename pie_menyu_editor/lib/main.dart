@@ -11,6 +11,7 @@ import 'package:pie_menyu_core/db/db.dart';
 
 import 'theme/color_schemes.g.dart';
 import 'theme/text_theme.g.dart';
+import 'package:path/path.dart' as p;
 
 Future<void> main() async {
   LocalJsonLocalization.delegate.directories = ['lib/i18n'];
@@ -18,6 +19,12 @@ Future<void> main() async {
   // For hot reload, `unregisterAll()` needs to be called.
   await hotKeyManager.unregisterAll();
   await DB.initialize();
+
+  // Start pieMenyu
+  Process.start(
+      p.join(Directory(Platform.resolvedExecutable).parent.path, "pie_menyu",
+          "pie_menyu.exe"),
+      [], mode: ProcessStartMode.detached);
 
   PackageInfo packageInfo = await PackageInfo.fromPlatform();
 
