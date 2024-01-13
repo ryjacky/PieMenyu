@@ -16,14 +16,14 @@ class KeyboardProvider extends ChangeNotifier {
   KeyboardHookIsolate? _keyboardHookIsolate;
 
   KeyboardProvider() {
-    initializeKeyboardHook();
-    initializeKeyDownHook();
+    initializeKeyDownHook().then((value) => initializeKeyboardHook())
+    ;
   }
 
   get keyEvent => _event;
 
   void initializeKeyboardHook() async {
-    _keyboardHookIsolate = KeyboardHookIsolate();
+    _keyboardHookIsolate = KeyboardHookIsolate(hotKeyManager.registeredHotKeyList);
     _keyboardHookIsolate!.addKeyUpListener(() async {
       if (await windowManager.isFocused()) {
         _event = KeyboardEvent(KeyboardEventType.keyUp, 0);
@@ -37,7 +37,7 @@ class KeyboardProvider extends ChangeNotifier {
     super.dispose();
   }
 
-  void initializeKeyDownHook() async {
+  Future<void> initializeKeyDownHook() async {
     await hotKeyManager.unregisterAll();
     List<Profile> profiles = await DB.getProfiles();
     for (Profile profile in profiles) {

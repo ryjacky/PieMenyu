@@ -2,6 +2,7 @@ import 'dart:ffi';
 import 'dart:isolate';
 
 import 'package:ffi/ffi.dart';
+import 'package:hotkey_manager/hotkey_manager.dart';
 import 'package:pie_menyu/system/hooks/system_hook_isolate.dart';
 import 'package:win32/win32.dart';
 
@@ -13,10 +14,10 @@ class KeyboardHookIsolate extends SystemHookIsolate {
 
   final List<Function()> _keyUpListener = [];
 
-  factory KeyboardHookIsolate() {
+  factory KeyboardHookIsolate(List<HotKey> hotkeyList) {
     if (_keyboardHookIsolate == null) {
       _keyboardHookIsolate = KeyboardHookIsolate._();
-      _keyboardHookIsolate!.startIsolated(KeyboardHook());
+      _keyboardHookIsolate!.startIsolated(KeyboardHook()..hotKeyList = hotkeyList);
     }
     return _keyboardHookIsolate!;
   }
@@ -38,11 +39,17 @@ class KeyboardHookIsolate extends SystemHookIsolate {
     }
   }
 }
+
 class KeyboardHook extends SystemHook {
+  List<HotKey> hotKeyList = [];
   int mouseHookProc(int nCode, int wParam, int lParam) {
     final pKeyboardStruct = Pointer<KBDLLHOOKSTRUCT>.fromAddress(lParam);
-    if (wParam == WM_KEYUP || wParam == WM_SYSKEYUP) {
-      sendPort?.send(KeyboardEvent(KeyboardEventType.keyUp, pKeyboardStruct.ref.vkCode));
+    if (wParam == WM_KEYDOWN || wParam == WM_SYSKEYDOWN) {
+      sendPort?.send(
+          KeyboardEvent(KeyboardEventType.keyDown, pKeyboardStruct.ref.vkCode));
+    } else if (wParam == WM_KEYUP || wParam == WM_SYSKEYUP) {
+      sendPort?.send(
+          KeyboardEvent(KeyboardEventType.keyUp, pKeyboardStruct.ref.vkCode));
     }
     return CallNextHookEx(hookHandle, nCode, wParam, lParam);
   }
