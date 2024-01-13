@@ -9,13 +9,8 @@ abstract class SystemHookIsolate {
 
   int _hookHandle = NULL;
   Isolate? _isolate;
-  final List<Function(int, int)> _mouseMoveListeners = [];
 
   SystemHookIsolate._();
-
-  addMouseMoveListener(Function(int, int) listener) {
-    _mouseMoveListeners.add(listener);
-  }
 
   Future<void> _startIsolated(SystemHook hook) async {
     final receivePort = ReceivePort();
