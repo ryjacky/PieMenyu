@@ -1,4 +1,3 @@
-import 'dart:developer';
 import 'dart:ffi';
 import 'dart:isolate';
 
@@ -12,7 +11,7 @@ import 'keyboard_event.dart';
 class KeyboardHookIsolate extends SystemHookIsolate {
   static KeyboardHookIsolate? _keyboardHookIsolate;
 
-  final List<Function(int, int)> _mouseMoveListeners = [];
+  final List<Function()> _keyUpListener = [];
 
   factory KeyboardHookIsolate() {
     if (_keyboardHookIsolate == null) {
@@ -24,13 +23,19 @@ class KeyboardHookIsolate extends SystemHookIsolate {
 
   KeyboardHookIsolate._();
 
-  addMouseMoveListener(Function(int, int) listener) {
-    _mouseMoveListeners.add(listener);
+  addKeyUpListener(Function() listener) {
+    _keyUpListener.add(listener);
   }
 
   @override
   void onMessage(message) {
-    // TODO: implement onMessage
+    if (message is KeyboardEvent) {
+      if (message.type == KeyboardEventType.keyUp) {
+        for (var listener in _keyUpListener) {
+          listener();
+        }
+      }
+    }
   }
 }
 class KeyboardHook extends SystemHook {
