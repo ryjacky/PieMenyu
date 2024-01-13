@@ -10,9 +10,7 @@ abstract class SystemHookIsolate {
   int _hookHandle = NULL;
   Isolate? _isolate;
 
-  SystemHookIsolate._();
-
-  Future<void> _startIsolated(SystemHook hook) async {
+  Future<void> startIsolated(SystemHook hook) async {
     final receivePort = ReceivePort();
 
     _isolate = await Isolate.spawn((sendPort) => hook.start(sendPort), receivePort.sendPort);
