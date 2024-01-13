@@ -18,6 +18,7 @@ extension HookTypesExtension on HookTypes {
   }
 }
 
+@Deprecated("Use keyboard_hook.dart and mouse_hook.dart instead")
 class SystemHook {
   static Future<ReceivePort> isolated(HookTypes type) async {
     final receivePort = ReceivePort();
