@@ -24,7 +24,7 @@ class KeyboardProvider extends ChangeNotifier {
 
   void initializeKeyboardHook() async {
     _keyboardHookIsolate = KeyboardHookIsolate();
-    _keyboardHookIsolate!.addMouseMoveListener((x, y) async {
+    _keyboardHookIsolate!.addKeyUpListener(() async {
       if (await windowManager.isFocused()) {
         _event = KeyboardEvent(KeyboardEventType.keyUp, 0);
         notifyListeners();
