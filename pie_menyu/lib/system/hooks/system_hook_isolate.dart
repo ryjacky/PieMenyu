@@ -5,7 +5,7 @@ import 'package:pie_menyu/system/hooks/system_hook.dart';
 import 'package:win32/win32.dart';
 
 abstract class SystemHookIsolate {
-  static SystemHookIsolate? _instance;
+  static SystemHookIsolate? instance;
 
   int _hookHandle = NULL;
   Isolate? _isolate;
