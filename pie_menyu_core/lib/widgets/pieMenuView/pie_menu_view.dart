@@ -1,15 +1,16 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:pie_menyu_core/widgets/pieMenuView/pie_item_order_index_controller.dart';
 
-import '../db/pie_item.dart';
-import '../db/pie_menu.dart';
-import '../painter/pie_center_painter.dart';
-import 'pie_item_view.dart';
+import '../../db/pie_item.dart';
+import '../../db/pie_menu.dart';
+import '../../painter/pie_center_painter.dart';
+import '../pie_item_view.dart';
 
 class PieMenuView extends StatefulWidget {
   final PieMenu pieMenu;
-  final int pieItemOrderIndex;
+  final PieItemOrderIndexController pieItemOrderIndexController;
   final List<PieItem> pieItems;
 
   final Function(int pieItemOrderIndex)? onPieItemClicked;
@@ -17,7 +18,7 @@ class PieMenuView extends StatefulWidget {
   const PieMenuView({super.key,
     required this.pieMenu,
     required this.pieItems,
-    required this.pieItemOrderIndex,
+    required this.pieItemOrderIndexController,
     this.onPieItemClicked});
 
   @override
@@ -32,7 +33,12 @@ class _PieMenuViewState extends State<PieMenuView> {
   void initState() {
     super.initState();
 
-    pieItemOrderIndex = widget.pieItemOrderIndex;
+    pieItemOrderIndex = widget.pieItemOrderIndexController.value;
+    widget.pieItemOrderIndexController.addListener(() {
+      setState(() {
+        pieItemOrderIndex = widget.pieItemOrderIndexController.value;
+      });
+    });
   }
 
   @override
@@ -149,7 +155,7 @@ class _PieMenuViewState extends State<PieMenuView> {
   }
 
   double getPieCenterRotation() {
-    double result = 2 * pi * widget.pieItemOrderIndex / widget.pieItems.length;
+    double result = 2 * pi * pieItemOrderIndex / widget.pieItems.length;
     return (result.isNaN || result.isInfinite) ? 0 : result;
   }
 }
