@@ -10,7 +10,8 @@ import 'package:pie_menyu_core/db/pie_item.dart';
 import 'package:pie_menyu_core/db/pie_menu.dart';
 import 'package:pie_menyu_core/executor/executor_service.dart';
 import 'package:pie_menyu_core/providers/pie_menu_provider.dart';
-import 'package:pie_menyu_core/widgets/pie_menu_view.dart';
+import 'package:pie_menyu_core/widgets/pieMenuView/pie_menu_view.dart';
+import 'package:pie_menyu_core/widgets/pieMenuView/pie_item_order_index_controller.dart';
 import 'package:provider/provider.dart';
 import 'package:window_manager/window_manager.dart';
 
@@ -74,16 +75,22 @@ Future<bool> isRunning() async {
   return exeName.allMatches(result.stdout.toString()).length > 1;
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
   const MyApp({super.key});
 
-  // This widget is the root of your application.
+  @override
+  State<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
+  final pieItemIndexController = PieItemOrderIndexController(0);
+
   @override
   Widget build(BuildContext context) {
     final mousePosition = context.select<MouseCursorProvider, Offset>(
-        (value) => value.mouseEvent.position);
+            (value) => value.mouseEvent.position);
     final pieMenu =
-        context.select<PieMenuProvider, PieMenu>((value) => value.pieMenu);
+    context.select<PieMenuProvider, PieMenu>((value) => value.pieMenu);
     final pieItems = context
         .select<PieMenuProvider, List<PieItem>>((value) => value.pieItems);
 
@@ -96,6 +103,7 @@ class MyApp extends StatelessWidget {
 
     context.read<ExecutorService>().activePieItemOrderIndex =
         activePieItemOrderIndex;
+    pieItemIndexController.value = activePieItemOrderIndex;
 
     return MaterialApp(
       title: 'PieMenyu',
@@ -103,19 +111,20 @@ class MyApp extends StatelessWidget {
       home: Scaffold(
         backgroundColor: Colors.transparent,
         body: PieMenuView(
-            pieMenu: pieMenu,
-            pieItems: pieItems,
-            pieItemOrderIndex: activePieItemOrderIndex),
+          pieMenu: pieMenu,
+          pieItems: pieItems,
+          pieItemOrderIndexController: pieItemIndexController,
+        ),
       ),
     );
   }
 
   int getActivePieItemOrderIndex(
-    Offset pieCenterPosition,
-    Offset position,
-    PieMenu pieMenu,
-    List<PieItem> pieItems,
-  ) {
+      Offset pieCenterPosition,
+      Offset position,
+      PieMenu pieMenu,
+      List<PieItem> pieItems,
+      ) {
     if (pieItems.isEmpty) {
       return 0;
     }
@@ -135,7 +144,7 @@ class MyApp extends StatelessWidget {
     pieCenterRotation += 2 * pi / pieItems.length / 2;
 
     var activeBtnIndex =
-        (pieItems.length * pieCenterRotation / (2 * pi)).floor();
+    (pieItems.length * pieCenterRotation / (2 * pi)).floor();
 
     // Because we offset the rotation by half the angle of a pie item,
     // we need to mod by the number of pie items to get the correct index

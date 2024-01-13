@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:pie_menyu_core/db/pie_item.dart';
-import 'package:pie_menyu_core/widgets/pie_menu_view.dart';
+import 'package:pie_menyu_core/widgets/pieMenuView/pie_menu_view.dart';
+import 'package:pie_menyu_core/widgets/pieMenuView/pie_item_order_index_controller.dart';
 import 'package:pie_menyu_editor/view/routes/pieMenuEditorPage/pie_menu_editor_page_title_bar.dart';
 import 'package:pie_menyu_editor/view/routes/pieMenuEditorPage/pie_menu_properties.dart';
 import 'package:pie_menyu_editor/view/routes/pieMenuEditorPage/pie_menu_state.dart';
@@ -34,7 +35,7 @@ class _PieMenuEditorPageState extends State<PieMenuEditorPage> {
                   child: Container(
                     color: Colors.white30,
                     child: PieMenuView(
-                      pieItemOrderIndex: pieItemOrderIndex,
+                      pieItemOrderIndexController: PieItemOrderIndexController(pieItemOrderIndex),
                       pieMenu: pieMenu,
                       pieItems: pieItems.toList(),
                       onPieItemClicked: (pieItemIndex) {
