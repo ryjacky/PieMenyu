@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:pie_menyu/system/mouse/mouse_hook.dart';
 import 'package:window_manager/window_manager.dart';
@@ -9,6 +7,8 @@ import 'mouse_events.dart';
 class MouseCursorProvider extends ChangeNotifier {
   MouseEvent _mouseEvent = MouseEvent(position: Offset.zero);
 
+  MouseHookIsolate? _mouseHookIsolate;
+
   MouseCursorProvider() {
     initializeMouseHook();
   }
@@ -16,24 +16,18 @@ class MouseCursorProvider extends ChangeNotifier {
   MouseEvent get mouseEvent => _mouseEvent;
 
   void initializeMouseHook() async {
-    Stream out = await MouseHook.isolated();
-    out.listen((event) async {
-      if (!await windowManager.isFocused()) {
-        return;
-      }
-
-      try {
-        List<String> pos = event.toString().trim().split("\t");
-        _mouseEvent = MouseEvent(position: Offset(double.parse(pos[0]), double.parse(pos[1])));
+    _mouseHookIsolate = MouseHookIsolate();
+    _mouseHookIsolate!.addMouseMoveListener((x, y) async {
+      if (await windowManager.isFocused()) {
+        _mouseEvent = MouseEvent(position: Offset(x.toDouble(), y.toDouble()));
         notifyListeners();
-      } catch (e) {
-        log("Invalid mouse hook info: $event");
       }
     });
   }
 
   @override
   void dispose() {
+    _mouseHookIsolate?.stop();
     super.dispose();
   }
 }

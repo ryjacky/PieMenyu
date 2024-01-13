@@ -1,8 +1,15 @@
 import 'dart:io';
+import 'dart:ui';
 
 import 'package:system_tray/system_tray.dart';
 
 class PieMenyuSystemTray {
+  static final List<VoidCallback> _onExitCallbacks = [];
+
+  static addOnExitCallback(VoidCallback callback) {
+    _onExitCallbacks.add(callback);
+  }
+
   static initialize() async {
     final AppWindow appWindow = AppWindow();
     final SystemTray systemTray = SystemTray();
@@ -18,7 +25,12 @@ class PieMenyuSystemTray {
     await menu.buildFrom([
       MenuItemLabel(label: 'Show', onClicked: (menuItem) => appWindow.show()),
       MenuItemLabel(label: 'Hide', onClicked: (menuItem) => appWindow.hide()),
-      MenuItemLabel(label: 'Exit', onClicked: (menuItem) => appWindow.close()),
+      MenuItemLabel(label: 'Exit', onClicked: (menuItem) {
+        for (var callback in _onExitCallbacks) {
+          callback();
+        }
+        exit(0);
+      }),
     ]);
 
     // set context menu

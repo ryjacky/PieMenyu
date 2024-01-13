@@ -47,6 +47,9 @@ Future<void> main() async {
   });
 
   final windowControl = WindowController();
+  PieMenyuSystemTray.addOnExitCallback(() {
+    windowControl.mouseCursorProvider.dispose();
+  });
 
   runApp(
     MultiProvider(
