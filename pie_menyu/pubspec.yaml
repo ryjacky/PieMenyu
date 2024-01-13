@@ -74,7 +74,6 @@ flutter:
   assets:
    - assets/
    - lib/i18n/
-   - windows/support/
    - support/foregroundWindowEvent.exe
 
   # An image asset can refer to one or more resolution-specific "variants", see
