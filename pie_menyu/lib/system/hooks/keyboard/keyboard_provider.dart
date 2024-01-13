@@ -1,5 +1,4 @@
 import 'dart:developer';
-import 'dart:isolate';
 
 import 'package:flutter/material.dart';
 import 'package:hotkey_manager/hotkey_manager.dart';
@@ -7,6 +6,7 @@ import 'package:pie_menyu_core/db/db.dart';
 import 'package:pie_menyu_core/db/profile.dart';
 import 'package:window_manager/window_manager.dart';
 
+import '../../window/foreground_window_event.dart';
 import 'keyboard_event.dart';
 import 'keyboard_hook.dart';
 
@@ -16,14 +16,18 @@ class KeyboardProvider extends ChangeNotifier {
   KeyboardHookIsolate? _keyboardHookIsolate;
 
   KeyboardProvider() {
-    initializeKeyDownHook().then((value) => initializeKeyboardHook())
-    ;
+    setKeyDownHook().then((value) => initializeKeyboardHook());
+    ForegroundWindowEvent().start();
+    ForegroundWindowEvent().addListener((exePath) {
+      setKeyDownHook(exePath: exePath);
+    });
   }
 
   get keyEvent => _event;
 
   void initializeKeyboardHook() async {
-    _keyboardHookIsolate = KeyboardHookIsolate(hotKeyManager.registeredHotKeyList);
+    _keyboardHookIsolate =
+        KeyboardHookIsolate(hotKeyManager.registeredHotKeyList);
     _keyboardHookIsolate!.addKeyUpListener(() async {
       if (await windowManager.isFocused()) {
         _event = KeyboardEvent(KeyboardEventType.keyUp, 0);
@@ -37,12 +41,16 @@ class KeyboardProvider extends ChangeNotifier {
     super.dispose();
   }
 
-  Future<void> initializeKeyDownHook() async {
+  Future<void> setKeyDownHook({String exePath = ""}) async {
     await hotKeyManager.unregisterAll();
-    List<Profile> profiles = await DB.getProfiles();
-    for (Profile profile in profiles) {
-      for (HotkeyToPieMenuId hotkeyToPieMenuId
-          in profile.hotkeyToPieMenuIdList) {
+
+    List<Profile> profiles = [
+      await DB.getProfileByExe(exePath),
+      (await DB.getProfiles(ids: [1])).firstOrNull
+    ].whereType<Profile>().toList();
+
+    for (var profile in profiles) {
+      for (var hotkeyToPieMenuId in profile.hotkeyToPieMenuIdList) {
         await hotKeyManager.register(
           HotKey(hotkeyToPieMenuId.keyCode,
               modifiers: hotkeyToPieMenuId.keyModifiers,
