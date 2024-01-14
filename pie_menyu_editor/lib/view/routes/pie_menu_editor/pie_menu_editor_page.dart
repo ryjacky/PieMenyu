@@ -5,7 +5,7 @@ import 'package:pie_menyu_core/widgets/pieMenuView/pie_item_order_index_controll
 import 'package:provider/provider.dart';
 
 import 'pie_menu_editor_page_title_bar.dart';
-import 'pie_menu_properties.dart';
+import 'editor_panel/editor_panel.dart';
 import 'pie_menu_state.dart';
 
 class PieMenuEditorPage extends StatefulWidget {
@@ -46,7 +46,7 @@ class _PieMenuEditorPageState extends State<PieMenuEditorPage> {
                     ),
                   ),
                 ),
-                const SizedBox(width: 325, child: PieMenuProperties()),
+                const SizedBox(width: 325, child: EditorPanel()),
               ],
             ),
           ),

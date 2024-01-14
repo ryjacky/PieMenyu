@@ -13,8 +13,8 @@ import 'package:pie_menyu_core/pieItemTasks/send_text_task.dart';
 import 'package:pie_menyu_editor/view/widgets/icon_button.dart';
 import 'package:provider/provider.dart';
 
-import 'pie_item_task_list.dart';
-import 'pie_menu_state.dart';
+import '../pie_item_task_list.dart';
+import '../pie_menu_state.dart';
 
 class ActionsTab extends StatelessWidget {
   const ActionsTab({super.key});
