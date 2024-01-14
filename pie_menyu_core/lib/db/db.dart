@@ -18,7 +18,6 @@ class DB {
 
   static Isar get isar => _isar;
 
-  ///
   static initialize(Directory dbLocation) async {
     DB._isar = await Isar.open(
         [ProfileSchema, PieMenuSchema, PieItemSchema, PieItemTaskSchema, ProfileExeSchema],
@@ -156,7 +155,7 @@ class DB {
     return pieMenu.profiles.length;
   }
 
-  static void updateProfile(Profile profile) async {
+  static Future<void> updateProfile(Profile profile) async {
     await _isar.writeTxn(() async {
       await _isar.profiles.put(profile);
     });
@@ -220,30 +219,6 @@ class DB {
   static Future<void> putPieItemTasks(List<PieItemTask> tasks) async {
     await _isar.writeTxn(() async {
       await _isar.pieItemTasks.putAll(tasks);
-    });
-  }
-
-  @Deprecated("Use updatePieItemTasks instead")
-  static addTasksToPieItem(List<PieItemTask> tasks, PieItem pieItem) {
-    pieItem.tasks.addAll(tasks);
-    _isar.writeTxn(() async {
-      pieItem.tasks.save();
-    });
-  }
-
-  static updatePieItemTasks(List<PieItemTask> tasks, PieItem pieItem) {
-    final taskToDelete = [];
-    for (PieItemTask task in pieItem.tasks) {
-      if (!tasks.contains(task)) {
-        taskToDelete.add(task);
-      }
-    }
-
-    pieItem.tasks.removeAll(taskToDelete);
-    pieItem.tasks.addAll(tasks);
-
-    _isar.writeTxn(() async {
-      pieItem.tasks.save();
     });
   }
 }
