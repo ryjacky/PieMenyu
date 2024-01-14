@@ -180,4 +180,15 @@ class PieMenuState extends ChangeNotifier {
     notifyListeners();
   }
 
+  bool removePieItem(PieItem pieItem) {
+    if (_pieItems.length <= 1) {
+      return false;
+    }
+
+    _pieItems.remove(pieItem);
+    _pieItemTasks.remove(pieItem.id);
+    notifyListeners();
+    return true;
+  }
+
 }
