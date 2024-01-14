@@ -10,14 +10,14 @@ import 'package:pie_menyu_core/pieItemTasks/open_url_task.dart';
 import 'package:pie_menyu_core/pieItemTasks/run_file_task.dart';
 import 'package:pie_menyu_core/pieItemTasks/send_key_task.dart';
 import 'package:pie_menyu_core/pieItemTasks/send_text_task.dart';
-import 'package:pie_menyu_editor/view/routes/pieMenuEditorPage/pie_menu_state.dart';
 import 'package:pie_menyu_editor/view/widgets/icon_button.dart';
 import 'package:provider/provider.dart';
 
 import 'pie_item_task_list.dart';
+import 'pie_menu_state.dart';
 
-class PieMenuPropertyTabActions extends StatelessWidget {
-  const PieMenuPropertyTabActions({super.key});
+class ActionsTab extends StatelessWidget {
+  const ActionsTab({super.key});
 
   final double gap = 6;
 

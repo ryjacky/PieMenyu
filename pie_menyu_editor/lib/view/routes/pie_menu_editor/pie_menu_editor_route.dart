@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:pie_menyu_core/db/pie_menu.dart';
-import 'package:pie_menyu_editor/view/routes/pieMenuEditorPage/pie_menu_editor_page.dart';
-import 'package:pie_menyu_editor/view/routes/pieMenuEditorPage/pie_menu_state.dart';
 import 'package:provider/provider.dart';
 
-class PieMenuEditorPageRoute extends StatelessWidget {
+import 'pie_menu_editor_page.dart';
+import 'pie_menu_state.dart';
+
+class PieMenuEditorRoute extends StatelessWidget {
   final PieMenu pieMenu;
 
-  const PieMenuEditorPageRoute(this.pieMenu, {super.key});
+  const PieMenuEditorRoute(this.pieMenu, {super.key});
 
   @override
   Widget build(BuildContext context) {

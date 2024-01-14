@@ -4,9 +4,9 @@ import 'package:gap/gap.dart';
 import 'package:localization/localization.dart';
 import 'package:pie_menyu_core/pieItemTasks/open_folder_task.dart';
 import 'package:pie_menyu_core/pieItemTasks/run_file_task.dart';
+import 'package:pie_menyu_editor/view/routes/pie_menu_editor/pie_menu_state.dart';
 import 'package:provider/provider.dart';
 
-import '../../routes/pieMenuEditorPage/pie_menu_state.dart';
 import 'pie_item_task_card.dart';
 
 class OpenFolderTaskCard extends StatefulWidget {

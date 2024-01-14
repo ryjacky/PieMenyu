@@ -5,13 +5,14 @@ import 'package:localization/localization.dart';
 import 'package:pie_menyu_core/db/db.dart';
 import 'package:pie_menyu_core/db/pie_menu.dart';
 import 'package:pie_menyu_core/db/profile.dart';
-import 'package:pie_menyu_editor/view/routes/homePage/home_page_view_model.dart';
-import 'package:pie_menyu_editor/view/routes/pieMenuEditorPage/pie_menu_editor_page_route.dart';
 import 'package:pie_menyu_editor/view/widgets/PrimaryButton.dart';
 import 'package:pie_menyu_editor/view/widgets/TableActionButton.dart';
 import 'package:pie_menyu_editor/view/widgets/key_press_recorder.dart';
 import 'package:pie_menyu_editor/view/widgets/minimal_text_field.dart';
 import 'package:provider/provider.dart';
+
+import '../pie_menu_editor/pie_menu_editor_route.dart';
+import 'home_page_view_model.dart';
 
 class RightHomePanel extends StatefulWidget {
   final Profile profile;
@@ -139,7 +140,7 @@ class _RightHomePanelState extends State<RightHomePanel> {
                                     Navigator.of(context).push(
                                       MaterialPageRoute(
                                         builder: (context) =>
-                                            PieMenuEditorPageRoute(pieMenu),
+                                            PieMenuEditorRoute(pieMenu),
                                       ),
                                     );
                                   },

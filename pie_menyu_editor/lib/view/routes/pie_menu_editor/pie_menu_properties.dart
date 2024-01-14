@@ -8,7 +8,6 @@ import 'package:localization/localization.dart';
 import 'package:pie_menyu_core/db/pie_item.dart';
 import 'package:pie_menyu_editor/coreExtended/db.dart';
 import 'package:pie_menyu_editor/system/file_icon.dart';
-import 'package:pie_menyu_editor/view/routes/pieMenuEditorPage/pie_menu_state.dart';
 import 'package:pie_menyu_editor/view/widgets/PrimaryButton.dart';
 import 'package:pie_menyu_editor/view/widgets/draggable_number_field.dart';
 import 'package:pie_menyu_editor/view/widgets/expansion_color_picker_tile.dart';
@@ -17,6 +16,7 @@ import 'package:pie_menyu_editor/view/widgets/minimal_text_field.dart';
 import 'package:provider/provider.dart';
 
 import 'pie_menu_property_tab_actions.dart';
+import 'pie_menu_state.dart';
 
 class PieMenuProperties extends StatefulWidget {
   const PieMenuProperties({super.key});
@@ -359,7 +359,7 @@ class _PieMenuPropertiesState extends State<PieMenuProperties> {
                             ),
                           ),
                         ),
-                        const PieMenuPropertyTabActions(),
+                        const ActionsTab(),
                       ],
                     ),
                   ),

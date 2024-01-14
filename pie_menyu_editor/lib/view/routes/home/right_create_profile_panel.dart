@@ -4,8 +4,9 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:localization/localization.dart';
 import 'package:pie_menyu_editor/system/task_bar_process_info.dart';
-import 'package:pie_menyu_editor/view/routes/homePage/home_page_view_model.dart';
 import 'package:provider/provider.dart';
+
+import 'home_page_view_model.dart';
 
 class RightCreateProfilePanel extends StatefulWidget {
   const RightCreateProfilePanel({super.key});

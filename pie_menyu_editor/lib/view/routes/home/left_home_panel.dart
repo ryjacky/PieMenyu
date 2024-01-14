@@ -3,10 +3,11 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:localization/localization.dart';
 import 'package:pie_menyu_core/db/db.dart';
 import 'package:pie_menyu_core/db/profile.dart';
-import 'package:pie_menyu_editor/view/routes/homePage/home_page_view_model.dart';
 import 'package:pie_menyu_editor/view/widgets/PrimaryButton.dart';
 import 'package:pie_menyu_editor/view/widgets/profile_list_item.dart';
 import 'package:provider/provider.dart';
+
+import 'home_page_view_model.dart';
 
 class LeftHomePanel extends StatefulWidget {
   final VoidCallback onCreateProfile;
