@@ -1,12 +1,7 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
-import 'package:hotkey_manager/hotkey_manager.dart';
 import 'package:launch_at_startup/launch_at_startup.dart';
 import 'package:localization/localization.dart';
-import 'package:pie_menyu_editor/settings/setting_keys.dart';
-import 'package:pie_menyu_editor/view/widgets/key_press_recorder.dart';
 import 'package:pie_menyu_editor/view/widgets/material_3_switch.dart';
 import 'package:pie_menyu_editor/view/widgets/setting_list_tile.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -20,7 +15,6 @@ class RightSettingPanel extends StatefulWidget {
 
 class _RightSettingPanelState extends State<RightSettingPanel> {
   bool isLaunchAtStartup = false;
-  HotKey? escapeKey;
 
   SharedPreferences? prefs;
 
@@ -34,12 +28,6 @@ class _RightSettingPanelState extends State<RightSettingPanel> {
   loadSettings() async {
     isLaunchAtStartup = await launchAtStartup.isEnabled();
     prefs = await SharedPreferences.getInstance();
-    try {
-      escapeKey = HotKey.fromJson(
-          jsonDecode(prefs?.getString(SettingKeys.escapeKey.key) ?? '{}'));
-    } catch (e) {
-      escapeKey = null;
-    }
 
     setState(() {});
   }
@@ -88,22 +76,6 @@ class _RightSettingPanelState extends State<RightSettingPanel> {
                       ),
                     ),
                     const Gap(20),
-                    SettingListTile(
-                        title: "setting-escape-key".i18n(),
-                        subtitle: "setting-escape-key-description".i18n(),
-                        tileColor: Theme.of(context).colorScheme.surface,
-                        trailing: SizedBox(
-                          width: 100,
-                          child: KeyPressRecorder(
-                            key: ValueKey(escapeKey),
-                            initalHotKey: escapeKey,
-                            onHotKeyRecorded: (hotkey) {
-                              prefs?.setString(
-                                  SettingKeys.escapeKey.key, jsonEncode(hotkey.toJson()));
-                              setState(() {});
-                            },
-                          ),
-                        ))
                   ],
                 )),
           ),
