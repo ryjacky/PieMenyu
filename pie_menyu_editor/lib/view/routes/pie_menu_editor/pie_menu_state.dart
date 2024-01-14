@@ -157,4 +157,27 @@ class PieMenuState extends ChangeNotifier {
     notifyListeners();
   }
 
+  void reorderPieItem(int oldIndex, int newIndex) {
+    if (oldIndex == newIndex) {
+      return;
+    }
+
+    if (oldIndex > newIndex) {
+      newIndex += 1;
+    }
+
+    PieItem pieItem = _pieItems.elementAt(oldIndex);
+    _pieItems.remove(pieItem);
+
+    for (int i = newIndex; i < _pieItems.length; i++) {
+      _pieItems.add(pieItem);
+
+      pieItem = _pieItems.elementAt(newIndex);
+      _pieItems.remove(pieItem);
+    }
+    _pieItems.add(pieItem);
+
+    notifyListeners();
+  }
+
 }

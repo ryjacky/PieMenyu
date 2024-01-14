@@ -79,7 +79,9 @@ class _PieItemListTabState extends State<PieItemListTab> {
             ),
           ),
       ],
-      onReorder: (oldIndex, newIndex) {},
+      onReorder: (oldIndex, newIndex) {
+        context.read<PieMenuState>().reorderPieItem(oldIndex, newIndex - 1);
+      },
     );
   }
 
