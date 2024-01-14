@@ -27,3 +27,6 @@ migrate_working_dir/
 **/doc/api/
 .dart_tool/
 build/
+/default.isar
+/default.isar-lck
+/isar.dll
