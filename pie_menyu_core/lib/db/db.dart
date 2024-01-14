@@ -1,6 +1,7 @@
 library pie_menyu_core;
 
 import 'dart:developer';
+import 'dart:io';
 
 import 'package:hotkey_manager/hotkey_manager.dart';
 import 'package:isar/isar.dart';
@@ -17,11 +18,11 @@ class DB {
 
   static Isar get isar => _isar;
 
-  static initialize() async {
-    final dir = await getApplicationSupportDirectory();
+  ///
+  static initialize(Directory dbLocation) async {
     DB._isar = await Isar.open(
         [ProfileSchema, PieMenuSchema, PieItemSchema, PieItemTaskSchema, ProfileExeSchema],
-        directory: dir.parent.path);
+        directory: dbLocation.parent.path);
 
     final defaultProf = Profile(name: 'Default Profile');
     final defaultProfExe = ProfileExe(path: "global")..profile.value = defaultProf;

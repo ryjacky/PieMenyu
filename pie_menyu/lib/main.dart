@@ -4,6 +4,7 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:localization/localization.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:pie_menyu/system/pie_menyu_system_tray.dart';
 import 'package:pie_menyu_core/db/db.dart';
 import 'package:pie_menyu_core/db/pie_item.dart';
@@ -28,7 +29,7 @@ Future<void> main() async {
 
   List<Future<dynamic>> asyncInitializers = [
     windowManager.ensureInitialized(),
-    DB.initialize(),
+    DB.initialize(await getApplicationSupportDirectory()),
     PieMenyuSystemTray.initialize(),
   ];
   await Future.wait(asyncInitializers);

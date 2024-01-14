@@ -6,6 +6,7 @@ import 'package:hotkey_manager/hotkey_manager.dart';
 import 'package:launch_at_startup/launch_at_startup.dart';
 import 'package:localization/localization.dart';
 import 'package:package_info_plus/package_info_plus.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:pie_menyu_editor/view/routes/homePage/home_page.dart';
 import 'package:pie_menyu_core/db/db.dart';
 
@@ -18,7 +19,7 @@ Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   // For hot reload, `unregisterAll()` needs to be called.
   await hotKeyManager.unregisterAll();
-  await DB.initialize();
+  await DB.initialize(await getApplicationSupportDirectory());
 
   // Start pieMenyu
   Process.start(
