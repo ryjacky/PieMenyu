@@ -21,7 +21,7 @@ class ExpansionColorPickerTile extends StatelessWidget {
       contentPadding:
           const EdgeInsets.symmetric(horizontal: 10.0, vertical: 0.0),
       dense: true,
-      horizontalTitleGap: 0.0,
+      horizontalTitleGap: 10.0,
       child: ExpansionTile(
         backgroundColor: Colors.transparent,
         title: title,
