@@ -32,7 +32,15 @@ class PieMenuProvider extends ChangeNotifier {
   /// Load pie items of current pie menu from database
   void loadPieItems() async {
     await _pieMenu.pieItems.load();
-    _pieItems = _pieMenu.pieItems.toList();
+
+    if (_pieMenu.pieItems.length != _pieMenu.pieItemOrder.length) {
+      _pieItems = _pieMenu.pieItems.toList();
+    } else {
+      _pieItems = List.generate(
+          _pieMenu.pieItems.length,
+              (index) => _pieMenu.pieItems.firstWhere(
+                  (element) => element.id == _pieMenu.pieItemOrder[index])).toList();
+    }
     notifyListeners();
   }
 
