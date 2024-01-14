@@ -8,16 +8,21 @@ class PieMenuState extends ChangeNotifier {
   int nextId = -1;
 
   PieMenu _pieMenu = PieMenu();
-  get pieMenu => _pieMenu;
+
+  PieMenu get pieMenu => _pieMenu;
 
   Set<PieItem> _pieItems = {};
+
   Set<PieItem> get pieItems => _pieItems;
 
   Map<int, Set<PieItemTask>> _pieItemTasks = {};
+
   Map<int, Set<PieItemTask>> get pieItemTasks => _pieItemTasks;
 
   PieItem? _activePieItem;
+
   PieItem? get activePieItem => _activePieItem;
+
   void setActivePieItem(PieItem pieItem) {
     _activePieItem =
         _pieItems.where((element) => element.id == pieItem.id).firstOrNull;
@@ -33,7 +38,14 @@ class PieMenuState extends ChangeNotifier {
   /// Load pie items of current pie menu and their tasks from database
   void load() async {
     await _pieMenu.pieItems.load();
-    _pieItems = _pieMenu.pieItems;
+    if (_pieMenu.pieItems.length != _pieMenu.pieItemOrder.length) {
+      _pieItems = _pieMenu.pieItems;
+    } else {
+      _pieItems = List.generate(
+          _pieMenu.pieItems.length,
+              (index) => _pieMenu.pieItems.firstWhere(
+                  (element) => element.id == _pieMenu.pieItemOrder[index])).toSet();
+    }
 
     for (PieItem pieItem in _pieItems) {
       await pieItem.tasks.load();
@@ -66,7 +78,7 @@ class PieMenuState extends ChangeNotifier {
 
   // PieItem related --------------------------------------------------
   bool putPieItem(PieItem pieItem) {
-    if (!addPieItem(pieItem)){
+    if (!addPieItem(pieItem)) {
       return updatePieItem(pieItem);
     }
 
@@ -190,5 +202,4 @@ class PieMenuState extends ChangeNotifier {
     notifyListeners();
     return true;
   }
-
 }

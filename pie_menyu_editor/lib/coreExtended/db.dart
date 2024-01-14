@@ -17,9 +17,10 @@ extension DBExtended on DB {
       await DB.putPieItem(pieItem);
 
       await saveTaskTo(pieItem, putTasks);
-
     }
 
+    state.pieMenu.pieItemOrder =
+        state.pieItems.map((e) => e.id).toList(growable: false);
     await DB.putPieMenu(state.pieMenu);
     await savePieItemsTo(state.pieMenu, state.pieItems.toList());
   }

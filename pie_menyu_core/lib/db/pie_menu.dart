@@ -26,6 +26,7 @@ class PieMenu {
   int iconSize;
   int pieItemRoundness;
   int pieItemSpread;
+  List<int> pieItemOrder = [];
 
   final int pieItemWidth = 512;
 
