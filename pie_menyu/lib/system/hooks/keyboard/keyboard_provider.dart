@@ -19,7 +19,11 @@ class KeyboardProvider extends ChangeNotifier {
     setKeyDownHook().then((value) => initializeKeyboardHook());
     ForegroundWindowEvent().start();
     ForegroundWindowEvent().addListener((exePath) {
-      setKeyDownHook(exePath: exePath);
+      if (exePath.contains("pie_menyu_editor.exe")) {
+        hotKeyManager.unregisterAll();
+      } else {
+        setKeyDownHook(exePath: exePath);
+      }
     });
   }
 
