@@ -7,9 +7,11 @@ class KeyPressRecorder extends StatefulWidget {
     Key? key,
     this.initalHotKey,
     required this.onHotKeyRecorded,
+    this.validation,
   }) : super(key: key);
   final HotKey? initalHotKey;
   final ValueChanged<HotKey> onHotKeyRecorded;
+  final bool Function(HotKey hotkey)? validation;
 
   @override
   State<KeyPressRecorder> createState() => _KeyPressRecorderState();
@@ -17,9 +19,12 @@ class KeyPressRecorder extends StatefulWidget {
 
 class _KeyPressRecorderState extends State<KeyPressRecorder> {
   HotKey? _hotKey;
+  HotKey? _oldHotKey;
+
   bool _toReset = false;
-  final Set<KeyModifier> _keyModifiers = {};
+  Set<KeyModifier> _keyModifiers = {};
   final FocusNode _focusNode = FocusNode();
+  final TextEditingController _textEditingController = TextEditingController();
 
   @override
   void initState() {
@@ -38,10 +43,10 @@ class _KeyPressRecorderState extends State<KeyPressRecorder> {
     KeyCode keyCode = KeyCode.space;
 
     KeyModifier? keyModifier =
-    KeyModifierParser.fromLogicalKey(keyEvent.logicalKey);
+        KeyModifierParser.fromLogicalKey(keyEvent.logicalKey);
 
     if (keyEvent is KeyDownEvent) {
-      if (_toReset){
+      if (_toReset) {
         setState(() {
           _toReset = false;
           _hotKey = null;
@@ -52,8 +57,16 @@ class _KeyPressRecorderState extends State<KeyPressRecorder> {
       // Only set keyCode if the key pressed is not a modifier key.
       // Because we don't want to display two modifier keys in the widget.
       if (keyModifier == null) {
-        keyCode =
-            KeyCodeParser.fromLogicalKey(keyEvent.logicalKey) ?? KeyCode.space;
+        final newKeyCode = KeyCodeParser.fromLogicalKey(keyEvent.logicalKey) ?? KeyCode.space;
+        if ((widget.validation?.call(HotKey(newKeyCode, modifiers: _keyModifiers.toList())) ?? true)) {
+          keyCode = newKeyCode;
+        } else {
+          _hotKey = _oldHotKey;
+          setState(() {});
+          _focusNode.unfocus();
+
+          return KeyEventResult.handled;
+        }
       } else {
         _keyModifiers.add(keyModifier);
       }
@@ -99,16 +112,19 @@ class _KeyPressRecorderState extends State<KeyPressRecorder> {
           onFocusChange: (hasFocus) {
             if (hasFocus) {
               _toReset = true;
+              _oldHotKey = _hotKey;
             }
           },
           focusNode: _focusNode,
           onKeyEvent: (focusNode, keyEvent) {
             return _handleKeyEvent(keyEvent);
           },
-          child: const TextField(
+          child: TextField(
+              controller: _textEditingController,
               cursorHeight: 0,
               cursorWidth: 0,
-              decoration: InputDecoration(
+              onChanged: (value) => _textEditingController.clear(),
+              decoration: const InputDecoration(
                 border: OutlineInputBorder(),
                 contentPadding: EdgeInsets.all(10),
                 isDense: true,

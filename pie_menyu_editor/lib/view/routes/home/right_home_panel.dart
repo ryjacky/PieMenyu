@@ -125,8 +125,35 @@ class _RightHomePanelState extends State<RightHomePanel> {
                             child: KeyPressRecorder(
                               key: ValueKey(pieMenu.id),
                               initalHotKey: getPieMenuHotkey(pieMenu),
-                              onHotKeyRecorded: (hotkey) =>
-                                  addHotkeyToProfile(hotkey, pieMenu.id),
+                              onHotKeyRecorded: (newHotkey) => {
+                                  addHotkeyToProfile(newHotkey, pieMenu.id)
+                              },
+                              validation: (hotkey) {
+                                for (var htpm
+                                    in widget.profile.hotkeyToPieMenuIdList) {
+                                  if (htpm.keyCode == hotkey.keyCode &&
+                                      htpm.keyModifiers
+                                              .contains(KeyModifier.shift) ==
+                                          hotkey.modifiers
+                                              ?.contains(KeyModifier.shift) &&
+                                      htpm.keyModifiers
+                                              .contains(KeyModifier.control) ==
+                                          hotkey.modifiers
+                                              ?.contains(KeyModifier.control) &&
+                                      htpm.keyModifiers
+                                              .contains(KeyModifier.alt) ==
+                                          hotkey.modifiers
+                                              ?.contains(KeyModifier.alt)) {
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                        SnackBar(
+                                            backgroundColor: Colors.red[400],
+                                            content: Text(
+                                                "message-hotkey-is-used".i18n())));
+                                    return false;
+                                  }
+                                }
+                                return true;
+                              },
                             ),
                           ),
                           Padding(
@@ -226,5 +253,22 @@ class _RightHomePanelState extends State<RightHomePanel> {
 
     widget.profile.hotkeyToPieMenuIdList = hotkeyToPieMenuIdList;
     DB.updateProfile(widget.profile);
+  }
+
+  removeHotkeyFromProfile(Profile profile, HotKey hotKey) async {
+    List<HotkeyToPieMenuId> hotkeyToPieMenuIdList = profile
+        .hotkeyToPieMenuIdList
+        .where((element) =>
+            element.keyCode != hotKey.keyCode ||
+            element.keyModifiers.contains(KeyModifier.shift) !=
+                hotKey.modifiers?.contains(KeyModifier.shift) ||
+            element.keyModifiers.contains(KeyModifier.control) !=
+                hotKey.modifiers?.contains(KeyModifier.control) ||
+            element.keyModifiers.contains(KeyModifier.alt) !=
+                hotKey.modifiers?.contains(KeyModifier.alt))
+        .toList();
+
+    profile.hotkeyToPieMenuIdList = hotkeyToPieMenuIdList;
+    DB.updateProfile(profile);
   }
 }

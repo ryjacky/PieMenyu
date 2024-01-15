@@ -94,5 +94,6 @@
   "message-pie-item-not-deleted-1": "You know what? Deleting the last Pie Item is like trying to eat the last slice of pizza and not feeling a little bit sad inside.",
   "message-pie-item-not-deleted-2": "I'm sorry, Dave. I'm afraid I can't do that. (Who is Dave?)",
   "message-pie-item-not-deleted-3": "This is the last piece of Pie Item. You sure you want to delete it? It's non refundable!",
-  "message-pie-item-not-deleted-4": "No please! Please don't! It's the last Pie Item in this menu. (´ཀ`」∠):"
+  "message-pie-item-not-deleted-4": "No please! Please don't! It's the last Pie Item in this menu. (´ཀ`」∠):",
+  "message-hotkey-is-used": "Hotkey is used in another pie menu"
 }
