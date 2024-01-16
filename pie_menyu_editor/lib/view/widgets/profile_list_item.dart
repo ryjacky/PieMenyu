@@ -32,6 +32,7 @@ class _ProfileListItemState extends State<ProfileListItem> {
         backgroundColor: !widget.active
             ? Theme.of(context).colorScheme.surface
             : Theme.of(context).colorScheme.background,
+        surfaceTintColor: Colors.transparent,
         foregroundColor: Colors.transparent,
         shadowColor: Colors.transparent,
         padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 10),
