@@ -8,6 +8,8 @@
   "table-header-color": "Color",
   "table-header-hotkey": "Hotkey",
   "table-header-actions": "Actions",
+  "about-view-on-github": "Check out PieMenyu on Github!",
+  "about-view-on-github-description": "PieMenyu is an open source project. Feel free to contribute!",
   "button-edit": "Edit",
   "button-delete": "Delete",
   "label-create-profile": "Create Profile",
@@ -30,9 +32,11 @@
   "tab-pie-items": "Pie Items",
   "label-new-pie-item": "New Pie Item",
   "label-general-settings": "General Settings",
+  "label-view-on-github": "View on Github",
   "label-about": "About",
   "label-select-color-shade": "Select color shade",
   "label-main-color": "Main color",
+  "label-check-ahp": "Check out AutoHotPie!",
   "label-colors": "Colors",
   "label-secondary-color": "Secondary color",
   "label-icon-color": "Icon color",
@@ -97,5 +101,6 @@
   "message-pie-item-not-deleted-2": "I'm sorry, Dave. I'm afraid I can't do that. (Who is Dave?)",
   "message-pie-item-not-deleted-3": "This is the last piece of Pie Item. You sure you want to delete it? It's non refundable!",
   "message-pie-item-not-deleted-4": "No please! Please don't! It's the last Pie Item in this menu. (´ཀ`」∠):",
-  "message-hotkey-is-used": "Hotkey is used in another pie menu"
+  "message-hotkey-is-used": "Hotkey is used in another pie menu",
+  "description-check-ahp": "PieMenyu is originated from AutoHotPie, make sure you also check it out on Github!"
 }
