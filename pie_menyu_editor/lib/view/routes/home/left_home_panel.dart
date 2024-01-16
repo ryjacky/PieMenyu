@@ -3,6 +3,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:localization/localization.dart';
 import 'package:pie_menyu_core/db/db.dart';
 import 'package:pie_menyu_core/db/profile.dart';
+import 'package:pie_menyu_editor/view/routes/settings/settings.dart';
 import 'package:pie_menyu_editor/view/widgets/PrimaryButton.dart';
 import 'package:pie_menyu_editor/view/widgets/profile_list_item.dart';
 import 'package:provider/provider.dart';
@@ -69,13 +70,16 @@ class _LeftHomePanelState extends State<LeftHomePanel> {
                   padding: const EdgeInsets.fromLTRB(0, 0, 0, 5),
                   child: DragTarget(
                     onAccept: (int? pieMenuId) async {
-                      final pieMenu = homePageViewModel.pieMenus.where((element) => element.id == pieMenuId).firstOrNull;
+                      final pieMenu = homePageViewModel.pieMenus
+                          .where((element) => element.id == pieMenuId)
+                          .firstOrNull;
 
                       if (pieMenu == null) {
                         return;
                       }
 
-                      await homePageViewModel.addPieMenuTo(profiles[index], pieMenu);
+                      await homePageViewModel.addPieMenuTo(
+                          profiles[index], pieMenu);
                       widget.onProfileSelected(profiles[iProfileSelected].id);
                     },
                     builder: (context, List<int?> candidateData, rejectedData) {
@@ -96,15 +100,27 @@ class _LeftHomePanelState extends State<LeftHomePanel> {
           Row(
             mainAxisAlignment: MainAxisAlignment.end,
             children: [
-              TextButton(
+              Theme(
+                data: ThemeData.from(
+                    colorScheme: Theme.of(context).colorScheme,
+                    useMaterial3: true),
+                child: ElevatedButton.icon(
                   onPressed: () {
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (context) =>
+                            Settings(),
+                      ),
+                    );
                     widget.onSettingPressed?.call();
                   },
-                  style: TextButton.styleFrom(
-                    padding: const EdgeInsets.all(15),
-                    minimumSize: const Size(0, 0),
+                  label: Text("button-settings".i18n()),
+                  icon: const FaIcon(
+                    Icons.settings,
+                    size: 24,
                   ),
-                  child: const FaIcon(FontAwesomeIcons.gear))
+                ),
+              )
             ],
           )
         ],
