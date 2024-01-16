@@ -9,7 +9,6 @@ import 'package:provider/provider.dart';
 import '../settings/settings_page.dart';
 import 'home_page_view_model.dart';
 import 'right_create_profile_panel.dart';
-import 'right_setting_panel.dart';
 import 'home_page_titlebar.dart';
 import 'left_home_panel.dart';
 import 'right_home_panel.dart';
@@ -108,7 +107,6 @@ class _HomePageState extends State<HomePage> {
       case RightPanelType.home:
         return RightHomePanel(profile: selectedProfile);
       default:
-        return const RightSettingPanel();
     }
   }
 }
