@@ -41,6 +41,10 @@ class DB {
     }
   }
 
+  static close() async {
+    await _isar.close();
+  }
+
   static Future<List<Profile>> getProfiles(
       {List<int> ids = const <int>[]}) async {
     if (ids.isEmpty) {
