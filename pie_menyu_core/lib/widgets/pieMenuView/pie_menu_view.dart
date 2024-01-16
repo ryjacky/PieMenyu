@@ -15,11 +15,12 @@ class PieMenuView extends StatefulWidget {
 
   final Function(int pieItemOrderIndex)? onPieItemClicked;
 
-  const PieMenuView({super.key,
-    required this.pieMenu,
-    required this.pieItems,
-    required this.pieItemOrderIndexController,
-    this.onPieItemClicked});
+  const PieMenuView(
+      {super.key,
+      required this.pieMenu,
+      required this.pieItems,
+      required this.pieItemOrderIndexController,
+      this.onPieItemClicked});
 
   @override
   State<PieMenuView> createState() => _PieMenuViewState();
@@ -28,6 +29,10 @@ class PieMenuView extends StatefulWidget {
 class _PieMenuViewState extends State<PieMenuView> {
   double angleDelta = 0;
   int pieItemOrderIndex = 0;
+
+  double getOriginX(BoxConstraints constraints) => constraints.maxWidth / 2;
+
+  double getOriginY(BoxConstraints constraints) => constraints.maxHeight / 2;
 
   @override
   void initState() {
@@ -43,60 +48,51 @@ class _PieMenuViewState extends State<PieMenuView> {
 
   @override
   Widget build(BuildContext context) {
-    const height = 35;
+    final double pieCenterSize =
+        (widget.pieMenu.centerRadius + widget.pieMenu.centerThickness) * 2;
+
     angleDelta = 2 * pi / widget.pieItems.length;
 
     return LayoutBuilder(builder: (context, constraints) {
       return Stack(
         children: [
           Positioned(
-            left: (constraints.maxWidth -
+            left: getOriginX(constraints) -
                 widget.pieMenu.centerRadius -
-                widget.pieMenu.centerThickness) /
-                2,
-            bottom: (constraints.maxHeight -
+                widget.pieMenu.centerThickness,
+            bottom: getOriginY(constraints) -
                 widget.pieMenu.centerRadius -
-                widget.pieMenu.centerThickness) /
-                2,
+                widget.pieMenu.centerThickness,
             child: Transform.rotate(
               angle: getPieCenterRotation(),
               child: CustomPaint(
-                size: Size(
-                  (widget.pieMenu.centerRadius + widget.pieMenu.centerThickness)
-                      .toDouble(),
-                  (widget.pieMenu.centerRadius + widget.pieMenu.centerThickness)
-                      .toDouble(),
-                ),
+                size: Size(pieCenterSize, pieCenterSize),
                 painter: PieCenterPainter(
-                    centerThickness: widget.pieMenu.centerThickness.toDouble(),
-                    backgroundColor: Color(widget.pieMenu.secondaryColor),
-                    foregroundColor: Color(widget.pieMenu.mainColor),
-                    numberOfPieItems: widget.pieItems.length),
+                  centerThickness: widget.pieMenu.centerThickness.toDouble(),
+                  backgroundColor: Color(widget.pieMenu.secondaryColor),
+                  foregroundColor: Color(widget.pieMenu.mainColor),
+                  numberOfPieItems: widget.pieItems.length,
+                ),
               ),
             ),
           ),
           for (int i = 0; i < widget.pieItems.length; i++)
             Positioned(
-              left: computeXAdjusted(i, constraints.maxWidth / 2),
-              bottom:
-              computeYAdjusted(i, constraints.maxHeight / 2 - height / 2),
+              left: computeXAdjusted(i, getOriginX(constraints)),
+              bottom: computeYAdjusted(i, getOriginY(constraints)),
               child: GestureDetector(
                 onTap: () {
                   widget.onPieItemClicked?.call(i);
                   pieItemOrderIndex = i;
                 },
                 child: PieItemView(
-                  name: widget.pieItems
-                      .elementAt(i)
-                      .displayName,
-                  icon: widget.pieItems
-                      .elementAt(i)
-                      .iconBase64,
+                  name: widget.pieItems.elementAt(i).displayName,
+                  icon: widget.pieItems.elementAt(i).iconBase64,
                   horizontalOffset: i % (widget.pieItems.length / 2) == 0
                       ? PieItemOffset.center
                       : i > widget.pieItems.length / 2
-                      ? PieItemOffset.toLeft
-                      : PieItemOffset.toRight,
+                          ? PieItemOffset.toLeft
+                          : PieItemOffset.toRight,
                   borderRadius: widget.pieMenu.pieItemRoundness,
                   backgroundColor: pieItemOrderIndex == i
                       ? widget.pieMenu.mainColor
@@ -113,16 +109,12 @@ class _PieMenuViewState extends State<PieMenuView> {
 
   double computeYAdjusted(int i, double originY) {
     double yAdjusted = originY +
-        getYFromBiasedPolar(angleDelta * i,
-            widget.pieMenu.centerRadius + widget.pieMenu.pieItemSpread);
-
-    if (i == 0) {
-      yAdjusted += 10;
-    }
-
-    if (i == widget.pieItems.length / 2) {
-      yAdjusted -= 10;
-    }
+        getYFromBiasedPolar(
+            angleDelta * i,
+            widget.pieMenu.centerRadius +
+                widget.pieMenu.centerThickness / 2 +
+                widget.pieMenu.pieItemSpread) -
+        widget.pieMenu.iconSize / 2;
 
     return yAdjusted;
   }
@@ -132,11 +124,12 @@ class _PieMenuViewState extends State<PieMenuView> {
   double computeXAdjusted(int i, double originX) {
     double rawX = getXFromBiasedPolar(angleDelta * i,
         widget.pieMenu.centerRadius + widget.pieMenu.pieItemSpread);
+
     double half = widget.pieItems.length / 2;
     if (i % half != 0) {
       rawX += i > half
-          ? -widget.pieMenu.pieItemWidth / 2
-          : widget.pieMenu.pieItemWidth / 2;
+          ? -widget.pieMenu.pieItemWidth / 2 + widget.pieMenu.iconSize / 2
+          : widget.pieMenu.pieItemWidth / 2 - widget.pieMenu.iconSize / 2;
     }
 
     return originX + rawX - widget.pieMenu.pieItemWidth / 2;
@@ -150,7 +143,7 @@ class _PieMenuViewState extends State<PieMenuView> {
 
   /// Returns the y coordinate from a polar coordinate system starting from the
   /// y axis.
-  double getYFromBiasedPolar(double angleFromYAxis, int radius) {
+  double getYFromBiasedPolar(double angleFromYAxis, double radius) {
     return radius * cos(angleFromYAxis);
   }
 
