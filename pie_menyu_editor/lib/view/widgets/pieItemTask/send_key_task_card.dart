@@ -48,52 +48,46 @@ class SendKeyTaskCard extends StatelessWidget {
   showKeyboardDialog(BuildContext context) {
     return showDialog(
       context: context,
-      builder: (context) => Theme(
-        data: ThemeData(
-            useMaterial3: true,
-            colorScheme: Theme.of(context).colorScheme,
-            textTheme: Theme.of(context).textTheme),
-        child: AlertDialog(
-          scrollable: true,
-          contentPadding: const EdgeInsets.all(20),
-          backgroundColor: Theme.of(context).colorScheme.secondaryContainer,
-          content: SizedBox(
-            width: 1000,
-            height: 300,
-            child: KeyboardView(
-              initialKeys: sendKeyTask.hotkeyStrings,
-              onKeyPressed: (String key) {
-                if (key == "Ctrl") {
-                  sendKeyTask.ctrl = !sendKeyTask.ctrl;
-                } else if (key == "Shift") {
-                  sendKeyTask.shift = !sendKeyTask.shift;
-                } else if (key == "Alt") {
-                  sendKeyTask.alt = !sendKeyTask.alt;
-                } else {
-                  sendKeyTask.key = key;
-                }
-              },
-            ),
+      builder: (context) => AlertDialog(
+        scrollable: true,
+        contentPadding: const EdgeInsets.all(20),
+        backgroundColor: Theme.of(context).colorScheme.secondaryContainer,
+        content: SizedBox(
+          width: 1000,
+          height: 300,
+          child: KeyboardView(
+            initialKeys: sendKeyTask.hotkeyStrings,
+            onKeyPressed: (String key) {
+              if (key == "Ctrl") {
+                sendKeyTask.ctrl = !sendKeyTask.ctrl;
+              } else if (key == "Shift") {
+                sendKeyTask.shift = !sendKeyTask.shift;
+              } else if (key == "Alt") {
+                sendKeyTask.alt = !sendKeyTask.alt;
+              } else {
+                sendKeyTask.key = key;
+              }
+            },
           ),
-          actions: [
-            TextButton(
-              onPressed: () {
-                Navigator.pop(context);
-              },
-              style: TextButton.styleFrom(
-                  backgroundColor: Theme.of(context).colorScheme.background),
-              child: Text("label-cancel".i18n()),
-            ),
-            TextButton(
-              style: TextButton.styleFrom(
-                  backgroundColor: Theme.of(context).colorScheme.background),
-              onPressed: () {
-                Navigator.pop(context, sendKeyTask);
-              },
-              child: Text("label-ok".i18n()),
-            ),
-          ],
         ),
+        actions: [
+          TextButton(
+            onPressed: () {
+              Navigator.pop(context);
+            },
+            style: TextButton.styleFrom(
+                backgroundColor: Theme.of(context).colorScheme.background),
+            child: Text("label-cancel".i18n()),
+          ),
+          TextButton(
+            style: TextButton.styleFrom(
+                backgroundColor: Theme.of(context).colorScheme.background),
+            onPressed: () {
+              Navigator.pop(context, sendKeyTask);
+            },
+            child: Text("label-ok".i18n()),
+          ),
+        ],
       ),
     );
   }

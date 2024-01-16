@@ -22,76 +22,70 @@ class EditorPanel extends StatefulWidget {
 class _EditorPanelState extends State<EditorPanel> {
   @override
   Widget build(BuildContext context) {
-    return Theme(
-      data: ThemeData(
-          useMaterial3: true,
-          colorScheme: Theme.of(context).colorScheme,
-          textTheme: Theme.of(context).textTheme),
-      child: Column(
-        children: [
-          Expanded(
-            child: DefaultTabController(
-              length: 3,
-              child: Column(
-                children: [
-                  TabBar(
-                    tabs: [
-                      Tab(text: "tab-pie-items".i18n()),
-                      Tab(text: "tab-properties".i18n()),
-                      Tab(text: "tab-actions".i18n()),
-                    ],
-                  ),
-                  const Expanded(
-                    child: TabBarView(
-                      children: [
-                        PieItemListTab(),
-                        PropertiesTab(),
-                        ActionsTab(),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: <Widget>[
-                Expanded(
-                  child: ElevatedButton.icon(
-                    onPressed: () {
-                      DBExtended.save(context.read<PieMenuState>());
-                    },
-                    icon: const Icon(Icons.save_outlined),
-                    label: Text("button-save".i18n()),
-                  ),
+    return Column(
+      children: [
+        Expanded(
+          child: DefaultTabController(
+            length: 3,
+            child: Column(
+              children: [
+                TabBar(
+                  tabs: [
+                    Tab(text: "tab-pie-items".i18n()),
+                    Tab(text: "tab-properties".i18n()),
+                    Tab(text: "tab-actions".i18n()),
+                  ],
                 ),
-                const Gap(10),
-                Expanded(
-                  child: ElevatedButton.icon(
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: const Color(0x1AFF9300),
-                    ),
-                    onPressed: () {
-                      context.read<PieMenuState>().load();
-                    },
-                    icon: const Icon(
-                      Icons.refresh,
-                      color: Color(0xFFC47C00),
-                    ),
-                    label: Text(
-                      "button-reset".i18n(),
-                      style: const TextStyle(color: Color(0xFFC47C00)),
-                    ),
+                const Expanded(
+                  child: TabBarView(
+                    children: [
+                      PieItemListTab(),
+                      PropertiesTab(),
+                      ActionsTab(),
+                    ],
                   ),
                 ),
               ],
             ),
           ),
-        ],
-      ),
+        ),
+        Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: <Widget>[
+              Expanded(
+                child: ElevatedButton.icon(
+                  onPressed: () {
+                    DBExtended.save(context.read<PieMenuState>());
+                  },
+                  icon: const Icon(Icons.save_outlined),
+                  label: Text("button-save".i18n()),
+                ),
+              ),
+              const Gap(10),
+              Expanded(
+                child: ElevatedButton.icon(
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: const Color(0x1AFF9300),
+                  ),
+                  onPressed: () {
+                    context.read<PieMenuState>().load();
+                  },
+                  icon: const Icon(
+                    Icons.refresh,
+                    color: Color(0xFFC47C00),
+                  ),
+                  label: Text(
+                    "button-reset".i18n(),
+                    style: const TextStyle(color: Color(0xFFC47C00)),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ],
     );
   }
 

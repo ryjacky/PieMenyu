@@ -62,63 +62,58 @@ class _LeftHomePanelState extends State<LeftHomePanel> {
             ),
           ),
           Expanded(
-            child: ListView.builder(
-              itemCount: profiles.length,
-              itemBuilder: (context, index) {
-                return Container(
-                  height: 50,
-                  padding: const EdgeInsets.fromLTRB(0, 0, 0, 5),
-                  child: DragTarget(
-                    onAccept: (int? pieMenuId) async {
-                      final pieMenu = homePageViewModel.pieMenus
-                          .where((element) => element.id == pieMenuId)
-                          .firstOrNull;
+              child: ListView.builder(
+                itemCount: profiles.length,
+                itemBuilder: (context, index) {
+                  return Container(
+                    height: 50,
+                    padding: const EdgeInsets.fromLTRB(0, 0, 0, 5),
+                    child: DragTarget(
+                      onAccept: (int? pieMenuId) async {
+                        final pieMenu = homePageViewModel.pieMenus
+                            .where((element) => element.id == pieMenuId)
+                            .firstOrNull;
 
-                      if (pieMenu == null) {
-                        return;
-                      }
+                        if (pieMenu == null) {
+                          return;
+                        }
 
-                      await homePageViewModel.addPieMenuTo(
-                          profiles[index], pieMenu);
-                      widget.onProfileSelected(profiles[iProfileSelected].id);
-                    },
-                    builder: (context, List<int?> candidateData, rejectedData) {
-                      return ProfileListItem(
-                        profile: profiles[index],
-                        active: iProfileSelected == index,
-                        onPressed: () {
-                          widget.onProfileSelected(profiles[index].id);
-                          iProfileSelected = index;
-                        },
-                      );
-                    },
-                  ),
-                );
-              },
+                        await homePageViewModel.addPieMenuTo(
+                            profiles[index], pieMenu);
+                        widget.onProfileSelected(profiles[iProfileSelected].id);
+                      },
+                      builder: (context, List<int?> candidateData, rejectedData) {
+                        return ProfileListItem(
+                          profile: profiles[index],
+                          active: iProfileSelected == index,
+                          onPressed: () {
+                            widget.onProfileSelected(profiles[index].id);
+                            iProfileSelected = index;
+                          },
+                        );
+                      },
+                    ),
+                  );
+                },
+              ),
             ),
-          ),
           Row(
             mainAxisAlignment: MainAxisAlignment.end,
             children: [
-              Theme(
-                data: ThemeData.from(
-                    colorScheme: Theme.of(context).colorScheme,
-                    useMaterial3: true),
-                child: ElevatedButton.icon(
-                  onPressed: () {
-                    Navigator.of(context).push(
-                      MaterialPageRoute(
-                        builder: (context) =>
-                            Settings(),
-                      ),
-                    );
-                    widget.onSettingPressed?.call();
-                  },
-                  label: Text("button-settings".i18n()),
-                  icon: const FaIcon(
-                    Icons.settings,
-                    size: 24,
-                  ),
+              ElevatedButton.icon(
+                onPressed: () {
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (context) =>
+                          Settings(),
+                    ),
+                  );
+                  widget.onSettingPressed?.call();
+                },
+                label: Text("button-settings".i18n()),
+                icon: const FaIcon(
+                  Icons.settings,
+                  size: 24,
                 ),
               )
             ],

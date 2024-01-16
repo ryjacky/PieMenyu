@@ -66,7 +66,7 @@ class _PropertiesTabState extends State<PropertiesTab> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 const Text("Enabled"),
-                Material3Switch(
+                Switch(
                   // This bool value toggles the switch.
                   value: pieMenu.enabled,
                   activeColor: Theme.of(context).colorScheme.primary,
@@ -84,7 +84,7 @@ class _PropertiesTabState extends State<PropertiesTab> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 const Text("Open In Screen Center"),
-                Material3Switch(
+                Switch(
                   // This bool value toggles the switch.
                   value: pieMenu.openInScreenCenter,
                   activeColor: Theme.of(context).colorScheme.primary,

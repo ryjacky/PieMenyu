@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+@Deprecated("PieMenyu Editor now uses material 3 by default")
 class Material3Switch extends StatelessWidget {
   final bool value;
   final Function(bool value)? onChanged;

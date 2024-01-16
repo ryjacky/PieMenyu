@@ -36,17 +36,11 @@ class _PieItemTaskListState extends State<PieItemTaskList> {
         context.select<PieMenuState, Set<PieItemTask>>((viewModel) =>
             viewModel.getTasksOf(state.activePieItem ?? PieItem()));
 
-    return Theme(
-      data: ThemeData(
-          useMaterial3: true,
-          colorScheme: Theme.of(context).colorScheme,
-          textTheme: Theme.of(context).textTheme),
-      child: ListView(
-        children: [
-          for (int i = 0; i < pieItemTasks.length; i++)
-            getTaskCard(pieItemTasks.elementAt(i), i),
-        ],
-      ),
+    return ListView(
+      children: [
+        for (int i = 0; i < pieItemTasks.length; i++)
+          getTaskCard(pieItemTasks.elementAt(i), i),
+      ],
     );
   }
 

@@ -61,7 +61,7 @@ class _RightSettingPanelState extends State<RightSettingPanel> {
                       title: "setting-launch-at-startup".i18n(),
                       subtitle: "setting-launch-at-startup-description".i18n(),
                       tileColor: Theme.of(context).colorScheme.surface,
-                      trailing: Material3Switch(
+                      trailing: Switch(
                         value: isLaunchAtStartup,
                         onChanged: (value) {
                           if (value) {
