@@ -17,6 +17,7 @@ class RightSettingPanel extends StatefulWidget {
 
 class _RightSettingPanelState extends State<RightSettingPanel> {
   final GlobalKey generalSectionKey = GlobalKey();
+  final GlobalKey dataSectionKey = GlobalKey();
   final GlobalKey aboutSectionKey = GlobalKey();
 
   final double gap = 20;
@@ -41,6 +42,8 @@ class _RightSettingPanelState extends State<RightSettingPanel> {
 
   @override
   Widget build(BuildContext context) {
+    final state = context.read<SettingsState>();
+
     final selectedSection = context.select<SettingsState, SettingsSection>(
         (value) => value.selectedSection);
 
@@ -63,7 +66,7 @@ class _RightSettingPanelState extends State<RightSettingPanel> {
                 key: generalSectionKey,
                 padding: const EdgeInsets.fromLTRB(0, 20, 0, 20),
                 child: Text(
-                  "label-setting".i18n(),
+                  "label-general-settings".i18n(),
                   style: Theme.of(context).textTheme.displayLarge,
                 ),
               ),
@@ -85,6 +88,8 @@ class _RightSettingPanelState extends State<RightSettingPanel> {
                   },
                 ),
               ),
+              Gap(gap),
+              ...buildDataSection(state),
               Gap(gap),
               ...buildAboutSection(),
             ],
@@ -134,6 +139,39 @@ class _RightSettingPanelState extends State<RightSettingPanel> {
           onPressed: () =>
               launchUrl(Uri.parse("https://github.com/dumbeau/AutoHotPie")),
           child: Text("label-view-on-github".i18n()),
+        ),
+      ),
+    ];
+  }
+
+  List<Widget> buildDataSection(SettingsState state) {
+    return [
+      Padding(
+        key: dataSectionKey,
+        padding: const EdgeInsets.fromLTRB(0, 20, 0, 20),
+        child: Text(
+          "label-data".i18n(),
+          style: Theme.of(context).textTheme.displayLarge,
+        ),
+      ),
+      SettingListTile(
+        title: "label-export-data".i18n(),
+        subtitle: "description-export-data".i18n(),
+        tileColor: Theme.of(context).colorScheme.surface,
+        trailing: TextButton(
+          onPressed: state.exportDataThenShowDir,
+          child: Text("label-export".i18n()),
+        ),
+      ),
+      Gap(gap),
+      SettingListTile(
+        title: "label-import-data".i18n(),
+        subtitle: "description-import-data".i18n(),
+        tileColor: Theme.of(context).colorScheme.surface,
+        trailing: TextButton(
+          onPressed: () =>
+              launchUrl(Uri.parse("https://github.com/ryjacky/PieMenyu")),
+          child: Text("label-import".i18n()),
         ),
       ),
     ];

@@ -23,7 +23,6 @@
   "pie-menu-name-saved": "Pie Menu name is saved.",
   "tab-properties": "Properties",
   "tab-actions": "Actions",
-  "label-setting": "Setting",
   "setting-launch-at-startup": "Launch at startup",
   "setting-launch-at-startup-description": "Launch PieMenyu at startup",
   "setting-escape-key": "Escape key",
@@ -64,6 +63,10 @@
   "label-mouse-click-task": "Mouse Click Task",
   "label-x": "X",
   "label-y": "Y",
+  "label-export-data": "Export data",
+  "label-export": "Export",
+  "label-import": "Import",
+  "label-import-data": "Import Data",
   "label-open-url-task": "Open URL Task",
   "label-url": "URL",
   "label-paste-text-task": "Paste Text Task",
@@ -95,6 +98,7 @@
   "label-right-short": "Right",
   "label-button": "Button",
   "label-listen": "Listen",
+  "label-data": "Data",
   "label-listening": "Listening...",
   "message-pie-item-not-deleted-0": "Nah... I won't allow you to delete the last Pie Item.",
   "message-pie-item-not-deleted-1": "You know what? Deleting the last Pie Item is like trying to eat the last slice of pizza and not feeling a little bit sad inside.",
@@ -102,5 +106,7 @@
   "message-pie-item-not-deleted-3": "This is the last piece of Pie Item. You sure you want to delete it? It's non refundable!",
   "message-pie-item-not-deleted-4": "No please! Please don't! It's the last Pie Item in this menu. (´ཀ`」∠):",
   "message-hotkey-is-used": "Hotkey is used in another pie menu",
-  "description-check-ahp": "PieMenyu is originated from AutoHotPie, make sure you also check it out on Github!"
+  "description-check-ahp": "PieMenyu is originated from AutoHotPie, make sure you also check it out on Github!",
+  "description-export-data": "Export all profiles, pie menus, pie items, and pie item tasks to file.",
+  "description-import-data": "Import profiles, pie menus, pie items, and pie item tasks from file."
 }
