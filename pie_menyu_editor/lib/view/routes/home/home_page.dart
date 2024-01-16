@@ -6,6 +6,7 @@ import 'package:pie_menyu_core/db/pie_menu.dart';
 import 'package:pie_menyu_core/db/profile.dart';
 import 'package:provider/provider.dart';
 
+import '../settings/settings.dart';
 import 'home_page_view_model.dart';
 import 'right_create_profile_panel.dart';
 import 'right_setting_panel.dart';
@@ -76,9 +77,12 @@ class _HomePageState extends State<HomePage> {
                         flex: 3,
                         child: LeftHomePanel(
                           onSettingPressed: () {
-                            setState(() {
-                              currentRightPanelType = RightPanelType.setting;
-                            });
+                            Navigator.of(context).push(
+                              MaterialPageRoute(
+                                builder: (context) =>
+                                    Settings(),
+                              ),
+                            );
                           },
                           onCreateProfile: () {
                             setState(() {
