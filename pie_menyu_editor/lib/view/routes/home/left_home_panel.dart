@@ -6,18 +6,17 @@ import 'package:pie_menyu_editor/view/widgets/PrimaryButton.dart';
 import 'package:pie_menyu_editor/view/widgets/profile_list_item.dart';
 import 'package:provider/provider.dart';
 
+import '../settings/settings_page.dart';
 import 'home_page_view_model.dart';
 
 class LeftHomePanel extends StatefulWidget {
   final VoidCallback onCreateProfile;
   final Function(int profileId) onProfileSelected;
-  final Function()? onSettingPressed;
 
   const LeftHomePanel(
       {super.key,
       required this.onCreateProfile,
-      required this.onProfileSelected,
-      this.onSettingPressed});
+      required this.onProfileSelected});
 
   @override
   State<LeftHomePanel> createState() => _LeftHomePanelState();
@@ -99,8 +98,13 @@ class _LeftHomePanelState extends State<LeftHomePanel> {
             mainAxisAlignment: MainAxisAlignment.end,
             children: [
               ElevatedButton.icon(
-                onPressed: () {
-                  widget.onSettingPressed?.call();
+                onPressed: () async {
+                  await Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (context) => const SettingsPage(),
+                    ),
+                  );
+                  homePageViewModel.updateState();
                 },
                 label: Text("button-settings".i18n()),
                 icon: const FaIcon(

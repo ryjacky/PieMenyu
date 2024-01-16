@@ -169,8 +169,15 @@ class _RightSettingPanelState extends State<RightSettingPanel> {
         subtitle: "description-import-data".i18n(),
         tileColor: Theme.of(context).colorScheme.surface,
         trailing: TextButton(
-          onPressed: () =>
-              launchUrl(Uri.parse("https://github.com/ryjacky/PieMenyu")),
+          onPressed: () async {
+            await state.importData();
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                backgroundColor: Theme.of(context).colorScheme.primary,
+                content: Text("message-data-imported".i18n()),
+              ),
+            );
+          },
           child: Text("label-import".i18n()),
         ),
       ),
