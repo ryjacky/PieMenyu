@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:pie_menyu_editor/view/widgets/back-button.dart';
+import 'package:pie_menyu_editor/view/widgets/back_icon_button.dart';
 import 'package:pie_menyu_editor/view/widgets/selectable_toc_item.dart';
 
 class LeftSettingsPanel extends StatefulWidget {
@@ -20,7 +20,7 @@ class _LeftSettingsPanelState extends State<LeftSettingsPanel> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           // Custom back button
-          const CustomBackButton(),
+          const BackIconButton(),
           // Table of contents
           SelectableTOCItem(
             title: 'Global settings',
