@@ -50,6 +50,21 @@ class PieMenu {
     this.pieItemRoundness = 7,
     this.pieItemSpread = 150,
   });
+
+  PieMenu.from(PieMenu pieMenu)
+      : name = pieMenu.name,
+        enabled = pieMenu.enabled,
+        activationMode = pieMenu.activationMode,
+        escapeRadius = pieMenu.escapeRadius,
+        openInScreenCenter = pieMenu.openInScreenCenter,
+        mainColor = pieMenu.mainColor,
+        secondaryColor = pieMenu.secondaryColor,
+        iconColor = pieMenu.iconColor,
+        centerRadius = pieMenu.centerRadius,
+        centerThickness = pieMenu.centerThickness,
+        iconSize = pieMenu.iconSize,
+        pieItemRoundness = pieMenu.pieItemRoundness,
+        pieItemSpread = pieMenu.pieItemSpread;
 }
 
 enum PieMenuActivationMode {

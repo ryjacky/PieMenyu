@@ -170,14 +170,14 @@ PieMenu _pieMenuDeserialize(
     centerThickness: reader.readLongOrNull(offsets[2]) ?? 10,
     enabled: reader.readBoolOrNull(offsets[3]) ?? true,
     escapeRadius: reader.readLongOrNull(offsets[4]) ?? 0,
-    iconColor: reader.readLongOrNull(offsets[5]) ?? 0xFFFFFF,
+    iconColor: reader.readLongOrNull(offsets[5]) ?? 0xFFFFFFFF,
     iconSize: reader.readLongOrNull(offsets[6]) ?? 16,
-    mainColor: reader.readLongOrNull(offsets[7]) ?? 0x1DAEAA,
+    mainColor: reader.readLongOrNull(offsets[7]) ?? 0xFF1DAEAA,
     name: reader.readStringOrNull(offsets[8]) ?? 'New Pie Menu',
     openInScreenCenter: reader.readBoolOrNull(offsets[9]) ?? false,
     pieItemRoundness: reader.readLongOrNull(offsets[11]) ?? 7,
     pieItemSpread: reader.readLongOrNull(offsets[12]) ?? 150,
-    secondaryColor: reader.readLongOrNull(offsets[14]) ?? 0x282828,
+    secondaryColor: reader.readLongOrNull(offsets[14]) ?? 0xFF282828,
   );
   object.id = id;
   object.pieItemOrder = reader.readLongList(offsets[10]) ?? [];
@@ -204,11 +204,11 @@ P _pieMenuDeserializeProp<P>(
     case 4:
       return (reader.readLongOrNull(offset) ?? 0) as P;
     case 5:
-      return (reader.readLongOrNull(offset) ?? 0xFFFFFF) as P;
+      return (reader.readLongOrNull(offset) ?? 0xFFFFFFFF) as P;
     case 6:
       return (reader.readLongOrNull(offset) ?? 16) as P;
     case 7:
-      return (reader.readLongOrNull(offset) ?? 0x1DAEAA) as P;
+      return (reader.readLongOrNull(offset) ?? 0xFF1DAEAA) as P;
     case 8:
       return (reader.readStringOrNull(offset) ?? 'New Pie Menu') as P;
     case 9:
@@ -222,7 +222,7 @@ P _pieMenuDeserializeProp<P>(
     case 13:
       return (reader.readLong(offset)) as P;
     case 14:
-      return (reader.readLongOrNull(offset) ?? 0x282828) as P;
+      return (reader.readLongOrNull(offset) ?? 0xFF282828) as P;
     default:
       throw IsarError('Unknown property with id $propertyId');
   }

@@ -25,4 +25,10 @@ class PieItem {
     this.displayName = '',
     this.enabled = false,
   });
+
+  PieItem.from(PieItem pieItem) {
+    iconBase64 = pieItem.iconBase64;
+    displayName = pieItem.displayName;
+    enabled = pieItem.enabled;
+  }
 }
