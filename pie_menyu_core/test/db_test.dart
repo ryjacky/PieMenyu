@@ -23,7 +23,7 @@ void main() {
 
     WidgetsFlutterBinding.ensureInitialized();
     await Isar.initializeIsarCore(download: true);
-    await DB.initialize(Directory(isarFile.path));
+    await DB.initialize(isarFile.parent);
   });
 
   group('DB Tests', () {

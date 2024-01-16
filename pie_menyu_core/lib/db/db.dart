@@ -5,7 +5,6 @@ import 'dart:io';
 
 import 'package:hotkey_manager/hotkey_manager.dart';
 import 'package:isar/isar.dart';
-import 'package:path_provider/path_provider.dart';
 import 'package:pie_menyu_core/db/profile_exe.dart';
 
 import 'pie_item.dart';
@@ -18,10 +17,16 @@ class DB {
 
   static Isar get isar => _isar;
 
-  static initialize(Directory dbLocation) async {
+  static String _dbPath = "";
+  static String get dbPath => _dbPath;
+
+  static const String dbFileName = "default.isar";
+
+  static initialize(Directory dbPath) async {
+    _dbPath = dbPath.path;
     DB._isar = await Isar.open(
         [ProfileSchema, PieMenuSchema, PieItemSchema, PieItemTaskSchema, ProfileExeSchema],
-        directory: dbLocation.parent.path);
+        directory: _dbPath);
 
     final defaultProf = Profile(name: 'Default Profile');
     final defaultProfExe = ProfileExe(path: "global")..profile.value = defaultProf;

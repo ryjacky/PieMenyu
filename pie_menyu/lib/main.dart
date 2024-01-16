@@ -29,7 +29,7 @@ Future<void> main() async {
 
   List<Future<dynamic>> asyncInitializers = [
     windowManager.ensureInitialized(),
-    DB.initialize(await getApplicationSupportDirectory()),
+    DB.initialize((await getApplicationSupportDirectory()).parent),
     PieMenyuSystemTray.initialize(),
   ];
   await Future.wait(asyncInitializers);
