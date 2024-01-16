@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:localization/localization.dart';
-import 'package:pie_menyu_core/db/db.dart';
 import 'package:pie_menyu_core/db/profile.dart';
-import 'package:pie_menyu_editor/view/routes/settings/settings.dart';
 import 'package:pie_menyu_editor/view/widgets/PrimaryButton.dart';
 import 'package:pie_menyu_editor/view/widgets/profile_list_item.dart';
 import 'package:provider/provider.dart';

@@ -6,7 +6,7 @@ import 'package:pie_menyu_core/db/pie_menu.dart';
 import 'package:pie_menyu_core/db/profile.dart';
 import 'package:provider/provider.dart';
 
-import '../settings/settings.dart';
+import '../settings/settings_page.dart';
 import 'home_page_view_model.dart';
 import 'right_create_profile_panel.dart';
 import 'right_setting_panel.dart';
@@ -74,24 +74,24 @@ class _HomePageState extends State<HomePage> {
                 child: Row(
                   children: [
                     Expanded(
-                        flex: 3,
-                        child: LeftHomePanel(
-                          onSettingPressed: () {
-                            Navigator.of(context).push(
-                              MaterialPageRoute(
-                                builder: (context) =>
-                                    Settings(),
-                              ),
-                            );
-                          },
-                          onCreateProfile: () {
-                            setState(() {
-                              currentRightPanelType =
-                                  RightPanelType.pieMenuEditor;
-                            });
-                          },
-                          onProfileSelected: updateSelectedProfile,
-                        )),
+                      flex: 3,
+                      child: LeftHomePanel(
+                        onSettingPressed: () {
+                          Navigator.of(context).push(
+                            MaterialPageRoute(
+                              builder: (context) => const SettingsPage(),
+                            ),
+                          );
+                        },
+                        onCreateProfile: () {
+                          setState(() {
+                            currentRightPanelType =
+                                RightPanelType.pieMenuEditor;
+                          });
+                        },
+                        onProfileSelected: updateSelectedProfile,
+                      ),
+                    ),
                     Expanded(flex: 7, child: getRightPanel()),
                   ],
                 ),
