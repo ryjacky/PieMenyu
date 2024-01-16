@@ -1,9 +1,5 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
-import 'package:pie_menyu_core/db/db.dart';
 import 'package:pie_menyu_core/db/pie_menu.dart';
-import 'package:pie_menyu_core/db/profile.dart';
 import 'package:provider/provider.dart';
 
 import 'home_page_titlebar.dart';
@@ -26,35 +22,12 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  Profile selectedProfile = Profile(
-    name: "Loading...",
-  );
   List<PieMenu> selectedProfilePieMenus = [];
   RightPanelType currentRightPanelType = RightPanelType.home;
-
-  updateSelectedProfile(profileId) async {
-    log("Fetching profile and its pie menus...");
-
-    List<Profile> tempProfileList = await DB.getProfiles(ids: [profileId]);
-    await tempProfileList.first.pieMenus.load();
-
-    if (tempProfileList.isEmpty) {
-      log("Profile not found, id: $profileId");
-      return;
-    }
-
-    setState(() {
-      currentRightPanelType = RightPanelType.home;
-      selectedProfilePieMenus = tempProfileList.first.pieMenus.toList();
-      selectedProfile = tempProfileList.first;
-      log("RightHomePanel state updated");
-    });
-  }
 
   @override
   void initState() {
     super.initState();
-    updateSelectedProfile(1);
   }
 
   @override
@@ -80,7 +53,6 @@ class _HomePageState extends State<HomePage> {
                                 RightPanelType.pieMenuEditor;
                           });
                         },
-                        onProfileSelected: updateSelectedProfile,
                       ),
                     ),
                     Expanded(flex: 7, child: getRightPanel()),
@@ -97,7 +69,7 @@ class _HomePageState extends State<HomePage> {
       case RightPanelType.pieMenuEditor:
         return const RightCreateProfilePanel();
       case RightPanelType.home:
-        return RightHomePanel(profile: selectedProfile);
+        return RightHomePanel();
       default:
     }
   }

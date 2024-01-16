@@ -105,7 +105,7 @@ class WindowController extends ChangeNotifier {
     }
 
     for (Profile profile in profiles) {
-      if (await loadCorrespondingPieMenu(profile, hotKey)) {
+      if (profile.enabled && await loadCorrespondingPieMenu(profile, hotKey)) {
         final pieCenterScreenPosition =
             await screenRetriever.getCursorScreenPoint();
 

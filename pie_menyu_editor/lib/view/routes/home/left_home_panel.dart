@@ -11,12 +11,10 @@ import 'home_page_view_model.dart';
 
 class LeftHomePanel extends StatefulWidget {
   final VoidCallback onCreateProfile;
-  final Function(int profileId) onProfileSelected;
 
   const LeftHomePanel(
       {super.key,
-      required this.onCreateProfile,
-      required this.onProfileSelected});
+      required this.onCreateProfile});
 
   @override
   State<LeftHomePanel> createState() => _LeftHomePanelState();
@@ -77,15 +75,17 @@ class _LeftHomePanelState extends State<LeftHomePanel> {
 
                       await homePageViewModel.addPieMenuTo(
                           profiles[index], pieMenu);
-                      widget.onProfileSelected(profiles[iProfileSelected].id);
+                      homePageViewModel.activeProfile = profiles[iProfileSelected];
                     },
                     builder: (context, List<int?> candidateData, rejectedData) {
                       return ProfileListItem(
                         profile: profiles[index],
                         active: iProfileSelected == index,
                         onPressed: () {
-                          widget.onProfileSelected(profiles[index].id);
-                          iProfileSelected = index;
+                          homePageViewModel.activeProfile = profiles[index];
+                          setState(() {
+                            iProfileSelected = index;
+                          });
                         },
                       );
                     },

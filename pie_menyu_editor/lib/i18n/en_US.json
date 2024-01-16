@@ -106,6 +106,8 @@
   "message-pie-item-not-deleted-3": "This is the last piece of Pie Item. You sure you want to delete it? It's non refundable!",
   "message-pie-item-not-deleted-4": "No please! Please don't! It's the last Pie Item in this menu. (´ཀ`」∠):",
   "message-data-imported": "Data is imported!",
+  "message-profile-enabled": "Profile is enabled",
+  "message-profile-disabled": "Profile is disabled",
   "message-hotkey-is-used": "Hotkey is used in another pie menu",
   "description-check-ahp": "PieMenyu is originated from AutoHotPie, make sure you also check it out on Github!",
   "description-export-data": "Export all profiles, pie menus, pie items, and pie item tasks to file.",

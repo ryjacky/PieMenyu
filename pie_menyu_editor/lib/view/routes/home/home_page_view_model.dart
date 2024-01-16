@@ -11,6 +11,13 @@ class HomePageViewModel extends ChangeNotifier {
   List<Profile> profiles = [];
   List<PieMenu> pieMenus = [];
 
+  Profile _activeProfile = Profile(name: "Loading...");
+  Profile get activeProfile => _activeProfile;
+  set activeProfile(Profile profile) {
+    _activeProfile = profile;
+    notifyListeners();
+  }
+
   HomePageViewModel() {
     updateState();
   }
@@ -21,6 +28,7 @@ class HomePageViewModel extends ChangeNotifier {
     profiles = await DB.getProfiles();
     pieMenus = await DB.getPieMenus();
 
+    activeProfile = profiles.firstOrNull ?? Profile(name: "Loading...");
     notifyListeners();
   }
 
@@ -90,5 +98,13 @@ class HomePageViewModel extends ChangeNotifier {
     await DB.addPieItemsToPieMenu(newPieItems, newPieMenu);
 
     updateState();
+  }
+
+  Future<bool> toggleActiveProfile() async {
+    activeProfile.enabled = !activeProfile.enabled;
+    await DB.putProfile(activeProfile);
+    notifyListeners();
+
+    return activeProfile.enabled;
   }
 }

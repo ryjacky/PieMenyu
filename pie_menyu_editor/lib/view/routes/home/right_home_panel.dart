@@ -15,9 +15,7 @@ import '../pie_menu_editor/pie_menu_editor_route.dart';
 import 'home_page_view_model.dart';
 
 class RightHomePanel extends StatefulWidget {
-  final Profile profile;
-
-  const RightHomePanel({super.key, required this.profile});
+  const RightHomePanel({super.key});
 
   @override
   State<RightHomePanel> createState() => _RightHomePanelState();
@@ -29,9 +27,11 @@ class _RightHomePanelState extends State<RightHomePanel> {
   @override
   Widget build(BuildContext context) {
     final homePageViewModel = context.watch<HomePageViewModel>();
+    final activeProfile = context
+        .select<HomePageViewModel, Profile>((value) => value.activeProfile);
     final allPieMenuExceptInProfile =
-        homePageViewModel.getAllPieMenusExceptIn(widget.profile);
-    final allPieMenuInProfile = homePageViewModel.getPieMenusOf(widget.profile);
+        homePageViewModel.getAllPieMenusExceptIn(activeProfile);
+    final allPieMenuInProfile = homePageViewModel.getPieMenusOf(activeProfile);
 
     return Container(
       padding: const EdgeInsets.fromLTRB(20, 50, 20, 20),
@@ -42,15 +42,32 @@ class _RightHomePanelState extends State<RightHomePanel> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
-                widget.profile.name,
+                activeProfile.name,
                 style: Theme.of(context).textTheme.displayLarge,
               ),
               Expanded(child: Container()),
+              IconButton(
+
+                onPressed: () async {
+                  bool result = await homePageViewModel.toggleActiveProfile();
+                  if (!context.mounted) return;
+                  ScaffoldMessenger.of(context).clearSnackBars();
+                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                      backgroundColor: Theme.of(context).colorScheme.primary,
+                      content: Text((result
+                          ? "message-profile-enabled"
+                          : "message-profile-disabled")
+                          .i18n())));
+                },
+                icon: Icon(activeProfile.enabled
+                    ? Icons.pause
+                    : Icons.play_arrow_outlined, size: 22,),
+              ),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 10),
                 child: PrimaryButton(
                   onPressed: () =>
-                      homePageViewModel.createPieMenuIn(widget.profile),
+                      homePageViewModel.createPieMenuIn(activeProfile),
                   icon: FontAwesomeIcons.plus,
                   label: Text("button-new-pie-menu".i18n()),
                 ),
@@ -104,7 +121,7 @@ class _RightHomePanelState extends State<RightHomePanel> {
                                 ),
                                 onPressed: () {
                                   homePageViewModel.makePieMenuUniqueIn(
-                                      widget.profile, pieMenu);
+                                      activeProfile, pieMenu);
                                 },
                                 child: Text(pieMenu.profiles.length.toString()),
                               ),
@@ -124,13 +141,15 @@ class _RightHomePanelState extends State<RightHomePanel> {
                             padding: const EdgeInsets.fromLTRB(0, 15, 8, 0),
                             child: KeyPressRecorder(
                               key: ValueKey(pieMenu.id),
-                              initalHotKey: getPieMenuHotkey(pieMenu),
+                              initalHotKey:
+                                  getPieMenuHotkey(pieMenu, activeProfile),
                               onHotKeyRecorded: (newHotkey) => {
-                                  addHotkeyToProfile(newHotkey, pieMenu.id)
+                                addHotkeyToProfile(
+                                    activeProfile, newHotkey, pieMenu.id)
                               },
                               validation: (hotkey) {
                                 for (var htpm
-                                    in widget.profile.hotkeyToPieMenuIdList) {
+                                    in activeProfile.hotkeyToPieMenuIdList) {
                                   if (htpm.keyCode == hotkey.keyCode &&
                                       htpm.keyModifiers
                                               .contains(KeyModifier.shift) ==
@@ -148,7 +167,8 @@ class _RightHomePanelState extends State<RightHomePanel> {
                                         SnackBar(
                                             backgroundColor: Colors.red[400],
                                             content: Text(
-                                                "message-hotkey-is-used".i18n())));
+                                                "message-hotkey-is-used"
+                                                    .i18n())));
                                     return false;
                                   }
                                 }
@@ -180,7 +200,7 @@ class _RightHomePanelState extends State<RightHomePanel> {
                                     icon: FontAwesomeIcons.trash,
                                     onLongPress: () {
                                       homePageViewModel.removePieMenuFrom(
-                                          widget.profile, pieMenu);
+                                          activeProfile, pieMenu);
                                     },
                                     color: Theme.of(context)
                                         .colorScheme
@@ -207,7 +227,7 @@ class _RightHomePanelState extends State<RightHomePanel> {
                     for (PieMenu pm in allPieMenuExceptInProfile)
                       TextButton(
                         onPressed: () {
-                          homePageViewModel.addPieMenuTo(widget.profile, pm);
+                          homePageViewModel.addPieMenuTo(activeProfile, pm);
                         },
                         child: Text("${pm.name} (id: ${pm.id})"),
                       )
@@ -233,9 +253,9 @@ class _RightHomePanelState extends State<RightHomePanel> {
     await DB.putPieMenu(pieMenu);
   }
 
-  HotKey? getPieMenuHotkey(PieMenu pieMenu) {
+  HotKey? getPieMenuHotkey(PieMenu pieMenu, Profile profile) {
     try {
-      HotkeyToPieMenuId htpm = widget.profile.hotkeyToPieMenuIdList
+      HotkeyToPieMenuId htpm = profile.hotkeyToPieMenuIdList
           .firstWhere((element) => element.pieMenuId == pieMenu.id);
 
       return HotKey(htpm.keyCode, modifiers: htpm.keyModifiers);
@@ -244,15 +264,15 @@ class _RightHomePanelState extends State<RightHomePanel> {
     }
   }
 
-  addHotkeyToProfile(HotKey hotKey, int pieMenuId) async {
-    List<HotkeyToPieMenuId> hotkeyToPieMenuIdList = widget
-        .profile.hotkeyToPieMenuIdList
+  addHotkeyToProfile(Profile profile, HotKey hotKey, int pieMenuId) async {
+    List<HotkeyToPieMenuId> hotkeyToPieMenuIdList = profile
+        .hotkeyToPieMenuIdList
         .where((element) => element.pieMenuId != pieMenuId)
         .toList();
     hotkeyToPieMenuIdList.add(HotkeyToPieMenuId.fromHotKey(hotKey, pieMenuId));
 
-    widget.profile.hotkeyToPieMenuIdList = hotkeyToPieMenuIdList;
-    DB.updateProfile(widget.profile);
+    profile.hotkeyToPieMenuIdList = hotkeyToPieMenuIdList;
+    DB.updateProfile(profile);
   }
 
   removeHotkeyFromProfile(Profile profile, HotKey hotKey) async {
