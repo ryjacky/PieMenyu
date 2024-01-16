@@ -1,11 +1,6 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
-import 'package:pie_menyu_core/db/db.dart';
-import 'package:pie_menyu_core/db/pie_menu.dart';
-import 'package:pie_menyu_core/db/profile.dart';
 import 'package:pie_menyu_editor/view/routes/home/home_page_titlebar.dart';
-import 'package:pie_menyu_editor/view/routes/home/right_setting_panel.dart';
+import 'package:pie_menyu_editor/view/routes/settings/right_setting_panel.dart';
 import 'package:pie_menyu_editor/view/routes/settings/settings_state.dart';
 import 'package:provider/provider.dart';
 
