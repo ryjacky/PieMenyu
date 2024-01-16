@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'package:flutter/cupertino.dart';
 import 'package:isar/isar.dart';
 import 'package:pie_menyu_core/db/db.dart';
+import 'package:pie_menyu_core/db/pie_item.dart';
 import 'package:pie_menyu_core/db/pie_menu.dart';
 import 'package:pie_menyu_core/db/profile.dart';
 
@@ -75,6 +76,18 @@ class HomePageViewModel extends ChangeNotifier {
 
     int pieMenuId = await DB.putPieMenu(newPieMenu);
     await DB.addPieMenuToProfile(pieMenuId, profile.id);
+
+    List<PieItem> newPieItems = [
+      PieItem(displayName: "New Pie Item"),
+      PieItem(displayName: "New Pie Item"),
+      PieItem(displayName: "New Pie Item"),
+      PieItem(displayName: "New Pie Item"),
+      PieItem(displayName: "New Pie Item"),
+    ];
+
+    await Future.wait(newPieItems.map((PieItem e) => DB.putPieItem(e)));
+
+    await DB.addPieItemsToPieMenu(newPieItems, newPieMenu);
 
     updateState();
   }
