@@ -56,7 +56,7 @@ class _PropertiesTabState extends State<PropertiesTab> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text("label-colors".i18n()),
+        Text("label-colors".i18n(), style: const TextStyle(fontWeight: FontWeight.bold)),
         ExpansionColorPickerTile(
           title: Text("label-main-color".i18n()),
           color: Color(pieMenu.mainColor),
@@ -83,7 +83,7 @@ class _PropertiesTabState extends State<PropertiesTab> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text("label-icon".i18n()),
+        Text("label-icon".i18n(), style: const TextStyle(fontWeight: FontWeight.bold)),
         ExpansionColorPickerTile(
           title: Text("label-icon-color".i18n()),
           color: Color(pieMenu.iconColor),
@@ -123,7 +123,7 @@ class _PropertiesTabState extends State<PropertiesTab> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text("label-font".i18n()),
+        Text("label-font".i18n(), style: const TextStyle(fontWeight: FontWeight.bold)),
         ExpansionColorPickerTile(
           title: Text("label-font-color".i18n()),
           color: Color(pieMenu.fontColor),
@@ -193,7 +193,7 @@ class _PropertiesTabState extends State<PropertiesTab> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text("label-behavior".i18n()),
+        Text("label-behavior".i18n(), style: const TextStyle(fontWeight: FontWeight.bold)),
         Gap(rowGap),
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -245,7 +245,7 @@ class _PropertiesTabState extends State<PropertiesTab> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text("label-shape".i18n()),
+        Text("label-shape".i18n(), style: const TextStyle(fontWeight: FontWeight.bold)),
         Gap(rowGap),
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
