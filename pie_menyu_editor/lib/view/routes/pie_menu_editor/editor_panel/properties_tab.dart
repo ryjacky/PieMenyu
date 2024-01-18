@@ -244,7 +244,7 @@ class _PropertiesTabState extends State<PropertiesTab> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text("label-behavior".i18n()),
+        Text("label-shape".i18n()),
         Gap(rowGap),
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
