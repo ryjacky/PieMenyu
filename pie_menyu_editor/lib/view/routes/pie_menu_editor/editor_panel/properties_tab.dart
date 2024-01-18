@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:localization/localization.dart';
 import 'package:pie_menyu_core/db/pie_menu.dart';
 import 'package:pie_menyu_editor/view/widgets/draggable_number_field.dart';
@@ -18,21 +17,14 @@ class PropertiesTab extends StatefulWidget {
 
 class _PropertiesTabState extends State<PropertiesTab> {
   final double rowGap = 10;
-  final List<DropdownMenuItem<String>> fontsDropdownItem = [
+  final fontsDropdownItem = [
     "Amatic SC",
     "Caveat",
     "Comfortaa",
     "Roboto",
     "Lora",
     "Montserrat",
-  ]
-      .map(
-        (fontName) => DropdownMenuItem<String>(
-          value: fontName,
-          child: Text(fontName, style: GoogleFonts.getFont(fontName)),
-        ),
-      )
-      .toList();
+  ];
 
   @override
   Widget build(BuildContext context) {
@@ -147,10 +139,20 @@ class _PropertiesTabState extends State<PropertiesTab> {
             const Padding(
                 padding: EdgeInsets.fromLTRB(42, 0, 0, 0),
                 child: Text("Font Family")),
-            DropdownButton<String>(
-              items: fontsDropdownItem,
-              value: pieMenu.fontName,
-              onChanged: (String? value) {
+            DropdownMenu(
+              menuHeight: 300,
+              inputDecorationTheme: InputDecorationTheme(
+                isDense: true,
+                constraints: BoxConstraints.tight(const Size.fromHeight(40)),
+                contentPadding: const EdgeInsets.all(8),
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(4),
+                ),
+              ),
+              dropdownMenuEntries: fontsDropdownItem
+                  .map((e) => DropdownMenuEntry(value: e, label: e))
+                  .toList(),
+              onSelected: (String? value) {
                 if (value == null) return;
                 context
                     .read<PieMenuState>()
