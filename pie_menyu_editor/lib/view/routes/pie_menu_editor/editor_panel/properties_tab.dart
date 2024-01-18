@@ -17,7 +17,7 @@ class PropertiesTab extends StatefulWidget {
 
 class _PropertiesTabState extends State<PropertiesTab> {
   final double rowGap = 10;
-  final fontsDropdownItem = [
+  final fonts = [
     "Amatic SC",
     "Caveat",
     "Comfortaa",
@@ -149,7 +149,8 @@ class _PropertiesTabState extends State<PropertiesTab> {
                   borderRadius: BorderRadius.circular(4),
                 ),
               ),
-              dropdownMenuEntries: fontsDropdownItem
+              initialSelection: pieMenu.fontName,
+              dropdownMenuEntries: fonts
                   .map((e) => DropdownMenuEntry(value: e, label: e))
                   .toList(),
               onSelected: (String? value) {
