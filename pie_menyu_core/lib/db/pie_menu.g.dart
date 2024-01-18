@@ -43,53 +43,68 @@ const PieMenuSchema = CollectionSchema(
       name: r'escapeRadius',
       type: IsarType.long,
     ),
-    r'iconColor': PropertySchema(
+    r'fontColor': PropertySchema(
       id: 5,
+      name: r'fontColor',
+      type: IsarType.long,
+    ),
+    r'fontName': PropertySchema(
+      id: 6,
+      name: r'fontName',
+      type: IsarType.string,
+    ),
+    r'fontSize': PropertySchema(
+      id: 7,
+      name: r'fontSize',
+      type: IsarType.long,
+    ),
+    r'iconColor': PropertySchema(
+      id: 8,
       name: r'iconColor',
       type: IsarType.long,
     ),
     r'iconSize': PropertySchema(
-      id: 6,
+      id: 9,
       name: r'iconSize',
       type: IsarType.long,
     ),
     r'mainColor': PropertySchema(
-      id: 7,
+      id: 10,
       name: r'mainColor',
       type: IsarType.long,
     ),
     r'name': PropertySchema(
-      id: 8,
+      id: 11,
       name: r'name',
       type: IsarType.string,
     ),
     r'openInScreenCenter': PropertySchema(
-      id: 9,
+      id: 12,
       name: r'openInScreenCenter',
       type: IsarType.bool,
     ),
     r'pieItemOrder': PropertySchema(
-      id: 10,
+      id: 13,
       name: r'pieItemOrder',
       type: IsarType.longList,
     ),
     r'pieItemRoundness': PropertySchema(
-      id: 11,
+      id: 14,
       name: r'pieItemRoundness',
       type: IsarType.long,
     ),
     r'pieItemSpread': PropertySchema(
-      id: 12,
+      id: 15,
       name: r'pieItemSpread',
       type: IsarType.long,
     ),
     r'pieItemWidth': PropertySchema(
-      id: 13,
+      id: 16,
       name: r'pieItemWidth',
       type: IsarType.long,
     ),
     r'secondaryColor': PropertySchema(
-      id: 14,
+      id: 17,
       name: r'secondaryColor',
       type: IsarType.long,
     )
@@ -128,6 +143,7 @@ int _pieMenuEstimateSize(
   Map<Type, List<int>> allOffsets,
 ) {
   var bytesCount = offsets.last;
+  bytesCount += 3 + object.fontName.length * 3;
   bytesCount += 3 + object.name.length * 3;
   bytesCount += 3 + object.pieItemOrder.length * 8;
   return bytesCount;
@@ -144,16 +160,19 @@ void _pieMenuSerialize(
   writer.writeLong(offsets[2], object.centerThickness);
   writer.writeBool(offsets[3], object.enabled);
   writer.writeLong(offsets[4], object.escapeRadius);
-  writer.writeLong(offsets[5], object.iconColor);
-  writer.writeLong(offsets[6], object.iconSize);
-  writer.writeLong(offsets[7], object.mainColor);
-  writer.writeString(offsets[8], object.name);
-  writer.writeBool(offsets[9], object.openInScreenCenter);
-  writer.writeLongList(offsets[10], object.pieItemOrder);
-  writer.writeLong(offsets[11], object.pieItemRoundness);
-  writer.writeLong(offsets[12], object.pieItemSpread);
-  writer.writeLong(offsets[13], object.pieItemWidth);
-  writer.writeLong(offsets[14], object.secondaryColor);
+  writer.writeLong(offsets[5], object.fontColor);
+  writer.writeString(offsets[6], object.fontName);
+  writer.writeLong(offsets[7], object.fontSize);
+  writer.writeLong(offsets[8], object.iconColor);
+  writer.writeLong(offsets[9], object.iconSize);
+  writer.writeLong(offsets[10], object.mainColor);
+  writer.writeString(offsets[11], object.name);
+  writer.writeBool(offsets[12], object.openInScreenCenter);
+  writer.writeLongList(offsets[13], object.pieItemOrder);
+  writer.writeLong(offsets[14], object.pieItemRoundness);
+  writer.writeLong(offsets[15], object.pieItemSpread);
+  writer.writeLong(offsets[16], object.pieItemWidth);
+  writer.writeLong(offsets[17], object.secondaryColor);
 }
 
 PieMenu _pieMenuDeserialize(
@@ -170,17 +189,20 @@ PieMenu _pieMenuDeserialize(
     centerThickness: reader.readLongOrNull(offsets[2]) ?? 10,
     enabled: reader.readBoolOrNull(offsets[3]) ?? true,
     escapeRadius: reader.readLongOrNull(offsets[4]) ?? 0,
-    iconColor: reader.readLongOrNull(offsets[5]) ?? 0xFFFFFFFF,
-    iconSize: reader.readLongOrNull(offsets[6]) ?? 16,
-    mainColor: reader.readLongOrNull(offsets[7]) ?? 0xFF1DAEAA,
-    name: reader.readStringOrNull(offsets[8]) ?? 'New Pie Menu',
-    openInScreenCenter: reader.readBoolOrNull(offsets[9]) ?? false,
-    pieItemRoundness: reader.readLongOrNull(offsets[11]) ?? 7,
-    pieItemSpread: reader.readLongOrNull(offsets[12]) ?? 150,
-    secondaryColor: reader.readLongOrNull(offsets[14]) ?? 0xFF282828,
+    fontColor: reader.readLongOrNull(offsets[5]) ?? 0xFFFFFFFF,
+    fontName: reader.readStringOrNull(offsets[6]) ?? 'Roboto',
+    fontSize: reader.readLongOrNull(offsets[7]) ?? 14,
+    iconColor: reader.readLongOrNull(offsets[8]) ?? 0xFFFFFFFF,
+    iconSize: reader.readLongOrNull(offsets[9]) ?? 32,
+    mainColor: reader.readLongOrNull(offsets[10]) ?? 0xFF1DAEAA,
+    name: reader.readStringOrNull(offsets[11]) ?? 'New Pie Menu',
+    openInScreenCenter: reader.readBoolOrNull(offsets[12]) ?? false,
+    pieItemRoundness: reader.readLongOrNull(offsets[14]) ?? 7,
+    pieItemSpread: reader.readLongOrNull(offsets[15]) ?? 150,
+    secondaryColor: reader.readLongOrNull(offsets[17]) ?? 0xFF282828,
   );
   object.id = id;
-  object.pieItemOrder = reader.readLongList(offsets[10]) ?? [];
+  object.pieItemOrder = reader.readLongList(offsets[13]) ?? [];
   return object;
 }
 
@@ -206,22 +228,28 @@ P _pieMenuDeserializeProp<P>(
     case 5:
       return (reader.readLongOrNull(offset) ?? 0xFFFFFFFF) as P;
     case 6:
-      return (reader.readLongOrNull(offset) ?? 16) as P;
+      return (reader.readStringOrNull(offset) ?? 'Roboto') as P;
     case 7:
-      return (reader.readLongOrNull(offset) ?? 0xFF1DAEAA) as P;
+      return (reader.readLongOrNull(offset) ?? 14) as P;
     case 8:
-      return (reader.readStringOrNull(offset) ?? 'New Pie Menu') as P;
+      return (reader.readLongOrNull(offset) ?? 0xFFFFFFFF) as P;
     case 9:
-      return (reader.readBoolOrNull(offset) ?? false) as P;
+      return (reader.readLongOrNull(offset) ?? 32) as P;
     case 10:
-      return (reader.readLongList(offset) ?? []) as P;
+      return (reader.readLongOrNull(offset) ?? 0xFF1DAEAA) as P;
     case 11:
-      return (reader.readLongOrNull(offset) ?? 7) as P;
+      return (reader.readStringOrNull(offset) ?? 'New Pie Menu') as P;
     case 12:
-      return (reader.readLongOrNull(offset) ?? 150) as P;
+      return (reader.readBoolOrNull(offset) ?? false) as P;
     case 13:
-      return (reader.readLong(offset)) as P;
+      return (reader.readLongList(offset) ?? []) as P;
     case 14:
+      return (reader.readLongOrNull(offset) ?? 7) as P;
+    case 15:
+      return (reader.readLongOrNull(offset) ?? 150) as P;
+    case 16:
+      return (reader.readLong(offset)) as P;
+    case 17:
       return (reader.readLongOrNull(offset) ?? 0xFF282828) as P;
     default:
       throw IsarError('Unknown property with id $propertyId');
@@ -542,6 +570,242 @@ extension PieMenuQueryFilter
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.between(
         property: r'escapeRadius',
+        lower: lower,
+        includeLower: includeLower,
+        upper: upper,
+        includeUpper: includeUpper,
+      ));
+    });
+  }
+
+  QueryBuilder<PieMenu, PieMenu, QAfterFilterCondition> fontColorEqualTo(
+      int value) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'fontColor',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<PieMenu, PieMenu, QAfterFilterCondition> fontColorGreaterThan(
+    int value, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        include: include,
+        property: r'fontColor',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<PieMenu, PieMenu, QAfterFilterCondition> fontColorLessThan(
+    int value, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.lessThan(
+        include: include,
+        property: r'fontColor',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<PieMenu, PieMenu, QAfterFilterCondition> fontColorBetween(
+    int lower,
+    int upper, {
+    bool includeLower = true,
+    bool includeUpper = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.between(
+        property: r'fontColor',
+        lower: lower,
+        includeLower: includeLower,
+        upper: upper,
+        includeUpper: includeUpper,
+      ));
+    });
+  }
+
+  QueryBuilder<PieMenu, PieMenu, QAfterFilterCondition> fontNameEqualTo(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'fontName',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<PieMenu, PieMenu, QAfterFilterCondition> fontNameGreaterThan(
+    String value, {
+    bool include = false,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        include: include,
+        property: r'fontName',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<PieMenu, PieMenu, QAfterFilterCondition> fontNameLessThan(
+    String value, {
+    bool include = false,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.lessThan(
+        include: include,
+        property: r'fontName',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<PieMenu, PieMenu, QAfterFilterCondition> fontNameBetween(
+    String lower,
+    String upper, {
+    bool includeLower = true,
+    bool includeUpper = true,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.between(
+        property: r'fontName',
+        lower: lower,
+        includeLower: includeLower,
+        upper: upper,
+        includeUpper: includeUpper,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<PieMenu, PieMenu, QAfterFilterCondition> fontNameStartsWith(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.startsWith(
+        property: r'fontName',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<PieMenu, PieMenu, QAfterFilterCondition> fontNameEndsWith(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.endsWith(
+        property: r'fontName',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<PieMenu, PieMenu, QAfterFilterCondition> fontNameContains(
+      String value,
+      {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.contains(
+        property: r'fontName',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<PieMenu, PieMenu, QAfterFilterCondition> fontNameMatches(
+      String pattern,
+      {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.matches(
+        property: r'fontName',
+        wildcard: pattern,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<PieMenu, PieMenu, QAfterFilterCondition> fontNameIsEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'fontName',
+        value: '',
+      ));
+    });
+  }
+
+  QueryBuilder<PieMenu, PieMenu, QAfterFilterCondition> fontNameIsNotEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        property: r'fontName',
+        value: '',
+      ));
+    });
+  }
+
+  QueryBuilder<PieMenu, PieMenu, QAfterFilterCondition> fontSizeEqualTo(
+      int value) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'fontSize',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<PieMenu, PieMenu, QAfterFilterCondition> fontSizeGreaterThan(
+    int value, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        include: include,
+        property: r'fontSize',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<PieMenu, PieMenu, QAfterFilterCondition> fontSizeLessThan(
+    int value, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.lessThan(
+        include: include,
+        property: r'fontSize',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<PieMenu, PieMenu, QAfterFilterCondition> fontSizeBetween(
+    int lower,
+    int upper, {
+    bool includeLower = true,
+    bool includeUpper = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.between(
+        property: r'fontSize',
         lower: lower,
         includeLower: includeLower,
         upper: upper,
@@ -1443,6 +1707,42 @@ extension PieMenuQuerySortBy on QueryBuilder<PieMenu, PieMenu, QSortBy> {
     });
   }
 
+  QueryBuilder<PieMenu, PieMenu, QAfterSortBy> sortByFontColor() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'fontColor', Sort.asc);
+    });
+  }
+
+  QueryBuilder<PieMenu, PieMenu, QAfterSortBy> sortByFontColorDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'fontColor', Sort.desc);
+    });
+  }
+
+  QueryBuilder<PieMenu, PieMenu, QAfterSortBy> sortByFontName() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'fontName', Sort.asc);
+    });
+  }
+
+  QueryBuilder<PieMenu, PieMenu, QAfterSortBy> sortByFontNameDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'fontName', Sort.desc);
+    });
+  }
+
+  QueryBuilder<PieMenu, PieMenu, QAfterSortBy> sortByFontSize() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'fontSize', Sort.asc);
+    });
+  }
+
+  QueryBuilder<PieMenu, PieMenu, QAfterSortBy> sortByFontSizeDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'fontSize', Sort.desc);
+    });
+  }
+
   QueryBuilder<PieMenu, PieMenu, QAfterSortBy> sortByIconColor() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'iconColor', Sort.asc);
@@ -1614,6 +1914,42 @@ extension PieMenuQuerySortThenBy
     });
   }
 
+  QueryBuilder<PieMenu, PieMenu, QAfterSortBy> thenByFontColor() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'fontColor', Sort.asc);
+    });
+  }
+
+  QueryBuilder<PieMenu, PieMenu, QAfterSortBy> thenByFontColorDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'fontColor', Sort.desc);
+    });
+  }
+
+  QueryBuilder<PieMenu, PieMenu, QAfterSortBy> thenByFontName() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'fontName', Sort.asc);
+    });
+  }
+
+  QueryBuilder<PieMenu, PieMenu, QAfterSortBy> thenByFontNameDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'fontName', Sort.desc);
+    });
+  }
+
+  QueryBuilder<PieMenu, PieMenu, QAfterSortBy> thenByFontSize() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'fontSize', Sort.asc);
+    });
+  }
+
+  QueryBuilder<PieMenu, PieMenu, QAfterSortBy> thenByFontSizeDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'fontSize', Sort.desc);
+    });
+  }
+
   QueryBuilder<PieMenu, PieMenu, QAfterSortBy> thenByIconColor() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'iconColor', Sort.asc);
@@ -1767,6 +2103,25 @@ extension PieMenuQueryWhereDistinct
     });
   }
 
+  QueryBuilder<PieMenu, PieMenu, QDistinct> distinctByFontColor() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addDistinctBy(r'fontColor');
+    });
+  }
+
+  QueryBuilder<PieMenu, PieMenu, QDistinct> distinctByFontName(
+      {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addDistinctBy(r'fontName', caseSensitive: caseSensitive);
+    });
+  }
+
+  QueryBuilder<PieMenu, PieMenu, QDistinct> distinctByFontSize() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addDistinctBy(r'fontSize');
+    });
+  }
+
   QueryBuilder<PieMenu, PieMenu, QDistinct> distinctByIconColor() {
     return QueryBuilder.apply(this, (query) {
       return query.addDistinctBy(r'iconColor');
@@ -1865,6 +2220,24 @@ extension PieMenuQueryProperty
   QueryBuilder<PieMenu, int, QQueryOperations> escapeRadiusProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'escapeRadius');
+    });
+  }
+
+  QueryBuilder<PieMenu, int, QQueryOperations> fontColorProperty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addPropertyName(r'fontColor');
+    });
+  }
+
+  QueryBuilder<PieMenu, String, QQueryOperations> fontNameProperty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addPropertyName(r'fontName');
+    });
+  }
+
+  QueryBuilder<PieMenu, int, QQueryOperations> fontSizeProperty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addPropertyName(r'fontSize');
     });
   }
 

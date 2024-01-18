@@ -16,14 +16,17 @@ class PieMenu {
 
   @enumerated
   PieMenuActivationMode activationMode;
+  String fontName;
   bool openInScreenCenter;
   int mainColor;
   int secondaryColor;
+  int fontColor;
   int iconColor;
   int escapeRadius;
   int centerRadius;
   int centerThickness;
   int iconSize;
+  int fontSize;
   int pieItemRoundness;
   int pieItemSpread;
   List<int> pieItemOrder = [];
@@ -44,11 +47,14 @@ class PieMenu {
     this.mainColor = 0xFF1DAEAA,
     this.secondaryColor = 0xFF282828,
     this.iconColor = 0xFFFFFFFF,
+    this.fontColor = 0xFFFFFFFF,
+    this.fontSize = 14,
     this.centerRadius = 20,
     this.centerThickness = 10,
-    this.iconSize = 16,
+    this.iconSize = 32,
     this.pieItemRoundness = 7,
     this.pieItemSpread = 150,
+    this.fontName = 'Roboto',
   });
 
   PieMenu.from(PieMenu pieMenu)
@@ -64,9 +70,10 @@ class PieMenu {
         centerThickness = pieMenu.centerThickness,
         iconSize = pieMenu.iconSize,
         pieItemRoundness = pieMenu.pieItemRoundness,
-        pieItemSpread = pieMenu.pieItemSpread;
+        pieItemSpread = pieMenu.pieItemSpread,
+        fontName = pieMenu.fontName,
+        fontSize = pieMenu.fontSize,
+        fontColor = pieMenu.fontColor;
 }
 
-enum PieMenuActivationMode {
-  activateOnKeyDown
-}
+enum PieMenuActivationMode { activateOnKeyDown }

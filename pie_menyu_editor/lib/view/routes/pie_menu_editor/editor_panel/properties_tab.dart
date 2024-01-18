@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:localization/localization.dart';
 import 'package:pie_menyu_editor/view/widgets/draggable_number_field.dart';
 import 'package:pie_menyu_editor/view/widgets/expansion_color_picker_tile.dart';
@@ -17,6 +18,21 @@ class PropertiesTab extends StatefulWidget {
 
 class _PropertiesTabState extends State<PropertiesTab> {
   final double rowGap = 10;
+  final List<DropdownMenuItem<String>> fontsDropdownItem = [
+    "Amatic SC",
+    "Caveat",
+    "Comfortaa",
+    "Roboto",
+    "Lora",
+    "Montserrat",
+  ]
+      .map(
+        (fontName) => DropdownMenuItem<String>(
+          value: fontName,
+          child: Text(fontName, style: GoogleFonts.getFont(fontName)),
+        ),
+      )
+      .toList();
 
   @override
   Widget build(BuildContext context) {
@@ -59,6 +75,15 @@ class _PropertiesTabState extends State<PropertiesTab> {
                         .updatePieMenu(pieMenu..iconColor = color.value);
                   },
                 ),
+                ExpansionColorPickerTile(
+                  title: Text("label-font-color".i18n()),
+                  color: Color(pieMenu.fontColor),
+                  onColorChanged: (color) {
+                    context
+                        .read<PieMenuState>()
+                        .updatePieMenu(pieMenu..fontColor = color.value);
+                  },
+                ),
               ],
             ),
             Gap(rowGap),
@@ -96,37 +121,40 @@ class _PropertiesTabState extends State<PropertiesTab> {
                 )
               ],
             ),
-            // Gap(rowGap),
-            // const Row(
-            //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            //   children: [
-            //     Text("Activation Mode"),
-            //     SizedBox(
-            //         width: 10, height: 10, child: Placeholder()),
-            //   ],
-            // ),
             Gap(rowGap),
-            Column(
+            Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    const Expanded(child: Text("Escape Radius")),
-                    SizedBox(
-                      width: 70,
-                      child: DraggableNumberField(
-                        min: 0,
-                        max: 500,
-                        value: pieMenu.escapeRadius,
-                        onChanged: (int value) {
-                          context
-                              .read<PieMenuState>()
-                              .updatePieMenu(pieMenu..escapeRadius = value);
-                        },
-                      ),
-                    ),
-                  ],
+                const Expanded(child: Text("Font Family")),
+                DropdownButton<String>(
+                  items: fontsDropdownItem,
+                  value: pieMenu.fontName,
+                  onChanged: (String? value) {
+                    if (value == null) return;
+                    context
+                        .read<PieMenuState>()
+                        .updatePieMenu(pieMenu..fontName = value);
+                  },
+                ),
+              ],
+            ),
+            Gap(rowGap),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                const Expanded(child: Text("Escape Radius")),
+                SizedBox(
+                  width: 70,
+                  child: DraggableNumberField(
+                    min: 0,
+                    max: 500,
+                    value: pieMenu.escapeRadius,
+                    onChanged: (int value) {
+                      context
+                          .read<PieMenuState>()
+                          .updatePieMenu(pieMenu..escapeRadius = value);
+                    },
+                  ),
                 ),
               ],
             ),
@@ -185,6 +213,26 @@ class _PropertiesTabState extends State<PropertiesTab> {
                       context
                           .read<PieMenuState>()
                           .updatePieMenu(pieMenu..iconSize = value);
+                    },
+                  ),
+                ),
+              ],
+            ),
+            Gap(rowGap),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                const Text("Font Size"),
+                SizedBox(
+                  width: 70,
+                  child: DraggableNumberField(
+                    min: 0,
+                    max: 500,
+                    value: pieMenu.fontSize,
+                    onChanged: (int value) {
+                      context
+                          .read<PieMenuState>()
+                          .updatePieMenu(pieMenu..fontSize = value);
                     },
                   ),
                 ),

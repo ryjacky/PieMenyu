@@ -57,6 +57,7 @@ dependencies:
   screen_retriever: ^0.1.9
   flutter_typeahead: ^5.0.1
   url_launcher: ^6.2.3
+  google_fonts: ^6.1.0
 
 
 dev_dependencies:

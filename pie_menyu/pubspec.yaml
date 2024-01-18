@@ -48,6 +48,7 @@ dependencies:
   ffi: ^2.1.0
   flutter_auto_gui: ^0.0.3
   path_provider: ^2.1.2
+  google_fonts: ^6.1.0
 
 dev_dependencies:
   flutter_test:
