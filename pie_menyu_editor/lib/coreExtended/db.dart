@@ -19,8 +19,9 @@ extension DBExtended on DB {
       await saveTaskTo(pieItem, putTasks);
     }
 
-    state.pieMenu.pieItemInstances =
-        state.pieItems.map((e) => PieItemInstance(pieItemId: e.id)).toList(growable: false);
+    state.pieMenu.pieItemInstances = state.pieItemInstances
+        .map((e) => PieItemInstance(pieItemId: e.pieItemId, keyCode: e.keyCode))
+        .toList();
     await DB.putPieMenu(state.pieMenu);
   }
 

@@ -9,6 +9,7 @@ import 'package:gap/gap.dart';
 import 'package:localization/localization.dart';
 import 'package:pie_menyu_core/db/pie_item.dart';
 import 'package:pie_menyu_core/db/pie_menu.dart';
+import 'package:pie_menyu_editor/coreExtended/real_pie_item_instance.dart';
 import 'package:pie_menyu_editor/system/file_icon.dart';
 import 'package:pie_menyu_editor/view/widgets/PrimaryButton.dart';
 import 'package:pie_menyu_editor/view/widgets/alphanumeric_input_field.dart';
@@ -27,29 +28,24 @@ class PieItemListTab extends StatefulWidget {
 class _PieItemListTabState extends State<PieItemListTab> {
   @override
   Widget build(BuildContext context) {
-    final pieItems = context
-        .watch<PieMenuState>()
-        .pieItems;
-    final pieMenu = context
-        .watch<PieMenuState>()
-        .pieMenu;
+    final pieItemInstances = context.watch<PieMenuState>().pieItemInstances;
+
+    final pieMenu = context.watch<PieMenuState>().pieMenu;
     return ReorderableListView(
       header: Padding(
         padding: const EdgeInsets.all(8.0),
         child: PrimaryButton(
-          onPressed: () =>
-              context
-                  .read<PieMenuState>()
-                  .addPieItem(
-                  PieItem(displayName: "label-new-pie-item".i18n())),
+          onPressed: () => context
+              .read<PieMenuState>()
+              .addPieItem(PieItem(displayName: "label-new-pie-item".i18n())),
           label: Text("label-new-pie-item".i18n()),
           icon: FontAwesomeIcons.plus,
         ),
       ),
       children: [
-        for (final PieItem pieItem in pieItems)
+        for (final RealPieItemInstance piInstance in pieItemInstances)
           SizedBox(
-            key: ValueKey(pieItem),
+            key: ValueKey(piInstance),
             width: 310,
             child: ListTile(
               title: Row(
@@ -57,53 +53,30 @@ class _PieItemListTabState extends State<PieItemListTab> {
                 children: [
                   Expanded(
                     child: MinimalTextField(
-                      content: pieItem.displayName,
+                      content: piInstance.pieItem.displayName,
                       onSubmitted: (String value) {
-                        context
-                            .read<PieMenuState>()
-                            .updatePieItem(pieItem..displayName = value);
+                        context.read<PieMenuState>().updatePieItem(
+                            piInstance.pieItem..displayName = value);
                       },
                     ),
                   ),
                   const Gap(10),
                   SizedBox(
-                    width: 32,
-                    child: Tooltip(
-                      message: "tooltip-pie-item-key".i18n(),
-                      child: SingleAlphanumericInputField(
-                        initialValue: pieMenu.pieItemInstances
-                            .where((element) => element.pieItemId == pieItem.id,).firstOrNull?.keyCode ?? "",
-                        onSubmitted: (String value) {
-                          var keyToPieItemIdList = pieMenu.pieItemInstances;
-                          bool updated = false;
-                          for (int i = 0; i < keyToPieItemIdList.length; i++) {
-                            if (keyToPieItemIdList[i].pieItemId == pieItem.id) {
-                              keyToPieItemIdList[i] = keyToPieItemIdList[i]
-                                ..keyCode = value;
-                              updated = true;
-                              break;
-                            }
-                          }
-                          if (!updated) {
-                            keyToPieItemIdList = [
-                              ...keyToPieItemIdList,
-                              PieItemInstance(
-                                pieItemId: pieItem.id,
-                                keyCode: value,
-                              )
-                            ];
-                          }
-                          context
-                              .read<PieMenuState>()
-                              .updatePieMenu(pieMenu..pieItemInstances = keyToPieItemIdList);
-                        },
-                      ),
-                    )
-                  ),
+                      width: 32,
+                      child: Tooltip(
+                        message: "tooltip-pie-item-key".i18n(),
+                        child: SingleAlphanumericInputField(
+                          initialValue: piInstance.keyCode,
+                          onSubmitted: (String value) {
+                            context.read<PieMenuState>().updatePieItemInstance(
+                                piInstance..keyCode = value);
+                          },
+                        ),
+                      )),
                 ],
               ),
-              leading: createAddIconButton(pieItem),
-              trailing: createDeleteButton(pieItem),
+              leading: createAddIconButton(piInstance.pieItem),
+              trailing: createDeleteButton(piInstance.pieItem),
             ),
           ),
       ],
@@ -132,10 +105,7 @@ class _PieItemListTabState extends State<PieItemListTab> {
           borderRadius: BorderRadius.circular(3),
         ),
         side: BorderSide(
-          color: Theme
-              .of(context)
-              .colorScheme
-              .outlineVariant,
+          color: Theme.of(context).colorScheme.outlineVariant,
           width: 2,
         ),
       ),
@@ -150,7 +120,7 @@ class _PieItemListTabState extends State<PieItemListTab> {
         height: 32,
         base64Decode(pieItem.iconBase64),
         errorBuilder: (context, error, stackTrace) =>
-        const Icon(FontAwesomeIcons.plus),
+            const Icon(FontAwesomeIcons.plus),
       ),
     );
   }

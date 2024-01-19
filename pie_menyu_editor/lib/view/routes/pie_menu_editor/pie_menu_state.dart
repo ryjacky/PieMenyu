@@ -3,30 +3,29 @@ import 'package:pie_menyu_core/db/db.dart';
 import 'package:pie_menyu_core/db/pie_item.dart';
 import 'package:pie_menyu_core/db/pie_item_task.dart';
 import 'package:pie_menyu_core/db/pie_menu.dart';
+import 'package:pie_menyu_editor/coreExtended/real_pie_item_instance.dart';
 
 class PieMenuState extends ChangeNotifier {
   static const deleteId = 0;
   int nextId = -1;
 
-  PieMenu _pieMenu = PieMenu();
-
+  final PieMenu _pieMenu;
   PieMenu get pieMenu => _pieMenu;
 
-  List<PieItem> _pieItems = [];
+  List<RealPieItemInstance> _pieItemInstances = [];
+  List<RealPieItemInstance> get pieItemInstances => _pieItemInstances;
+  List<PieItem> get pieItems =>
+      _pieItemInstances.map((e) => e.pieItem).toList();
 
-  List<PieItem> get pieItems => _pieItems;
-
-  Map<int, Set<PieItemTask>> _pieItemTasks = {};
-
+  final Map<int, Set<PieItemTask>> _pieItemTasks = {};
   Map<int, Set<PieItemTask>> get pieItemTasks => _pieItemTasks;
 
   PieItem? _activePieItem;
-
   PieItem? get activePieItem => _activePieItem;
 
   void setActivePieItem(PieItem pieItem) {
     _activePieItem =
-        _pieItems.where((element) => element.id == pieItem.id).firstOrNull;
+        pieItems.where((element) => element.id == pieItem.id).firstOrNull;
     notifyListeners();
   }
 
@@ -38,11 +37,17 @@ class PieMenuState extends ChangeNotifier {
 
   /// Load pie items of current pie menu and their tasks from database
   void load() async {
-    _pieItems = await DB.getPieItemsOf(_pieMenu);
+    final pieItems = await DB.getPieItemsOf(_pieMenu);
 
-    for (PieItem pieItem in _pieItems) {
+    for (PieItem pieItem in pieItems) {
       await pieItem.tasks.load();
       _pieItemTasks[pieItem.id] = pieItem.tasks;
+      _pieItemInstances.add(RealPieItemInstance(
+          pieMenu.pieItemInstances
+                  .where((element) => element.pieItemId == pieItem.id)
+                  .firstOrNull ??
+              PieItemInstance(pieItemId: pieItem.id),
+          pieItem));
     }
 
     notifyListeners();
@@ -79,7 +84,7 @@ class PieMenuState extends ChangeNotifier {
   }
 
   bool updatePieItem(PieItem pieItem) {
-    for (PieItem item in _pieItems) {
+    for (PieItem item in pieItems) {
       if (item.id == pieItem.id) {
         item.displayName = pieItem.displayName;
         item.iconBase64 = pieItem.iconBase64;
@@ -94,12 +99,15 @@ class PieMenuState extends ChangeNotifier {
   /// Add a pie item to current pie menu.
   /// Do nothing if a pie item with the same id already exists.
   bool addPieItem(PieItem pieItem) {
-    if (_pieItems.where((element) => element.id == pieItem.id).isNotEmpty) {
+    if (pieItems.where((element) => element.id == pieItem.id).isNotEmpty) {
       return false;
     }
 
     pieItem.id = nextId--;
-    _pieItems = [..._pieItems, pieItem];
+    _pieItemInstances = [
+      ..._pieItemInstances,
+      RealPieItemInstance(PieItemInstance(pieItemId: pieItem.id), pieItem)
+    ];
     _pieItemTasks[pieItem.id] = {};
     notifyListeners();
     return true;
@@ -171,28 +179,39 @@ class PieMenuState extends ChangeNotifier {
       newIndex += 1;
     }
 
-    PieItem pieItem = _pieItems.elementAt(oldIndex);
-    _pieItems.remove(pieItem);
+    RealPieItemInstance pieItem = _pieItemInstances.elementAt(oldIndex);
+    _pieItemInstances.remove(pieItem);
 
-    for (int i = newIndex; i < _pieItems.length; i++) {
-      _pieItems.add(pieItem);
+    for (int i = newIndex; i < _pieItemInstances.length; i++) {
+      _pieItemInstances.add(pieItem);
 
-      pieItem = _pieItems.elementAt(newIndex);
-      _pieItems.remove(pieItem);
+      pieItem = _pieItemInstances.elementAt(newIndex);
+      _pieItemInstances.remove(pieItem);
     }
-    _pieItems.add(pieItem);
+    _pieItemInstances.add(pieItem);
 
     notifyListeners();
   }
 
   bool removePieItem(PieItem pieItem) {
-    if (_pieItems.length <= 1) {
+    if (_pieItemInstances.length <= 1) {
       return false;
     }
 
-    _pieItems.remove(pieItem);
+    _pieItemInstances.removeWhere((element) => element.pieItem.id == pieItem.id);
     _pieItemTasks.remove(pieItem.id);
     notifyListeners();
     return true;
+  }
+
+  // PieItemInstance related ------------------------------------------
+  void updatePieItemInstance(RealPieItemInstance pieItemInstance) {
+    for (int i = 0; i < _pieItemInstances.length; i++) {
+      if (_pieItemInstances[i].pieItem.id == pieItemInstance.pieItem.id) {
+        _pieItemInstances[i] = pieItemInstance;
+        notifyListeners();
+        return;
+      }
+    }
   }
 }
