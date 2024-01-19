@@ -45,21 +45,16 @@ class WindowController extends ChangeNotifier {
         }
       }
       if (keyboardProvider.keyEvent.type == KeyboardEventType.keyUp) {
-        final pieItemOrder = pieMenuProvider.pieMenu.pieItemOrder;
-        for (int i = 0; i < pieItemOrder.length; i++) {
-          final pieItemInstanceInfo = pieMenuProvider.pieMenu.keyToPieItemIdList
-              .where((element) => element.pieItemId == pieItemOrder[i])
-              .firstOrNull;
-          if (pieItemInstanceInfo != null) {
-            if (pieItemInstanceInfo.keyCode ==
-                String.fromCharCode(keyboardProvider.keyEvent.vkCode)) {
-              executorService.activePieItemOrderIndex = i;
-              executeAfterHideWindow();
-              return;
-            }
+        final pieItemInstance = pieMenuProvider.pieMenu.pieItemInstances;
+        for (var piInstance in pieItemInstance) {
+          if (piInstance.keyCode ==
+              String.fromCharCode(keyboardProvider.keyEvent.vkCode)) {
+            executorService.activePieItemOrderIndex =
+                pieItemInstance.indexOf(piInstance);
+            break;
           }
         }
-        windowManager.hide();
+        executeAfterHideWindow();
       }
     });
 
@@ -84,6 +79,7 @@ class WindowController extends ChangeNotifier {
     await windowManager.hide();
 
     if (pieMenuProvider.pieItems.isEmpty) {
+
       return;
     }
     final tasks =

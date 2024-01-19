@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:pie_menyu_core/db/pie_item.dart';
 import 'package:pie_menyu_core/db/pie_menu.dart';
+import 'package:pie_menyu_core/db/db.dart';
 
 class PieMenuProvider extends ChangeNotifier {
   PieMenu _pieMenu = PieMenu();
@@ -31,19 +32,8 @@ class PieMenuProvider extends ChangeNotifier {
 
   /// Load pie items of current pie menu from database
   void loadPieItems() async {
-    throw UnimplementedError();
-
-    // await _pieMenu.pieItems.load();
-    //
-    // if (_pieMenu.pieItems.length != _pieMenu.pieItemOrder.length) {
-    //   _pieItems = _pieMenu.pieItems.toList();
-    // } else {
-    //   _pieItems = List.generate(
-    //       _pieMenu.pieItems.length,
-    //           (index) => _pieMenu.pieItems.firstWhere(
-    //               (element) => element.id == _pieMenu.pieItemOrder[index])).toList();
-    // }
-    // notifyListeners();
+    _pieItems = await DB.getPieItemsOf(_pieMenu);
+    notifyListeners();
   }
 
 }
