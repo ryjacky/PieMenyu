@@ -1,9 +1,11 @@
 import 'dart:developer' as dev;
+import 'dart:math';
 
 import 'package:flutter/cupertino.dart';
 import 'package:hotkey_manager/hotkey_manager.dart';
 import 'package:pie_menyu_core/db/db.dart';
 import 'package:pie_menyu_core/db/pie_item_task.dart';
+import 'package:pie_menyu_core/db/pie_menu.dart';
 import 'package:pie_menyu_core/db/profile.dart';
 import 'package:pie_menyu_core/executor/executor_service.dart';
 import 'package:pie_menyu_core/pieItemTasks/mouse_click_task.dart';
@@ -40,16 +42,33 @@ class WindowController extends ChangeNotifier {
       if (keyboardProvider.keyEvent.type == KeyboardEventType.keyDown) {
         if (!executorService.isExecuting &&
             keyboardProvider.keyEvent.hotkey != null) {
-          showPieMenuWindow(keyboardProvider.keyEvent.hotkey!);
+          showPieMenuWindow(keyboardProvider.keyEvent.hotkey!)
+              .then((value) => hotKeyManager.unregisterAll());
         }
       }
       if (keyboardProvider.keyEvent.type == KeyboardEventType.keyUp) {
         executeAfterHideWindow();
       }
     });
+
+    // TODO: escape radius, blocked because activation mode not implemented
+    // mouseCursorProvider.addListener(() {
+    //   if (pieMenuProvider.pieMenu.escapeRadius == 0 && pieMenuProvider.pieMenu.activationMode != PieMenuActivationMode.activateOnKeyDown) {
+    //     return;
+    //   }
+    //
+    //   final distanceX = mouseCursorProvider.mouseEvent.position.dx -
+    //       pieMenuProvider.pieCenterScreenPosition.dx;
+    //   final distanceY = mouseCursorProvider.mouseEvent.position.dy -
+    //       pieMenuProvider.pieCenterScreenPosition.dy;
+    //   if (sqrt(distanceX * distanceX + distanceY * distanceY) >
+    //       pieMenuProvider.pieMenu.escapeRadius) {
+    //     executeAfterHideWindow();
+    //   }
+    // });
   }
 
-  void executeAfterHideWindow() async {
+  Future<void> executeAfterHideWindow() async {
     await windowManager.hide();
 
     if (pieMenuProvider.pieItems.isEmpty) {
@@ -88,7 +107,7 @@ class WindowController extends ChangeNotifier {
     executorService.start();
   }
 
-  void showPieMenuWindow(HotKey hotKey) async {
+  Future<void> showPieMenuWindow(HotKey hotKey) async {
     if (await windowManager.isFocused()) {
       return;
     }
