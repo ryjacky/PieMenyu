@@ -19,10 +19,9 @@ extension DBExtended on DB {
       await saveTaskTo(pieItem, putTasks);
     }
 
-    state.pieMenu.pieItemOrder =
-        state.pieItems.map((e) => e.id).toList(growable: false);
+    state.pieMenu.pieItemInstances =
+        state.pieItems.map((e) => PieItemInstance(pieItemId: e.id)).toList(growable: false);
     await DB.putPieMenu(state.pieMenu);
-    await savePieItemsTo(state.pieMenu, state.pieItems.toList());
   }
 
   static Future<List<PieItemTask>> putPieItemTask(Set<PieItemTask> task) async {
@@ -57,21 +56,6 @@ extension DBExtended on DB {
     pieItem.tasks.addAll(tasks);
     await DB.isar.writeTxn(() async {
       await pieItem.tasks.save();
-    });
-  }
-
-  static savePieItemsTo(PieMenu pieMenu, List<PieItem> pieItems) async {
-    await pieMenu.pieItems.load();
-    final originalPieItems = pieMenu.pieItems.toList();
-    pieMenu.pieItems.removeAll(originalPieItems);
-    await DB.isar.writeTxn(() async {
-      // Must save before add again or else addAll in next line will not work
-      await pieMenu.pieItems.save();
-    });
-
-    pieMenu.pieItems.addAll(pieItems);
-    await DB.isar.writeTxn(() async {
-      await pieMenu.pieItems.save();
     });
   }
 }

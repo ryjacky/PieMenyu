@@ -1,4 +1,5 @@
 import 'package:flutter/cupertino.dart';
+import 'package:pie_menyu_core/db/db.dart';
 import 'package:pie_menyu_core/db/pie_item.dart';
 import 'package:pie_menyu_core/db/pie_item_task.dart';
 import 'package:pie_menyu_core/db/pie_menu.dart';
@@ -11,9 +12,9 @@ class PieMenuState extends ChangeNotifier {
 
   PieMenu get pieMenu => _pieMenu;
 
-  Set<PieItem> _pieItems = {};
+  List<PieItem> _pieItems = [];
 
-  Set<PieItem> get pieItems => _pieItems;
+  List<PieItem> get pieItems => _pieItems;
 
   Map<int, Set<PieItemTask>> _pieItemTasks = {};
 
@@ -37,20 +38,13 @@ class PieMenuState extends ChangeNotifier {
 
   /// Load pie items of current pie menu and their tasks from database
   void load() async {
-    await _pieMenu.pieItems.load();
-    if (_pieMenu.pieItems.length != _pieMenu.pieItemOrder.length) {
-      _pieItems = _pieMenu.pieItems;
-    } else {
-      _pieItems = List.generate(
-          _pieMenu.pieItems.length,
-              (index) => _pieMenu.pieItems.firstWhere(
-                  (element) => element.id == _pieMenu.pieItemOrder[index])).toSet();
-    }
+    _pieItems = await DB.getPieItemsOf(_pieMenu);
 
     for (PieItem pieItem in _pieItems) {
       await pieItem.tasks.load();
       _pieItemTasks[pieItem.id] = pieItem.tasks;
     }
+
     notifyListeners();
   }
 
@@ -70,7 +64,6 @@ class PieMenuState extends ChangeNotifier {
     _pieMenu.iconSize = pieMenu.iconSize;
     _pieMenu.pieItemRoundness = pieMenu.pieItemRoundness;
     _pieMenu.pieItemSpread = pieMenu.pieItemSpread;
-    _pieMenu.pieItems = pieMenu.pieItems;
     _pieMenu.profiles = pieMenu.profiles;
 
     notifyListeners();
@@ -106,7 +99,7 @@ class PieMenuState extends ChangeNotifier {
     }
 
     pieItem.id = nextId--;
-    _pieItems = {..._pieItems, pieItem};
+    _pieItems = [..._pieItems, pieItem];
     _pieItemTasks[pieItem.id] = {};
     notifyListeners();
     return true;

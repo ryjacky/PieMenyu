@@ -40,13 +40,6 @@ const PieItemSchema = CollectionSchema(
   idName: r'id',
   indexes: {},
   links: {
-    r'pieMenus': LinkSchema(
-      id: 6484480270944672114,
-      name: r'pieMenus',
-      target: r'PieMenu',
-      single: false,
-      linkName: r'pieItems',
-    ),
     r'tasks': LinkSchema(
       id: -8485404465967763350,
       name: r'tasks',
@@ -121,12 +114,11 @@ Id _pieItemGetId(PieItem object) {
 }
 
 List<IsarLinkBase<dynamic>> _pieItemGetLinks(PieItem object) {
-  return [object.pieMenus, object.tasks];
+  return [object.tasks];
 }
 
 void _pieItemAttach(IsarCollection<dynamic> col, Id id, PieItem object) {
   object.id = id;
-  object.pieMenus.attach(col, col.isar.collection<PieMenu>(), r'pieMenus', id);
   object.tasks.attach(col, col.isar.collection<PieItemTask>(), r'tasks', id);
 }
 
@@ -536,63 +528,6 @@ extension PieItemQueryObject
 
 extension PieItemQueryLinks
     on QueryBuilder<PieItem, PieItem, QFilterCondition> {
-  QueryBuilder<PieItem, PieItem, QAfterFilterCondition> pieMenus(
-      FilterQuery<PieMenu> q) {
-    return QueryBuilder.apply(this, (query) {
-      return query.link(q, r'pieMenus');
-    });
-  }
-
-  QueryBuilder<PieItem, PieItem, QAfterFilterCondition> pieMenusLengthEqualTo(
-      int length) {
-    return QueryBuilder.apply(this, (query) {
-      return query.linkLength(r'pieMenus', length, true, length, true);
-    });
-  }
-
-  QueryBuilder<PieItem, PieItem, QAfterFilterCondition> pieMenusIsEmpty() {
-    return QueryBuilder.apply(this, (query) {
-      return query.linkLength(r'pieMenus', 0, true, 0, true);
-    });
-  }
-
-  QueryBuilder<PieItem, PieItem, QAfterFilterCondition> pieMenusIsNotEmpty() {
-    return QueryBuilder.apply(this, (query) {
-      return query.linkLength(r'pieMenus', 0, false, 999999, true);
-    });
-  }
-
-  QueryBuilder<PieItem, PieItem, QAfterFilterCondition> pieMenusLengthLessThan(
-    int length, {
-    bool include = false,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.linkLength(r'pieMenus', 0, true, length, include);
-    });
-  }
-
-  QueryBuilder<PieItem, PieItem, QAfterFilterCondition>
-      pieMenusLengthGreaterThan(
-    int length, {
-    bool include = false,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.linkLength(r'pieMenus', length, include, 999999, true);
-    });
-  }
-
-  QueryBuilder<PieItem, PieItem, QAfterFilterCondition> pieMenusLengthBetween(
-    int lower,
-    int upper, {
-    bool includeLower = true,
-    bool includeUpper = true,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.linkLength(
-          r'pieMenus', lower, includeLower, upper, includeUpper);
-    });
-  }
-
   QueryBuilder<PieItem, PieItem, QAfterFilterCondition> tasks(
       FilterQuery<PieItemTask> q) {
     return QueryBuilder.apply(this, (query) {

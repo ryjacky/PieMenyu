@@ -30,11 +30,9 @@ class PieMenu {
   int fontSize;
   int pieItemRoundness;
   int pieItemSpread;
-  List<int> pieItemOrder = [];
   final int pieItemWidth = 512;
 
-  List<PieItemInstanceInfo> keyToPieItemIdList = [];
-  IsarLinks<PieItem> pieItems = IsarLinks<PieItem>();
+  List<PieItemInstance> pieItemInstances = [];
 
   @Backlink(to: 'pieMenus')
   IsarLinks<Profile> profiles = IsarLinks<Profile>();
@@ -80,19 +78,19 @@ class PieMenu {
 enum PieMenuActivationMode { activateOnKeyDown }
 
 @embedded
-class PieItemInstanceInfo {
+class PieItemInstance {
   @enumerated
   String keyCode = "";
 
   int pieItemId = 0;
 
-  PieItemInstanceInfo({
+  PieItemInstance({
     this.keyCode = "",
     this.pieItemId = 0,
   });
 
-  factory PieItemInstanceInfo.from(PieItemInstanceInfo info) {
-    return PieItemInstanceInfo(
+  factory PieItemInstance.from(PieItemInstance info) {
+    return PieItemInstance(
       keyCode: info.keyCode,
       pieItemId: info.pieItemId,
     );

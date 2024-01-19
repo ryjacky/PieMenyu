@@ -110,6 +110,14 @@ class DB {
     return (await _isar.pieMenus.getAll(ids)).whereType<PieMenu>().toList();
   }
 
+  static Future<List<PieItem>> getPieItems(
+      {List<int> ids = const <int>[]}) async {
+    if (ids.isEmpty) {
+      return _isar.pieItems.where().findAll();
+    }
+    return (await _isar.pieItems.getAll(ids)).whereType<PieItem>().toList();
+  }
+
   static Future<void> addPieMenuToProfile(int pieMenuId, int profileId) async {
     List<dynamic> result = await Future.wait([
       _isar.profiles.get(profileId),
@@ -178,9 +186,16 @@ class DB {
 
   /// Insert when not existed, update when existed.
   /// [pieItem.id] will be set to the inserted id.
+  @Deprecated("Use putPieItems")
   static Future<void> putPieItem(PieItem pieItem) async {
     await _isar.writeTxn(() async {
       await _isar.pieItems.put(pieItem);
+    });
+  }
+
+  static Future<void> putPieItems(List<PieItem> pieItem) async {
+    await _isar.writeTxn(() async {
+      await _isar.pieItems.putAll(pieItem);
     });
   }
 
@@ -202,21 +217,28 @@ class DB {
       return;
     }
 
-    pieMenu.pieItems.add(pieItem);
-    await _isar.writeTxn(() async {
-      // Isar automatically handles duplicated case for IsarLinks and will
-      // not add if existed
-      await pieMenu.pieItems.save();
-    });
+    throw UnimplementedError();
+
+    // pieMenu.pieItems.add(pieItem);
+    // await _isar.writeTxn(() async {
+    //   // Isar automatically handles duplicated case for IsarLinks and will
+    //   // not add if existed
+    //   await pieMenu.pieItems.save();
+    // });
   }
 
   static addPieItemsToPieMenu(List<PieItem> pieItems, PieMenu pieMenu) async {
-    pieMenu.pieItems.addAll(pieItems);
-    await _isar.writeTxn(() async {
-      // Isar automatically handles duplicated case for IsarLinks and will
-      // not add if existed
-      await pieMenu.pieItems.save();
-    });
+    throw UnimplementedError();
+    // pieMenu.pieItems.addAll(pieItems);
+    // await _isar.writeTxn(() async {
+    //   // Isar automatically handles duplicated case for IsarLinks and will
+    //   // not add if existed
+    //   await pieMenu.pieItems.save();
+    // });
+  }
+
+  static Future<List<PieItem>> getPieItemsOf(PieMenu pieMenu) async {
+    return getPieItems(ids: pieMenu.pieItemInstances.map((e) => e.pieItemId).toList());
   }
 
   /// Quoted from https://isar.dev/docs/

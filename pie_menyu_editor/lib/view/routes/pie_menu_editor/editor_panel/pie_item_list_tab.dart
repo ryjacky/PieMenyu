@@ -71,10 +71,10 @@ class _PieItemListTabState extends State<PieItemListTab> {
                     child: Tooltip(
                       message: "tooltip-pie-item-key".i18n(),
                       child: SingleAlphanumericInputField(
-                        initialValue: pieMenu.keyToPieItemIdList
+                        initialValue: pieMenu.pieItemInstances
                             .where((element) => element.pieItemId == pieItem.id,).firstOrNull?.keyCode ?? "",
                         onSubmitted: (String value) {
-                          var keyToPieItemIdList = pieMenu.keyToPieItemIdList;
+                          var keyToPieItemIdList = pieMenu.pieItemInstances;
                           bool updated = false;
                           for (int i = 0; i < keyToPieItemIdList.length; i++) {
                             if (keyToPieItemIdList[i].pieItemId == pieItem.id) {
@@ -87,7 +87,7 @@ class _PieItemListTabState extends State<PieItemListTab> {
                           if (!updated) {
                             keyToPieItemIdList = [
                               ...keyToPieItemIdList,
-                              PieItemInstanceInfo(
+                              PieItemInstance(
                                 pieItemId: pieItem.id,
                                 keyCode: value,
                               )
@@ -95,7 +95,7 @@ class _PieItemListTabState extends State<PieItemListTab> {
                           }
                           context
                               .read<PieMenuState>()
-                              .updatePieMenu(pieMenu..keyToPieItemIdList = keyToPieItemIdList);
+                              .updatePieMenu(pieMenu..pieItemInstances = keyToPieItemIdList);
                         },
                       ),
                     )

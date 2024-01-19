@@ -17,7 +17,7 @@ class PieItemView extends StatefulWidget {
   final PieItemOffset horizontalOffset;
   final double fontSize;
   final double iconSize;
-  final PieItemInstanceInfo info;
+  final PieItemInstance info;
 
   const PieItemView(
       {super.key,

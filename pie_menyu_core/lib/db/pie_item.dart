@@ -15,9 +15,6 @@ class PieItem {
   String displayName = '';
   bool enabled = true;
 
-  @Backlink(to: 'pieItems')
-  IsarLinks<PieMenu> pieMenus = IsarLinks<PieMenu>();
-
   IsarLinks<PieItemTask> tasks = IsarLinks<PieItemTask>();
 
   PieItem({

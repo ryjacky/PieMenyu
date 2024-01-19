@@ -20,7 +20,7 @@ class _PieMenuEditorPageState extends State<PieMenuEditorPage> {
   Widget build(BuildContext context) {
     final pieItemOrderIndex = 0;
     final pieMenu = context.watch<PieMenuState>().pieMenu;
-    final pieItems = context.select<PieMenuState, Set<PieItem>>(
+    final pieItems = context.select<PieMenuState, List<PieItem>>(
         (value) => value.pieItems);
 
     return Scaffold(
