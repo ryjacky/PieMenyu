@@ -1,5 +1,6 @@
 library pie_menyu_core;
 
+import 'package:hotkey_manager/hotkey_manager.dart';
 import 'package:isar/isar.dart';
 
 import 'pie_item.dart';
@@ -30,9 +31,9 @@ class PieMenu {
   int pieItemRoundness;
   int pieItemSpread;
   List<int> pieItemOrder = [];
-
   final int pieItemWidth = 512;
 
+  List<PieItemInstanceInfo> keyToPieItemIdList = [];
   IsarLinks<PieItem> pieItems = IsarLinks<PieItem>();
 
   @Backlink(to: 'pieMenus')
@@ -77,3 +78,23 @@ class PieMenu {
 }
 
 enum PieMenuActivationMode { activateOnKeyDown }
+
+@embedded
+class PieItemInstanceInfo {
+  @enumerated
+  String keyCode = "";
+
+  int pieItemId = 0;
+
+  PieItemInstanceInfo({
+    this.keyCode = "",
+    this.pieItemId = 0,
+  });
+
+  factory PieItemInstanceInfo.from(PieItemInstanceInfo info) {
+    return PieItemInstanceInfo(
+      keyCode: info.keyCode,
+      pieItemId: info.pieItemId,
+    );
+  }
+}

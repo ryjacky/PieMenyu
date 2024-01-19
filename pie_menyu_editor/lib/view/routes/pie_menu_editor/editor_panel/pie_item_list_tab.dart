@@ -3,12 +3,15 @@ import 'dart:math';
 
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:gap/gap.dart';
 import 'package:localization/localization.dart';
 import 'package:pie_menyu_core/db/pie_item.dart';
+import 'package:pie_menyu_core/db/pie_menu.dart';
 import 'package:pie_menyu_editor/system/file_icon.dart';
 import 'package:pie_menyu_editor/view/widgets/PrimaryButton.dart';
+import 'package:pie_menyu_editor/view/widgets/alphanumeric_input_field.dart';
 import 'package:pie_menyu_editor/view/widgets/minimal_text_field.dart';
 import 'package:provider/provider.dart';
 
@@ -24,14 +27,21 @@ class PieItemListTab extends StatefulWidget {
 class _PieItemListTabState extends State<PieItemListTab> {
   @override
   Widget build(BuildContext context) {
-    final pieItems = context.watch<PieMenuState>().pieItems;
+    final pieItems = context
+        .watch<PieMenuState>()
+        .pieItems;
+    final pieMenu = context
+        .watch<PieMenuState>()
+        .pieMenu;
     return ReorderableListView(
       header: Padding(
         padding: const EdgeInsets.all(8.0),
         child: PrimaryButton(
-          onPressed: () => context
-              .read<PieMenuState>()
-              .addPieItem(PieItem(displayName: "label-new-pie-item".i18n())),
+          onPressed: () =>
+              context
+                  .read<PieMenuState>()
+                  .addPieItem(
+                  PieItem(displayName: "label-new-pie-item".i18n())),
           label: Text("label-new-pie-item".i18n()),
           icon: FontAwesomeIcons.plus,
         ),
@@ -42,13 +52,55 @@ class _PieItemListTabState extends State<PieItemListTab> {
             key: ValueKey(pieItem),
             width: 310,
             child: ListTile(
-              title: MinimalTextField(
-                content: pieItem.displayName,
-                onSubmitted: (String value) {
-                  context
-                      .read<PieMenuState>()
-                      .updatePieItem(pieItem..displayName = value);
-                },
+              title: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Expanded(
+                    child: MinimalTextField(
+                      content: pieItem.displayName,
+                      onSubmitted: (String value) {
+                        context
+                            .read<PieMenuState>()
+                            .updatePieItem(pieItem..displayName = value);
+                      },
+                    ),
+                  ),
+                  const Gap(10),
+                  SizedBox(
+                    width: 32,
+                    child: Tooltip(
+                      message: "tooltip-pie-item-key".i18n(),
+                      child: SingleAlphanumericInputField(
+                        initialValue: pieMenu.keyToPieItemIdList
+                            .where((element) => element.pieItemId == pieItem.id,).firstOrNull?.keyCode ?? "",
+                        onSubmitted: (String value) {
+                          var keyToPieItemIdList = pieMenu.keyToPieItemIdList;
+                          bool updated = false;
+                          for (int i = 0; i < keyToPieItemIdList.length; i++) {
+                            if (keyToPieItemIdList[i].pieItemId == pieItem.id) {
+                              keyToPieItemIdList[i] = keyToPieItemIdList[i]
+                                ..keyCode = value;
+                              updated = true;
+                              break;
+                            }
+                          }
+                          if (!updated) {
+                            keyToPieItemIdList = [
+                              ...keyToPieItemIdList,
+                              PieItemInstanceInfo(
+                                pieItemId: pieItem.id,
+                                keyCode: value,
+                              )
+                            ];
+                          }
+                          context
+                              .read<PieMenuState>()
+                              .updatePieMenu(pieMenu..keyToPieItemIdList = keyToPieItemIdList);
+                        },
+                      ),
+                    )
+                  ),
+                ],
               ),
               leading: createAddIconButton(pieItem),
               trailing: createDeleteButton(pieItem),
@@ -80,7 +132,10 @@ class _PieItemListTabState extends State<PieItemListTab> {
           borderRadius: BorderRadius.circular(3),
         ),
         side: BorderSide(
-          color: Theme.of(context).colorScheme.outlineVariant,
+          color: Theme
+              .of(context)
+              .colorScheme
+              .outlineVariant,
           width: 2,
         ),
       ),
@@ -95,7 +150,7 @@ class _PieItemListTabState extends State<PieItemListTab> {
         height: 32,
         base64Decode(pieItem.iconBase64),
         errorBuilder: (context, error, stackTrace) =>
-            const Icon(FontAwesomeIcons.plus),
+        const Icon(FontAwesomeIcons.plus),
       ),
     );
   }

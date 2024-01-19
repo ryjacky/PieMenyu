@@ -45,6 +45,7 @@
   "label-repeat": "Repeat",
   "tooltip-add-send-key-task": "Add Send Key Task - Send key to the active window",
   "tooltip-paste-text-task": "Add Paste Text Task - Send text to the foreground window",
+  "tooltip-pie-item-key": "Pie Item key",
   "tooltip-add-mouse-click-task": "Add Mouse Click Task - Click mouse at specific position",
   "tooltip-add-run-file-task": "Add Run File Task - Run file or application",
   "tooltip-add-open-sub-menu-task": "Add Open Sub Menu Task - Open another Pie Menu",

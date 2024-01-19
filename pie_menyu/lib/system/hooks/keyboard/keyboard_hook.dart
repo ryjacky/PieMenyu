@@ -12,7 +12,7 @@ import 'keyboard_event.dart';
 class KeyboardHookIsolate extends SystemHookIsolate {
   static KeyboardHookIsolate? _keyboardHookIsolate;
 
-  final List<Function()> _keyUpListener = [];
+  final List<Function(int vkCode)> _keyUpListener = [];
 
   factory KeyboardHookIsolate(List<HotKey> hotkeyList) {
     if (_keyboardHookIsolate == null) {
@@ -24,7 +24,7 @@ class KeyboardHookIsolate extends SystemHookIsolate {
 
   KeyboardHookIsolate._();
 
-  addKeyUpListener(Function() listener) {
+  addKeyUpListener(Function(int vkCode) listener) {
     _keyUpListener.add(listener);
   }
 
@@ -33,7 +33,7 @@ class KeyboardHookIsolate extends SystemHookIsolate {
     if (message is KeyboardEvent) {
       if (message.type == KeyboardEventType.keyUp) {
         for (var listener in _keyUpListener) {
-          listener();
+          listener(message.vkCode);
         }
       }
     }

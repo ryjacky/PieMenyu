@@ -102,6 +102,9 @@ class _PieMenuViewState extends State<PieMenuView> {
                   font: widget.pieMenu.fontName,
                   fontColor: widget.pieMenu.fontColor,
                   fontSize: widget.pieMenu.fontSize.toDouble(),
+                  info: widget.pieMenu.keyToPieItemIdList
+                      .where((element) => element.pieItemId == widget.pieItems.elementAt(i).id)
+                      .firstOrNull ?? PieItemInstanceInfo(),
                 ),
               ),
             ),

@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:pie_menyu_core/db/pie_menu.dart';
 
 enum PieItemOffset { toRight, toLeft, center }
 
@@ -16,6 +17,7 @@ class PieItemView extends StatefulWidget {
   final PieItemOffset horizontalOffset;
   final double fontSize;
   final double iconSize;
+  final PieItemInstanceInfo info;
 
   const PieItemView(
       {super.key,
@@ -28,7 +30,8 @@ class PieItemView extends StatefulWidget {
       this.horizontalOffset = PieItemOffset.toRight,
       required this.font,
       required this.fontColor,
-      required this.fontSize});
+      required this.fontSize,
+      required this.info});
 
   @override
   State<PieItemView> createState() => _PieItemViewState();
@@ -73,6 +76,14 @@ class _PieItemViewState extends State<PieItemView> {
                     style: GoogleFonts.getFont(widget.font,
                         color: Color(widget.fontColor),
                         fontSize: widget.fontSize)),
+                Padding(
+                  padding: EdgeInsets.fromLTRB(
+                      widget.info.keyCode == "" ? 0 : 6, 0, 0, 0),
+                  child: Text(widget.info.keyCode,
+                      style: GoogleFonts.getFont(widget.font,
+                          color: Color(widget.fontColor),
+                          fontSize: widget.fontSize)),
+                ),
               ],
             ),
           ),

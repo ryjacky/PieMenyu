@@ -32,9 +32,9 @@ class KeyboardProvider extends ChangeNotifier {
   void initializeKeyboardHook() async {
     _keyboardHookIsolate =
         KeyboardHookIsolate(hotKeyManager.registeredHotKeyList);
-    _keyboardHookIsolate!.addKeyUpListener(() async {
+    _keyboardHookIsolate!.addKeyUpListener((int vkCode) async {
       if (await windowManager.isFocused()) {
-        _event = KeyboardEvent(KeyboardEventType.keyUp, 0);
+        _event = KeyboardEvent(KeyboardEventType.keyUp, vkCode);
         notifyListeners();
       }
     });

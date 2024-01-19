@@ -1,11 +1,9 @@
 import 'dart:developer' as dev;
-import 'dart:math';
 
 import 'package:flutter/cupertino.dart';
 import 'package:hotkey_manager/hotkey_manager.dart';
 import 'package:pie_menyu_core/db/db.dart';
 import 'package:pie_menyu_core/db/pie_item_task.dart';
-import 'package:pie_menyu_core/db/pie_menu.dart';
 import 'package:pie_menyu_core/db/profile.dart';
 import 'package:pie_menyu_core/executor/executor_service.dart';
 import 'package:pie_menyu_core/pieItemTasks/mouse_click_task.dart';
@@ -47,7 +45,21 @@ class WindowController extends ChangeNotifier {
         }
       }
       if (keyboardProvider.keyEvent.type == KeyboardEventType.keyUp) {
-        executeAfterHideWindow();
+        final pieItemOrder = pieMenuProvider.pieMenu.pieItemOrder;
+        for (int i = 0; i < pieItemOrder.length; i++) {
+          final pieItemInstanceInfo = pieMenuProvider.pieMenu.keyToPieItemIdList
+              .where((element) => element.pieItemId == pieItemOrder[i])
+              .firstOrNull;
+          if (pieItemInstanceInfo != null) {
+            if (pieItemInstanceInfo.keyCode ==
+                String.fromCharCode(keyboardProvider.keyEvent.vkCode)) {
+              executorService.activePieItemOrderIndex = i;
+              executeAfterHideWindow();
+              return;
+            }
+          }
+        }
+        windowManager.hide();
       }
     });
 
