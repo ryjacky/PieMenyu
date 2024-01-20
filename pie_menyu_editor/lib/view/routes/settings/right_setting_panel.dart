@@ -52,6 +52,8 @@ class _RightSettingPanelState extends State<RightSettingPanel> {
         scrollTo(generalSectionKey);
       case SettingsSection.about:
         scrollTo(aboutSectionKey);
+      case SettingsSection.data:
+        scrollTo(dataSectionKey);
     }
 
     return Padding(

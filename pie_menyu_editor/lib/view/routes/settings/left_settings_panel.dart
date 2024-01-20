@@ -39,7 +39,12 @@ class _LeftSettingsPanelState extends State<LeftSettingsPanel> {
                 settingsState.selectedSection = SettingsSection.general,
             isSelected: selectedSection == SettingsSection.general,
           ),
-
+          Gap(gap),
+          ClickableText(
+            title: 'label-data'.i18n(),
+            onTap: () => settingsState.selectedSection = SettingsSection.data,
+            isSelected: selectedSection == SettingsSection.data,
+          ),
           Gap(gap),
           ClickableText(
             title: 'label-about'.i18n(),
