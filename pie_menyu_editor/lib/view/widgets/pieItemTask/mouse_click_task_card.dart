@@ -33,22 +33,21 @@ class _MouseClickTaskCardState extends State<MouseClickTaskCard> {
   void initState() {
     HardwareKeyboard.instance.addHandler(handleEnter);
 
+    _isSelected[0] = false;
+    _isSelected[1] = false;
+    _isSelected[2] = false;
     switch (widget.mouseClickTask.mouseButton) {
       case MouseButton.left:
         _isSelected[0] = true;
-        _isSelected[1] = false;
-        _isSelected[2] = false;
         break;
       case MouseButton.middle:
-        _isSelected[0] = false;
         _isSelected[1] = true;
-        _isSelected[2] = false;
         break;
       case MouseButton.right:
-        _isSelected[0] = false;
-        _isSelected[1] = false;
         _isSelected[2] = true;
         break;
+      default:
+        _isSelected[0] = true;
     }
     super.initState();
   }

@@ -43,7 +43,7 @@ class _RunFileTaskCardState extends State<RunFileTaskCard> {
           onPressed: () async {
             FilePickerResult? result = await FilePicker.platform.pickFiles();
 
-            if (result != null) {
+            if (result != null && context.mounted) {
               setState(() {
                 task = task..filePath = result.files.single.path!;
               });
@@ -52,8 +52,6 @@ class _RunFileTaskCardState extends State<RunFileTaskCard> {
               if (pieItem != null) {
                 state.updateTaskIn(pieItem, task);
               }
-            } else {
-              // User canceled the picker
             }
           },
           style: TextButton.styleFrom(

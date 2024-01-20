@@ -30,7 +30,7 @@ class SendKeyTaskCard extends StatelessWidget {
               trailing: TextButton(
                 onPressed: () async {
                   SendKeyTask? task = await showKeyboardDialog(context);
-                  if (task != null) {
+                  if (task != null && context.mounted) {
                     final state = context.read<PieMenuState>();
                     final pieItem = state.activePieItem;
                     if (pieItem != null) {

@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:localization/localization.dart';
 import 'package:pie_menyu_core/pieItemTasks/open_folder_task.dart';
-import 'package:pie_menyu_core/pieItemTasks/run_file_task.dart';
 import 'package:pie_menyu_editor/view/routes/pie_menu_editor/pie_menu_state.dart';
 import 'package:provider/provider.dart';
 
@@ -44,7 +43,7 @@ class _OpenFolderTaskCardState extends State<OpenFolderTaskCard> {
           onPressed: () async {
             String? result = await FilePicker.platform.getDirectoryPath();
 
-            if (result != null) {
+            if (result != null && context.mounted) {
               setState(() {
                 task = task..folderPath = result;
               });

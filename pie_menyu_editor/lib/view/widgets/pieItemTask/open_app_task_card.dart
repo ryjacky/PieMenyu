@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:localization/localization.dart';
 import 'package:pie_menyu_core/pieItemTasks/open_app_task.dart';
-import 'package:pie_menyu_core/pieItemTasks/run_file_task.dart';
 import 'package:pie_menyu_editor/view/routes/pie_menu_editor/pie_menu_state.dart';
 import 'package:pie_menyu_editor/view/widgets/minimal_text_field.dart';
 import 'package:provider/provider.dart';
@@ -65,9 +64,7 @@ class _OpenAppTaskCardState extends State<OpenAppTaskCard> {
           onPressed: () async {
             FilePickerResult? result = await FilePicker.platform.pickFiles(
               type: FileType.custom,
-              allowedExtensions: [
-                "exe",
-              ],
+              allowedExtensions: ["exe"],
             );
 
             if (result != null) {
@@ -78,8 +75,6 @@ class _OpenAppTaskCardState extends State<OpenAppTaskCard> {
               if (pieItem != null) {
                 state.updateTaskIn(pieItem, task);
               }
-            } else {
-              // User canceled the picker
             }
           },
           style: TextButton.styleFrom(
