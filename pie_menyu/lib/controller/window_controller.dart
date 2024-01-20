@@ -79,7 +79,6 @@ class WindowController extends ChangeNotifier {
     await windowManager.hide();
 
     if (pieMenuProvider.pieItems.isEmpty) {
-
       return;
     }
     final tasks =
@@ -133,9 +132,17 @@ class WindowController extends ChangeNotifier {
 
     for (Profile profile in profiles) {
       if (profile.enabled && await loadCorrespondingPieMenu(profile, hotKey)) {
-        final pieCenterScreenPosition =
+        var pieCenterScreenPosition =
             await screenRetriever.getCursorScreenPoint();
 
+        if (pieMenuProvider.pieMenu.openInScreenCenter) {
+          final mouseScreen = await getMouseScreen(pieCenterScreenPosition);
+          pieCenterScreenPosition = Offset(
+              mouseScreen.visiblePosition!.dx +
+                  mouseScreen.visibleSize!.width / 2,
+              mouseScreen.visiblePosition!.dy +
+                  mouseScreen.visibleSize!.height / 2);
+        }
         await windowManager.setPosition(Offset(
             pieCenterScreenPosition.dx - windowSize.width / 2,
             pieCenterScreenPosition.dy - windowSize.height / 2));
@@ -144,6 +151,23 @@ class WindowController extends ChangeNotifier {
         pieMenuProvider.pieCenterScreenPosition = pieCenterScreenPosition;
       }
     }
+  }
+
+  Future<Display> getMouseScreen(Offset cursorPos) async {
+    List<Display> displays = await screenRetriever.getAllDisplays();
+    for (Display display in displays) {
+      if (display.visiblePosition == null || display.visibleSize == null)
+        return await screenRetriever.getPrimaryDisplay();
+      if (display.visiblePosition!.dx <= cursorPos.dx &&
+          display.visiblePosition!.dx + display.visibleSize!.width >=
+              cursorPos.dx &&
+          display.visiblePosition!.dy <= cursorPos.dy &&
+          display.visiblePosition!.dy + display.visibleSize!.height >=
+              cursorPos.dy) {
+        return display;
+      }
+    }
+    return await screenRetriever.getPrimaryDisplay();
   }
 
   Future<bool> loadCorrespondingPieMenu(Profile profile, HotKey hotKey) async {
