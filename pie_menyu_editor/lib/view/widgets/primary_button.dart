@@ -17,11 +17,9 @@ class PrimaryButton extends StatelessWidget {
     return ElevatedButton.icon(
       onPressed: onPressed,
       icon: Padding(
-          padding: const EdgeInsets.fromLTRB(0, 5, 5, 5),
-          child: FaIcon(
-            icon,
-            size: 20,
-          )),
+        padding: const EdgeInsets.fromLTRB(0, 5, 5, 5),
+        child: FaIcon(icon, size: 20),
+      ),
       label: label,
     );
   }

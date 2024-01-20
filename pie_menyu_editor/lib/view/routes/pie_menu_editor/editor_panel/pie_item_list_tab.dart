@@ -11,7 +11,7 @@ import 'package:pie_menyu_core/db/pie_item.dart';
 import 'package:pie_menyu_core/db/pie_menu.dart';
 import 'package:pie_menyu_editor/coreExtended/real_pie_item_instance.dart';
 import 'package:pie_menyu_editor/system/file_icon.dart';
-import 'package:pie_menyu_editor/view/widgets/PrimaryButton.dart';
+import 'package:pie_menyu_editor/view/widgets/primary_button.dart';
 import 'package:pie_menyu_editor/view/widgets/alphanumeric_input_field.dart';
 import 'package:pie_menyu_editor/view/widgets/minimal_text_field.dart';
 import 'package:provider/provider.dart';

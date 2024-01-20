@@ -5,7 +5,7 @@ import 'package:localization/localization.dart';
 import 'package:pie_menyu_core/db/db.dart';
 import 'package:pie_menyu_core/db/pie_menu.dart';
 import 'package:pie_menyu_core/db/profile.dart';
-import 'package:pie_menyu_editor/view/widgets/PrimaryButton.dart';
+import 'package:pie_menyu_editor/view/widgets/primary_button.dart';
 import 'package:pie_menyu_editor/view/widgets/outlined_icon_button.dart';
 import 'package:pie_menyu_editor/view/widgets/key_press_recorder.dart';
 import 'package:pie_menyu_editor/view/widgets/minimal_text_field.dart';
