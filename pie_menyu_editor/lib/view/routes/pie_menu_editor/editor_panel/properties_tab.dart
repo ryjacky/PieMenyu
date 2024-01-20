@@ -3,7 +3,7 @@ import 'package:gap/gap.dart';
 import 'package:localization/localization.dart';
 import 'package:pie_menyu_core/db/pie_menu.dart';
 import 'package:pie_menyu_editor/view/widgets/draggable_number_field.dart';
-import 'package:pie_menyu_editor/view/widgets/expansion_color_picker_tile.dart';
+import 'package:pie_menyu_editor/view/widgets/collapasable_color_picker.dart';
 import 'package:provider/provider.dart';
 
 import '../pie_menu_state.dart';
@@ -57,7 +57,7 @@ class _PropertiesTabState extends State<PropertiesTab> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text("label-colors".i18n(), style: const TextStyle(fontWeight: FontWeight.bold)),
-        ExpansionColorPickerTile(
+        CollapsableColorPicker(
           title: Text("label-main-color".i18n()),
           color: Color(pieMenu.mainColor),
           onColorChanged: (color) {
@@ -66,7 +66,7 @@ class _PropertiesTabState extends State<PropertiesTab> {
                 .updatePieMenu(pieMenu..mainColor = color.value);
           },
         ),
-        ExpansionColorPickerTile(
+        CollapsableColorPicker(
           title: Text("label-secondary-color".i18n()),
           color: Color(pieMenu.secondaryColor),
           onColorChanged: (color) {
@@ -84,7 +84,7 @@ class _PropertiesTabState extends State<PropertiesTab> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text("label-icon".i18n(), style: const TextStyle(fontWeight: FontWeight.bold)),
-        ExpansionColorPickerTile(
+        CollapsableColorPicker(
           title: Text("label-icon-color".i18n()),
           color: Color(pieMenu.iconColor),
           onColorChanged: (color) {
@@ -124,7 +124,7 @@ class _PropertiesTabState extends State<PropertiesTab> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text("label-font".i18n(), style: const TextStyle(fontWeight: FontWeight.bold)),
-        ExpansionColorPickerTile(
+        CollapsableColorPicker(
           title: Text("label-font-color".i18n()),
           color: Color(pieMenu.fontColor),
           onColorChanged: (color) {

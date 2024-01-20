@@ -2,12 +2,12 @@ import 'package:flex_color_picker/flex_color_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:localization/localization.dart';
 
-class ExpansionColorPickerTile extends StatelessWidget {
+class CollapsableColorPicker extends StatelessWidget {
   final Color color;
   final Widget title;
   final Function(Color) onColorChanged;
 
-  const ExpansionColorPickerTile(
+  const CollapsableColorPicker(
       {super.key,
       required this.color,
       required this.onColorChanged,
