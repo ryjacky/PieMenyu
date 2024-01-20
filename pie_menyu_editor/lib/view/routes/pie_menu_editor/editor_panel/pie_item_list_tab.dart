@@ -26,101 +26,108 @@ class PieItemListTab extends StatefulWidget {
 }
 
 class _PieItemListTabState extends State<PieItemListTab> {
+  static const double gap = 6;
+
   @override
   Widget build(BuildContext context) {
     final pieItemInstances = context.watch<PieMenuState>().pieItemInstances;
+    final pieMenuState = context.watch<PieMenuState>();
 
-    final pieMenu = context.watch<PieMenuState>().pieMenu;
-    return ReorderableListView(
+    return ReorderableListView.builder(
+      buildDefaultDragHandles: false,
       header: Padding(
         padding: const EdgeInsets.all(8.0),
         child: PrimaryButton(
-          onPressed: () => context
-              .read<PieMenuState>()
+          onPressed: () => pieMenuState
               .addPieItem(PieItem(displayName: "label-new-pie-item".i18n())),
           label: Text("label-new-pie-item".i18n()),
           icon: FontAwesomeIcons.plus,
         ),
       ),
-      children: [
-        for (final RealPieItemInstance piInstance in pieItemInstances)
-          SizedBox(
-            key: ValueKey(piInstance),
-            width: 310,
-            child: ListTile(
-              title: Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Expanded(
-                    child: MinimalTextField(
-                      content: piInstance.pieItem.displayName,
-                      onSubmitted: (String value) {
-                        context.read<PieMenuState>().updatePieItem(
-                            piInstance.pieItem..displayName = value);
-                      },
-                    ),
+      itemCount: pieItemInstances.length,
+      onReorder: (oldI, newI) => pieMenuState.reorderPieItem(oldI, newI - 1),
+      itemBuilder: (BuildContext context, int index) {
+        final piInstance = pieItemInstances[index];
+        return Padding(
+          key: ValueKey(piInstance),
+          padding: const EdgeInsets.symmetric(horizontal: 6.0, vertical: 4),
+          child: Row(
+            children: [
+              ReorderableDragStartListener(
+                index: index,
+                child: MouseRegion(
+                  cursor: SystemMouseCursors.resizeDown,
+                  child: Icon(
+                    FontAwesomeIcons.gripVertical,
+                    size: 15,
+                    color: Theme.of(context).colorScheme.secondary,
                   ),
-                  const Gap(10),
-                  SizedBox(
-                      width: 32,
-                      child: Tooltip(
-                        message: "tooltip-pie-item-key".i18n(),
-                        child: SingleKeyRecorder(
-                          initialValue: piInstance.keyCode,
-                          onSubmitted: (String value) {
-                            context.read<PieMenuState>().updatePieItemInstance(
-                                piInstance..keyCode = value);
-                          },
-                        ),
-                      )),
-                ],
+                ),
               ),
-              leading: createAddIconButton(piInstance.pieItem),
-              trailing: createDeleteButton(piInstance.pieItem),
-            ),
+              const Gap(gap),
+              createAddIconButton(piInstance.pieItem),
+              const Gap(gap),
+              Expanded(
+                child: MinimalTextField(
+                  content: piInstance.pieItem.displayName,
+                  onSubmitted: (String value) {
+                    pieMenuState
+                        .updatePieItem(piInstance.pieItem..displayName = value);
+                  },
+                ),
+              ),
+              const Gap(gap),
+              SizedBox(
+                width: 32,
+                child: Tooltip(
+                  message: "tooltip-pie-item-key".i18n(),
+                  child: SingleKeyRecorder(
+                    initialValue: piInstance.keyCode,
+                    onSubmitted: (String value) {
+                      pieMenuState
+                          .updatePieItemInstance(piInstance..keyCode = value);
+                    },
+                  ),
+                ),
+              ),
+              const Gap(gap),
+              createDeleteButton(piInstance.pieItem),
+            ],
           ),
-      ],
-      onReorder: (oldIndex, newIndex) {
-        context.read<PieMenuState>().reorderPieItem(oldIndex, newIndex - 1);
+        );
       },
     );
   }
 
-  Future<String?> pickPieItemIconFromFile() async {
-    FilePickerResult? result = await FilePicker.platform.pickFiles();
-
-    if (result != null) {
-      return FileIcon.getBase64(result.files.single.path!);
-    }
-
-    return null;
-  }
-
   Widget createAddIconButton(PieItem pieItem) {
+    final themeColorScheme = Theme.of(context).colorScheme;
     return TextButton(
       style: TextButton.styleFrom(
-        padding: const EdgeInsets.all(5),
-        minimumSize: const Size(50, 50),
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(3),
-        ),
-        side: BorderSide(
-          color: Theme.of(context).colorScheme.outlineVariant,
-          width: 2,
-        ),
+        foregroundColor: themeColorScheme.secondary,
+        padding: const EdgeInsets.all(0),
+        minimumSize: const Size(45, 45),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(3)),
+        side: BorderSide(color: themeColorScheme.outlineVariant, width: 2),
+        backgroundColor: themeColorScheme.surface,
       ),
       onPressed: () async {
-        String? icon = await pickPieItemIconFromFile();
-        if (icon != null) {
+        String? icon;
+
+        FilePickerResult? result = await FilePicker.platform.pickFiles();
+        if (result != null) {
+          icon = await FileIcon.getBase64(result.files.single.path!);
+        }
+
+        if (icon != null && context.mounted) {
           context.read<PieMenuState>().putPieItem(pieItem..iconBase64 = icon);
         }
       },
       child: Image.memory(
-        width: 32,
-        height: 32,
+        width: 28,
+        height: 28,
+        isAntiAlias: true,
         base64Decode(pieItem.iconBase64),
-        errorBuilder: (context, error, stackTrace) =>
-            const Icon(FontAwesomeIcons.plus),
+        errorBuilder: (_, __, ___) => const Icon(Icons.upload_file),
       ),
     );
   }
@@ -135,21 +142,18 @@ class _PieItemListTabState extends State<PieItemListTab> {
           minimumSize: const Size(36, 36),
         ),
         onPressed: () {},
-        child: const Icon(
-          FontAwesomeIcons.minus,
-          color: Colors.red,
-          size: 12,
-        ),
+        child: const Icon(FontAwesomeIcons.minus, color: Colors.red, size: 12),
         onLongPress: () {
           final result = context.read<PieMenuState>().removePieItem(pieItem);
+          final scaffoldMessenger = ScaffoldMessenger.of(context);
           if (!result) {
-            ScaffoldMessenger.of(context).hideCurrentSnackBar();
-            ScaffoldMessenger.of(context).showSnackBar(
+            scaffoldMessenger.hideCurrentSnackBar();
+            scaffoldMessenger.showSnackBar(
               SnackBar(
                 backgroundColor: Colors.red[400],
                 content: Text(
-                    "message-pie-item-not-deleted-${Random().nextInt(5)}"
-                        .i18n()),
+                  "message-pie-item-not-deleted-${Random().nextInt(5)}".i18n(),
+                ),
                 duration: const Duration(seconds: 5),
               ),
             );
