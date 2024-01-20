@@ -2,9 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:localization/localization.dart';
 import 'package:pie_menyu_editor/coreExtended/db.dart';
-import 'package:pie_menyu_editor/view/widgets/draggable_number_field.dart';
-import 'package:pie_menyu_editor/view/widgets/expansion_color_picker_tile.dart';
-import 'package:pie_menyu_editor/view/widgets/material_3_switch.dart';
 import 'package:provider/provider.dart';
 
 import '../pie_menu_state.dart';
