@@ -6,7 +6,7 @@ import 'package:pie_menyu_core/db/db.dart';
 import 'package:pie_menyu_core/db/pie_menu.dart';
 import 'package:pie_menyu_core/db/profile.dart';
 import 'package:pie_menyu_editor/view/widgets/PrimaryButton.dart';
-import 'package:pie_menyu_editor/view/widgets/TableActionButton.dart';
+import 'package:pie_menyu_editor/view/widgets/outlined_icon_button.dart';
 import 'package:pie_menyu_editor/view/widgets/key_press_recorder.dart';
 import 'package:pie_menyu_editor/view/widgets/minimal_text_field.dart';
 import 'package:provider/provider.dart';
@@ -181,7 +181,7 @@ class _RightHomePanelState extends State<RightHomePanel> {
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceAround,
                               children: [
-                                TableActionButton(
+                                OutlinedIconButton(
                                   icon: FontAwesomeIcons.pencil,
                                   onPressed: () {
                                     Navigator.of(context).push(
@@ -196,7 +196,7 @@ class _RightHomePanelState extends State<RightHomePanel> {
                                 ),
                                 Tooltip(
                                   message: "tooltip-remove-pie-menu".i18n(),
-                                  child: TableActionButton(
+                                  child: OutlinedIconButton(
                                     icon: FontAwesomeIcons.trash,
                                     onLongPress: () {
                                       homePageViewModel.removePieMenuFrom(
