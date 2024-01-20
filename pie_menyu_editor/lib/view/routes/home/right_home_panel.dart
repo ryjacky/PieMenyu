@@ -141,7 +141,7 @@ class _RightHomePanelState extends State<RightHomePanel> {
                             padding: const EdgeInsets.fromLTRB(0, 15, 8, 0),
                             child: KeyPressRecorder(
                               key: ValueKey(pieMenu.id),
-                              initalHotKey:
+                              initialHotkey:
                                   getPieMenuHotkey(pieMenu, activeProfile),
                               onHotKeyRecorded: (newHotkey) => {
                                 addHotkeyToProfile(
