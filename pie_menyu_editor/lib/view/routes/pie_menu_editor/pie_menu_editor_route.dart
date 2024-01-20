@@ -14,10 +14,7 @@ class PieMenuEditorRoute extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
-        ChangeNotifierProvider(create: (_) => PieMenuState(
-          pieMenu: pieMenu,
-        )
-        ),
+        ChangeNotifierProvider(create: (_) => PieMenuState(pieMenu: pieMenu)),
       ],
       child: const PieMenuEditorPage(),
     );
