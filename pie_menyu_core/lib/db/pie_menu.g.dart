@@ -89,23 +89,28 @@ const PieMenuSchema = CollectionSchema(
       type: IsarType.objectList,
       target: r'PieItemInstance',
     ),
-    r'pieItemRoundness': PropertySchema(
+    r'pieItemOffset': PropertySchema(
       id: 14,
+      name: r'pieItemOffset',
+      type: IsarType.long,
+    ),
+    r'pieItemRoundness': PropertySchema(
+      id: 15,
       name: r'pieItemRoundness',
       type: IsarType.long,
     ),
     r'pieItemSpread': PropertySchema(
-      id: 15,
+      id: 16,
       name: r'pieItemSpread',
       type: IsarType.long,
     ),
     r'pieItemWidth': PropertySchema(
-      id: 16,
+      id: 17,
       name: r'pieItemWidth',
       type: IsarType.long,
     ),
     r'secondaryColor': PropertySchema(
-      id: 17,
+      id: 18,
       name: r'secondaryColor',
       type: IsarType.long,
     )
@@ -177,10 +182,11 @@ void _pieMenuSerialize(
     PieItemInstanceSchema.serialize,
     object.pieItemInstances,
   );
-  writer.writeLong(offsets[14], object.pieItemRoundness);
-  writer.writeLong(offsets[15], object.pieItemSpread);
-  writer.writeLong(offsets[16], object.pieItemWidth);
-  writer.writeLong(offsets[17], object.secondaryColor);
+  writer.writeLong(offsets[14], object.pieItemOffset);
+  writer.writeLong(offsets[15], object.pieItemRoundness);
+  writer.writeLong(offsets[16], object.pieItemSpread);
+  writer.writeLong(offsets[17], object.pieItemWidth);
+  writer.writeLong(offsets[18], object.secondaryColor);
 }
 
 PieMenu _pieMenuDeserialize(
@@ -205,9 +211,10 @@ PieMenu _pieMenuDeserialize(
     mainColor: reader.readLongOrNull(offsets[10]) ?? 0xFF1DAEAA,
     name: reader.readStringOrNull(offsets[11]) ?? 'New Pie Menu',
     openInScreenCenter: reader.readBoolOrNull(offsets[12]) ?? false,
-    pieItemRoundness: reader.readLongOrNull(offsets[14]) ?? 7,
-    pieItemSpread: reader.readLongOrNull(offsets[15]) ?? 150,
-    secondaryColor: reader.readLongOrNull(offsets[17]) ?? 0xFF282828,
+    pieItemOffset: reader.readLongOrNull(offsets[14]) ?? 0,
+    pieItemRoundness: reader.readLongOrNull(offsets[15]) ?? 7,
+    pieItemSpread: reader.readLongOrNull(offsets[16]) ?? 150,
+    secondaryColor: reader.readLongOrNull(offsets[18]) ?? 0xFF282828,
   );
   object.id = id;
   object.pieItemInstances = reader.readObjectList<PieItemInstance>(
@@ -264,12 +271,14 @@ P _pieMenuDeserializeProp<P>(
           ) ??
           []) as P;
     case 14:
-      return (reader.readLongOrNull(offset) ?? 7) as P;
+      return (reader.readLongOrNull(offset) ?? 0) as P;
     case 15:
-      return (reader.readLongOrNull(offset) ?? 150) as P;
+      return (reader.readLongOrNull(offset) ?? 7) as P;
     case 16:
-      return (reader.readLong(offset)) as P;
+      return (reader.readLongOrNull(offset) ?? 150) as P;
     case 17:
+      return (reader.readLong(offset)) as P;
+    case 18:
       return (reader.readLongOrNull(offset) ?? 0xFF282828) as P;
     default:
       throw IsarError('Unknown property with id $propertyId');
@@ -1273,6 +1282,60 @@ extension PieMenuQueryFilter
     });
   }
 
+  QueryBuilder<PieMenu, PieMenu, QAfterFilterCondition> pieItemOffsetEqualTo(
+      int value) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'pieItemOffset',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<PieMenu, PieMenu, QAfterFilterCondition>
+      pieItemOffsetGreaterThan(
+    int value, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        include: include,
+        property: r'pieItemOffset',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<PieMenu, PieMenu, QAfterFilterCondition> pieItemOffsetLessThan(
+    int value, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.lessThan(
+        include: include,
+        property: r'pieItemOffset',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<PieMenu, PieMenu, QAfterFilterCondition> pieItemOffsetBetween(
+    int lower,
+    int upper, {
+    bool includeLower = true,
+    bool includeUpper = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.between(
+        property: r'pieItemOffset',
+        lower: lower,
+        includeLower: includeLower,
+        upper: upper,
+        includeUpper: includeUpper,
+      ));
+    });
+  }
+
   QueryBuilder<PieMenu, PieMenu, QAfterFilterCondition> pieItemRoundnessEqualTo(
       int value) {
     return QueryBuilder.apply(this, (query) {
@@ -1717,6 +1780,18 @@ extension PieMenuQuerySortBy on QueryBuilder<PieMenu, PieMenu, QSortBy> {
     });
   }
 
+  QueryBuilder<PieMenu, PieMenu, QAfterSortBy> sortByPieItemOffset() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'pieItemOffset', Sort.asc);
+    });
+  }
+
+  QueryBuilder<PieMenu, PieMenu, QAfterSortBy> sortByPieItemOffsetDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'pieItemOffset', Sort.desc);
+    });
+  }
+
   QueryBuilder<PieMenu, PieMenu, QAfterSortBy> sortByPieItemRoundness() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'pieItemRoundness', Sort.asc);
@@ -1936,6 +2011,18 @@ extension PieMenuQuerySortThenBy
     });
   }
 
+  QueryBuilder<PieMenu, PieMenu, QAfterSortBy> thenByPieItemOffset() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'pieItemOffset', Sort.asc);
+    });
+  }
+
+  QueryBuilder<PieMenu, PieMenu, QAfterSortBy> thenByPieItemOffsetDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'pieItemOffset', Sort.desc);
+    });
+  }
+
   QueryBuilder<PieMenu, PieMenu, QAfterSortBy> thenByPieItemRoundness() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'pieItemRoundness', Sort.asc);
@@ -2067,6 +2154,12 @@ extension PieMenuQueryWhereDistinct
     });
   }
 
+  QueryBuilder<PieMenu, PieMenu, QDistinct> distinctByPieItemOffset() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addDistinctBy(r'pieItemOffset');
+    });
+  }
+
   QueryBuilder<PieMenu, PieMenu, QDistinct> distinctByPieItemRoundness() {
     return QueryBuilder.apply(this, (query) {
       return query.addDistinctBy(r'pieItemRoundness');
@@ -2183,6 +2276,12 @@ extension PieMenuQueryProperty
       pieItemInstancesProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'pieItemInstances');
+    });
+  }
+
+  QueryBuilder<PieMenu, int, QQueryOperations> pieItemOffsetProperty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addPropertyName(r'pieItemOffset');
     });
   }
 

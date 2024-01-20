@@ -30,6 +30,7 @@ class PieMenu {
   int fontSize;
   int pieItemRoundness;
   int pieItemSpread;
+  int pieItemOffset;
   final int pieItemWidth = 512;
 
   List<PieItemInstance> pieItemInstances = [];
@@ -53,6 +54,7 @@ class PieMenu {
     this.iconSize = 32,
     this.pieItemRoundness = 7,
     this.pieItemSpread = 150,
+    this.pieItemOffset = 0,
     this.fontName = 'Roboto',
   });
 
@@ -72,6 +74,7 @@ class PieMenu {
         pieItemSpread = pieMenu.pieItemSpread,
         fontName = pieMenu.fontName,
         fontSize = pieMenu.fontSize,
+        pieItemOffset = pieMenu.pieItemOffset,
         fontColor = pieMenu.fontColor;
 }
 

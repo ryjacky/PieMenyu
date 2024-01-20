@@ -275,6 +275,29 @@ class _PropertiesTabState extends State<PropertiesTab> {
           children: [
             const Padding(
               padding: EdgeInsets.fromLTRB(42, 0, 0, 0),
+              child: Text("Pie Item Offset"),
+            ),
+            SizedBox(
+              width: 70,
+              child: DraggableNumberField(
+                min: 0,
+                max: 360,
+                value: pieMenu.pieItemOffset,
+                onChanged: (int value) {
+                  context
+                      .read<PieMenuState>()
+                      .updatePieMenu(pieMenu..pieItemOffset = value);
+                },
+              ),
+            ),
+          ],
+        ),
+        Gap(rowGap),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            const Padding(
+              padding: EdgeInsets.fromLTRB(42, 0, 0, 0),
               child: Text("Center Thickness"),
             ),
             SizedBox(

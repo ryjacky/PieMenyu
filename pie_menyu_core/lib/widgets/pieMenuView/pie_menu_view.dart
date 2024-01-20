@@ -144,13 +144,13 @@ class _PieMenuViewState extends State<PieMenuView> {
   /// Returns the x coordinate from a polar coordinate system starting from the
   /// y axis.
   double getXFromBiasedPolar(double angleFromYAxis, int radius) {
-    return radius * sin(angleFromYAxis);
+    return radius * sin(angleFromYAxis + widget.pieMenu.pieItemOffset / 360 * pi);
   }
 
   /// Returns the y coordinate from a polar coordinate system starting from the
   /// y axis.
   double getYFromBiasedPolar(double angleFromYAxis, double radius) {
-    return radius * cos(angleFromYAxis);
+    return radius * cos(angleFromYAxis + widget.pieMenu.pieItemOffset / 360 * pi);
   }
 
   double getPieCenterRotation() {
