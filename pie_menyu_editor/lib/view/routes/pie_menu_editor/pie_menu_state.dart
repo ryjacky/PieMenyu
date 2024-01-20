@@ -70,6 +70,7 @@ class PieMenuState extends ChangeNotifier {
     _pieMenu.pieItemRoundness = pieMenu.pieItemRoundness;
     _pieMenu.pieItemSpread = pieMenu.pieItemSpread;
     _pieMenu.profiles = pieMenu.profiles;
+    _pieMenu.pieItemInstances = pieMenu.pieItemInstances;
 
     notifyListeners();
   }
@@ -209,9 +210,15 @@ class PieMenuState extends ChangeNotifier {
     for (int i = 0; i < _pieItemInstances.length; i++) {
       if (_pieItemInstances[i].pieItem.id == pieItemInstance.pieItem.id) {
         _pieItemInstances[i] = pieItemInstance;
-        notifyListeners();
-        return;
+        break;
       }
     }
+    final pieItemInstances = _pieItemInstances.map((e) => PieItemInstance(
+          pieItemId: e.pieItem.id,
+          keyCode: e.keyCode,
+        ));
+    _pieMenu.pieItemInstances = pieItemInstances.toList();
+    notifyListeners();
+
   }
 }
