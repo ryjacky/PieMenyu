@@ -26,9 +26,12 @@ class _PropertiesTabState extends State<PropertiesTab> {
     "Montserrat",
   ];
 
+  PieMenuState? pieMenuState;
+
   @override
   Widget build(BuildContext context) {
     final pieMenu = context.watch<PieMenuState>().pieMenu;
+    pieMenuState = context.read<PieMenuState>();
 
     return SingleChildScrollView(
       child: Padding(
@@ -61,18 +64,14 @@ class _PropertiesTabState extends State<PropertiesTab> {
           title: Text("label-main-color".i18n()),
           color: Color(pieMenu.mainColor),
           onColorChanged: (color) {
-            context
-                .read<PieMenuState>()
-                .updatePieMenu(pieMenu..mainColor = color.value);
+            pieMenuState?.updatePieMenu(pieMenu..mainColor = color.value);
           },
         ),
         CollapsableColorPicker(
           title: Text("label-secondary-color".i18n()),
           color: Color(pieMenu.secondaryColor),
           onColorChanged: (color) {
-            context
-                .read<PieMenuState>()
-                .updatePieMenu(pieMenu..secondaryColor = color.value);
+            pieMenuState?.updatePieMenu(pieMenu..secondaryColor = color.value);
           },
         ),
       ],
@@ -88,9 +87,7 @@ class _PropertiesTabState extends State<PropertiesTab> {
           title: Text("label-icon-color".i18n()),
           color: Color(pieMenu.iconColor),
           onColorChanged: (color) {
-            context
-                .read<PieMenuState>()
-                .updatePieMenu(pieMenu..iconColor = color.value);
+            pieMenuState?.updatePieMenu(pieMenu..iconColor = color.value);
           },
         ),
         Row(
@@ -128,9 +125,7 @@ class _PropertiesTabState extends State<PropertiesTab> {
           title: Text("label-font-color".i18n()),
           color: Color(pieMenu.fontColor),
           onColorChanged: (color) {
-            context
-                .read<PieMenuState>()
-                .updatePieMenu(pieMenu..fontColor = color.value);
+            pieMenuState?.updatePieMenu(pieMenu..fontColor = color.value);
           },
         ),
         Row(
@@ -155,9 +150,7 @@ class _PropertiesTabState extends State<PropertiesTab> {
                   .toList(),
               onSelected: (String? value) {
                 if (value == null) return;
-                context
-                    .read<PieMenuState>()
-                    .updatePieMenu(pieMenu..fontName = value);
+                pieMenuState?.updatePieMenu(pieMenu..fontName = value);
               },
             ),
           ],
@@ -177,9 +170,7 @@ class _PropertiesTabState extends State<PropertiesTab> {
                 max: 22,
                 value: pieMenu.fontSize,
                 onChanged: (int value) {
-                  context
-                      .read<PieMenuState>()
-                      .updatePieMenu(pieMenu..fontSize = value);
+                  pieMenuState?.updatePieMenu(pieMenu..fontSize = value);
                 },
               ),
             ),
@@ -207,9 +198,7 @@ class _PropertiesTabState extends State<PropertiesTab> {
               value: pieMenu.openInScreenCenter,
               activeColor: Theme.of(context).colorScheme.primary,
               onChanged: (bool value) {
-                context
-                    .read<PieMenuState>()
-                    .updatePieMenu(pieMenu..openInScreenCenter = value);
+                pieMenuState?.updatePieMenu(pieMenu..openInScreenCenter = value);
               },
             ),
           ],
@@ -229,9 +218,7 @@ class _PropertiesTabState extends State<PropertiesTab> {
                 max: 500,
                 value: pieMenu.escapeRadius,
                 onChanged: (int value) {
-                  context
-                      .read<PieMenuState>()
-                      .updatePieMenu(pieMenu..escapeRadius = value);
+                  pieMenuState?.updatePieMenu(pieMenu..escapeRadius = value);
                 },
               ),
             ),
@@ -261,9 +248,7 @@ class _PropertiesTabState extends State<PropertiesTab> {
                 max: 500,
                 value: pieMenu.centerRadius,
                 onChanged: (int value) {
-                  context
-                      .read<PieMenuState>()
-                      .updatePieMenu(pieMenu..centerRadius = value);
+                  pieMenuState?.updatePieMenu(pieMenu..centerRadius = value);
                 },
               ),
             ),
@@ -284,9 +269,7 @@ class _PropertiesTabState extends State<PropertiesTab> {
                 max: 360,
                 value: pieMenu.pieItemOffset,
                 onChanged: (int value) {
-                  context
-                      .read<PieMenuState>()
-                      .updatePieMenu(pieMenu..pieItemOffset = value);
+                  pieMenuState?.updatePieMenu(pieMenu..pieItemOffset = value);
                 },
               ),
             ),
@@ -307,9 +290,7 @@ class _PropertiesTabState extends State<PropertiesTab> {
                 max: 500,
                 value: pieMenu.centerThickness,
                 onChanged: (int value) {
-                  context
-                      .read<PieMenuState>()
-                      .updatePieMenu(pieMenu..centerThickness = value);
+                  pieMenuState?.updatePieMenu(pieMenu..centerThickness = value);
                 },
               ),
             ),
@@ -330,9 +311,7 @@ class _PropertiesTabState extends State<PropertiesTab> {
                 max: 500,
                 value: pieMenu.pieItemRoundness,
                 onChanged: (int value) {
-                  context
-                      .read<PieMenuState>()
-                      .updatePieMenu(pieMenu..pieItemRoundness = value);
+                  pieMenuState?.updatePieMenu(pieMenu..pieItemRoundness = value);
                 },
               ),
             ),
@@ -353,9 +332,7 @@ class _PropertiesTabState extends State<PropertiesTab> {
                 max: 500,
                 value: pieMenu.pieItemSpread,
                 onChanged: (int value) {
-                  context
-                      .read<PieMenuState>()
-                      .updatePieMenu(pieMenu..pieItemSpread = value);
+                  pieMenuState?.updatePieMenu(pieMenu..pieItemSpread = value);
                 },
               ),
             ),
