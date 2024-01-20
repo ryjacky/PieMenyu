@@ -217,24 +217,18 @@ class DB {
       return;
     }
 
-    throw UnimplementedError();
-
-    // pieMenu.pieItems.add(pieItem);
-    // await _isar.writeTxn(() async {
-    //   // Isar automatically handles duplicated case for IsarLinks and will
-    //   // not add if existed
-    //   await pieMenu.pieItems.save();
-    // });
+    pieMenu.pieItemInstances.add(PieItemInstance(pieItemId: pieItem.id));
+    await _isar.writeTxn(() async {
+      await _isar.pieMenus.put(pieMenu);
+    });
   }
 
+  @Deprecated("Use createPieItemIn instead in the future")
   static addPieItemsToPieMenu(List<PieItem> pieItems, PieMenu pieMenu) async {
-    throw UnimplementedError();
-    // pieMenu.pieItems.addAll(pieItems);
-    // await _isar.writeTxn(() async {
-    //   // Isar automatically handles duplicated case for IsarLinks and will
-    //   // not add if existed
-    //   await pieMenu.pieItems.save();
-    // });
+    pieMenu.pieItemInstances.addAll(pieItems.map((e) => PieItemInstance(pieItemId: e.id)));
+    await _isar.writeTxn(() async {
+      await _isar.pieMenus.put(pieMenu);
+    });
   }
 
   static Future<List<PieItem>> getPieItemsOf(PieMenu pieMenu) async {
