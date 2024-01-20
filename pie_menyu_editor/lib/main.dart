@@ -6,14 +6,13 @@ import 'package:hotkey_manager/hotkey_manager.dart';
 import 'package:launch_at_startup/launch_at_startup.dart';
 import 'package:localization/localization.dart';
 import 'package:package_info_plus/package_info_plus.dart';
+import 'package:path/path.dart' as p;
 import 'package:path_provider/path_provider.dart';
 import 'package:pie_menyu_core/db/db.dart';
+import 'package:pie_menyu_editor/view/routes/home/home_route.dart';
 
 import 'theme/color_schemes.g.dart';
 import 'theme/text_theme.g.dart';
-import 'package:path/path.dart' as p;
-
-import 'view/routes/home/home_page.dart';
 
 Future<void> main() async {
   LocalJsonLocalization.delegate.directories = ['lib/i18n'];
@@ -63,7 +62,7 @@ class PieMenyus extends StatelessWidget {
           textTheme: textTheme
       ),
       themeMode: ThemeMode.dark,
-      home: const HomePage()
+      home: const HomeRoute()
     );
   }
 }

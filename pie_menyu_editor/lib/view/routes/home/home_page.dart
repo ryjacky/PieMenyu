@@ -4,15 +4,9 @@ import 'package:pie_menyu_editor/view/widgets/title_bar.dart';
 import 'package:provider/provider.dart';
 
 import 'home_page_view_model.dart';
-import 'left_home_panel.dart';
+import 'left_panel/left_panel.dart';
 import 'right_create_profile_panel.dart';
 import 'right_home_panel.dart';
-
-enum RightPanelType {
-  home,
-  setting,
-  pieMenuEditor,
-}
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -23,7 +17,6 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   List<PieMenu> selectedProfilePieMenus = [];
-  RightPanelType currentRightPanelType = RightPanelType.home;
 
   @override
   void initState() {
@@ -32,45 +25,24 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        backgroundColor: Theme.of(context).colorScheme.background,
-        body: MultiProvider(
-          providers: [
-            ChangeNotifierProvider(create: (_) => HomePageViewModel()),
-          ],
-          child: Column(
+    final creatingProfile = context
+        .select<HomePageViewModel, bool>((value) => value.creatingProfile);
+    return Column(
+      children: [
+        const TitleBar(),
+        Expanded(
+          child: Row(
             children: [
-              const TitleBar(),
+              const Expanded(flex: 3, child: LeftPanel()),
               Expanded(
-                child: Row(
-                  children: [
-                    Expanded(
-                      flex: 3,
-                      child: LeftHomePanel(
-                        onCreateProfile: () {
-                          setState(() {
-                            currentRightPanelType =
-                                RightPanelType.pieMenuEditor;
-                          });
-                        },
-                      ),
-                    ),
-                    Expanded(flex: 7, child: getRightPanel()),
-                  ],
-                ),
-              ),
+                  flex: 7,
+                  child: creatingProfile
+                      ? const RightCreateProfilePanel()
+                      : const RightHomePanel()),
             ],
           ),
-        ));
-  }
-
-  getRightPanel() {
-    switch (currentRightPanelType) {
-      case RightPanelType.pieMenuEditor:
-        return const RightCreateProfilePanel();
-      case RightPanelType.home:
-        return RightHomePanel();
-      default:
-    }
+        ),
+      ],
+    );
   }
 }

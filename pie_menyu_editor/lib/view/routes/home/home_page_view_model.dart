@@ -11,8 +11,12 @@ class HomePageViewModel extends ChangeNotifier {
   List<Profile> profiles = [];
   List<PieMenu> pieMenus = [];
 
+  bool _creatingProfile = false;
+  get creatingProfile => _creatingProfile;
+
   Profile _activeProfile = Profile(name: "Loading...");
   Profile get activeProfile => _activeProfile;
+
   set activeProfile(Profile profile) {
     _activeProfile = profile;
     notifyListeners();
@@ -106,5 +110,10 @@ class HomePageViewModel extends ChangeNotifier {
     notifyListeners();
 
     return activeProfile.enabled;
+  }
+
+  void toggleCreateProfileMode() {
+    _creatingProfile = !_creatingProfile;
+    notifyListeners();
   }
 }
