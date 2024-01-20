@@ -1,17 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-class SingleAlphanumericInputField extends StatefulWidget {
+class SingleKeyRecorder extends StatefulWidget {
   final Function(String value) onSubmitted;
   final String initialValue;
 
-  const SingleAlphanumericInputField({super.key, required this.onSubmitted, required this.initialValue});
+  const SingleKeyRecorder({super.key, required this.onSubmitted, required this.initialValue});
 
   @override
-  State<SingleAlphanumericInputField> createState() => _SingleAlphanumericInputFieldState();
+  State<SingleKeyRecorder> createState() => _SingleKeyRecorderState();
 }
 
-class _SingleAlphanumericInputFieldState extends State<SingleAlphanumericInputField> {
+class _SingleKeyRecorderState extends State<SingleKeyRecorder> {
   final TextEditingController _controller = TextEditingController();
   final FocusNode _focusNode = FocusNode();
 

@@ -12,7 +12,7 @@ import 'package:pie_menyu_core/db/pie_menu.dart';
 import 'package:pie_menyu_editor/coreExtended/real_pie_item_instance.dart';
 import 'package:pie_menyu_editor/system/file_icon.dart';
 import 'package:pie_menyu_editor/view/widgets/primary_button.dart';
-import 'package:pie_menyu_editor/view/widgets/alphanumeric_input_field.dart';
+import 'package:pie_menyu_editor/view/widgets/single_key_recorder.dart';
 import 'package:pie_menyu_editor/view/widgets/minimal_text_field.dart';
 import 'package:provider/provider.dart';
 
@@ -65,7 +65,7 @@ class _PieItemListTabState extends State<PieItemListTab> {
                       width: 32,
                       child: Tooltip(
                         message: "tooltip-pie-item-key".i18n(),
-                        child: SingleAlphanumericInputField(
+                        child: SingleKeyRecorder(
                           initialValue: piInstance.keyCode,
                           onSubmitted: (String value) {
                             context.read<PieMenuState>().updatePieItemInstance(
