@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:pie_menyu_core/db/pie_menu.dart';
+import 'package:pie_menyu_editor/view/widgets/title_bar.dart';
 import 'package:provider/provider.dart';
 
-import 'home_page_titlebar.dart';
 import 'home_page_view_model.dart';
 import 'left_home_panel.dart';
 import 'right_create_profile_panel.dart';
@@ -40,7 +40,7 @@ class _HomePageState extends State<HomePage> {
           ],
           child: Column(
             children: [
-              const HomePageTitleBar(),
+              const TitleBar(),
               Expanded(
                 child: Row(
                   children: [

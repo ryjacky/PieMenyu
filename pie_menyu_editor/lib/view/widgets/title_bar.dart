@@ -1,10 +1,11 @@
 import 'package:bitsdojo_window/bitsdojo_window.dart';
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:localization/localization.dart';
 
-class PieMenuEditorPageTitleBar extends StatelessWidget {
-  const PieMenuEditorPageTitleBar({super.key});
+class TitleBar extends StatelessWidget {
+  final Widget? leading;
+  final Widget? title;
+
+  const TitleBar({super.key, this.leading, this.title});
 
   @override
   Widget build(BuildContext context) {
@@ -29,16 +30,10 @@ class PieMenuEditorPageTitleBar extends StatelessWidget {
           child: Row(
             children: [
               Padding(
-                padding: const EdgeInsets.fromLTRB(5.0, 6.0, 0.0, 3),
-                child: TextButton(
-                    onPressed: () {
-                      Navigator.of(context).pop();
-                    },
-                    child: const Icon(
-                      FontAwesomeIcons.reply,
-                      size: 15,
-                    )),
+                padding: const EdgeInsets.fromLTRB(5.0, 6.0, 5, 3),
+                child: leading,
               ),
+              if (title != null) title!,
               Expanded(child: MoveWindow()),
               MinimizeWindowButton(colors: buttonColors),
               MaximizeWindowButton(colors: buttonColors),
