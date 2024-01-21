@@ -4,6 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:hotkey_manager/hotkey_manager.dart';
 import 'package:pie_menyu_core/db/db.dart';
 import 'package:pie_menyu_core/db/pie_item_task.dart';
+import 'package:pie_menyu_core/db/pie_menu.dart';
 import 'package:pie_menyu_core/db/profile.dart';
 import 'package:pie_menyu_core/executor/executor_service.dart';
 import 'package:pie_menyu_core/pieItemTasks/mouse_click_task.dart';
@@ -51,10 +52,20 @@ class WindowController extends ChangeNotifier {
               String.fromCharCode(keyboardProvider.keyEvent.vkCode)) {
             executorService.activePieItemOrderIndex =
                 pieItemInstance.indexOf(piInstance);
-            break;
+            executeAfterHideWindow();
+            print(2);
+            print(piInstance.keyCode);
+            print(String.fromCharCode(keyboardProvider.keyEvent.vkCode));
+
+            return;
           }
         }
-        executeAfterHideWindow();
+
+        if (pieMenuProvider.pieMenu.activationMode == ActivationMode.onRelease) {
+          print(pieMenuProvider.pieMenu.activationMode);
+          print(1);
+          executeAfterHideWindow();
+        }
       }
     });
 

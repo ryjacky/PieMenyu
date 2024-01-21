@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:localization/localization.dart';
 import 'package:pie_menyu_core/pieItemTasks/run_file_task.dart';
-import 'package:pie_menyu_editor/view/routes/pie_menu_editor/pie_menu_state.dart';
+import 'package:pie_menyu_core/widgets/pieMenuView/pie_menu_state.dart';
 import 'package:provider/provider.dart';
 
 import 'pie_item_task_card.dart';
@@ -48,10 +48,8 @@ class _RunFileTaskCardState extends State<RunFileTaskCard> {
                 task = task..filePath = result.files.single.path!;
               });
               final state = context.read<PieMenuState>();
-              final pieItem = state.activePieItem;
-              if (pieItem != null) {
-                state.updateTaskIn(pieItem, task);
-              }
+              final pieItem = state.activePieItemInstance;
+              state.updateTaskIn(pieItem, task);
             }
           },
           style: TextButton.styleFrom(

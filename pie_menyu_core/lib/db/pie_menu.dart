@@ -1,6 +1,5 @@
 library pie_menyu_core;
 
-import 'package:hotkey_manager/hotkey_manager.dart';
 import 'package:isar/isar.dart';
 
 import 'pie_item.dart';
@@ -8,98 +7,132 @@ import 'profile.dart';
 
 part 'pie_menu.g.dart';
 
+@embedded
+class PieMenuColors {
+  int primary = 0xFF1DAEAA;
+  int secondary = 0xFF282828;
+
+  PieMenuColors();
+
+  PieMenuColors.from(PieMenuColors colors)
+      : primary = colors.primary,
+        secondary = colors.secondary;
+}
+
+@embedded
+class PieMenuIcon {
+  int color = 0xFFFFFFFF;
+  double size = 32;
+
+  PieMenuIcon();
+
+  PieMenuIcon.from(PieMenuIcon icon)
+      : color = icon.color,
+        size = icon.size;
+}
+
+@embedded
+class PieMenuFont {
+  int color = 0xFFFFFFFF;
+  double size = 14;
+  String fontFamily = 'Roboto';
+
+  PieMenuFont();
+
+  PieMenuFont.from(PieMenuFont font)
+      : color = font.color,
+        size = font.size,
+        fontFamily = font.fontFamily;
+}
+
+enum ActivationMode { onRelease, onHover, onClick }
+
+@embedded
+class PieMenuBehavior {
+  double escapeRadius = 0;
+  bool openInScreenCenter = false;
+  @enumerated
+  ActivationMode activationMode = ActivationMode.onRelease;
+
+  PieMenuBehavior();
+
+  PieMenuBehavior.from(PieMenuBehavior behavior)
+      : escapeRadius = behavior.escapeRadius,
+        openInScreenCenter = behavior.openInScreenCenter,
+        activationMode = behavior.activationMode;
+}
+
+@embedded
+class PieMenuShape {
+  double centerRadius = 20;
+  double centerThickness = 10;
+  double pieItemRoundness = 7;
+  double pieItemSpread = 150;
+  double pieItemOffset = 0;
+  static const pieItemWidth = 512;
+
+  PieMenuShape();
+
+  PieMenuShape.from(PieMenuShape shape)
+      : centerRadius = shape.centerRadius,
+        centerThickness = shape.centerThickness,
+        pieItemRoundness = shape.pieItemRoundness,
+        pieItemSpread = shape.pieItemSpread,
+        pieItemOffset = shape.pieItemOffset;
+}
+
+@embedded
+class PieItemInstance {
+  String keyCode = "";
+  int pieItemId;
+
+  /// This will only be used if [isMenu] is true
+  @enumerated
+  ActivationMode activationMode = ActivationMode.onRelease;
+
+  @ignore
+  PieItem? pieItem;
+
+  PieItemInstance({this.keyCode = "", this.pieItemId = 0});
+
+  factory PieItemInstance.from(PieItemInstance info) {
+    final instance =
+        PieItemInstance(keyCode: info.keyCode, pieItemId: info.pieItemId);
+    if (info.pieItem != null) {
+      instance.pieItem = PieItem.from(info.pieItem!);
+    }
+    return instance;
+  }
+}
+
 @collection
 class PieMenu {
   Id id = Isar.autoIncrement; // you can also use id = null to auto increment
 
-  String name;
-  bool enabled;
+  String name = 'New Pie Menu';
+  bool enabled = true;
 
-  @enumerated
-  ActivationMode activationMode;
-  String fontName;
-  bool openInScreenCenter;
-  int mainColor;
-  int secondaryColor;
-  int fontColor;
-  int iconColor;
-  int escapeRadius;
-  int centerRadius;
-  int centerThickness;
-  int iconSize;
-  int fontSize;
-  int pieItemRoundness;
-  int pieItemSpread;
-  int pieItemOffset;
-  final int pieItemWidth = 512;
+  PieMenuColors colors = PieMenuColors();
+  PieMenuIcon icon = PieMenuIcon();
+  PieMenuFont font = PieMenuFont();
+  PieMenuBehavior behavior = PieMenuBehavior();
+  PieMenuShape shape = PieMenuShape();
 
   List<PieItemInstance> pieItemInstances = [];
 
   @Backlink(to: 'pieMenus')
   IsarLinks<Profile> profiles = IsarLinks<Profile>();
 
-  PieMenu({
-    this.name = 'New Pie Menu',
-    this.enabled = true,
-    this.activationMode = ActivationMode.onRelease,
-    this.escapeRadius = 0,
-    this.openInScreenCenter = false,
-    this.mainColor = 0xFF1DAEAA,
-    this.secondaryColor = 0xFF282828,
-    this.iconColor = 0xFFFFFFFF,
-    this.fontColor = 0xFFFFFFFF,
-    this.fontSize = 14,
-    this.centerRadius = 20,
-    this.centerThickness = 10,
-    this.iconSize = 32,
-    this.pieItemRoundness = 7,
-    this.pieItemSpread = 150,
-    this.pieItemOffset = 0,
-    this.fontName = 'Roboto',
-  });
+  PieMenu();
 
   PieMenu.from(PieMenu pieMenu)
-      : name = pieMenu.name,
-        enabled = pieMenu.enabled,
-        activationMode = pieMenu.activationMode,
-        escapeRadius = pieMenu.escapeRadius,
-        openInScreenCenter = pieMenu.openInScreenCenter,
-        mainColor = pieMenu.mainColor,
-        secondaryColor = pieMenu.secondaryColor,
-        iconColor = pieMenu.iconColor,
-        centerRadius = pieMenu.centerRadius,
-        centerThickness = pieMenu.centerThickness,
-        iconSize = pieMenu.iconSize,
-        pieItemRoundness = pieMenu.pieItemRoundness,
-        pieItemSpread = pieMenu.pieItemSpread,
-        fontName = pieMenu.fontName,
-        fontSize = pieMenu.fontSize,
-        pieItemOffset = pieMenu.pieItemOffset,
-        fontColor = pieMenu.fontColor;
-}
-
-enum ActivationMode { onRelease, onHover, onClick }
-
-@embedded
-class PieItemInstance {
-  String keyCode = "";
-
-  bool isMenu = false;
-  /// This will only be used if [isMenu] is true
-  @enumerated
-  ActivationMode activationMode = ActivationMode.onRelease;
-
-  int pieItemId = 0;
-
-  PieItemInstance({
-    this.keyCode = "",
-    this.pieItemId = 0,
-  });
-
-  factory PieItemInstance.from(PieItemInstance info) {
-    return PieItemInstance(
-      keyCode: info.keyCode,
-      pieItemId: info.pieItemId,
-    );
-  }
+      : id = pieMenu.id,
+        colors = PieMenuColors.from(pieMenu.colors),
+        icon = PieMenuIcon.from(pieMenu.icon),
+        font = PieMenuFont.from(pieMenu.font),
+        behavior = PieMenuBehavior.from(pieMenu.behavior),
+        shape = PieMenuShape.from(pieMenu.shape),
+        pieItemInstances = pieMenu.pieItemInstances
+            .map((e) => PieItemInstance.from(e))
+            .toList();
 }

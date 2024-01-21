@@ -3,17 +3,13 @@
 part of 'pie_item_task.dart';
 
 // **************************************************************************
-// IsarCollectionGenerator
+// IsarEmbeddedGenerator
 // **************************************************************************
 
 // coverage:ignore-file
 // ignore_for_file: duplicate_ignore, non_constant_identifier_names, constant_identifier_names, invalid_use_of_protected_member, unnecessary_cast, prefer_const_constructors, lines_longer_than_80_chars, require_trailing_commas, inference_failure_on_function_invocation, unnecessary_parenthesis, unnecessary_raw_strings, unnecessary_null_checks, join_return_with_assignment, prefer_final_locals, avoid_js_rounded_ints, avoid_positional_boolean_parameters, always_specify_types
 
-extension GetPieItemTaskCollection on Isar {
-  IsarCollection<PieItemTask> get pieItemTasks => this.collection();
-}
-
-const PieItemTaskSchema = CollectionSchema(
+const PieItemTaskSchema = Schema(
   name: r'PieItemTask',
   id: 5168616107860454445,
   properties: {
@@ -38,14 +34,6 @@ const PieItemTaskSchema = CollectionSchema(
   serialize: _pieItemTaskSerialize,
   deserialize: _pieItemTaskDeserialize,
   deserializeProp: _pieItemTaskDeserializeProp,
-  idName: r'id',
-  indexes: {},
-  links: {},
-  embeddedSchemas: {},
-  getId: _pieItemTaskGetId,
-  getLinks: _pieItemTaskGetLinks,
-  attach: _pieItemTaskAttach,
-  version: '3.1.0+1',
 );
 
 int _pieItemTaskEstimateSize(
@@ -88,7 +76,6 @@ PieItemTask _pieItemTaskDeserialize(
         _PieItemTasktaskTypeValueEnumMap[reader.readByteOrNull(offsets[2])] ??
             PieItemTaskType.sendKey,
   );
-  object.id = id;
   return object;
 }
 
@@ -137,97 +124,6 @@ const _PieItemTasktaskTypeValueEnumMap = {
   9: PieItemTaskType.moveWindow,
   10: PieItemTaskType.sendText,
 };
-
-Id _pieItemTaskGetId(PieItemTask object) {
-  return object.id;
-}
-
-List<IsarLinkBase<dynamic>> _pieItemTaskGetLinks(PieItemTask object) {
-  return [];
-}
-
-void _pieItemTaskAttach(
-    IsarCollection<dynamic> col, Id id, PieItemTask object) {
-  object.id = id;
-}
-
-extension PieItemTaskQueryWhereSort
-    on QueryBuilder<PieItemTask, PieItemTask, QWhere> {
-  QueryBuilder<PieItemTask, PieItemTask, QAfterWhere> anyId() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addWhereClause(const IdWhereClause.any());
-    });
-  }
-}
-
-extension PieItemTaskQueryWhere
-    on QueryBuilder<PieItemTask, PieItemTask, QWhereClause> {
-  QueryBuilder<PieItemTask, PieItemTask, QAfterWhereClause> idEqualTo(Id id) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addWhereClause(IdWhereClause.between(
-        lower: id,
-        upper: id,
-      ));
-    });
-  }
-
-  QueryBuilder<PieItemTask, PieItemTask, QAfterWhereClause> idNotEqualTo(
-      Id id) {
-    return QueryBuilder.apply(this, (query) {
-      if (query.whereSort == Sort.asc) {
-        return query
-            .addWhereClause(
-              IdWhereClause.lessThan(upper: id, includeUpper: false),
-            )
-            .addWhereClause(
-              IdWhereClause.greaterThan(lower: id, includeLower: false),
-            );
-      } else {
-        return query
-            .addWhereClause(
-              IdWhereClause.greaterThan(lower: id, includeLower: false),
-            )
-            .addWhereClause(
-              IdWhereClause.lessThan(upper: id, includeUpper: false),
-            );
-      }
-    });
-  }
-
-  QueryBuilder<PieItemTask, PieItemTask, QAfterWhereClause> idGreaterThan(Id id,
-      {bool include = false}) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addWhereClause(
-        IdWhereClause.greaterThan(lower: id, includeLower: include),
-      );
-    });
-  }
-
-  QueryBuilder<PieItemTask, PieItemTask, QAfterWhereClause> idLessThan(Id id,
-      {bool include = false}) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addWhereClause(
-        IdWhereClause.lessThan(upper: id, includeUpper: include),
-      );
-    });
-  }
-
-  QueryBuilder<PieItemTask, PieItemTask, QAfterWhereClause> idBetween(
-    Id lowerId,
-    Id upperId, {
-    bool includeLower = true,
-    bool includeUpper = true,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addWhereClause(IdWhereClause.between(
-        lower: lowerId,
-        includeLower: includeLower,
-        upper: upperId,
-        includeUpper: includeUpper,
-      ));
-    });
-  }
-}
 
 extension PieItemTaskQueryFilter
     on QueryBuilder<PieItemTask, PieItemTask, QFilterCondition> {
@@ -456,59 +352,6 @@ extension PieItemTaskQueryFilter
     });
   }
 
-  QueryBuilder<PieItemTask, PieItemTask, QAfterFilterCondition> idEqualTo(
-      Id value) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.equalTo(
-        property: r'id',
-        value: value,
-      ));
-    });
-  }
-
-  QueryBuilder<PieItemTask, PieItemTask, QAfterFilterCondition> idGreaterThan(
-    Id value, {
-    bool include = false,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.greaterThan(
-        include: include,
-        property: r'id',
-        value: value,
-      ));
-    });
-  }
-
-  QueryBuilder<PieItemTask, PieItemTask, QAfterFilterCondition> idLessThan(
-    Id value, {
-    bool include = false,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.lessThan(
-        include: include,
-        property: r'id',
-        value: value,
-      ));
-    });
-  }
-
-  QueryBuilder<PieItemTask, PieItemTask, QAfterFilterCondition> idBetween(
-    Id lower,
-    Id upper, {
-    bool includeLower = true,
-    bool includeUpper = true,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.between(
-        property: r'id',
-        lower: lower,
-        includeLower: includeLower,
-        upper: upper,
-        includeUpper: includeUpper,
-      ));
-    });
-  }
-
   QueryBuilder<PieItemTask, PieItemTask, QAfterFilterCondition> repeatEqualTo(
       int value) {
     return QueryBuilder.apply(this, (query) {
@@ -621,122 +464,3 @@ extension PieItemTaskQueryFilter
 
 extension PieItemTaskQueryObject
     on QueryBuilder<PieItemTask, PieItemTask, QFilterCondition> {}
-
-extension PieItemTaskQueryLinks
-    on QueryBuilder<PieItemTask, PieItemTask, QFilterCondition> {}
-
-extension PieItemTaskQuerySortBy
-    on QueryBuilder<PieItemTask, PieItemTask, QSortBy> {
-  QueryBuilder<PieItemTask, PieItemTask, QAfterSortBy> sortByRepeat() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'repeat', Sort.asc);
-    });
-  }
-
-  QueryBuilder<PieItemTask, PieItemTask, QAfterSortBy> sortByRepeatDesc() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'repeat', Sort.desc);
-    });
-  }
-
-  QueryBuilder<PieItemTask, PieItemTask, QAfterSortBy> sortByTaskType() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'taskType', Sort.asc);
-    });
-  }
-
-  QueryBuilder<PieItemTask, PieItemTask, QAfterSortBy> sortByTaskTypeDesc() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'taskType', Sort.desc);
-    });
-  }
-}
-
-extension PieItemTaskQuerySortThenBy
-    on QueryBuilder<PieItemTask, PieItemTask, QSortThenBy> {
-  QueryBuilder<PieItemTask, PieItemTask, QAfterSortBy> thenById() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'id', Sort.asc);
-    });
-  }
-
-  QueryBuilder<PieItemTask, PieItemTask, QAfterSortBy> thenByIdDesc() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'id', Sort.desc);
-    });
-  }
-
-  QueryBuilder<PieItemTask, PieItemTask, QAfterSortBy> thenByRepeat() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'repeat', Sort.asc);
-    });
-  }
-
-  QueryBuilder<PieItemTask, PieItemTask, QAfterSortBy> thenByRepeatDesc() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'repeat', Sort.desc);
-    });
-  }
-
-  QueryBuilder<PieItemTask, PieItemTask, QAfterSortBy> thenByTaskType() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'taskType', Sort.asc);
-    });
-  }
-
-  QueryBuilder<PieItemTask, PieItemTask, QAfterSortBy> thenByTaskTypeDesc() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'taskType', Sort.desc);
-    });
-  }
-}
-
-extension PieItemTaskQueryWhereDistinct
-    on QueryBuilder<PieItemTask, PieItemTask, QDistinct> {
-  QueryBuilder<PieItemTask, PieItemTask, QDistinct> distinctByArguments() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addDistinctBy(r'arguments');
-    });
-  }
-
-  QueryBuilder<PieItemTask, PieItemTask, QDistinct> distinctByRepeat() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addDistinctBy(r'repeat');
-    });
-  }
-
-  QueryBuilder<PieItemTask, PieItemTask, QDistinct> distinctByTaskType() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addDistinctBy(r'taskType');
-    });
-  }
-}
-
-extension PieItemTaskQueryProperty
-    on QueryBuilder<PieItemTask, PieItemTask, QQueryProperty> {
-  QueryBuilder<PieItemTask, int, QQueryOperations> idProperty() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addPropertyName(r'id');
-    });
-  }
-
-  QueryBuilder<PieItemTask, List<String>, QQueryOperations>
-      argumentsProperty() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addPropertyName(r'arguments');
-    });
-  }
-
-  QueryBuilder<PieItemTask, int, QQueryOperations> repeatProperty() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addPropertyName(r'repeat');
-    });
-  }
-
-  QueryBuilder<PieItemTask, PieItemTaskType, QQueryOperations>
-      taskTypeProperty() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addPropertyName(r'taskType');
-    });
-  }
-}

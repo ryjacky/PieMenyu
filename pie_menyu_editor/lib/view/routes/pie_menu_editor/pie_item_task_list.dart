@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:pie_menyu_core/db/pie_item.dart';
 import 'package:pie_menyu_core/db/pie_item_task.dart';
+import 'package:pie_menyu_core/db/pie_menu.dart';
 import 'package:pie_menyu_core/pieItemTasks/mouse_click_task.dart';
 import 'package:pie_menyu_core/pieItemTasks/open_app_task.dart';
 import 'package:pie_menyu_core/pieItemTasks/open_folder_task.dart';
@@ -9,6 +9,7 @@ import 'package:pie_menyu_core/pieItemTasks/open_url_task.dart';
 import 'package:pie_menyu_core/pieItemTasks/run_file_task.dart';
 import 'package:pie_menyu_core/pieItemTasks/send_key_task.dart';
 import 'package:pie_menyu_core/pieItemTasks/send_text_task.dart';
+import 'package:pie_menyu_core/widgets/pieMenuView/pie_menu_state.dart';
 import 'package:pie_menyu_editor/view/widgets/pieItemTask/open_app_task_card.dart';
 import 'package:pie_menyu_editor/view/widgets/pieItemTask/open_folder_task_card.dart';
 import 'package:pie_menyu_editor/view/widgets/pieItemTask/open_sub_menu_task_card.dart';
@@ -19,7 +20,6 @@ import '../../widgets/pieItemTask/mouse_click_task_card.dart';
 import '../../widgets/pieItemTask/open_url_task_card.dart';
 import '../../widgets/pieItemTask/run_file_task_card.dart';
 import '../../widgets/pieItemTask/send_text_task_card.dart';
-import 'pie_menu_state.dart';
 
 class PieItemTaskList extends StatefulWidget {
   const PieItemTaskList({super.key});
@@ -31,10 +31,14 @@ class PieItemTaskList extends StatefulWidget {
 class _PieItemTaskListState extends State<PieItemTaskList> {
   @override
   Widget build(BuildContext context) {
-    final state = context.read<PieMenuState>();
-    final Set<PieItemTask> pieItemTasks =
-        context.select<PieMenuState, Set<PieItemTask>>((viewModel) =>
-            viewModel.getTasksOf(state.activePieItem ?? PieItem()));
+    final pieItemInstance = context.select<PieMenuState, PieItemInstance>(
+        (state) => state.activePieItemInstance);
+
+    if (pieItemInstance.pieItem == null) {
+      throw Exception("pieItem is null");
+    }
+
+    final pieItemTasks = pieItemInstance.pieItem!.tasks;
 
     return ListView(
       children: [
@@ -67,12 +71,13 @@ class _PieItemTaskListState extends State<PieItemTaskList> {
           onDelete: () => removeTask(pieItemTask),
         );
       case PieItemTaskType.openSubMenu:
-        final openSubMenuTask = OpenSubMenuTask.from(pieItemTask);
-        return OpenSubMenuTaskCard(
-          task: openSubMenuTask,
-          order: order,
-          onDelete: () => removeTask(pieItemTask),
-        );
+        // final openSubMenuTask = OpenSubMenuTask.from(pieItemTask);
+        // return OpenSubMenuTaskCard(
+        //   task: openSubMenuTask,
+        //   order: order,
+        //   onDelete: () => removeTask(pieItemTask),
+        // );
+        return const SizedBox();
       case PieItemTaskType.openFolder:
         final task = OpenFolderTask.from(pieItemTask);
         return OpenFolderTaskCard(
@@ -104,17 +109,14 @@ class _PieItemTaskListState extends State<PieItemTaskList> {
           onDelete: () => removeTask(pieItemTask),
         );
       case PieItemTaskType.resizeWindow:
-        // TODO: Handle this case.
+      // TODO: Handle this case.
       case PieItemTaskType.moveWindow:
-        // TODO: Handle this case.
+      // TODO: Handle this case.
     }
   }
 
   removeTask(PieItemTask task) {
     final state = context.read<PieMenuState>();
-    final pieItem = state.activePieItem;
-    if (pieItem != null) {
-      state.removeTaskFrom(pieItem, task);
-    }
+    state.removeTaskFrom(state.activePieItemInstance, task);
   }
 }

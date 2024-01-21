@@ -7,18 +7,19 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:gap/gap.dart';
 import 'package:localization/localization.dart';
 import 'package:pie_menyu_core/db/pie_item.dart';
-import 'package:pie_menyu_editor/coreExtended/real_pie_item_instance.dart';
+import 'package:pie_menyu_core/db/pie_menu.dart';
+import 'package:pie_menyu_core/widgets/pieMenuView/pie_menu_state.dart';
 import 'package:pie_menyu_editor/system/file_icon.dart';
 import 'package:pie_menyu_editor/view/widgets/minimal_text_field.dart';
 import 'package:pie_menyu_editor/view/widgets/single_key_recorder.dart';
 import 'package:provider/provider.dart';
 
-import '../pie_menu_state.dart';
-
 class PieItemListItem extends StatefulWidget {
-  final RealPieItemInstance piInstance;
+  final PieItemInstance piInstance;
   final PieMenuState pieMenuState;
-  const PieItemListItem({super.key, required this.piInstance, required this.pieMenuState});
+
+  const PieItemListItem(
+      {super.key, required this.piInstance, required this.pieMenuState});
 
   @override
   State<PieItemListItem> createState() => _PieItemListItemState();
@@ -29,22 +30,24 @@ class _PieItemListItemState extends State<PieItemListItem> {
 
   @override
   Widget build(BuildContext context) {
+    PieItem? pieItem = widget.piInstance.pieItem;
+    pieItem ??= PieItem(name: "Loading...".i18n());
+
     final pieMenuState = widget.pieMenuState;
     final piInstance = widget.piInstance;
 
-    _icon ??= createIconWidget(piInstance.pieItem.iconBase64);
+    _icon ??= createIconWidget(pieItem.iconBase64);
 
     return Row(
       children: [
         const Gap(6),
-        createAddIconButton(piInstance.pieItem),
+        createAddIconButton(pieItem),
         const Gap(6),
         Expanded(
           child: MinimalTextField(
-            content: piInstance.pieItem.displayName,
+            content: pieItem.name,
             onSubmitted: (String value) {
-              pieMenuState
-                  .updatePieItem(piInstance.pieItem..displayName = value);
+              pieMenuState.putPieItem(pieItem!..name = value);
             },
           ),
         ),
@@ -62,7 +65,7 @@ class _PieItemListItemState extends State<PieItemListItem> {
           ),
         ),
         const Gap(6),
-        createDeleteButton(piInstance.pieItem),
+        createDeleteButton(pieItem),
       ],
     );
   }
@@ -136,4 +139,3 @@ class _PieItemListItemState extends State<PieItemListItem> {
     );
   }
 }
-

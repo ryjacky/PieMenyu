@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:localization/localization.dart';
-import 'package:pie_menyu_editor/coreExtended/db.dart';
+import 'package:pie_menyu_core/widgets/pieMenuView/pie_menu_state.dart';
 import 'package:provider/provider.dart';
 
-import '../pie_menu_state.dart';
 import 'actions_tab.dart';
+import 'editor_panel_view_model.dart';
 import 'pie_item_list_tab.dart';
-import 'properties_tab.dart';
+import 'properties_tab/properties_tab.dart';
 
 class EditorPanel extends StatefulWidget {
   const EditorPanel({super.key});
@@ -19,6 +19,7 @@ class EditorPanel extends StatefulWidget {
 class _EditorPanelState extends State<EditorPanel> {
   @override
   Widget build(BuildContext context) {
+    final viewModel = context.watch<EditorPanelViewModel>();
     return Column(
       children: [
         Expanded(
@@ -54,7 +55,7 @@ class _EditorPanelState extends State<EditorPanel> {
               Expanded(
                 child: ElevatedButton.icon(
                   onPressed: () {
-                    DBExtended.save(context.read<PieMenuState>());
+                    viewModel.saveState(context.read<PieMenuState>());
                   },
                   icon: const Icon(Icons.save_outlined),
                   label: Text("button-save".i18n()),

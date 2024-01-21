@@ -10,6 +10,7 @@ import 'package:path/path.dart' as p;
 import 'package:path_provider/path_provider.dart';
 import 'package:pie_menyu_core/db/db.dart';
 import 'package:pie_menyu_editor/view/routes/home/home_route.dart';
+import 'package:provider/provider.dart';
 
 import 'theme/color_schemes.g.dart';
 import 'theme/text_theme.g.dart';
@@ -19,7 +20,6 @@ Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   // For hot reload, `unregisterAll()` needs to be called.
   await hotKeyManager.unregisterAll();
-  await DB.initialize((await getApplicationSupportDirectory()).parent);
 
   // Start pieMenyu
   Process.start(
@@ -34,7 +34,7 @@ Future<void> main() async {
     appPath: Platform.resolvedExecutable,
   );
 
-  runApp(const PieMenyus());
+  runApp(PieMenyu(supportDir: (await getApplicationSupportDirectory()).parent));
 
   doWhenWindowReady(() {
     const initialSize = Size(900, 600);
@@ -45,24 +45,30 @@ Future<void> main() async {
   });
 }
 
-class PieMenyus extends StatelessWidget {
-  const PieMenyus({super.key});
+class PieMenyu extends StatelessWidget {
+  final Directory supportDir;
+  const PieMenyu({super.key, required this.supportDir});
 
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'app-name'.i18n(),
-      localizationsDelegates: [
-        LocalJsonLocalization.delegate
+    return MultiProvider(
+      providers: [
+        Provider(create: (_) => Database(supportDir)),
       ],
-      darkTheme: ThemeData(
-          useMaterial3: true,
-          colorScheme: darkColorScheme,
-          textTheme: textTheme
+      child: MaterialApp(
+        title: 'app-name'.i18n(),
+        localizationsDelegates: [
+          LocalJsonLocalization.delegate
+        ],
+        darkTheme: ThemeData(
+            useMaterial3: true,
+            colorScheme: darkColorScheme,
+            textTheme: textTheme
+        ),
+        themeMode: ThemeMode.dark,
+        home: const HomeRoute()
       ),
-      themeMode: ThemeMode.dark,
-      home: const HomeRoute()
     );
   }
 }

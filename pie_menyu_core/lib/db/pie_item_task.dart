@@ -4,10 +4,8 @@ import 'package:isar/isar.dart';
 
 part 'pie_item_task.g.dart';
 
-@collection
+@embedded
 class PieItemTask {
-  Id id = Isar.autoIncrement;
-
   @enumerated
   PieItemTaskType taskType = PieItemTaskType.sendKey;
   int repeat = 1;
@@ -22,7 +20,6 @@ class PieItemTask {
   PieItemTask.from(PieItemTask pieItemTask) {
     repeat = pieItemTask.repeat;
     arguments = pieItemTask.arguments;
-    id = pieItemTask.id;
   }
 
 }

@@ -3,7 +3,6 @@ library pie_menyu_core;
 import 'package:isar/isar.dart';
 
 import 'pie_item_task.dart';
-import 'pie_menu.dart';
 
 part 'pie_item.g.dart';
 
@@ -12,20 +11,15 @@ class PieItem {
   Id id = Isar.autoIncrement;
 
   String iconBase64 = '';
-  String displayName = '';
-  bool enabled = true;
+  String name = '';
 
-  IsarLinks<PieItemTask> tasks = IsarLinks<PieItemTask>();
+  List<PieItemTask> tasks = [];
 
-  PieItem({
-    this.iconBase64 = '',
-    this.displayName = '',
-    this.enabled = false,
-  });
+  PieItem({this.iconBase64 = '', this.name = ''});
 
   PieItem.from(PieItem pieItem) {
+    id = pieItem.id;
     iconBase64 = pieItem.iconBase64;
-    displayName = pieItem.displayName;
-    enabled = pieItem.enabled;
+    name = pieItem.name;
   }
 }

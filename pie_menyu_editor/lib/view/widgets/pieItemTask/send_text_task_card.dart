@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:localization/localization.dart';
 import 'package:pie_menyu_core/pieItemTasks/send_text_task.dart';
-import 'package:pie_menyu_editor/view/routes/pie_menu_editor/pie_menu_state.dart';
+import 'package:pie_menyu_core/widgets/pieMenuView/pie_menu_state.dart';
 import 'package:pie_menyu_editor/view/widgets/minimal_text_field.dart';
 import 'package:provider/provider.dart';
 
@@ -44,10 +44,8 @@ class _PasteTextTaskCardState extends State<PasteTextTaskCard> {
               setState(() {
                 task = task..text = value;
               });
-              final pieItem = state.activePieItem;
-              if (pieItem != null) {
-                state.updateTaskIn(pieItem, task);
-              }
+              final pieItem = state.activePieItemInstance;
+              state.updateTaskIn(pieItem, task);
             },
           ),
         )

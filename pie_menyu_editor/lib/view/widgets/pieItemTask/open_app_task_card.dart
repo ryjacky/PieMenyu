@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:localization/localization.dart';
 import 'package:pie_menyu_core/pieItemTasks/open_app_task.dart';
-import 'package:pie_menyu_editor/view/routes/pie_menu_editor/pie_menu_state.dart';
+import 'package:pie_menyu_core/widgets/pieMenuView/pie_menu_state.dart';
 import 'package:pie_menyu_editor/view/widgets/minimal_text_field.dart';
 import 'package:provider/provider.dart';
 
@@ -48,10 +48,8 @@ class _OpenAppTaskCardState extends State<OpenAppTaskCard> {
                 setState(() {
                   task = task..windowTitle = value;
                 });
-                final pieItem = state.activePieItem;
-                if (pieItem != null) {
-                  state.updateTaskIn(pieItem, task);
-                }
+                final pieItem = state.activePieItemInstance;
+                state.updateTaskIn(pieItem, task);
               },
             ),
           ),
@@ -71,10 +69,8 @@ class _OpenAppTaskCardState extends State<OpenAppTaskCard> {
               setState(() {
                 task = task..appPath = result.files.single.path!;
               });
-              final pieItem = state.activePieItem;
-              if (pieItem != null) {
-                state.updateTaskIn(pieItem, task);
-              }
+              final pieItem = state.activePieItemInstance;
+              state.updateTaskIn(pieItem, task);
             }
           },
           style: TextButton.styleFrom(

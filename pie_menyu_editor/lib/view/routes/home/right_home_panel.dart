@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:hotkey_manager/hotkey_manager.dart';
 import 'package:localization/localization.dart';
-import 'package:pie_menyu_core/db/db.dart';
+import '../../../main.dart';
 import 'package:pie_menyu_core/db/pie_menu.dart';
 import 'package:pie_menyu_core/db/profile.dart';
 import 'package:pie_menyu_editor/view/widgets/primary_button.dart';
@@ -250,7 +250,7 @@ class _RightHomePanelState extends State<RightHomePanel> {
         backgroundColor: Theme.of(context).colorScheme.primary,
         content: Text("pie-menu-name-saved".i18n())));
 
-    await DB.putPieMenu(pieMenu);
+    await context.read<HomePageViewModel>().putPieMenu(pieMenu);
   }
 
   HotKey? getPieMenuHotkey(PieMenu pieMenu, Profile profile) {
@@ -272,7 +272,7 @@ class _RightHomePanelState extends State<RightHomePanel> {
     hotkeyToPieMenuIdList.add(HotkeyToPieMenuId.fromHotKey(hotKey, pieMenuId));
 
     profile.hotkeyToPieMenuIdList = hotkeyToPieMenuIdList;
-    DB.updateProfile(profile);
+    context.read<HomePageViewModel>().putProfile(profile);
   }
 
   removeHotkeyFromProfile(Profile profile, HotKey hotKey) async {
@@ -289,6 +289,6 @@ class _RightHomePanelState extends State<RightHomePanel> {
         .toList();
 
     profile.hotkeyToPieMenuIdList = hotkeyToPieMenuIdList;
-    DB.updateProfile(profile);
+    context.read<HomePageViewModel>().putProfile(profile);
   }
 }

@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_typeahead/flutter_typeahead.dart';
 import 'package:localization/localization.dart';
-import 'package:pie_menyu_core/db/db.dart';
 import 'package:pie_menyu_core/db/pie_menu.dart';
 import 'package:pie_menyu_core/pieItemTasks/open_sub_menu_task.dart';
 
@@ -10,23 +9,26 @@ import 'pie_item_task_card.dart';
 class OpenSubMenuTaskCard extends StatefulWidget {
   final OpenSubMenuTask task;
   final int order;
+  final List<PieMenu> allPieMenus;
   final VoidCallback? onDelete;
 
-  const OpenSubMenuTaskCard(
-      {super.key, required this.task, required this.order, this.onDelete});
+  const OpenSubMenuTaskCard({
+    super.key,
+    required this.task,
+    required this.order,
+    this.onDelete,
+    required this.allPieMenus,
+  });
 
   @override
   State<OpenSubMenuTaskCard> createState() => _OpenSubMenuTaskCardState();
 }
 
 class _OpenSubMenuTaskCardState extends State<OpenSubMenuTaskCard> {
-  final _allPieMenus = <PieMenu>[];
   var _controller = TextEditingController();
 
   @override
   void initState() {
-    DB.getPieMenus().then((value) => _allPieMenus.addAll(value));
-
     super.initState();
   }
 
@@ -40,9 +42,9 @@ class _OpenSubMenuTaskCardState extends State<OpenSubMenuTaskCard> {
           leading: Text("label-menu".i18n()),
           title: TypeAheadField<PieMenu>(
             suggestionsController: SuggestionsController<PieMenu>(),
-            suggestionsCallback: (search) => _allPieMenus
+            suggestionsCallback: (search) => widget.allPieMenus
                 .where((element) =>
-                element.name.toLowerCase().contains(search.toLowerCase()))
+                    element.name.toLowerCase().contains(search.toLowerCase()))
                 .toList(),
             builder: (context, controller, focusNode) {
               _controller = controller;

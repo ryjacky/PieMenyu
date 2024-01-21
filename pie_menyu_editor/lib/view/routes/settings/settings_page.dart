@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:pie_menyu_core/db/db.dart';
 import 'package:pie_menyu_editor/view/routes/settings/right_setting_panel.dart';
 import 'package:pie_menyu_editor/view/routes/settings/settings_state.dart';
 import 'package:pie_menyu_editor/view/widgets/title_bar.dart';
@@ -16,11 +17,13 @@ class SettingsPage extends StatefulWidget {
 class _SettingsPageState extends State<SettingsPage> {
   @override
   Widget build(BuildContext context) {
+    final db = context.read<Database>();
+
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.background,
       body: MultiProvider(
         providers: [
-          ChangeNotifierProvider(create: (_) => SettingsState()),
+          ChangeNotifierProvider(create: (_) => SettingsState(db)),
         ],
         child: const Column(
           children: [

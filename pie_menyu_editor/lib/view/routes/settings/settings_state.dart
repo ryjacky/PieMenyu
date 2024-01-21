@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:path/path.dart' as p;
 import 'package:path_provider/path_provider.dart';
 import 'package:pie_menyu_core/db/db.dart';
+import '../../../main.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 enum SettingsSection {
@@ -23,12 +24,16 @@ class SettingsState extends ChangeNotifier {
     _selectedSection = section;
     notifyListeners();
   }
+  
+  Database _db;
+  
+  SettingsState(this._db);
 
   Future<void> exportDataThenShowDir() async {
     String? result = await FilePicker.platform.getDirectoryPath();
 
     if (result != null) {
-      await File(p.join(DB.dbPath, DB.dbFileName))
+      await File(p.join(_db.dbPath, Database.dbFileName))
           .copy(p.join(result, "default.isar"));
       launchUrl(Uri.parse("file:///$result"));
     }
@@ -43,17 +48,17 @@ class SettingsState extends ChangeNotifier {
     if (result?.paths.firstOrNull != null) {
       final dbPath = (await getApplicationSupportDirectory()).parent;
       try {
-        DB.close();
+        _db.close();
       } catch (e) {
         log("DB already closed");
       }
 
-      final dest = File(p.join(dbPath.path, DB.dbFileName));
+      final dest = File(p.join(dbPath.path, Database.dbFileName));
       if (await dest.exists()) {
         await dest.delete();
       }
       await File(result!.paths.first!).copy(dest.path);
-      await DB.initialize(dbPath);
+      await _db.initialize(dbPath);
     }
   }
 }
