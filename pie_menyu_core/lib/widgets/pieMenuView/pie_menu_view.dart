@@ -52,6 +52,7 @@ class _PieMenuViewState extends State<PieMenuView> {
     return LayoutBuilder(
       builder: (context, constraints) {
         return Stack(
+          alignment: Alignment.center,
           children: [
             Positioned(
               left: getOriginX(constraints) - centerRadius - centerThickness,
@@ -72,8 +73,13 @@ class _PieMenuViewState extends State<PieMenuView> {
             for (int i = 0; i < nInstances; i++)
               if (pieItemInstances[i].pieItem != null)
                 Positioned(
-                  left: computeXAdjusted(i, getOriginX(constraints)),
-                  bottom: computeYAdjusted(i, getOriginY(constraints)),
+                  right: (i > nInstances / 2)
+                      ? getHorizontalOffset(i, constraints)
+                      : null,
+                  left: (i > 0 && i < nInstances / 2)
+                      ? getHorizontalOffset(i, constraints)
+                      : null,
+                  bottom: getVerticalOffset(i, constraints),
                   child: InkWell(
                     highlightColor: Colors.transparent,
                     hoverColor: Colors.transparent,
@@ -99,7 +105,8 @@ class _PieMenuViewState extends State<PieMenuView> {
                       colors: state.colors,
                       shape: state.shape,
                       instance: state.pieItemInstances[i],
-                      active: state.activePieItemInstance == pieItemInstances[i],
+                      active:
+                          state.activePieItemInstance == pieItemInstances[i],
                     ),
                   ),
                 ),
@@ -109,48 +116,6 @@ class _PieMenuViewState extends State<PieMenuView> {
     );
   }
 
-  double computeYAdjusted(int i, double originY) {
-    double yAdjusted = originY +
-        getYFromBiasedPolar(
-            angleDelta * i,
-            widget.state.shape.centerRadius +
-                widget.state.shape.centerThickness / 2 +
-                widget.state.shape.pieItemSpread) -
-        widget.state.icon.size / 2;
-
-    return yAdjusted;
-  }
-
-  /// Returns the x coordinate relative to the [originX] and adjusted
-  /// the pie item so it looks more like in a circle.
-  double computeXAdjusted(int i, double originX) {
-    double rawX = getXFromBiasedPolar(angleDelta * i,
-        widget.state.shape.centerRadius + widget.state.shape.pieItemSpread);
-
-    double half = widget.state.pieItemInstances.length / 2;
-    if (i % half != 0) {
-      rawX += i > half
-          ? -PieMenuShape.pieItemWidth / 2 + widget.state.icon.size / 2
-          : PieMenuShape.pieItemWidth / 2 - widget.state.icon.size / 2;
-    }
-
-    return originX + rawX - PieMenuShape.pieItemWidth / 2;
-  }
-
-  /// Returns the x coordinate from a polar coordinate system starting from the
-  /// y axis.
-  double getXFromBiasedPolar(double angleFromYAxis, double radius) {
-    return radius *
-        sin(angleFromYAxis + widget.state.shape.pieItemOffset / 360 * pi);
-  }
-
-  /// Returns the y coordinate from a polar coordinate system starting from the
-  /// y axis.
-  double getYFromBiasedPolar(double angleFromYAxis, double radius) {
-    return radius *
-        cos(angleFromYAxis + widget.state.shape.pieItemOffset / 360 * pi);
-  }
-
   double getPieCenterRotation() {
     double result = 2 *
         pi *
@@ -158,5 +123,23 @@ class _PieMenuViewState extends State<PieMenuView> {
             .indexOf(widget.state.activePieItemInstance) /
         widget.state.pieItemInstances.length;
     return (result.isNaN || result.isInfinite) ? 0 : result;
+  }
+
+  double getHorizontalOffset(int i, BoxConstraints constraints) {
+    final shape = widget.state.shape;
+    return getOriginX(constraints) +
+        ((shape.centerRadius + shape.pieItemSpread) *
+                sin(i * angleDelta + shape.pieItemOffset / 360 * pi))
+            .abs() -
+        widget.state.icon.size / 2;
+  }
+
+  double getVerticalOffset(int i, BoxConstraints constraints) {
+    final shape = widget.state.shape;
+
+    return getOriginY(constraints) +
+        ((shape.centerRadius + shape.pieItemSpread) *
+            cos(i * angleDelta + shape.pieItemOffset / 360 * pi)) -
+        widget.state.icon.size / 2;
   }
 }

@@ -69,7 +69,6 @@ class PieMenuShape {
   double pieItemRoundness = 7;
   double pieItemSpread = 150;
   double pieItemOffset = 0;
-  static const pieItemWidth = 512;
 
   PieMenuShape();
 

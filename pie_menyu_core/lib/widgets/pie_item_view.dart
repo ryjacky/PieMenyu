@@ -57,47 +57,35 @@ class _PieItemViewState extends State<PieItemView> {
       },
     );
 
-    return SizedBox(
-      width: PieMenuShape.pieItemWidth.toDouble(),
+    return Container(
+      height: widget.icon.size,
+      decoration: BoxDecoration(
+        border: Border.all(color: Colors.black),
+        borderRadius:
+            BorderRadius.circular(widget.shape.pieItemRoundness),
+        color: Color(widget.active
+            ? widget.colors.primary
+            : widget.colors.secondary),
+      ),
+      padding: const EdgeInsets.all(5),
       child: Row(
-        mainAxisAlignment: widget.horizontalOffset == PieItemOffset.toRight
-            ? MainAxisAlignment.start
-            : widget.horizontalOffset == PieItemOffset.toLeft
-                ? MainAxisAlignment.end
-                : MainAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.start,
         children: [
-          Container(
-            height: widget.icon.size,
-            decoration: BoxDecoration(
-              border: Border.all(color: Colors.black),
-              borderRadius:
-                  BorderRadius.circular(widget.shape.pieItemRoundness),
-              color: Color(widget.active
-                  ? widget.colors.primary
-                  : widget.colors.secondary),
-            ),
-            padding: const EdgeInsets.all(5),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                imageIcon!,
-                Text(
-                  pieItem.name,
-                  style: GoogleFonts.getFont(widget.font.fontFamily,
-                      color: Color(widget.font.color),
-                      fontSize: widget.font.size),
-                ),
-                Padding(
-                  padding: EdgeInsets.fromLTRB(
-                      widget.instance.keyCode == "" ? 0 : 6, 0, 0, 0),
-                  child: Text(
-                    widget.instance.keyCode,
-                    style: GoogleFonts.getFont(widget.font.fontFamily,
-                        color: Color(widget.font.color),
-                        fontSize: widget.font.size),
-                  ),
-                ),
-              ],
+          imageIcon!,
+          Text(
+            pieItem.name,
+            style: GoogleFonts.getFont(widget.font.fontFamily,
+                color: Color(widget.font.color),
+                fontSize: widget.font.size),
+          ),
+          Padding(
+            padding: EdgeInsets.fromLTRB(
+                widget.instance.keyCode == "" ? 0 : 6, 0, 0, 0),
+            child: Text(
+              widget.instance.keyCode,
+              style: GoogleFonts.getFont(widget.font.fontFamily,
+                  color: Color(widget.font.color),
+                  fontSize: widget.font.size),
             ),
           ),
         ],
