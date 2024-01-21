@@ -14,6 +14,8 @@ import 'package:pie_menyu_core/widgets/pieMenuView/pie_menu_state.dart';
 import 'package:pie_menyu_editor/view/widgets/icon_button.dart';
 import 'package:provider/provider.dart';
 
+import '../pie_item_task_list.dart';
+
 class ActionsTab extends StatelessWidget {
   const ActionsTab({super.key});
 
@@ -33,12 +35,9 @@ class ActionsTab extends StatelessWidget {
 
     return Row(
       children: [
-        Expanded(
+        const Expanded(
           flex: 7,
-          child: Text(
-            "hint-select-pie-item-first".i18n(),
-            textAlign: TextAlign.center,
-          ),
+          child: PieItemTaskList(),
         ),
         Container(
           padding: const EdgeInsets.fromLTRB(5, 0, 5, 0),

@@ -98,6 +98,8 @@ class PieMenuState extends ChangeNotifier {
     _pieItemInstances = _initialPieMenu.pieItemInstances
         .map((e) => PieItemInstance.from(e))
         .toList();
+    _activePieItemInstance = _pieItemInstances.first;
+
     notifyListeners();
   }
 
@@ -131,7 +133,7 @@ class PieMenuState extends ChangeNotifier {
       throw Exception("PieItemInstance has no pieItem");
     }
 
-    pieItem.tasks = [...pieItem.tasks, task];
+    pieItem.tasks.add(task);
     notifyListeners();
   }
 

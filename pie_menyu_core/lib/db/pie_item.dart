@@ -21,5 +21,6 @@ class PieItem {
     id = pieItem.id;
     iconBase64 = pieItem.iconBase64;
     name = pieItem.name;
+    tasks = pieItem.tasks.toList();
   }
 }

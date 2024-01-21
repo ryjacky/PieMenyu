@@ -31,8 +31,7 @@ class PieItemTaskList extends StatefulWidget {
 class _PieItemTaskListState extends State<PieItemTaskList> {
   @override
   Widget build(BuildContext context) {
-    final pieItemInstance = context.select<PieMenuState, PieItemInstance>(
-        (state) => state.activePieItemInstance);
+    final pieItemInstance = context.watch<PieMenuState>().activePieItemInstance;
 
     if (pieItemInstance.pieItem == null) {
       throw Exception("pieItem is null");
