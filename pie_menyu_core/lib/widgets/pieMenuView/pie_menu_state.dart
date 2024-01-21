@@ -153,9 +153,11 @@ class PieMenuState extends ChangeNotifier {
     notifyListeners();
   }
 
-  removePieItem(PieItem pieItem) {
+  bool removePieItem(PieItem pieItem) {
+    if (_pieItemInstances.length <= 1) return false;
     _pieItemInstances.removeWhere((element) => element.pieItemId == pieItem.id);
     notifyListeners();
+    return true;
   }
 
   updatePieItemInstance(PieItemInstance instance) {
