@@ -198,7 +198,7 @@ PieMenu _pieMenuDeserialize(
   final object = PieMenu(
     activationMode:
         _PieMenuactivationModeValueEnumMap[reader.readByteOrNull(offsets[0])] ??
-            PieMenuActivationMode.activateOnKeyDown,
+            ActivationMode.onRelease,
     centerRadius: reader.readLongOrNull(offsets[1]) ?? 20,
     centerThickness: reader.readLongOrNull(offsets[2]) ?? 10,
     enabled: reader.readBoolOrNull(offsets[3]) ?? true,
@@ -237,7 +237,7 @@ P _pieMenuDeserializeProp<P>(
     case 0:
       return (_PieMenuactivationModeValueEnumMap[
               reader.readByteOrNull(offset)] ??
-          PieMenuActivationMode.activateOnKeyDown) as P;
+          ActivationMode.onRelease) as P;
     case 1:
       return (reader.readLongOrNull(offset) ?? 20) as P;
     case 2:
@@ -286,10 +286,14 @@ P _pieMenuDeserializeProp<P>(
 }
 
 const _PieMenuactivationModeEnumValueMap = {
-  'activateOnKeyDown': 0,
+  'onRelease': 0,
+  'onHover': 1,
+  'onClick': 2,
 };
 const _PieMenuactivationModeValueEnumMap = {
-  0: PieMenuActivationMode.activateOnKeyDown,
+  0: ActivationMode.onRelease,
+  1: ActivationMode.onHover,
+  2: ActivationMode.onClick,
 };
 
 Id _pieMenuGetId(PieMenu object) {
@@ -383,7 +387,7 @@ extension PieMenuQueryWhere on QueryBuilder<PieMenu, PieMenu, QWhereClause> {
 extension PieMenuQueryFilter
     on QueryBuilder<PieMenu, PieMenu, QFilterCondition> {
   QueryBuilder<PieMenu, PieMenu, QAfterFilterCondition> activationModeEqualTo(
-      PieMenuActivationMode value) {
+      ActivationMode value) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.equalTo(
         property: r'activationMode',
@@ -394,7 +398,7 @@ extension PieMenuQueryFilter
 
   QueryBuilder<PieMenu, PieMenu, QAfterFilterCondition>
       activationModeGreaterThan(
-    PieMenuActivationMode value, {
+    ActivationMode value, {
     bool include = false,
   }) {
     return QueryBuilder.apply(this, (query) {
@@ -407,7 +411,7 @@ extension PieMenuQueryFilter
   }
 
   QueryBuilder<PieMenu, PieMenu, QAfterFilterCondition> activationModeLessThan(
-    PieMenuActivationMode value, {
+    ActivationMode value, {
     bool include = false,
   }) {
     return QueryBuilder.apply(this, (query) {
@@ -420,8 +424,8 @@ extension PieMenuQueryFilter
   }
 
   QueryBuilder<PieMenu, PieMenu, QAfterFilterCondition> activationModeBetween(
-    PieMenuActivationMode lower,
-    PieMenuActivationMode upper, {
+    ActivationMode lower,
+    ActivationMode upper, {
     bool includeLower = true,
     bool includeUpper = true,
   }) {
@@ -2193,7 +2197,7 @@ extension PieMenuQueryProperty
     });
   }
 
-  QueryBuilder<PieMenu, PieMenuActivationMode, QQueryOperations>
+  QueryBuilder<PieMenu, ActivationMode, QQueryOperations>
       activationModeProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'activationMode');
@@ -2321,13 +2325,24 @@ const PieItemInstanceSchema = Schema(
   name: r'PieItemInstance',
   id: -3357939713037499918,
   properties: {
-    r'keyCode': PropertySchema(
+    r'activationMode': PropertySchema(
       id: 0,
+      name: r'activationMode',
+      type: IsarType.byte,
+      enumMap: _PieItemInstanceactivationModeEnumValueMap,
+    ),
+    r'isMenu': PropertySchema(
+      id: 1,
+      name: r'isMenu',
+      type: IsarType.bool,
+    ),
+    r'keyCode': PropertySchema(
+      id: 2,
       name: r'keyCode',
       type: IsarType.string,
     ),
     r'pieItemId': PropertySchema(
-      id: 1,
+      id: 3,
       name: r'pieItemId',
       type: IsarType.long,
     )
@@ -2354,8 +2369,10 @@ void _pieItemInstanceSerialize(
   List<int> offsets,
   Map<Type, List<int>> allOffsets,
 ) {
-  writer.writeString(offsets[0], object.keyCode);
-  writer.writeLong(offsets[1], object.pieItemId);
+  writer.writeByte(offsets[0], object.activationMode.index);
+  writer.writeBool(offsets[1], object.isMenu);
+  writer.writeString(offsets[2], object.keyCode);
+  writer.writeLong(offsets[3], object.pieItemId);
 }
 
 PieItemInstance _pieItemInstanceDeserialize(
@@ -2365,9 +2382,13 @@ PieItemInstance _pieItemInstanceDeserialize(
   Map<Type, List<int>> allOffsets,
 ) {
   final object = PieItemInstance(
-    keyCode: reader.readStringOrNull(offsets[0]) ?? "",
-    pieItemId: reader.readLongOrNull(offsets[1]) ?? 0,
+    keyCode: reader.readStringOrNull(offsets[2]) ?? "",
+    pieItemId: reader.readLongOrNull(offsets[3]) ?? 0,
   );
+  object.activationMode = _PieItemInstanceactivationModeValueEnumMap[
+          reader.readByteOrNull(offsets[0])] ??
+      ActivationMode.onRelease;
+  object.isMenu = reader.readBool(offsets[1]);
   return object;
 }
 
@@ -2379,16 +2400,99 @@ P _pieItemInstanceDeserializeProp<P>(
 ) {
   switch (propertyId) {
     case 0:
-      return (reader.readStringOrNull(offset) ?? "") as P;
+      return (_PieItemInstanceactivationModeValueEnumMap[
+              reader.readByteOrNull(offset)] ??
+          ActivationMode.onRelease) as P;
     case 1:
+      return (reader.readBool(offset)) as P;
+    case 2:
+      return (reader.readStringOrNull(offset) ?? "") as P;
+    case 3:
       return (reader.readLongOrNull(offset) ?? 0) as P;
     default:
       throw IsarError('Unknown property with id $propertyId');
   }
 }
 
+const _PieItemInstanceactivationModeEnumValueMap = {
+  'onRelease': 0,
+  'onHover': 1,
+  'onClick': 2,
+};
+const _PieItemInstanceactivationModeValueEnumMap = {
+  0: ActivationMode.onRelease,
+  1: ActivationMode.onHover,
+  2: ActivationMode.onClick,
+};
+
 extension PieItemInstanceQueryFilter
     on QueryBuilder<PieItemInstance, PieItemInstance, QFilterCondition> {
+  QueryBuilder<PieItemInstance, PieItemInstance, QAfterFilterCondition>
+      activationModeEqualTo(ActivationMode value) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'activationMode',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<PieItemInstance, PieItemInstance, QAfterFilterCondition>
+      activationModeGreaterThan(
+    ActivationMode value, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        include: include,
+        property: r'activationMode',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<PieItemInstance, PieItemInstance, QAfterFilterCondition>
+      activationModeLessThan(
+    ActivationMode value, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.lessThan(
+        include: include,
+        property: r'activationMode',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<PieItemInstance, PieItemInstance, QAfterFilterCondition>
+      activationModeBetween(
+    ActivationMode lower,
+    ActivationMode upper, {
+    bool includeLower = true,
+    bool includeUpper = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.between(
+        property: r'activationMode',
+        lower: lower,
+        includeLower: includeLower,
+        upper: upper,
+        includeUpper: includeUpper,
+      ));
+    });
+  }
+
+  QueryBuilder<PieItemInstance, PieItemInstance, QAfterFilterCondition>
+      isMenuEqualTo(bool value) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'isMenu',
+        value: value,
+      ));
+    });
+  }
+
   QueryBuilder<PieItemInstance, PieItemInstance, QAfterFilterCondition>
       keyCodeEqualTo(
     String value, {

@@ -16,7 +16,7 @@ class PieMenu {
   bool enabled;
 
   @enumerated
-  PieMenuActivationMode activationMode;
+  ActivationMode activationMode;
   String fontName;
   bool openInScreenCenter;
   int mainColor;
@@ -41,7 +41,7 @@ class PieMenu {
   PieMenu({
     this.name = 'New Pie Menu',
     this.enabled = true,
-    this.activationMode = PieMenuActivationMode.activateOnKeyDown,
+    this.activationMode = ActivationMode.onRelease,
     this.escapeRadius = 0,
     this.openInScreenCenter = false,
     this.mainColor = 0xFF1DAEAA,
@@ -78,12 +78,16 @@ class PieMenu {
         fontColor = pieMenu.fontColor;
 }
 
-enum PieMenuActivationMode { activateOnKeyDown }
+enum ActivationMode { onRelease, onHover, onClick }
 
 @embedded
 class PieItemInstance {
-  @enumerated
   String keyCode = "";
+
+  bool isMenu = false;
+  /// This will only be used if [isMenu] is true
+  @enumerated
+  ActivationMode activationMode = ActivationMode.onRelease;
 
   int pieItemId = 0;
 

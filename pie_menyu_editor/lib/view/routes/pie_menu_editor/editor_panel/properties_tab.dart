@@ -16,7 +16,7 @@ class PropertiesTab extends StatefulWidget {
 }
 
 class _PropertiesTabState extends State<PropertiesTab> {
-  final double rowGap = 10;
+  static const double rowGap = 10;
   final fonts = [
     "Amatic SC",
     "Caveat",
@@ -40,15 +40,15 @@ class _PropertiesTabState extends State<PropertiesTab> {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             getColorsSection(pieMenu),
-            Gap(rowGap),
+            const Gap(rowGap),
             getIconSection(pieMenu),
-            Gap(rowGap),
+            const Gap(rowGap),
             getFontSection(pieMenu),
-            Gap(rowGap),
+            const Gap(rowGap),
             getBehaviorSection(pieMenu),
-            Gap(rowGap),
+            const Gap(rowGap),
             getShapeSection(pieMenu),
-            Gap(rowGap),
+            const Gap(rowGap),
           ],
         ),
       ),
@@ -59,7 +59,8 @@ class _PropertiesTabState extends State<PropertiesTab> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text("label-colors".i18n(), style: const TextStyle(fontWeight: FontWeight.bold)),
+        Text("label-colors".i18n(),
+            style: const TextStyle(fontWeight: FontWeight.bold)),
         CollapsableColorPicker(
           title: Text("label-main-color".i18n()),
           color: Color(pieMenu.mainColor),
@@ -82,7 +83,8 @@ class _PropertiesTabState extends State<PropertiesTab> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text("label-icon".i18n(), style: const TextStyle(fontWeight: FontWeight.bold)),
+        Text("label-icon".i18n(),
+            style: const TextStyle(fontWeight: FontWeight.bold)),
         CollapsableColorPicker(
           title: Text("label-icon-color".i18n()),
           color: Color(pieMenu.iconColor),
@@ -120,7 +122,8 @@ class _PropertiesTabState extends State<PropertiesTab> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text("label-font".i18n(), style: const TextStyle(fontWeight: FontWeight.bold)),
+        Text("label-font".i18n(),
+            style: const TextStyle(fontWeight: FontWeight.bold)),
         CollapsableColorPicker(
           title: Text("label-font-color".i18n()),
           color: Color(pieMenu.fontColor),
@@ -155,7 +158,7 @@ class _PropertiesTabState extends State<PropertiesTab> {
             ),
           ],
         ),
-        Gap(rowGap),
+        const Gap(rowGap),
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
@@ -184,8 +187,9 @@ class _PropertiesTabState extends State<PropertiesTab> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text("label-behavior".i18n(), style: const TextStyle(fontWeight: FontWeight.bold)),
-        Gap(rowGap),
+        Text("label-behavior".i18n(),
+            style: const TextStyle(fontWeight: FontWeight.bold)),
+        const Gap(rowGap),
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
@@ -198,12 +202,13 @@ class _PropertiesTabState extends State<PropertiesTab> {
               value: pieMenu.openInScreenCenter,
               activeColor: Theme.of(context).colorScheme.primary,
               onChanged: (bool value) {
-                pieMenuState?.updatePieMenu(pieMenu..openInScreenCenter = value);
+                pieMenuState
+                    ?.updatePieMenu(pieMenu..openInScreenCenter = value);
               },
             ),
           ],
         ),
-        Gap(rowGap),
+        const Gap(rowGap),
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
@@ -224,6 +229,50 @@ class _PropertiesTabState extends State<PropertiesTab> {
             ),
           ],
         ),
+        const Gap(rowGap),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Padding(
+              padding: const EdgeInsets.fromLTRB(8, 0, 0, 0),
+              child: Tooltip(
+                message: "tooltip-activation-mode-hint".i18n(),
+                child: const Icon(
+                  Icons.help_outline,
+                  size: 16,
+                  color: Colors.grey,
+                ),
+              ),
+            ),
+            Text("label-activation-mode".i18n()),
+            DropdownMenu<ActivationMode>(
+              menuHeight: 300,
+              width: 120,
+              inputDecorationTheme: InputDecorationTheme(
+                isDense: true,
+                constraints: BoxConstraints.tight(const Size(120, 40)),
+                contentPadding: const EdgeInsets.all(8),
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(4),
+                ),
+              ),
+              initialSelection: pieMenu.activationMode,
+              dropdownMenuEntries: [
+                DropdownMenuEntry(
+                    value: ActivationMode.onRelease,
+                    label: "label-release".i18n()),
+                DropdownMenuEntry(
+                    value: ActivationMode.onClick, label: "label-click".i18n()),
+                DropdownMenuEntry(
+                    value: ActivationMode.onHover, label: "label-hover".i18n()),
+              ],
+              onSelected: (ActivationMode? value) {
+                if (value == null) return;
+                pieMenuState?.updatePieMenu(pieMenu..activationMode = value);
+              },
+            ),
+          ],
+        ),
       ],
     );
   }
@@ -232,8 +281,9 @@ class _PropertiesTabState extends State<PropertiesTab> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text("label-shape".i18n(), style: const TextStyle(fontWeight: FontWeight.bold)),
-        Gap(rowGap),
+        Text("label-shape".i18n(),
+            style: const TextStyle(fontWeight: FontWeight.bold)),
+        const Gap(rowGap),
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
@@ -254,7 +304,7 @@ class _PropertiesTabState extends State<PropertiesTab> {
             ),
           ],
         ),
-        Gap(rowGap),
+        const Gap(rowGap),
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
@@ -275,7 +325,7 @@ class _PropertiesTabState extends State<PropertiesTab> {
             ),
           ],
         ),
-        Gap(rowGap),
+        const Gap(rowGap),
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
@@ -296,7 +346,7 @@ class _PropertiesTabState extends State<PropertiesTab> {
             ),
           ],
         ),
-        Gap(rowGap),
+        const Gap(rowGap),
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
@@ -311,13 +361,14 @@ class _PropertiesTabState extends State<PropertiesTab> {
                 max: 500,
                 value: pieMenu.pieItemRoundness,
                 onChanged: (int value) {
-                  pieMenuState?.updatePieMenu(pieMenu..pieItemRoundness = value);
+                  pieMenuState
+                      ?.updatePieMenu(pieMenu..pieItemRoundness = value);
                 },
               ),
             ),
           ],
         ),
-        Gap(rowGap),
+        const Gap(rowGap),
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
