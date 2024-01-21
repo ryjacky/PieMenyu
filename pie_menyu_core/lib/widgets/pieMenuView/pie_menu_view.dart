@@ -128,8 +128,7 @@ class _PieMenuViewState extends State<PieMenuView> {
   double getHorizontalOffset(int i, BoxConstraints constraints) {
     final shape = widget.state.shape;
     return getOriginX(constraints) +
-        ((shape.centerRadius + shape.pieItemSpread) *
-                sin(i * angleDelta + shape.pieItemOffset / 360 * pi))
+        ((shape.centerRadius + shape.pieItemSpread) * sin(i * angleDelta))
             .abs() -
         widget.state.icon.size / 2;
   }
@@ -138,8 +137,7 @@ class _PieMenuViewState extends State<PieMenuView> {
     final shape = widget.state.shape;
 
     return getOriginY(constraints) +
-        ((shape.centerRadius + shape.pieItemSpread) *
-            cos(i * angleDelta + shape.pieItemOffset / 360 * pi)) -
+        ((shape.centerRadius + shape.pieItemSpread) * cos(i * angleDelta)) -
         widget.state.icon.size / 2;
   }
 }

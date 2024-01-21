@@ -47,27 +47,6 @@ class ShapeSection extends StatelessWidget {
           children: [
             const Padding(
               padding: EdgeInsets.fromLTRB(42, 0, 0, 0),
-              child: Text("Pie Item Offset"),
-            ),
-            SizedBox(
-              width: 70,
-              child: DraggableNumberField(
-                min: 0,
-                max: 360,
-                value: shape.pieItemOffset,
-                onChanged: (double value) {
-                  state.updatePieMenu(shape: shape..pieItemOffset = value);
-                },
-              ),
-            ),
-          ],
-        ),
-        const Gap(10),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            const Padding(
-              padding: EdgeInsets.fromLTRB(42, 0, 0, 0),
               child: Text("Center Thickness"),
             ),
             SizedBox(

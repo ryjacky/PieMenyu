@@ -68,7 +68,6 @@ class PieMenuShape {
   double centerThickness = 10;
   double pieItemRoundness = 7;
   double pieItemSpread = 150;
-  double pieItemOffset = 0;
 
   PieMenuShape();
 
@@ -76,8 +75,7 @@ class PieMenuShape {
       : centerRadius = shape.centerRadius,
         centerThickness = shape.centerThickness,
         pieItemRoundness = shape.pieItemRoundness,
-        pieItemSpread = shape.pieItemSpread,
-        pieItemOffset = shape.pieItemOffset;
+        pieItemSpread = shape.pieItemSpread;
 }
 
 @embedded

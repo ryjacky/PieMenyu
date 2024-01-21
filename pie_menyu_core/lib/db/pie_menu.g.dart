@@ -1874,18 +1874,13 @@ const PieMenuShapeSchema = Schema(
       name: r'centerThickness',
       type: IsarType.double,
     ),
-    r'pieItemOffset': PropertySchema(
-      id: 2,
-      name: r'pieItemOffset',
-      type: IsarType.double,
-    ),
     r'pieItemRoundness': PropertySchema(
-      id: 3,
+      id: 2,
       name: r'pieItemRoundness',
       type: IsarType.double,
     ),
     r'pieItemSpread': PropertySchema(
-      id: 4,
+      id: 3,
       name: r'pieItemSpread',
       type: IsarType.double,
     )
@@ -1913,9 +1908,8 @@ void _pieMenuShapeSerialize(
 ) {
   writer.writeDouble(offsets[0], object.centerRadius);
   writer.writeDouble(offsets[1], object.centerThickness);
-  writer.writeDouble(offsets[2], object.pieItemOffset);
-  writer.writeDouble(offsets[3], object.pieItemRoundness);
-  writer.writeDouble(offsets[4], object.pieItemSpread);
+  writer.writeDouble(offsets[2], object.pieItemRoundness);
+  writer.writeDouble(offsets[3], object.pieItemSpread);
 }
 
 PieMenuShape _pieMenuShapeDeserialize(
@@ -1927,9 +1921,8 @@ PieMenuShape _pieMenuShapeDeserialize(
   final object = PieMenuShape();
   object.centerRadius = reader.readDouble(offsets[0]);
   object.centerThickness = reader.readDouble(offsets[1]);
-  object.pieItemOffset = reader.readDouble(offsets[2]);
-  object.pieItemRoundness = reader.readDouble(offsets[3]);
-  object.pieItemSpread = reader.readDouble(offsets[4]);
+  object.pieItemRoundness = reader.readDouble(offsets[2]);
+  object.pieItemSpread = reader.readDouble(offsets[3]);
   return object;
 }
 
@@ -1947,8 +1940,6 @@ P _pieMenuShapeDeserializeProp<P>(
     case 2:
       return (reader.readDouble(offset)) as P;
     case 3:
-      return (reader.readDouble(offset)) as P;
-    case 4:
       return (reader.readDouble(offset)) as P;
     default:
       throw IsarError('Unknown property with id $propertyId');
@@ -2080,72 +2071,6 @@ extension PieMenuShapeQueryFilter
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.between(
         property: r'centerThickness',
-        lower: lower,
-        includeLower: includeLower,
-        upper: upper,
-        includeUpper: includeUpper,
-        epsilon: epsilon,
-      ));
-    });
-  }
-
-  QueryBuilder<PieMenuShape, PieMenuShape, QAfterFilterCondition>
-      pieItemOffsetEqualTo(
-    double value, {
-    double epsilon = Query.epsilon,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.equalTo(
-        property: r'pieItemOffset',
-        value: value,
-        epsilon: epsilon,
-      ));
-    });
-  }
-
-  QueryBuilder<PieMenuShape, PieMenuShape, QAfterFilterCondition>
-      pieItemOffsetGreaterThan(
-    double value, {
-    bool include = false,
-    double epsilon = Query.epsilon,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.greaterThan(
-        include: include,
-        property: r'pieItemOffset',
-        value: value,
-        epsilon: epsilon,
-      ));
-    });
-  }
-
-  QueryBuilder<PieMenuShape, PieMenuShape, QAfterFilterCondition>
-      pieItemOffsetLessThan(
-    double value, {
-    bool include = false,
-    double epsilon = Query.epsilon,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.lessThan(
-        include: include,
-        property: r'pieItemOffset',
-        value: value,
-        epsilon: epsilon,
-      ));
-    });
-  }
-
-  QueryBuilder<PieMenuShape, PieMenuShape, QAfterFilterCondition>
-      pieItemOffsetBetween(
-    double lower,
-    double upper, {
-    bool includeLower = true,
-    bool includeUpper = true,
-    double epsilon = Query.epsilon,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.between(
-        property: r'pieItemOffset',
         lower: lower,
         includeLower: includeLower,
         upper: upper,
