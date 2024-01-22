@@ -82,27 +82,16 @@ class _PieMenuScreenState extends State<PieMenuScreen> {
   }
 
   Widget buildPieMenuView(
-      PieMenuState state, BoxConstraints constraint, Offset position) {
-    var width = position.dx * 2;
-    var height = position.dy * 2;
-
-    if (width > constraint.maxWidth) {
-      width = constraint.maxWidth - (width - constraint.maxWidth);
-    }
-    if (height > constraint.maxHeight) {
-      height = constraint.maxHeight - (height - constraint.maxHeight);
-    }
-
-    final alignment = Alignment(
-      position.dx > constraint.maxWidth / 2 ? 1 : -1,
-      position.dy > constraint.maxHeight / 2 ? 1 : -1,
-    );
-
-    return Align(
-      alignment: alignment,
+    PieMenuState state,
+    BoxConstraints constraint,
+    Offset position,
+  ) {
+    return Positioned(
+      left: position.dx - constraint.maxWidth / 2,
+      top: position.dy - constraint.maxHeight / 2,
       child: SizedBox(
-        width: width,
-        height: height,
+        width: constraint.maxWidth,
+        height: constraint.maxHeight,
         child: PieMenuView(state: state),
       ),
     );
