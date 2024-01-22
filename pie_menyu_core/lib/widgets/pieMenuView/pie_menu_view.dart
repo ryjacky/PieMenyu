@@ -53,6 +53,7 @@ class _PieMenuViewState extends State<PieMenuView> {
       builder: (context, constraints) {
         return Stack(
           alignment: Alignment.center,
+
           children: [
             Positioned(
               left: getOriginX(constraints) - centerRadius - centerThickness,
@@ -140,4 +141,6 @@ class _PieMenuViewState extends State<PieMenuView> {
         ((shape.centerRadius + shape.pieItemSpread) * cos(i * angleDelta)) -
         widget.state.icon.size / 2;
   }
+
+
 }
