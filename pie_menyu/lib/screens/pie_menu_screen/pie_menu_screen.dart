@@ -1,8 +1,12 @@
 import 'dart:math';
+import 'dart:ui';
 
 import 'package:flutter/material.dart';
+import 'package:pie_menyu/hotkey/key_event_notifier.dart';
 import 'package:pie_menyu/screens/pie_menu_screen/pie_menu_state_provider.dart';
+import 'package:pie_menyu/window/pie_menyu_window_manager.dart';
 import 'package:pie_menyu_core/db/pie_menu.dart';
+import 'package:pie_menyu_core/pieItemTasks/open_sub_menu_task.dart';
 import 'package:pie_menyu_core/widgets/pieMenuView/pie_menu_state.dart';
 import 'package:pie_menyu_core/widgets/pieMenuView/pie_menu_view.dart';
 import 'package:provider/provider.dart';
@@ -15,9 +19,26 @@ class PieMenuScreen extends StatefulWidget {
 }
 
 class _PieMenuScreenState extends State<PieMenuScreen> {
+  List<PieMenuState> pieMenuStates = [];
+
+  @override
+  void initState() {
+    final keyEvent = context.read<GlobalKeyEvent>();
+    keyEvent.addKeyUpListener((hotkey) {
+      tryActivate(
+        pieMenuStates.last.activePieItemInstance,
+        pieMenuStates.last,
+        ActivationMode.onRelease,
+      );
+      return true;
+    });
+
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
-    final pieMenuStates = context.watch<PieMenuStateProvider>().pieMenuStates;
+    pieMenuStates = context.watch<PieMenuStateProvider>().pieMenuStates;
     final pieMenuPos = context.read<PieMenuStateProvider>().pieMenuPositions;
 
     if (pieMenuStates.isEmpty) return Container();
@@ -92,8 +113,46 @@ class _PieMenuScreenState extends State<PieMenuScreen> {
       child: SizedBox(
         width: constraint.maxWidth,
         height: constraint.maxHeight,
-        child: PieMenuView(state: state),
+        child: PieMenuView(
+          state: state,
+          onTap: (PieItemInstance instance) =>
+              tryActivate(instance, state, ActivationMode.onClick),
+          onHover: (PieItemInstance instance) =>
+              tryActivate(instance, state, ActivationMode.onHover),
+        ),
       ),
     );
+  }
+
+  tryActivate(
+    PieItemInstance instance,
+    PieMenuState state,
+    ActivationMode mode,
+  ) {
+    final pieMenuStates = context.read<PieMenuStateProvider>().pieMenuStates;
+
+    if (state != pieMenuStates.last) return;
+
+    final mainMenuState = pieMenuStates[0];
+    final bool isSubMenuItem = state.activePieItemInstance.pieItem?.tasks
+            .whereType<OpenSubMenuTask>()
+            .isNotEmpty ??
+        false;
+
+    if (isSubMenuItem) {
+      final modeMatched = mainMenuState.behavior.subMenuActivationMode == mode;
+
+      if (modeMatched && mode == ActivationMode.onRelease) {
+        debugPrint("Close");
+        context.read<PieMenyuWindowManager>().hide();
+      } else if (modeMatched) {
+        debugPrint("Open sub menu (Execute task)");
+      }
+    } else {
+      if (mainMenuState.behavior.activationMode == mode) {
+        debugPrint("Execute tasks and close");
+        context.read<PieMenyuWindowManager>().hide();
+      }
+    }
   }
 }

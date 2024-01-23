@@ -20,7 +20,7 @@
 // import 'package:pie_menyu_core/pieItemTasks/send_text_task.dart';
 // import 'package:pie_menyu_core/providers/pie_menu_provider.dart';
 // import 'package:screen_retriever/screen_retriever.dart';
-// import 'package:window_manager/window_manager.dart';
+// import 'package:window_manager/pie_menyu_window_manager.dart';
 //
 // import '../system/hooks/keyboard/keyboard_event.dart';
 // import '../system/hooks/keyboard/keyboard_provider.dart';

@@ -1,9 +1,9 @@
 import 'dart:developer';
-import 'dart:io';
+import 'dart:ui';
 
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:hotkey_manager/hotkey_manager.dart';
+import 'package:pie_menyu/hotkey/key_event_notifier.dart';
 import 'package:pie_menyu/screens/pie_menu_screen/pie_menu_state_provider.dart';
 import 'package:pie_menyu_core/db/db.dart';
 import 'package:pie_menyu_core/db/pie_menu.dart';
@@ -19,13 +19,34 @@ class PieMenyuWindowManager {
 
   Database _db;
   PieMenuStateProvider _pieMenuStateProvider;
-  bool keyUpRegistered = false;
+  GlobalKeyEvent _keyEventNotifier;
 
-  PieMenyuWindowManager._(this._db, this._pieMenuStateProvider);
+  PieMenyuWindowManager._(
+    this._db,
+    this._pieMenuStateProvider,
+    this._keyEventNotifier,
+  ) {
+    _keyEventNotifier.addKeyUpListener((hotKey) {
+      hide();
+      return true;
+    });
+    _keyEventNotifier.addKeyDownListener((hotKey) {
+      _tryShow(hotKey);
+      return true;
+    });
+
+  }
 
   factory PieMenyuWindowManager(
-      Database db, PieMenuStateProvider pieMenuStateProvider) {
-    instance ??= PieMenyuWindowManager._(db, pieMenuStateProvider);
+    Database db,
+    PieMenuStateProvider pieMenuStateProvider,
+    GlobalKeyEvent keyUpNotifier,
+  ) {
+    instance ??= PieMenyuWindowManager._(
+      db,
+      pieMenuStateProvider,
+      keyUpNotifier,
+    );
     return instance!;
   }
 
@@ -43,41 +64,10 @@ class PieMenyuWindowManager {
       await windowManager.blur();
     });
 
-    await _unregisterHotkey();
-    await _registerHotkey();
-
     log("Window manager initialized");
   }
 
-
-  Future<void> _unregisterHotkey() async {
-    await hotKeyManager.unregisterAll();
-  }
-
-  _registerHotkey() async {
-    final hotkeys = await _db.getAllHotkeys();
-    for (HotKey hotkey in hotkeys) {
-      hotKeyManager.register(
-        hotkey..scope = HotKeyScope.system,
-        keyDownHandler: _onKeyDown,
-        keyUpHandler: _onKeyUp,
-      );
-    }
-
-    if (Platform.isWindows && !keyUpRegistered) {
-      keyUpRegistered = true;
-      RawKeyboard.instance.addListener((event) {
-        if (event is RawKeyUpEvent) {
-          _onKeyUp(HotKey(KeyCode.space));
-        }
-      });
-    }
-
-    log("Hotkeys registered");
-  }
-
-  _onKeyDown(HotKey hotkey) async {
-    log("Hotkey pressed: $hotkey");
+  _tryShow(HotKey hotkey) async {
     Profile? profile = await _db.getProfileByExe(ForegroundWindow().path);
     profile ??= (await _db.getProfiles(ids: [1])).first;
     final pieMenu = await _getHotkeyPieMenuIn(profile, hotkey);
@@ -86,19 +76,15 @@ class PieMenyuWindowManager {
 
     final pieMenuState = PieMenuState(_db, pieMenu);
     _pieMenuStateProvider.replaceStates([pieMenuState]);
-    _pieMenuStateProvider.pieMenuPositions[pieMenuState] = await screenRetriever.getCursorScreenPoint();
+    _pieMenuStateProvider.pieMenuPositions[pieMenuState] =
+        await screenRetriever.getCursorScreenPoint();
 
     windowManager.setBounds((await getCurrentDisplayBounds()).deflate(1));
     windowManager.show();
-    await _unregisterHotkey();
   }
 
-  /// On Windows platform hotkey is always HotKey(KeyCode.space)
-  _onKeyUp(HotKey hotkey) async {
-    log("Hotkey released: $hotkey");
-
+  hide() async {
     await windowManager.hide();
-    _registerHotkey();
   }
 
   // Modified from calcWindowPosition
@@ -139,6 +125,4 @@ class PieMenyuWindowManager {
 
     return (await _db.getPieMenus(ids: [pieMenuId])).firstOrNull;
   }
-
-
 }

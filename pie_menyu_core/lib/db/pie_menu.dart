@@ -53,6 +53,9 @@ class PieMenuBehavior {
   bool openInScreenCenter = false;
   @enumerated
   ActivationMode activationMode = ActivationMode.onRelease;
+  @enumerated
+  ActivationMode subMenuActivationMode = ActivationMode.onHover;
+
 
   PieMenuBehavior();
 
