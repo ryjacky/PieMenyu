@@ -7,6 +7,8 @@ import 'package:hotkey_manager/hotkey_manager.dart';
 import 'package:keyboard_event/keyboard_event.dart' as hook;
 import 'package:pie_menyu_core/db/db.dart';
 
+import 'known_v_key.dart';
+
 typedef KeyEventListener = bool Function(HotKey hotKey);
 
 class SystemKeyEvent {
@@ -31,6 +33,8 @@ class SystemKeyEvent {
 
   final Database _db;
 
+  List<int?> _pressedKeys = [];
+
   SystemKeyEvent(this._db) {
     _registerHotkey();
   }
@@ -52,7 +56,7 @@ class SystemKeyEvent {
 
       keyUpRegistered = true;
       hook.KeyboardEvent().startListening((keyEvent) {
-        if (keyEvent.isKeyUP) {
+        if (keyEvent.isKeyUP && _pressedKeys.contains(keyEvent.vkCode)) {
           _onKeyUp(HotKey(KeyCode.space));
         }
       });
@@ -81,6 +85,11 @@ class SystemKeyEvent {
 
     log("Hotkey pressed: $hotkey");
     _keyEventType = KeyEventType.down;
+    _pressedKeys = [
+      kKnownVirtualKeyCodes[hotkey.keyCode.stringValue],
+      if (hotkey.modifiers != null)
+        ...hotkey.modifiers!.map((e) => kKnownVirtualKeyCodes[e.stringValue])
+    ];
 
     for (final listener in _keyDownListeners) {
       if (!listener(hotkey)) break;
@@ -93,7 +102,6 @@ class SystemKeyEvent {
         _keyEventType != KeyEventType.repeat) {
       return;
     }
-
     log("Hotkey released: $hotkey");
 
     _keyEventType = KeyEventType.up;
