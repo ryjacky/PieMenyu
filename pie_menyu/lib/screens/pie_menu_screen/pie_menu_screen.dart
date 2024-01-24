@@ -46,6 +46,7 @@ class _PieMenuScreenState extends State<PieMenuScreen> {
   void initState() {
     final keyEvent = context.read<SystemKeyEvent>();
     keyEvent.addKeyUpListener((hotkey) {
+
       final lastPieMenuState = _pieMenuStates.lastOrNull;
       if (lastPieMenuState == null) return false;
 
@@ -63,6 +64,7 @@ class _PieMenuScreenState extends State<PieMenuScreen> {
 
   bool _screenKeyEventHandler(KeyEvent event) {
     if (event is KeyDownEvent) {
+
       final lastPieMenuState = _pieMenuStates.lastOrNull;
       if (lastPieMenuState == null) {
         context.read<PieMenyuWindowManager>().hide();
@@ -73,7 +75,7 @@ class _PieMenuScreenState extends State<PieMenuScreen> {
           .where((instance) =>
               instance.keyCode.toUpperCase() == event.character?.toUpperCase())
           .firstOrNull;
-      if (instanceOfKey == null){
+      if (instanceOfKey == null) {
         if (!_isModifierKey(event.logicalKey)) {
           context.read<PieMenyuWindowManager>().hide();
         }
@@ -209,6 +211,7 @@ class _PieMenuScreenState extends State<PieMenuScreen> {
     PieMenuState state,
     ActivationMode mode,
   ) async {
+    dev.log("Trying to activate pie item");
     final pieMenuStates = context.read<PieMenuStateProvider>().pieMenuStates;
     PieItem? activePieItem = state.activePieItemInstance.pieItem;
 
@@ -220,6 +223,8 @@ class _PieMenuScreenState extends State<PieMenuScreen> {
 
     final executorService = context.read<ExecutorService>();
     if (mainMenuState == state) executorService.cancelAll();
+
+    dev.log("isSubMenuItem: $isSubMenuItem");
 
     if (isSubMenuItem) {
       final modeMatched = mainMenuState.behavior.subMenuActivationMode == mode;
