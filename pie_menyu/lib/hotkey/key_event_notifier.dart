@@ -5,6 +5,7 @@ import 'dart:ui';
 import 'package:flutter/services.dart';
 import 'package:hotkey_manager/hotkey_manager.dart';
 import 'package:keyboard_event/keyboard_event.dart' as hook;
+import 'package:pie_menyu/deep_linking/deep_link_handler.dart';
 import 'package:pie_menyu_core/db/db.dart';
 
 import 'known_v_key.dart';
@@ -35,8 +36,16 @@ class SystemKeyEvent {
 
   List<int?> _pressedKeys = [];
 
-  SystemKeyEvent(this._db) {
+  SystemKeyEvent(this._db, DeepLinkHandler deepLinkHandler) {
     _registerHotkey();
+
+    deepLinkHandler.addListener((value) {
+      switch (value) {
+        case DeepLinkCommand.reload:
+          _registerHotkey();
+          break;
+      }
+    });
   }
 
   _registerHotkey() async {

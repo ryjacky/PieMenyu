@@ -1,14 +1,19 @@
+import 'dart:developer';
 import 'dart:io';
 
 import 'package:app_links/app_links.dart';
 import 'package:flutter/material.dart';
 import 'package:win32_registry/win32_registry.dart';
 
-class DeepLinkHandler {
-  final List<ValueChanged> _onReloadListeners = [];
+enum DeepLinkCommand {
+  reload,
+}
 
-  void addOnReloadListener(ValueChanged listener) {
-    _onReloadListeners.add(listener);
+class DeepLinkHandler {
+  final List<ValueChanged<DeepLinkCommand>> _listeners = [];
+
+  void addListener(ValueChanged<DeepLinkCommand> listener) {
+    _listeners.add(listener);
   }
 
   DeepLinkHandler() {
@@ -17,9 +22,9 @@ class DeepLinkHandler {
     final appLinks = AppLinks();
 
     appLinks.allUriLinkStream.listen((uri) {
-      if (uri.path.contains("reload")) {
-        for (var onReload in _onReloadListeners) {
-          onReload(uri);
+      if (uri.toString().contains("reload")) {
+        for (var listener in _listeners) {
+          listener(DeepLinkCommand.reload);
         }
       }
     });

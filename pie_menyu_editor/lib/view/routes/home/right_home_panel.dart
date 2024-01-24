@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:hotkey_manager/hotkey_manager.dart';
 import 'package:localization/localization.dart';
+import 'package:url_launcher/url_launcher.dart';
 import '../../../main.dart';
 import 'package:pie_menyu_core/db/pie_menu.dart';
 import 'package:pie_menyu_core/db/profile.dart';
@@ -58,6 +59,8 @@ class _RightHomePanelState extends State<RightHomePanel> {
                           ? "message-profile-enabled"
                           : "message-profile-disabled")
                           .i18n())));
+
+                  launchUrl(Uri.parse("piemenyu://reload"));
                 },
                 icon: Icon(activeProfile.enabled
                     ? Icons.pause

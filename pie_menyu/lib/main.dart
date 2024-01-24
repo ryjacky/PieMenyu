@@ -22,7 +22,7 @@ Future<void> main() async {
   final dbDir = (await getApplicationSupportDirectory()).parent;
   final db = Database(dbDir);
   final pieMenuStateProvider = PieMenuStateProvider();
-  final globalKeyEvent = SystemKeyEvent(db);
+  final globalKeyEvent = SystemKeyEvent(db, deepLinkHandler);
   final windowManager = PieMenyuWindowManager(
     db,
     pieMenuStateProvider,

@@ -25,11 +25,11 @@ class Database {
 
   Database(Directory dir)
       : _isar = Isar.openSync([
-    ProfileSchema,
-    PieMenuSchema,
-    PieItemSchema,
-    ProfileExeSchema,
-  ], directory: dir.path),
+          ProfileSchema,
+          PieMenuSchema,
+          PieItemSchema,
+          ProfileExeSchema,
+        ], directory: dir.path),
         _dbPath = dir.path;
 
   initialize(Directory dbPath) async {
@@ -59,7 +59,7 @@ class Database {
 
   Future<Profile?> getProfileByExe(String path) async {
     ProfileExe? profileExe =
-    await _isar.profileExes.where().pathEqualTo(path).findFirst();
+        await _isar.profileExes.where().pathEqualTo(path).findFirst();
 
     if (profileExe == null) {
       return null;
@@ -72,7 +72,8 @@ class Database {
   Future<List<HotKey>> getAllHotkeys() async {
     final List<HotKey> hotkeys = [];
 
-    final List<Profile> profiles = await _isar.profiles.where().findAll();
+    final List<Profile> profiles =
+        await _isar.profiles.where().filter().enabledEqualTo(true).findAll();
     for (Profile profile in profiles) {
       for (HotkeyToPieMenuId htpm in profile.hotkeyToPieMenuIdList) {
         hotkeys.add(HotKey(htpm.keyCode, modifiers: htpm.keyModifiers));
@@ -86,7 +87,7 @@ class Database {
     final Map<String, List<HotKey>> exeToHotkeyMap = {};
 
     final List<ProfileExe> profileExes =
-    await _isar.profileExes.where().findAll();
+        await _isar.profileExes.where().findAll();
     for (ProfileExe profileExe in profileExes) {
       await profileExe.profile.load();
       final Profile? profile = profileExe.profile.value;
@@ -98,7 +99,7 @@ class Database {
 
       final List<HotKey> hotkeys = [];
       for (HotkeyToPieMenuId hotkeyToPieMenuId
-      in profile.hotkeyToPieMenuIdList) {
+          in profile.hotkeyToPieMenuIdList) {
         hotkeys.add(HotKey(hotkeyToPieMenuId.keyCode,
             modifiers: hotkeyToPieMenuId.keyModifiers,
             scope: HotKeyScope.system));
@@ -128,7 +129,7 @@ class Database {
 
   Future<void> linkProfileToExe(Profile profile, String path) async {
     ProfileExe? profileExe =
-    await _isar.profileExes.where().pathEqualTo(path).findFirst();
+        await _isar.profileExes.where().pathEqualTo(path).findFirst();
     profileExe ??= ProfileExe(path: path);
 
     profileExe.profile.value = profile;
@@ -269,6 +270,6 @@ class Database {
 
   Future<void> loadPieItemInstance(PieItemInstance pieItemInstance) async {
     pieItemInstance.pieItem =
-    await _isar.pieItems.get(pieItemInstance.pieItemId);
+        await _isar.pieItems.get(pieItemInstance.pieItemId);
   }
 }
