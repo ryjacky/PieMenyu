@@ -25,6 +25,7 @@ import 'package:pie_menyu_core/widgets/pieMenuView/pie_menu_state.dart';
 import 'package:pie_menyu_core/widgets/pieMenuView/pie_menu_view.dart';
 import 'package:provider/provider.dart';
 import 'package:window_manager/window_manager.dart';
+import 'dart:developer' as dev;
 
 class PieMenuScreen extends StatefulWidget {
   const PieMenuScreen({super.key});
@@ -62,7 +63,10 @@ class _PieMenuScreenState extends State<PieMenuScreen> {
   bool _screenKeyEventHandler(KeyEvent event) {
     if (event is KeyDownEvent) {
       final lastPieMenuState = _pieMenuStates.lastOrNull;
-      if (lastPieMenuState == null) return false;
+      if (lastPieMenuState == null) {
+        context.read<PieMenyuWindowManager>().hide();
+        return false;
+      }
 
       PieItemInstance? instanceOfKey = lastPieMenuState.pieItemInstances
           .where((instance) =>
@@ -96,7 +100,11 @@ class _PieMenuScreenState extends State<PieMenuScreen> {
     _pieMenuStates = context.watch<PieMenuStateProvider>().pieMenuStates;
     final pieMenuPos = context.read<PieMenuStateProvider>().pieMenuPositions;
 
-    if (_pieMenuStates.isEmpty) return Container();
+    if (_pieMenuStates.isEmpty) {
+      dev.log("No state is found, closing the window");
+      context.read<PieMenyuWindowManager>().hide();
+      return Container();
+    }
 
     return Scaffold(
       backgroundColor: Colors.transparent,

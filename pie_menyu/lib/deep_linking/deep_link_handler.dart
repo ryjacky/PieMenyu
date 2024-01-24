@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:app_links/app_links.dart';
 import 'package:flutter/material.dart';
+import 'package:system_tray/system_tray.dart';
 import 'package:win32_registry/win32_registry.dart';
 import 'package:window_manager/window_manager.dart';
 
@@ -23,7 +24,11 @@ class DeepLinkHandler {
 
     final appLinks = AppLinks();
 
-    appLinks.allUriLinkStream.listen((uri) {
+    appLinks.allUriLinkStream.listen((uri) async {
+      // deep links always open the window, we need to hide it programmatically
+      await windowManager.hide();
+      await AppWindow().hide();
+
       String url = uri.toString();
       for (var listener in _listeners) {
         if (url.contains("reload")) {
@@ -35,8 +40,7 @@ class DeepLinkHandler {
         }
       }
 
-      // deep links always open the window, we need to hide it programmatically
-      windowManager.hide();
+
     });
   }
 

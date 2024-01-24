@@ -23,7 +23,6 @@ class PieMenyuSystemTray {
     // create context menu
     final Menu menu = Menu();
     await menu.buildFrom([
-      MenuItemLabel(label: 'Show', onClicked: (menuItem) => appWindow.show()),
       MenuItemLabel(label: 'Hide', onClicked: (menuItem) => appWindow.hide()),
       MenuItemLabel(label: 'Exit', onClicked: (menuItem) {
         for (var callback in _onExitCallbacks) {
@@ -46,7 +45,7 @@ class PieMenyuSystemTray {
         case kSystemTrayEventRightClick:
           Platform.isWindows ? systemTray.popUpContextMenu() : appWindow.show();
         case kSystemTrayEventDoubleClick:
-          appWindow.show();
+          break;
       }
     });
   }

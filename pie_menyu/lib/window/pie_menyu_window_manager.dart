@@ -61,7 +61,7 @@ class PieMenyuWindowManager {
     windowManager.waitUntilReadyToShow(windowOptions, () async {
       await windowManager.show();
       await windowManager.setAsFrameless();
-      await windowManager.hide();
+      await hide();
     });
 
     log("Window manager initialized");
@@ -78,12 +78,13 @@ class PieMenyuWindowManager {
     _pieMenuStateProvider.replaceStates([pieMenuState]);
     _pieMenuStateProvider.pieMenuPositions[pieMenuState] = await getRelativeCursorScreenPoint();
 
-    windowManager.setBounds((await getCurrentDisplayBounds()).deflate(1));
-    windowManager.show();
+    await windowManager.setBounds((await getCurrentDisplayBounds()).deflate(1));
+    await windowManager.show();
   }
 
   Future<void> hide() async {
     await windowManager.hide();
+    await windowManager.blur();
   }
 
   // Modified from calcWindowPosition

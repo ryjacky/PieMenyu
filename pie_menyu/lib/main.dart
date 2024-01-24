@@ -28,8 +28,8 @@ Future<void> main(dynamic args) async {
     globalKeyEvent,
   );
 
-  windowManager.initialize();
-  PieMenyuSystemTray.initialize();
+  await windowManager.initialize();
+  await PieMenyuSystemTray.initialize();
 
   runApp(
     MultiProvider(
