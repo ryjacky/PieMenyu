@@ -53,15 +53,36 @@ class _PieMenuScreenState extends State<PieMenuScreen> {
       return true;
     });
 
-
-
+    HardwareKeyboard.instance.addHandler(_screenKeyEventHandler);
 
     super.initState();
   }
 
+  bool _screenKeyEventHandler(KeyEvent event) {
+    if (event is KeyDownEvent) {
+      final lastPieMenuState = _pieMenuStates.lastOrNull;
+      if (lastPieMenuState == null) return false;
+
+      PieItemInstance? instanceOfKey = lastPieMenuState.pieItemInstances
+          .where((instance) => instance.keyCode.toUpperCase() == event.character?.toUpperCase())
+          .firstOrNull;
+      if (instanceOfKey == null) return false;
+
+      lastPieMenuState.activePieItemInstance = instanceOfKey;
+
+      tryActivate(
+        lastPieMenuState,
+        ActivationMode.onRelease,
+      );
+      return true;
+    }
+
+    return false;
+  }
+
   @override
   void dispose() {
-
+    HardwareKeyboard.instance.removeHandler(_screenKeyEventHandler);
     super.dispose();
   }
 
@@ -85,7 +106,8 @@ class _PieMenuScreenState extends State<PieMenuScreen> {
               _pieMenuStates.last.pieItemInstances,
             );
 
-            if (instance != _pieMenuStates.last.activePieItemInstance && instance != null) {
+            if (instance != _pieMenuStates.last.activePieItemInstance &&
+                instance != null) {
               _pieMenuStates.last.activePieItemInstance = instance;
             }
           },
