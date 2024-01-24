@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:hotkey_manager/hotkey_manager.dart';
 import 'package:pie_menyu/hotkey/key_event_notifier.dart';
 import 'package:pie_menyu/screens/pie_menu_screen/pie_menu_state_provider.dart';
 import 'package:pie_menyu/window/pie_menyu_window_manager.dart';
@@ -72,8 +73,10 @@ class _PieMenuScreenState extends State<PieMenuScreen> {
           .where((instance) =>
               instance.keyCode.toUpperCase() == event.character?.toUpperCase())
           .firstOrNull;
-      if (instanceOfKey == null) {
-        context.read<PieMenyuWindowManager>().hide();
+      if (instanceOfKey == null){
+        if (!_isModifierKey(event.logicalKey)) {
+          context.read<PieMenyuWindowManager>().hide();
+        }
         return false;
       }
 
@@ -287,5 +290,22 @@ class _PieMenuScreenState extends State<PieMenuScreen> {
           break;
       }
     }
+  }
+
+  bool _isModifierKey(LogicalKeyboardKey logicalKey) {
+    return [
+      LogicalKeyboardKey.control,
+      LogicalKeyboardKey.controlRight,
+      LogicalKeyboardKey.controlLeft,
+      LogicalKeyboardKey.shift,
+      LogicalKeyboardKey.shiftRight,
+      LogicalKeyboardKey.shiftLeft,
+      LogicalKeyboardKey.alt,
+      LogicalKeyboardKey.altRight,
+      LogicalKeyboardKey.altLeft,
+      LogicalKeyboardKey.meta,
+      LogicalKeyboardKey.metaRight,
+      LogicalKeyboardKey.metaLeft,
+    ].contains(logicalKey);
   }
 }
