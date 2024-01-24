@@ -1,11 +1,21 @@
 import 'package:bitsdojo_window/bitsdojo_window.dart';
 import 'package:flutter/material.dart';
+import 'package:localization/localization.dart';
+import 'package:url_launcher/url_launcher.dart';
 
-class TitleBar extends StatelessWidget {
+class TitleBar extends StatefulWidget {
   final Widget? leading;
   final Widget? title;
 
   const TitleBar({super.key, this.leading, this.title});
+
+  @override
+  State<TitleBar> createState() => _TitleBarState();
+}
+
+class _TitleBarState extends State<TitleBar> {
+  static const titlebarItemPadding = EdgeInsets.fromLTRB(5.0, 6.0, 5, 3);
+  bool pieMenyuStatus = true;
 
   @override
   Widget build(BuildContext context) {
@@ -30,11 +40,29 @@ class TitleBar extends StatelessWidget {
           child: Row(
             children: [
               Padding(
-                padding: const EdgeInsets.fromLTRB(5.0, 6.0, 5, 3),
-                child: leading,
+                padding: titlebarItemPadding,
+                child: widget.leading,
               ),
-              if (title != null) title!,
+              if (widget.title != null) widget.title!,
               Expanded(child: MoveWindow()),
+              Text(
+                "label-pie-menyu-status".i18n(),
+                style: const TextStyle(color: Colors.grey),
+              ),
+              Padding(
+                padding: titlebarItemPadding,
+                child: Transform.scale(
+                  scale: 0.6,
+                  child: Switch(
+                    value: pieMenyuStatus,
+                    onChanged: (bool value) {
+                      setState(() => pieMenyuStatus = value);
+                      launchUrl(
+                          Uri.parse("piemenyu://${value ? "start" : "stop"}"));
+                    },
+                  ),
+                ),
+              ),
               MinimizeWindowButton(colors: buttonColors),
               MaximizeWindowButton(colors: buttonColors),
               CloseWindowButton(colors: closeButtonColors),
