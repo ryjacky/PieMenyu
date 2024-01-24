@@ -11,6 +11,8 @@ import 'package:path_provider/path_provider.dart';
 import 'package:pie_menyu_core/db/db.dart';
 import 'package:pie_menyu_editor/view/routes/home/home_route.dart';
 import 'package:provider/provider.dart';
+import 'package:url_launcher/url_launcher.dart';
+import 'package:url_launcher/url_launcher_string.dart';
 
 import 'theme/color_schemes.g.dart';
 import 'theme/text_theme.g.dart';
@@ -22,10 +24,9 @@ Future<void> main() async {
   await hotKeyManager.unregisterAll();
 
   // Start pieMenyu
-  Process.start(
-      p.join(Directory(Platform.resolvedExecutable).parent.path, "pie_menyu",
-          "pie_menyu.exe"),
-      [], mode: ProcessStartMode.detached);
+  // Will not when both editor and pie_menyu is in debug mode
+  // pie_menyu will be terminated after close in debug mode
+  launchUrl(Uri.parse("piemenyu://"));
 
   PackageInfo packageInfo = await PackageInfo.fromPlatform();
 
