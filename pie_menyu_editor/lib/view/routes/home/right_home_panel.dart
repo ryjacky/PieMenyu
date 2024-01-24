@@ -147,6 +147,8 @@ class _RightHomePanelState extends State<RightHomePanel> {
                                 addHotkeyToProfile(
                                     activeProfile, newHotkey, pieMenu.id)
                               },
+                              onClear: (prevHotkey) => removeHotkeyFromProfile(
+                                  activeProfile, prevHotkey),
                               validation: (hotkey) {
                                 for (var htpm
                                     in activeProfile.hotkeyToPieMenuIdList) {

@@ -43,10 +43,12 @@ class KeyPressRecorder extends StatefulWidget {
     this.initialHotkey,
     required this.onHotKeyRecorded,
     this.validation,
+    this.onClear,
   });
 
   final HotKey? initialHotkey;
   final ValueChanged<HotKey> onHotKeyRecorded;
+  final ValueChanged<HotKey>? onClear;
   final bool Function(HotKey hotkey)? validation;
 
   @override
@@ -92,7 +94,12 @@ class _KeyPressRecorderState extends State<KeyPressRecorder> {
     switch (keyEvent.logicalKey) {
       case LogicalKeyboardKey.escape:
         if (!ctrl && !alt && !shift) {
-          resetToPrevious();
+          _focusNode.unfocus();
+          return KeyEventResult.handled;
+        }
+      case LogicalKeyboardKey.delete:
+        if (!ctrl && !alt && !shift) {
+          _clear();
           return KeyEventResult.handled;
         }
       case LogicalKeyboardKey.control:
@@ -183,6 +190,28 @@ class _KeyPressRecorderState extends State<KeyPressRecorder> {
     shift = prevShift;
     key = prevKey;
     setState(() {});
+
+    _focusNode.unfocus();
+  }
+
+  void _clear() {
+    widget.onClear?.call(HotKey(
+      prevKey!,
+      modifiers: [
+        if (prevCtrl) KeyModifier.control,
+        if (prevAlt) KeyModifier.alt,
+        if (prevShift) KeyModifier.shift,
+      ],
+    ));
+
+    prevAlt = false;
+    prevCtrl = false;
+    prevShift = false;
+    prevKey = null;
+    ctrl = false;
+    alt = false;
+    shift = false;
+    key = null;
 
     _focusNode.unfocus();
   }
