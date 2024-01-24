@@ -19,7 +19,7 @@ class PieMenyuWindowManager {
 
   Database _db;
   PieMenuStateProvider _pieMenuStateProvider;
-  GlobalKeyEvent _keyEventNotifier;
+  SystemKeyEvent _keyEventNotifier;
 
   PieMenyuWindowManager._(
     this._db,
@@ -40,7 +40,7 @@ class PieMenyuWindowManager {
   factory PieMenyuWindowManager(
     Database db,
     PieMenuStateProvider pieMenuStateProvider,
-    GlobalKeyEvent keyUpNotifier,
+    SystemKeyEvent keyUpNotifier,
   ) {
     instance ??= PieMenyuWindowManager._(
       db,

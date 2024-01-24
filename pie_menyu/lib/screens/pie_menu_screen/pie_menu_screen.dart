@@ -1,6 +1,7 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:pie_menyu/hotkey/key_event_notifier.dart';
 import 'package:pie_menyu/screens/pie_menu_screen/pie_menu_state_provider.dart';
 import 'package:pie_menyu/window/pie_menyu_window_manager.dart';
@@ -40,7 +41,7 @@ class _PieMenuScreenState extends State<PieMenuScreen> {
 
   @override
   void initState() {
-    final keyEvent = context.read<GlobalKeyEvent>();
+    final keyEvent = context.read<SystemKeyEvent>();
     keyEvent.addKeyUpListener((hotkey) {
       final lastPieMenuState = _pieMenuStates.lastOrNull;
       if (lastPieMenuState == null) return false;
@@ -52,7 +53,16 @@ class _PieMenuScreenState extends State<PieMenuScreen> {
       return true;
     });
 
+
+
+
     super.initState();
+  }
+
+  @override
+  void dispose() {
+
+    super.dispose();
   }
 
   @override

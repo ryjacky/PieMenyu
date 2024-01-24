@@ -9,7 +9,7 @@ import 'package:pie_menyu_core/db/db.dart';
 
 typedef KeyEventListener = bool Function(HotKey hotKey);
 
-class GlobalKeyEvent {
+class SystemKeyEvent {
   /// Only be used in the Windows platform
   bool keyUpRegistered = false;
 
@@ -31,7 +31,7 @@ class GlobalKeyEvent {
 
   final Database _db;
 
-  GlobalKeyEvent(this._db) {
+  SystemKeyEvent(this._db) {
     _registerHotkey();
   }
 
