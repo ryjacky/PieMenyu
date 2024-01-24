@@ -14,10 +14,13 @@ class GlobalKeyEvent {
   bool keyUpRegistered = false;
 
   final List<KeyEventListener> _keyUpListeners = [];
+
   addKeyUpListener(KeyEventListener listener) {
     _keyUpListeners.add(listener);
   }
+
   final List<KeyEventListener> _keyDownListeners = [];
+
   addKeyDownListener(KeyEventListener listener) {
     _keyDownListeners.add(listener);
   }
@@ -79,17 +82,23 @@ class GlobalKeyEvent {
     log("Hotkey pressed: $hotkey");
     _keyEventType = KeyEventType.down;
 
-    for (final listener in _keyDownListeners){
+    for (final listener in _keyDownListeners) {
       if (!listener(hotkey)) break;
     }
   }
 
   /// On Windows platform hotkey is always HotKey(KeyCode.space)
   _onKeyUp(HotKey hotkey) async {
+    if (_keyEventType != KeyEventType.down &&
+        _keyEventType != KeyEventType.repeat) {
+      return;
+    }
+
     log("Hotkey released: $hotkey");
+
     _keyEventType = KeyEventType.up;
 
-    for (final listener in _keyUpListeners){
+    for (final listener in _keyUpListeners) {
       if (!listener(hotkey)) break;
     }
   }
