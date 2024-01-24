@@ -5,6 +5,7 @@ import 'package:pie_menyu/hotkey/key_event_notifier.dart';
 import 'package:pie_menyu/screens/pie_menu_screen/pie_menu_state_provider.dart';
 import 'package:pie_menyu/window/pie_menyu_window_manager.dart';
 import 'package:pie_menyu_core/db/db.dart';
+import 'package:pie_menyu_core/db/pie_item.dart';
 import 'package:pie_menyu_core/db/pie_item_task.dart';
 import 'package:pie_menyu_core/db/pie_menu.dart';
 import 'package:pie_menyu_core/executor/executor_service.dart';
@@ -31,15 +32,21 @@ class PieMenuScreen extends StatefulWidget {
 }
 
 class _PieMenuScreenState extends State<PieMenuScreen> {
-  List<PieMenuState> pieMenuStates = [];
+  static const _animationDuration = Duration(milliseconds: 200);
+  static const _animationCurve = Curves.easeOutCubic;
+
+  List<PieMenuState> _pieMenuStates = [];
+  Offset _mousePosition = Offset.zero;
 
   @override
   void initState() {
     final keyEvent = context.read<GlobalKeyEvent>();
     keyEvent.addKeyUpListener((hotkey) {
+      final lastPieMenuState = _pieMenuStates.lastOrNull;
+      if (lastPieMenuState == null) return false;
+
       tryActivate(
-        pieMenuStates.last.activePieItemInstance,
-        pieMenuStates.last,
+        lastPieMenuState,
         ActivationMode.onRelease,
       );
       return true;
@@ -50,35 +57,36 @@ class _PieMenuScreenState extends State<PieMenuScreen> {
 
   @override
   Widget build(BuildContext context) {
-    pieMenuStates = context.watch<PieMenuStateProvider>().pieMenuStates;
+    _pieMenuStates = context.watch<PieMenuStateProvider>().pieMenuStates;
     final pieMenuPos = context.read<PieMenuStateProvider>().pieMenuPositions;
 
-    if (pieMenuStates.isEmpty) return Container();
+    if (_pieMenuStates.isEmpty) return Container();
 
     return Scaffold(
       backgroundColor: Colors.transparent,
       body: LayoutBuilder(builder: (_, constraint) {
         return MouseRegion(
           onHover: (event) {
+            _mousePosition = event.position;
             final instance = getPieItemInstanceAt(
               event.position,
-              pieMenuPos[pieMenuStates.last] ??=
+              pieMenuPos[_pieMenuStates.last] ??=
                   Offset(constraint.maxWidth / 2, constraint.maxHeight / 2),
-              pieMenuStates.last.pieItemInstances,
+              _pieMenuStates.last.pieItemInstances,
             );
 
-            if (instance != pieMenuStates.last.activePieItemInstance) {
-              pieMenuStates.last.activePieItemInstance = instance;
+            if (instance != _pieMenuStates.last.activePieItemInstance) {
+              _pieMenuStates.last.activePieItemInstance = instance;
             }
           },
           child: Stack(
             children: [
-              for (final state in pieMenuStates)
+              for (final state in _pieMenuStates)
                 buildPieMenuView(
                   state,
                   constraint,
-                  pieMenuPos[state] ??=
-                      Offset(constraint.maxWidth / 2, constraint.maxHeight / 2),
+                  pieMenuPos[state] ??= _mousePosition,
+                  state == _pieMenuStates.last,
                 )
             ],
           ),
@@ -118,37 +126,47 @@ class _PieMenuScreenState extends State<PieMenuScreen> {
     PieMenuState state,
     BoxConstraints constraint,
     Offset position,
+    bool inForeground,
   ) {
-    return Positioned(
-      left: position.dx - constraint.maxWidth / 2,
-      top: position.dy - constraint.maxHeight / 2,
+    return AnimatedPositioned(
+      left: position.dx - constraint.maxWidth / 2 - (inForeground ? 0 : 200),
+      top: position.dy - constraint.maxHeight / 2 + (inForeground ? 0 : 100),
+      duration: _animationDuration,
+      curve: _animationCurve,
       child: SizedBox(
         width: constraint.maxWidth,
         height: constraint.maxHeight,
-        child: PieMenuView(
-          state: state,
-          onTap: (PieItemInstance instance) =>
-              tryActivate(instance, state, ActivationMode.onClick),
-          onHover: (PieItemInstance instance) =>
-              tryActivate(instance, state, ActivationMode.onHover),
+        child: AnimatedOpacity(
+          opacity: inForeground ? 1.0 : 0.5,
+          duration: _animationDuration,
+          curve: _animationCurve,
+          child: AnimatedScale(
+            scale: inForeground ? 1.0 : 0.7,
+            duration: _animationDuration,
+            curve: _animationCurve,
+            child: PieMenuView(
+              state: state,
+              onTap: () => tryActivate(state, ActivationMode.onClick),
+              onHover: () => tryActivate(state, ActivationMode.onHover),
+            ),
+          ),
         ),
       ),
     );
   }
 
   tryActivate(
-    PieItemInstance instance,
     PieMenuState state,
     ActivationMode mode,
   ) async {
     final pieMenuStates = context.read<PieMenuStateProvider>().pieMenuStates;
+    PieItem? activePieItem = state.activePieItemInstance.pieItem;
 
-    if (state != pieMenuStates.last) return;
+    if (state != pieMenuStates.last || activePieItem == null) return;
 
     final mainMenuState = pieMenuStates[0];
-    final bool isSubMenuItem =
-        state.activePieItemInstance.pieItem?.tasks.firstOrNull?.taskType ==
-            PieItemTaskType.openSubMenu;
+    final bool isSubMenuItem = activePieItem.tasks.firstOrNull?.taskType ==
+        PieItemTaskType.openSubMenu;
 
     final executorService = context.read<ExecutorService>();
     if (mainMenuState == state) executorService.cancelAll();
@@ -162,29 +180,33 @@ class _PieMenuScreenState extends State<PieMenuScreen> {
       } else if (modeMatched) {
         debugPrint("Open Sub Menu");
 
-        final tasks = instance.pieItem?.tasks ?? [];
-        if (tasks.length != 1) return;
-
-        final openSubMenuTask = OpenSubMenuTask.from(tasks.first);
-        final db = context.read<Database>();
-        final pieMenu = (await db.getPieMenus(ids: [openSubMenuTask.subMenuId]))
-            .firstOrNull;
-
-        if (pieMenu == null || !context.mounted) return;
-
-        final pieMenuState = PieMenuState(db, pieMenu);
-        final pieMenuStateProvider = context.read<PieMenuStateProvider>();
-        pieMenuStateProvider.addState(pieMenuState);
+        openSubMenu(activePieItem);
       }
     } else {
       if (mainMenuState.behavior.activationMode == mode) {
         debugPrint("Execute tasks and close");
         await context.read<PieMenyuWindowManager>().hide();
 
-        addToExecutorQueue(executorService, instance.pieItem?.tasks ?? []);
+        addToExecutorQueue(executorService, activePieItem.tasks);
         executorService.start();
       }
     }
+  }
+
+  void openSubMenu(PieItem activePieItem) async {
+    final tasks = activePieItem.tasks;
+    if (tasks.length != 1) return;
+
+    final openSubMenuTask = OpenSubMenuTask.from(tasks.first);
+    final db = context.read<Database>();
+    final pieMenu =
+        (await db.getPieMenus(ids: [openSubMenuTask.subMenuId])).firstOrNull;
+
+    if (pieMenu == null || !context.mounted) return;
+
+    final pieMenuState = PieMenuState(db, pieMenu);
+    final pieMenuStateProvider = context.read<PieMenuStateProvider>();
+    pieMenuStateProvider.addState(pieMenuState);
   }
 
   void addToExecutorQueue(
