@@ -10,6 +10,7 @@ import 'package:pie_menyu_core/db/db.dart';
 import 'package:pie_menyu_core/executor/executor_service.dart';
 import 'package:provider/provider.dart';
 
+import 'deep_linking/deep_link_handler.dart';
 import 'hotkey/key_event_notifier.dart';
 import 'screens/pie_menu_screen/pie_menu_state_provider.dart';
 import 'tray/pie_menyu_system_tray.dart';
@@ -17,6 +18,7 @@ import 'tray/pie_menyu_system_tray.dart';
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
+  final deepLinkHandler = DeepLinkHandler();
   final dbDir = (await getApplicationSupportDirectory()).parent;
   final db = Database(dbDir);
   final pieMenuStateProvider = PieMenuStateProvider();

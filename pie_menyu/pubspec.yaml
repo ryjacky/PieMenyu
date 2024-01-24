@@ -50,6 +50,8 @@ dependencies:
   path_provider: ^2.1.2
   google_fonts: ^6.1.0
   keyboard_event: ^0.3.4
+  app_links: ^3.5.0
+  win32_registry: ^1.1.2
 
 dev_dependencies:
   flutter_test:
