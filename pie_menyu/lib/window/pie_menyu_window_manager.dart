@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
@@ -25,10 +26,6 @@ class PieMenyuWindowManager {
     this._pieMenuStateProvider,
     this._keyEventNotifier,
   ) {
-    _keyEventNotifier.addKeyUpListener((hotKey) {
-      hide();
-      return true;
-    });
     _keyEventNotifier.addKeyDownListener((hotKey) {
       _tryShow(hotKey);
       return true;
@@ -60,6 +57,7 @@ class PieMenyuWindowManager {
     windowManager.waitUntilReadyToShow(windowOptions, () async {
       await windowManager.show();
       await windowManager.setAsFrameless();
+      await Future.delayed(const Duration(milliseconds: 100));
       await hide();
     });
 
@@ -79,6 +77,8 @@ class PieMenyuWindowManager {
 
     await windowManager.setBounds((await getCurrentDisplayBounds()).deflate(1));
     await windowManager.show();
+    await windowManager.focus();
+    await windowManager.setAlwaysOnTop(true);
   }
 
   Future<void> hide() async {
