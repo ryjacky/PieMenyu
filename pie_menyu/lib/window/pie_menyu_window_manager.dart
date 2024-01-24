@@ -57,6 +57,7 @@ class PieMenyuWindowManager {
     windowManager.waitUntilReadyToShow(windowOptions, () async {
       await windowManager.show();
       await windowManager.setAsFrameless();
+      await Future.delayed(const Duration(milliseconds: 100));
       await hide();
     });
 
