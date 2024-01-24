@@ -22,7 +22,7 @@ class ForegroundWindow {
         processId.value);
 
     if (processHandle == NULL) {
-      throw Exception("Unable to open process");
+      path = "";
     }
 
     Pointer<Utf16> pathPointer = calloc<Uint16>(MAX_PATH).cast<Utf16>();
@@ -30,7 +30,7 @@ class ForegroundWindow {
         GetModuleFileNameEx(processHandle, NULL, pathPointer, MAX_PATH);
 
     if (result == 0) {
-      throw Exception("Unable to get module file name");
+      path = "";
     }
 
     path = pathPointer.toDartString();
