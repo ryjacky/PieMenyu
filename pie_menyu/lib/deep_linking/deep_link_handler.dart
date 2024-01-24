@@ -25,10 +25,6 @@ class DeepLinkHandler {
     final appLinks = AppLinks();
 
     appLinks.allUriLinkStream.listen((uri) async {
-      // deep links always open the window, we need to hide it programmatically
-      await windowManager.hide();
-      await AppWindow().hide();
-
       String url = uri.toString();
       for (var listener in _listeners) {
         if (url.contains("reload")) {
@@ -40,6 +36,10 @@ class DeepLinkHandler {
         }
       }
 
+      // deep links always open the window, we need to hide it programmatically
+      await Future.delayed(const Duration(milliseconds: 100));
+      await windowManager.hide();
+      await AppWindow().hide();
 
     });
   }

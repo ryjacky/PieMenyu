@@ -1,5 +1,4 @@
 import 'dart:developer';
-import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:hotkey_manager/hotkey_manager.dart';
@@ -84,7 +83,6 @@ class PieMenyuWindowManager {
 
   Future<void> hide() async {
     await windowManager.hide();
-    await windowManager.blur();
   }
 
   // Modified from calcWindowPosition
