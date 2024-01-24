@@ -51,7 +51,7 @@ class PieMenyuWindowManager {
   }
 
   initialize() async {
-    windowManager.ensureInitialized();
+    await windowManager.ensureInitialized();
     WindowOptions windowOptions = const WindowOptions(
       backgroundColor: Colors.transparent,
       skipTaskbar: true,
@@ -61,17 +61,19 @@ class PieMenyuWindowManager {
     windowManager.waitUntilReadyToShow(windowOptions, () async {
       await windowManager.setAsFrameless();
       await windowManager.hide();
-      await windowManager.blur();
     });
 
     log("Window manager initialized");
   }
 
   _tryShow(HotKey hotkey) async {
-    Profile? profile = await _db.getProfileByExe(ForegroundWindow().path);
-    profile ??= (await _db.getProfiles(ids: [1])).first;
-    final pieMenu = await _getHotkeyPieMenuIn(profile, hotkey);
+    final foregroundWindowPath = ForegroundWindow().path;
+    if (foregroundWindowPath.contains("pie_menyu")) return;
 
+    Profile? profile = await _db.getProfileByExe(foregroundWindowPath);
+    profile ??= (await _db.getProfiles(ids: [1])).first;
+
+    final pieMenu = await _getHotkeyPieMenuIn(profile, hotkey);
     if (pieMenu == null) return;
 
     final pieMenuState = PieMenuState(_db, pieMenu);
