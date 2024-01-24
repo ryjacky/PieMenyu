@@ -83,7 +83,7 @@ class PieMenyuWindowManager {
     windowManager.show();
   }
 
-  hide() async {
+  Future<void> hide() async {
     await windowManager.hide();
   }
 

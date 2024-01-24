@@ -6,6 +6,7 @@ import 'package:pie_menyu_core/db/pie_menu.dart';
 import 'package:pie_menyu_core/pieItemTasks/mouse_click_task.dart';
 import 'package:pie_menyu_core/pieItemTasks/open_app_task.dart';
 import 'package:pie_menyu_core/pieItemTasks/open_folder_task.dart';
+import 'package:pie_menyu_core/pieItemTasks/open_sub_menu_task.dart';
 import 'package:pie_menyu_core/pieItemTasks/open_url_task.dart';
 import 'package:pie_menyu_core/pieItemTasks/run_file_task.dart';
 import 'package:pie_menyu_core/pieItemTasks/send_key_task.dart';
@@ -85,19 +86,16 @@ class ActionsTab extends StatelessWidget {
                 },
               ),
             ),
-            // Gap(gap),
-            // Tooltip(
-            //   message: "tooltip-add-open-sub-menu-task".i18n(),
-            //   child: MonochromeIconButton(
-            //     icon: Icons.pie_chart,
-            //     onPressed: () {
-            //       final pieMenuState = context.read<PieMenuState>();
-            //       if (activePieItem != null) {
-            //         pieMenuState.addTaskTo(activePieItem, OpenSubMenuTask());
-            //       }
-            //     },
-            //   ),
-            // ),
+            Gap(gap),
+            Tooltip(
+              message: "tooltip-add-open-sub-menu-task".i18n(),
+              child: MonochromeIconButton(
+                icon: Icons.pie_chart,
+                onPressed: () {
+                  pieMenuState.addTaskTo(activePieItemInstance, OpenSubMenuTask());
+                },
+              ),
+            ),
             Gap(gap),
             Tooltip(
               message: "tooltip-add-open-folder-task".i18n(),

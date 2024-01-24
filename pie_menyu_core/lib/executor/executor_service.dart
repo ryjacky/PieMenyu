@@ -27,4 +27,8 @@ class ExecutorService extends ChangeNotifier {
     notifyListeners();
   }
 
+  void cancelAll(){
+    _pieItemTasks.clear();
+  }
+
 }

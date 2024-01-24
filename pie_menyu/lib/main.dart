@@ -7,6 +7,7 @@ import 'package:path_provider/path_provider.dart';
 import 'package:pie_menyu/screens/pie_menu_screen/pie_menu_screen.dart';
 import 'package:pie_menyu/window/pie_menyu_window_manager.dart';
 import 'package:pie_menyu_core/db/db.dart';
+import 'package:pie_menyu_core/executor/executor_service.dart';
 import 'package:provider/provider.dart';
 
 import 'hotkey/key_event_notifier.dart';
@@ -40,6 +41,7 @@ Future<void> main() async {
         Provider(create: (_) => db),
         Provider(create: (_) => windowManager),
         Provider(create: (_) => globalKeyEvent),
+        ChangeNotifierProvider(create: (_) => ExecutorService()),
         ChangeNotifierProvider(create: (_) => pieMenuStateProvider),
       ],
       child: MaterialApp(

@@ -11,6 +11,9 @@ class PieItemTask {
   int repeat = 1;
   List<String> arguments = [];
 
+  @ignore
+  int runtimeId = -1;
+
   PieItemTask({
     this.taskType = PieItemTaskType.sendKey,
     this.repeat = 1,
@@ -20,6 +23,8 @@ class PieItemTask {
   PieItemTask.from(PieItemTask pieItemTask) {
     repeat = pieItemTask.repeat;
     arguments = pieItemTask.arguments;
+    taskType = pieItemTask.taskType;
+    runtimeId = pieItemTask.runtimeId;
   }
 
 }

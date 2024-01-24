@@ -1645,6 +1645,12 @@ const PieMenuBehaviorSchema = Schema(
       id: 2,
       name: r'openInScreenCenter',
       type: IsarType.bool,
+    ),
+    r'subMenuActivationMode': PropertySchema(
+      id: 3,
+      name: r'subMenuActivationMode',
+      type: IsarType.byte,
+      enumMap: _PieMenuBehaviorsubMenuActivationModeEnumValueMap,
     )
   },
   estimateSize: _pieMenuBehaviorEstimateSize,
@@ -1671,6 +1677,7 @@ void _pieMenuBehaviorSerialize(
   writer.writeByte(offsets[0], object.activationMode.index);
   writer.writeDouble(offsets[1], object.escapeRadius);
   writer.writeBool(offsets[2], object.openInScreenCenter);
+  writer.writeByte(offsets[3], object.subMenuActivationMode.index);
 }
 
 PieMenuBehavior _pieMenuBehaviorDeserialize(
@@ -1685,6 +1692,10 @@ PieMenuBehavior _pieMenuBehaviorDeserialize(
       ActivationMode.onRelease;
   object.escapeRadius = reader.readDouble(offsets[1]);
   object.openInScreenCenter = reader.readBool(offsets[2]);
+  object.subMenuActivationMode =
+      _PieMenuBehaviorsubMenuActivationModeValueEnumMap[
+              reader.readByteOrNull(offsets[3])] ??
+          ActivationMode.onRelease;
   return object;
 }
 
@@ -1703,6 +1714,10 @@ P _pieMenuBehaviorDeserializeProp<P>(
       return (reader.readDouble(offset)) as P;
     case 2:
       return (reader.readBool(offset)) as P;
+    case 3:
+      return (_PieMenuBehaviorsubMenuActivationModeValueEnumMap[
+              reader.readByteOrNull(offset)] ??
+          ActivationMode.onRelease) as P;
     default:
       throw IsarError('Unknown property with id $propertyId');
   }
@@ -1714,6 +1729,16 @@ const _PieMenuBehavioractivationModeEnumValueMap = {
   'onClick': 2,
 };
 const _PieMenuBehavioractivationModeValueEnumMap = {
+  0: ActivationMode.onRelease,
+  1: ActivationMode.onHover,
+  2: ActivationMode.onClick,
+};
+const _PieMenuBehaviorsubMenuActivationModeEnumValueMap = {
+  'onRelease': 0,
+  'onHover': 1,
+  'onClick': 2,
+};
+const _PieMenuBehaviorsubMenuActivationModeValueEnumMap = {
   0: ActivationMode.onRelease,
   1: ActivationMode.onHover,
   2: ActivationMode.onClick,
@@ -1849,6 +1874,62 @@ extension PieMenuBehaviorQueryFilter
       return query.addFilterCondition(FilterCondition.equalTo(
         property: r'openInScreenCenter',
         value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<PieMenuBehavior, PieMenuBehavior, QAfterFilterCondition>
+      subMenuActivationModeEqualTo(ActivationMode value) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'subMenuActivationMode',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<PieMenuBehavior, PieMenuBehavior, QAfterFilterCondition>
+      subMenuActivationModeGreaterThan(
+    ActivationMode value, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        include: include,
+        property: r'subMenuActivationMode',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<PieMenuBehavior, PieMenuBehavior, QAfterFilterCondition>
+      subMenuActivationModeLessThan(
+    ActivationMode value, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.lessThan(
+        include: include,
+        property: r'subMenuActivationMode',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<PieMenuBehavior, PieMenuBehavior, QAfterFilterCondition>
+      subMenuActivationModeBetween(
+    ActivationMode lower,
+    ActivationMode upper, {
+    bool includeLower = true,
+    bool includeUpper = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.between(
+        property: r'subMenuActivationMode',
+        lower: lower,
+        includeLower: includeLower,
+        upper: upper,
+        includeUpper: includeUpper,
       ));
     });
   }

@@ -133,7 +133,7 @@ class PieMenuState extends ChangeNotifier {
       throw Exception("PieItemInstance has no pieItem");
     }
 
-    pieItem.tasks.add(task);
+    pieItem.tasks.add(task..runtimeId = _nextId--);
     notifyListeners();
   }
 
@@ -212,9 +212,9 @@ class PieMenuState extends ChangeNotifier {
       throw Exception("PieItemInstance has no pieItem");
     }
 
-    final index = pieItem.tasks.indexWhere((element) => element == pieItemTask);
+    final index = pieItem.tasks.indexWhere((element) => element.runtimeId == pieItemTask.runtimeId);
     if (index == -1) {
-      throw Exception("PieItemTask not found");
+      throw Exception("PieItemTask not found, tasks available: ${pieItem.tasks.map((e) => e.runtimeId)}, finding: ${pieItemTask.runtimeId}");
     }
 
     pieItem.tasks[index] = pieItemTask;

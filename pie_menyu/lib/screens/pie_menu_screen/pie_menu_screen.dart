@@ -1,12 +1,24 @@
 import 'dart:math';
-import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:pie_menyu/hotkey/key_event_notifier.dart';
 import 'package:pie_menyu/screens/pie_menu_screen/pie_menu_state_provider.dart';
 import 'package:pie_menyu/window/pie_menyu_window_manager.dart';
+import 'package:pie_menyu_core/db/db.dart';
+import 'package:pie_menyu_core/db/pie_item_task.dart';
 import 'package:pie_menyu_core/db/pie_menu.dart';
+import 'package:pie_menyu_core/executor/executor_service.dart';
+import 'package:pie_menyu_core/pieItemTasks/mouse_click_task.dart';
+import 'package:pie_menyu_core/pieItemTasks/move_window_task.dart';
+import 'package:pie_menyu_core/pieItemTasks/open_app_task.dart';
+import 'package:pie_menyu_core/pieItemTasks/open_editor_task.dart';
+import 'package:pie_menyu_core/pieItemTasks/open_folder_task.dart';
 import 'package:pie_menyu_core/pieItemTasks/open_sub_menu_task.dart';
+import 'package:pie_menyu_core/pieItemTasks/open_url_task.dart';
+import 'package:pie_menyu_core/pieItemTasks/resize_window_task.dart';
+import 'package:pie_menyu_core/pieItemTasks/run_file_task.dart';
+import 'package:pie_menyu_core/pieItemTasks/send_key_task.dart';
+import 'package:pie_menyu_core/pieItemTasks/send_text_task.dart';
 import 'package:pie_menyu_core/widgets/pieMenuView/pie_menu_state.dart';
 import 'package:pie_menyu_core/widgets/pieMenuView/pie_menu_view.dart';
 import 'package:provider/provider.dart';
@@ -128,30 +140,80 @@ class _PieMenuScreenState extends State<PieMenuScreen> {
     PieItemInstance instance,
     PieMenuState state,
     ActivationMode mode,
-  ) {
+  ) async {
     final pieMenuStates = context.read<PieMenuStateProvider>().pieMenuStates;
 
     if (state != pieMenuStates.last) return;
 
     final mainMenuState = pieMenuStates[0];
-    final bool isSubMenuItem = state.activePieItemInstance.pieItem?.tasks
-            .whereType<OpenSubMenuTask>()
-            .isNotEmpty ??
-        false;
+    final bool isSubMenuItem =
+        state.activePieItemInstance.pieItem?.tasks.firstOrNull?.taskType ==
+            PieItemTaskType.openSubMenu;
+
+    final executorService = context.read<ExecutorService>();
+    if (mainMenuState == state) executorService.cancelAll();
 
     if (isSubMenuItem) {
       final modeMatched = mainMenuState.behavior.subMenuActivationMode == mode;
 
-      if (modeMatched && mode == ActivationMode.onRelease) {
+      if (mode == ActivationMode.onRelease) {
         debugPrint("Close");
         context.read<PieMenyuWindowManager>().hide();
       } else if (modeMatched) {
-        debugPrint("Open sub menu (Execute task)");
+        debugPrint("Open Sub Menu");
+
+        final tasks = instance.pieItem?.tasks ?? [];
+        if (tasks.length != 1) return;
+
+        final openSubMenuTask = OpenSubMenuTask.from(tasks.first);
+        final db = context.read<Database>();
+        final pieMenu = (await db.getPieMenus(ids: [openSubMenuTask.subMenuId]))
+            .firstOrNull;
+
+        if (pieMenu == null || !context.mounted) return;
+
+        final pieMenuState = PieMenuState(db, pieMenu);
+        final pieMenuStateProvider = context.read<PieMenuStateProvider>();
+        pieMenuStateProvider.addState(pieMenuState);
       }
     } else {
       if (mainMenuState.behavior.activationMode == mode) {
         debugPrint("Execute tasks and close");
-        context.read<PieMenyuWindowManager>().hide();
+        await context.read<PieMenyuWindowManager>().hide();
+
+        addToExecutorQueue(executorService, instance.pieItem?.tasks ?? []);
+        executorService.start();
+      }
+    }
+  }
+
+  void addToExecutorQueue(
+      ExecutorService executorService, List<PieItemTask> tasks) {
+    for (PieItemTask task in tasks) {
+      switch (task.taskType) {
+        case PieItemTaskType.sendKey:
+          executorService.execute(SendKeyTask.from(task));
+        case PieItemTaskType.mouseClick:
+          executorService.execute(MouseClickTask.from(task));
+        case PieItemTaskType.runFile:
+          executorService.execute(RunFileTask.from(task));
+
+        case PieItemTaskType.openFolder:
+          executorService.execute(OpenFolderTask.from(task));
+        case PieItemTaskType.openApp:
+          executorService.execute(OpenAppTask.from(task));
+        case PieItemTaskType.openUrl:
+          executorService.execute(OpenUrlTask.from(task));
+        case PieItemTaskType.openEditor:
+          executorService.execute(OpenEditorTask.from(task));
+        case PieItemTaskType.resizeWindow:
+          executorService.execute(ResizeWindowTask.from(task));
+        case PieItemTaskType.moveWindow:
+          executorService.execute(MoveWindowTask.from(task));
+        case PieItemTaskType.sendText:
+          executorService.execute(PasteTextTask.from(task));
+        case PieItemTaskType.openSubMenu:
+          break;
       }
     }
   }
