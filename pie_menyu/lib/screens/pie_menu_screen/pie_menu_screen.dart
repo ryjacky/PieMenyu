@@ -24,6 +24,7 @@ import 'package:pie_menyu_core/pieItemTasks/send_text_task.dart';
 import 'package:pie_menyu_core/widgets/pieMenuView/pie_menu_state.dart';
 import 'package:pie_menyu_core/widgets/pieMenuView/pie_menu_view.dart';
 import 'package:provider/provider.dart';
+import 'package:window_manager/window_manager.dart';
 
 class PieMenuScreen extends StatefulWidget {
   const PieMenuScreen({super.key});
@@ -64,7 +65,8 @@ class _PieMenuScreenState extends State<PieMenuScreen> {
       if (lastPieMenuState == null) return false;
 
       PieItemInstance? instanceOfKey = lastPieMenuState.pieItemInstances
-          .where((instance) => instance.keyCode.toUpperCase() == event.character?.toUpperCase())
+          .where((instance) =>
+              instance.keyCode.toUpperCase() == event.character?.toUpperCase())
           .firstOrNull;
       if (instanceOfKey == null) return false;
 
@@ -217,7 +219,9 @@ class _PieMenuScreenState extends State<PieMenuScreen> {
         openSubMenu(activePieItem);
       }
     } else {
-      if (mainMenuState.behavior.activationMode == mode) {
+      if (mainMenuState.behavior.activationMode == mode &&
+          await windowManager.isFocused() &&
+          context.mounted) {
         debugPrint("Execute tasks and close");
         await context.read<PieMenyuWindowManager>().hide();
 
