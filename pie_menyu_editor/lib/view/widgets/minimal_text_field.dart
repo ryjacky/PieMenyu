@@ -30,16 +30,17 @@ class _MinimalTextFieldState extends State<MinimalTextField> {
         }
       },
       child: TextField(
-          onChanged: (String content) {
-            this.content = content;
-          },
-          controller: TextEditingController(text: content),
-          keyboardType: widget.keyboardType,
-          decoration: const InputDecoration(
-            border: OutlineInputBorder(),
-            contentPadding: EdgeInsets.all(10),
-            isDense: true,
-          )),
+        onChanged: (String content) {
+          this.content = content;
+        },
+        controller: TextEditingController(text: content),
+        keyboardType: widget.keyboardType,
+        decoration: const InputDecoration(
+          border: OutlineInputBorder(),
+          contentPadding: EdgeInsets.all(10),
+          isDense: true,
+        ),
+      ),
     );
   }
 }

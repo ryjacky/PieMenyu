@@ -1,5 +1,7 @@
 library pie_menyu_core;
 
+import 'dart:ui';
+
 import 'package:pie_menyu_core/db/pie_item_task.dart';
 
 import '../executor/executable.dart';
@@ -26,8 +28,10 @@ class OpenSubMenuTask extends PieItemTask with Executable {
 
   int get subMenuId => int.parse(arguments[0]);
 
+  Future<void> Function()? afterExecute;
+
   @override
   Future<void> execute() async {
-    // TODO: implement execute
+    await afterExecute?.call();
   }
 }

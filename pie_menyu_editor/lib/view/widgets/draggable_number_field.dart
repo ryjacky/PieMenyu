@@ -3,11 +3,11 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 
 class DraggableNumberField extends StatefulWidget {
-  final int value;
-  final int min;
-  final int max;
-  final int step;
-  final Function(int value) onChanged;
+  final double value;
+  final double min;
+  final double max;
+  final double step;
+  final Function(double value) onChanged;
 
   const DraggableNumberField(
       {super.key,
@@ -23,7 +23,7 @@ class DraggableNumberField extends StatefulWidget {
 
 class _DraggableNumberFieldState extends State<DraggableNumberField> {
   bool ignoreMouse = true;
-  int value = 0;
+  double value = 0;
 
   @override
   void initState() {
@@ -49,7 +49,7 @@ class _DraggableNumberFieldState extends State<DraggableNumberField> {
         child: IgnorePointer(
           child: TextField(
               onChanged: (String content) {
-                int? value = int.tryParse(content);
+                double? value = double.tryParse(content);
                 if (value != null) {
                   this.value = max(min(widget.max, value), widget.min);
                   widget.onChanged(value);

@@ -1,32 +1,42 @@
 library pie_menyu_core;
 
 import 'dart:developer';
+import 'dart:io';
 
 import 'package:hotkey_manager/hotkey_manager.dart';
 import 'package:isar/isar.dart';
-import 'package:path_provider/path_provider.dart';
 import 'package:pie_menyu_core/db/profile_exe.dart';
+import 'package:pie_menyu_core/widgets/pieMenuView/pie_menu_state.dart';
 
 import 'pie_item.dart';
-import 'pie_item_task.dart';
 import 'pie_menu.dart';
 import 'profile.dart';
 
-class DB {
-  static late Isar _isar;
+class Database {
+  static const String dbFileName = "default.isar";
 
-  static Isar get isar => _isar;
+  final Isar _isar;
 
-  static initialize() async {
-    final dir = await getApplicationSupportDirectory();
-    DB._isar = await Isar.open(
-        [ProfileSchema, PieMenuSchema, PieItemSchema, PieItemTaskSchema, ProfileExeSchema],
-        directory: dir.parent.path);
+  Isar get isar => _isar;
 
-    final defaultProf = Profile(name: 'Default Profile');
-    final defaultProfExe = ProfileExe(path: "global")..profile.value = defaultProf;
+  final String _dbPath;
 
+  String get dbPath => _dbPath;
+
+  Database(Directory dir)
+      : _isar = Isar.openSync([
+          ProfileSchema,
+          PieMenuSchema,
+          PieItemSchema,
+          ProfileExeSchema,
+        ], directory: dir.path),
+        _dbPath = dir.path;
+
+  initialize(Directory dbPath) async {
     // Create initial record if not existed
+    final defaultProf = Profile(name: 'Default Profile');
+    final defaultProfExe = ProfileExe(path: "global")
+      ..profile.value = defaultProf;
     if (await _isar.profiles.count() == 0) {
       await _isar.writeTxn(() async {
         await _isar.profileExes.put(defaultProfExe);
@@ -36,16 +46,20 @@ class DB {
     }
   }
 
-  static Future<List<Profile>> getProfiles(
-      {List<int> ids = const <int>[]}) async {
+  close() async {
+    await _isar.close();
+  }
+
+  Future<List<Profile>> getProfiles({List<int> ids = const <int>[]}) async {
     if (ids.isEmpty) {
       return _isar.profiles.where().findAll();
     }
     return (await _isar.profiles.getAll(ids)).whereType<Profile>().toList();
   }
 
-  static Future<Profile?> getProfileByExe(String path) async {
-    ProfileExe? profileExe = await _isar.profileExes.where().pathEqualTo(path).findFirst();
+  Future<Profile?> getProfileByExe(String path) async {
+    ProfileExe? profileExe =
+        await _isar.profileExes.where().pathEqualTo(path).findFirst();
 
     if (profileExe == null) {
       return null;
@@ -55,10 +69,25 @@ class DB {
     return profileExe.profile.value;
   }
 
-  static Future<Map<String, List<HotKey>>> getExeToHotkeyMap() async {
+  Future<List<HotKey>> getAllHotkeys() async {
+    final List<HotKey> hotkeys = [];
+
+    final List<Profile> profiles =
+        await _isar.profiles.where().filter().enabledEqualTo(true).findAll();
+    for (Profile profile in profiles) {
+      for (HotkeyToPieMenuId htpm in profile.hotkeyToPieMenuIdList) {
+        hotkeys.add(HotKey(htpm.keyCode, modifiers: htpm.keyModifiers));
+      }
+    }
+
+    return hotkeys;
+  }
+
+  Future<Map<String, List<HotKey>>> getExeToHotkeyMap() async {
     final Map<String, List<HotKey>> exeToHotkeyMap = {};
 
-    final List<ProfileExe> profileExes = await _isar.profileExes.where().findAll();
+    final List<ProfileExe> profileExes =
+        await _isar.profileExes.where().findAll();
     for (ProfileExe profileExe in profileExes) {
       await profileExe.profile.load();
       final Profile? profile = profileExe.profile.value;
@@ -69,7 +98,8 @@ class DB {
       }
 
       final List<HotKey> hotkeys = [];
-      for (HotkeyToPieMenuId hotkeyToPieMenuId in profile.hotkeyToPieMenuIdList) {
+      for (HotkeyToPieMenuId hotkeyToPieMenuId
+          in profile.hotkeyToPieMenuIdList) {
         hotkeys.add(HotKey(hotkeyToPieMenuId.keyCode,
             modifiers: hotkeyToPieMenuId.keyModifiers,
             scope: HotKeyScope.system));
@@ -81,8 +111,25 @@ class DB {
     return exeToHotkeyMap;
   }
 
-  static Future<void> linkProfileToExe(Profile profile, String path) async {
-    ProfileExe? profileExe = await _isar.profileExes.where().pathEqualTo(path).findFirst();
+  save(PieMenuState state) async {
+    final pieItems = state.pieItemInstances.map((e) {
+      if (e.pieItem != null && e.pieItem!.id < 0) {
+        e.pieItem!.id = Isar.autoIncrement;
+      }
+      return e.pieItem;
+    }).whereType<PieItem>();
+
+    await putPieItems(pieItems.toList());
+    for (PieItemInstance pieItemInstance in state.pieItemInstances) {
+      pieItemInstance.pieItemId = pieItemInstance.pieItem!.id;
+    }
+
+    await putPieMenu(state.pieMenu);
+  }
+
+  Future<void> linkProfileToExe(Profile profile, String path) async {
+    ProfileExe? profileExe =
+        await _isar.profileExes.where().pathEqualTo(path).findFirst();
     profileExe ??= ProfileExe(path: path);
 
     profileExe.profile.value = profile;
@@ -93,15 +140,21 @@ class DB {
     });
   }
 
-  static Future<List<PieMenu>> getPieMenus(
-      {List<int> ids = const <int>[]}) async {
+  Future<List<PieMenu>> getPieMenus({List<int> ids = const <int>[]}) async {
     if (ids.isEmpty) {
       return _isar.pieMenus.where().findAll();
     }
     return (await _isar.pieMenus.getAll(ids)).whereType<PieMenu>().toList();
   }
 
-  static Future<void> addPieMenuToProfile(int pieMenuId, int profileId) async {
+  Future<List<PieItem>> getPieItems({List<int> ids = const <int>[]}) async {
+    if (ids.isEmpty) {
+      return _isar.pieItems.where().findAll();
+    }
+    return (await _isar.pieItems.getAll(ids)).whereType<PieItem>().toList();
+  }
+
+  Future<void> addPieMenuToProfile(int pieMenuId, int profileId) async {
     List<dynamic> result = await Future.wait([
       _isar.profiles.get(profileId),
       _isar.pieMenus.get(pieMenuId),
@@ -127,7 +180,7 @@ class DB {
     });
   }
 
-  static Future<int> putProfile(Profile profile) async {
+  Future<int> putProfile(Profile profile) async {
     late int profileId;
     await _isar.writeTxn(() async {
       profileId = await _isar.profiles.put(profile);
@@ -137,7 +190,7 @@ class DB {
   }
 
   /// Insert when not existed, update when existed.
-  static Future<int> putPieMenu(PieMenu pieMenu) async {
+  Future<int> putPieMenu(PieMenu pieMenu) async {
     late int pieMenuId;
     await _isar.writeTxn(() async {
       pieMenuId = await _isar.pieMenus.put(pieMenu);
@@ -146,7 +199,7 @@ class DB {
     return pieMenuId;
   }
 
-  static Future<int> getPieMenuLinkedCount(int pieMenuId) async {
+  Future<int> getPieMenuLinkedCount(int pieMenuId) async {
     PieMenu? pieMenu = await _isar.pieMenus.get(pieMenuId);
     if (pieMenu == null) {
       return 0;
@@ -155,13 +208,13 @@ class DB {
     return pieMenu.profiles.length;
   }
 
-  static void updateProfile(Profile profile) async {
+  Future<void> updateProfile(Profile profile) async {
     await _isar.writeTxn(() async {
       await _isar.profiles.put(profile);
     });
   }
 
-  static Future<void> updateProfileToPieMenuLinks(Profile profile) async {
+  Future<void> updateProfileToPieMenuLinks(Profile profile) async {
     await _isar.writeTxn(() async {
       await profile.pieMenus.save();
     });
@@ -169,13 +222,20 @@ class DB {
 
   /// Insert when not existed, update when existed.
   /// [pieItem.id] will be set to the inserted id.
-  static Future<void> putPieItem(PieItem pieItem) async {
+  @Deprecated("Use putPieItems")
+  Future<void> putPieItem(PieItem pieItem) async {
     await _isar.writeTxn(() async {
       await _isar.pieItems.put(pieItem);
     });
   }
 
-  static addPieItemToPieMenuWithId(int pieItemID, int pieMenuId) async {
+  Future<void> putPieItems(List<PieItem> pieItem) async {
+    await _isar.writeTxn(() async {
+      await _isar.pieItems.putAll(pieItem);
+    });
+  }
+
+  addPieItemToPieMenuWithId(int pieItemID, int pieMenuId) async {
     List<dynamic> result = await Future.wait([
       _isar.pieItems.get(pieItemID),
       _isar.pieMenus.get(pieMenuId),
@@ -193,56 +253,23 @@ class DB {
       return;
     }
 
-    pieMenu.pieItems.add(pieItem);
+    pieMenu.pieItemInstances.add(PieItemInstance(pieItemId: pieItem.id));
     await _isar.writeTxn(() async {
-      // Isar automatically handles duplicated case for IsarLinks and will
-      // not add if existed
-      await pieMenu.pieItems.save();
+      await _isar.pieMenus.put(pieMenu);
     });
   }
 
-  static addPieItemsToPieMenu(List<PieItem> pieItems, PieMenu pieMenu) async {
-    pieMenu.pieItems.addAll(pieItems);
+  @Deprecated("Use createPieItemIn instead in the future")
+  addPieItemsToPieMenu(List<PieItem> pieItems, PieMenu pieMenu) async {
+    pieMenu.pieItemInstances
+        .addAll(pieItems.map((e) => PieItemInstance(pieItemId: e.id)));
     await _isar.writeTxn(() async {
-      // Isar automatically handles duplicated case for IsarLinks and will
-      // not add if existed
-      await pieMenu.pieItems.save();
+      await _isar.pieMenus.put(pieMenu);
     });
   }
 
-  /// Quoted from https://isar.dev/docs/
-  /// Insert or update a list of objects.
-  /// Returns the list of ids of the new or updated objects.
-  /// If the objects have an non-final id property,
-  /// it will be set to the assigned id.
-  /// Otherwise you should use the returned ids to update the objects.
-  static Future<void> putPieItemTasks(List<PieItemTask> tasks) async {
-    await _isar.writeTxn(() async {
-      await _isar.pieItemTasks.putAll(tasks);
-    });
-  }
-
-  @Deprecated("Use updatePieItemTasks instead")
-  static addTasksToPieItem(List<PieItemTask> tasks, PieItem pieItem) {
-    pieItem.tasks.addAll(tasks);
-    _isar.writeTxn(() async {
-      pieItem.tasks.save();
-    });
-  }
-
-  static updatePieItemTasks(List<PieItemTask> tasks, PieItem pieItem) {
-    final taskToDelete = [];
-    for (PieItemTask task in pieItem.tasks) {
-      if (!tasks.contains(task)) {
-        taskToDelete.add(task);
-      }
-    }
-
-    pieItem.tasks.removeAll(taskToDelete);
-    pieItem.tasks.addAll(tasks);
-
-    _isar.writeTxn(() async {
-      pieItem.tasks.save();
-    });
+  Future<void> loadPieItemInstance(PieItemInstance pieItemInstance) async {
+    pieItemInstance.pieItem =
+        await _isar.pieItems.get(pieItemInstance.pieItemId);
   }
 }

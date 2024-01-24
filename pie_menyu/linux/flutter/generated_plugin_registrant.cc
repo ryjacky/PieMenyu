@@ -6,6 +6,7 @@
 
 #include "generated_plugin_registrant.h"
 
+#include <gtk/gtk_plugin.h>
 #include <hotkey_manager/hotkey_manager_plugin.h>
 #include <isar_flutter_libs/isar_flutter_libs_plugin.h>
 #include <screen_retriever/screen_retriever_plugin.h>
@@ -14,6 +15,9 @@
 #include <window_manager/window_manager_plugin.h>
 
 void fl_register_plugins(FlPluginRegistry* registry) {
+  g_autoptr(FlPluginRegistrar) gtk_registrar =
+      fl_plugin_registry_get_registrar_for_plugin(registry, "GtkPlugin");
+  gtk_plugin_register_with_registrar(gtk_registrar);
   g_autoptr(FlPluginRegistrar) hotkey_manager_registrar =
       fl_plugin_registry_get_registrar_for_plugin(registry, "HotkeyManagerPlugin");
   hotkey_manager_plugin_register_with_registrar(hotkey_manager_registrar);

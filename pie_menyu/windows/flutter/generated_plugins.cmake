@@ -3,9 +3,11 @@
 #
 
 list(APPEND FLUTTER_PLUGIN_LIST
+  app_links
   flutter_auto_gui_windows
   hotkey_manager
   isar_flutter_libs
+  keyboard_event
   screen_retriever
   system_tray
   url_launcher_windows

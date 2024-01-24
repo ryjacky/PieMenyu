@@ -17,76 +17,51 @@ const PieMenuSchema = CollectionSchema(
   name: r'PieMenu',
   id: -1347626773998044354,
   properties: {
-    r'activationMode': PropertySchema(
+    r'behavior': PropertySchema(
       id: 0,
-      name: r'activationMode',
-      type: IsarType.byte,
-      enumMap: _PieMenuactivationModeEnumValueMap,
+      name: r'behavior',
+      type: IsarType.object,
+      target: r'PieMenuBehavior',
     ),
-    r'centerRadius': PropertySchema(
+    r'colors': PropertySchema(
       id: 1,
-      name: r'centerRadius',
-      type: IsarType.long,
-    ),
-    r'centerThickness': PropertySchema(
-      id: 2,
-      name: r'centerThickness',
-      type: IsarType.long,
+      name: r'colors',
+      type: IsarType.object,
+      target: r'PieMenuColors',
     ),
     r'enabled': PropertySchema(
-      id: 3,
+      id: 2,
       name: r'enabled',
       type: IsarType.bool,
     ),
-    r'escapeRadius': PropertySchema(
+    r'font': PropertySchema(
+      id: 3,
+      name: r'font',
+      type: IsarType.object,
+      target: r'PieMenuFont',
+    ),
+    r'icon': PropertySchema(
       id: 4,
-      name: r'escapeRadius',
-      type: IsarType.long,
-    ),
-    r'iconColor': PropertySchema(
-      id: 5,
-      name: r'iconColor',
-      type: IsarType.long,
-    ),
-    r'iconSize': PropertySchema(
-      id: 6,
-      name: r'iconSize',
-      type: IsarType.long,
-    ),
-    r'mainColor': PropertySchema(
-      id: 7,
-      name: r'mainColor',
-      type: IsarType.long,
+      name: r'icon',
+      type: IsarType.object,
+      target: r'PieMenuIcon',
     ),
     r'name': PropertySchema(
-      id: 8,
+      id: 5,
       name: r'name',
       type: IsarType.string,
     ),
-    r'openInScreenCenter': PropertySchema(
-      id: 9,
-      name: r'openInScreenCenter',
-      type: IsarType.bool,
+    r'pieItemInstances': PropertySchema(
+      id: 6,
+      name: r'pieItemInstances',
+      type: IsarType.objectList,
+      target: r'PieItemInstance',
     ),
-    r'pieItemRoundness': PropertySchema(
-      id: 10,
-      name: r'pieItemRoundness',
-      type: IsarType.long,
-    ),
-    r'pieItemSpread': PropertySchema(
-      id: 11,
-      name: r'pieItemSpread',
-      type: IsarType.long,
-    ),
-    r'pieItemWidth': PropertySchema(
-      id: 12,
-      name: r'pieItemWidth',
-      type: IsarType.long,
-    ),
-    r'secondaryColor': PropertySchema(
-      id: 13,
-      name: r'secondaryColor',
-      type: IsarType.long,
+    r'shape': PropertySchema(
+      id: 7,
+      name: r'shape',
+      type: IsarType.object,
+      target: r'PieMenuShape',
     )
   },
   estimateSize: _pieMenuEstimateSize,
@@ -96,12 +71,6 @@ const PieMenuSchema = CollectionSchema(
   idName: r'id',
   indexes: {},
   links: {
-    r'pieItems': LinkSchema(
-      id: -1945743058670083083,
-      name: r'pieItems',
-      target: r'PieItem',
-      single: false,
-    ),
     r'profiles': LinkSchema(
       id: -7916542860931486755,
       name: r'profiles',
@@ -110,7 +79,14 @@ const PieMenuSchema = CollectionSchema(
       linkName: r'pieMenus',
     )
   },
-  embeddedSchemas: {},
+  embeddedSchemas: {
+    r'PieMenuColors': PieMenuColorsSchema,
+    r'PieMenuIcon': PieMenuIconSchema,
+    r'PieMenuFont': PieMenuFontSchema,
+    r'PieMenuBehavior': PieMenuBehaviorSchema,
+    r'PieMenuShape': PieMenuShapeSchema,
+    r'PieItemInstance': PieItemInstanceSchema
+  },
   getId: _pieMenuGetId,
   getLinks: _pieMenuGetLinks,
   attach: _pieMenuAttach,
@@ -123,7 +99,31 @@ int _pieMenuEstimateSize(
   Map<Type, List<int>> allOffsets,
 ) {
   var bytesCount = offsets.last;
+  bytesCount += 3 +
+      PieMenuBehaviorSchema.estimateSize(
+          object.behavior, allOffsets[PieMenuBehavior]!, allOffsets);
+  bytesCount += 3 +
+      PieMenuColorsSchema.estimateSize(
+          object.colors, allOffsets[PieMenuColors]!, allOffsets);
+  bytesCount += 3 +
+      PieMenuFontSchema.estimateSize(
+          object.font, allOffsets[PieMenuFont]!, allOffsets);
+  bytesCount += 3 +
+      PieMenuIconSchema.estimateSize(
+          object.icon, allOffsets[PieMenuIcon]!, allOffsets);
   bytesCount += 3 + object.name.length * 3;
+  bytesCount += 3 + object.pieItemInstances.length * 3;
+  {
+    final offsets = allOffsets[PieItemInstance]!;
+    for (var i = 0; i < object.pieItemInstances.length; i++) {
+      final value = object.pieItemInstances[i];
+      bytesCount +=
+          PieItemInstanceSchema.estimateSize(value, offsets, allOffsets);
+    }
+  }
+  bytesCount += 3 +
+      PieMenuShapeSchema.estimateSize(
+          object.shape, allOffsets[PieMenuShape]!, allOffsets);
   return bytesCount;
 }
 
@@ -133,20 +133,44 @@ void _pieMenuSerialize(
   List<int> offsets,
   Map<Type, List<int>> allOffsets,
 ) {
-  writer.writeByte(offsets[0], object.activationMode.index);
-  writer.writeLong(offsets[1], object.centerRadius);
-  writer.writeLong(offsets[2], object.centerThickness);
-  writer.writeBool(offsets[3], object.enabled);
-  writer.writeLong(offsets[4], object.escapeRadius);
-  writer.writeLong(offsets[5], object.iconColor);
-  writer.writeLong(offsets[6], object.iconSize);
-  writer.writeLong(offsets[7], object.mainColor);
-  writer.writeString(offsets[8], object.name);
-  writer.writeBool(offsets[9], object.openInScreenCenter);
-  writer.writeLong(offsets[10], object.pieItemRoundness);
-  writer.writeLong(offsets[11], object.pieItemSpread);
-  writer.writeLong(offsets[12], object.pieItemWidth);
-  writer.writeLong(offsets[13], object.secondaryColor);
+  writer.writeObject<PieMenuBehavior>(
+    offsets[0],
+    allOffsets,
+    PieMenuBehaviorSchema.serialize,
+    object.behavior,
+  );
+  writer.writeObject<PieMenuColors>(
+    offsets[1],
+    allOffsets,
+    PieMenuColorsSchema.serialize,
+    object.colors,
+  );
+  writer.writeBool(offsets[2], object.enabled);
+  writer.writeObject<PieMenuFont>(
+    offsets[3],
+    allOffsets,
+    PieMenuFontSchema.serialize,
+    object.font,
+  );
+  writer.writeObject<PieMenuIcon>(
+    offsets[4],
+    allOffsets,
+    PieMenuIconSchema.serialize,
+    object.icon,
+  );
+  writer.writeString(offsets[5], object.name);
+  writer.writeObjectList<PieItemInstance>(
+    offsets[6],
+    allOffsets,
+    PieItemInstanceSchema.serialize,
+    object.pieItemInstances,
+  );
+  writer.writeObject<PieMenuShape>(
+    offsets[7],
+    allOffsets,
+    PieMenuShapeSchema.serialize,
+    object.shape,
+  );
 }
 
 PieMenu _pieMenuDeserialize(
@@ -155,24 +179,47 @@ PieMenu _pieMenuDeserialize(
   List<int> offsets,
   Map<Type, List<int>> allOffsets,
 ) {
-  final object = PieMenu(
-    activationMode:
-        _PieMenuactivationModeValueEnumMap[reader.readByteOrNull(offsets[0])] ??
-            PieMenuActivationMode.activateOnKeyDown,
-    centerRadius: reader.readLongOrNull(offsets[1]) ?? 20,
-    centerThickness: reader.readLongOrNull(offsets[2]) ?? 10,
-    enabled: reader.readBoolOrNull(offsets[3]) ?? true,
-    escapeRadius: reader.readLongOrNull(offsets[4]) ?? 0,
-    iconColor: reader.readLongOrNull(offsets[5]) ?? 0xFFFFFF,
-    iconSize: reader.readLongOrNull(offsets[6]) ?? 16,
-    mainColor: reader.readLongOrNull(offsets[7]) ?? 0x1DAEAA,
-    name: reader.readStringOrNull(offsets[8]) ?? 'New Pie Menu',
-    openInScreenCenter: reader.readBoolOrNull(offsets[9]) ?? false,
-    pieItemRoundness: reader.readLongOrNull(offsets[10]) ?? 7,
-    pieItemSpread: reader.readLongOrNull(offsets[11]) ?? 150,
-    secondaryColor: reader.readLongOrNull(offsets[13]) ?? 0x282828,
-  );
+  final object = PieMenu();
+  object.behavior = reader.readObjectOrNull<PieMenuBehavior>(
+        offsets[0],
+        PieMenuBehaviorSchema.deserialize,
+        allOffsets,
+      ) ??
+      PieMenuBehavior();
+  object.colors = reader.readObjectOrNull<PieMenuColors>(
+        offsets[1],
+        PieMenuColorsSchema.deserialize,
+        allOffsets,
+      ) ??
+      PieMenuColors();
+  object.enabled = reader.readBool(offsets[2]);
+  object.font = reader.readObjectOrNull<PieMenuFont>(
+        offsets[3],
+        PieMenuFontSchema.deserialize,
+        allOffsets,
+      ) ??
+      PieMenuFont();
+  object.icon = reader.readObjectOrNull<PieMenuIcon>(
+        offsets[4],
+        PieMenuIconSchema.deserialize,
+        allOffsets,
+      ) ??
+      PieMenuIcon();
   object.id = id;
+  object.name = reader.readString(offsets[5]);
+  object.pieItemInstances = reader.readObjectList<PieItemInstance>(
+        offsets[6],
+        PieItemInstanceSchema.deserialize,
+        allOffsets,
+        PieItemInstance(),
+      ) ??
+      [];
+  object.shape = reader.readObjectOrNull<PieMenuShape>(
+        offsets[7],
+        PieMenuShapeSchema.deserialize,
+        allOffsets,
+      ) ??
+      PieMenuShape();
   return object;
 }
 
@@ -184,58 +231,67 @@ P _pieMenuDeserializeProp<P>(
 ) {
   switch (propertyId) {
     case 0:
-      return (_PieMenuactivationModeValueEnumMap[
-              reader.readByteOrNull(offset)] ??
-          PieMenuActivationMode.activateOnKeyDown) as P;
+      return (reader.readObjectOrNull<PieMenuBehavior>(
+            offset,
+            PieMenuBehaviorSchema.deserialize,
+            allOffsets,
+          ) ??
+          PieMenuBehavior()) as P;
     case 1:
-      return (reader.readLongOrNull(offset) ?? 20) as P;
+      return (reader.readObjectOrNull<PieMenuColors>(
+            offset,
+            PieMenuColorsSchema.deserialize,
+            allOffsets,
+          ) ??
+          PieMenuColors()) as P;
     case 2:
-      return (reader.readLongOrNull(offset) ?? 10) as P;
+      return (reader.readBool(offset)) as P;
     case 3:
-      return (reader.readBoolOrNull(offset) ?? true) as P;
+      return (reader.readObjectOrNull<PieMenuFont>(
+            offset,
+            PieMenuFontSchema.deserialize,
+            allOffsets,
+          ) ??
+          PieMenuFont()) as P;
     case 4:
-      return (reader.readLongOrNull(offset) ?? 0) as P;
+      return (reader.readObjectOrNull<PieMenuIcon>(
+            offset,
+            PieMenuIconSchema.deserialize,
+            allOffsets,
+          ) ??
+          PieMenuIcon()) as P;
     case 5:
-      return (reader.readLongOrNull(offset) ?? 0xFFFFFF) as P;
+      return (reader.readString(offset)) as P;
     case 6:
-      return (reader.readLongOrNull(offset) ?? 16) as P;
+      return (reader.readObjectList<PieItemInstance>(
+            offset,
+            PieItemInstanceSchema.deserialize,
+            allOffsets,
+            PieItemInstance(),
+          ) ??
+          []) as P;
     case 7:
-      return (reader.readLongOrNull(offset) ?? 0x1DAEAA) as P;
-    case 8:
-      return (reader.readStringOrNull(offset) ?? 'New Pie Menu') as P;
-    case 9:
-      return (reader.readBoolOrNull(offset) ?? false) as P;
-    case 10:
-      return (reader.readLongOrNull(offset) ?? 7) as P;
-    case 11:
-      return (reader.readLongOrNull(offset) ?? 150) as P;
-    case 12:
-      return (reader.readLong(offset)) as P;
-    case 13:
-      return (reader.readLongOrNull(offset) ?? 0x282828) as P;
+      return (reader.readObjectOrNull<PieMenuShape>(
+            offset,
+            PieMenuShapeSchema.deserialize,
+            allOffsets,
+          ) ??
+          PieMenuShape()) as P;
     default:
       throw IsarError('Unknown property with id $propertyId');
   }
 }
-
-const _PieMenuactivationModeEnumValueMap = {
-  'activateOnKeyDown': 0,
-};
-const _PieMenuactivationModeValueEnumMap = {
-  0: PieMenuActivationMode.activateOnKeyDown,
-};
 
 Id _pieMenuGetId(PieMenu object) {
   return object.id;
 }
 
 List<IsarLinkBase<dynamic>> _pieMenuGetLinks(PieMenu object) {
-  return [object.pieItems, object.profiles];
+  return [object.profiles];
 }
 
 void _pieMenuAttach(IsarCollection<dynamic> col, Id id, PieMenu object) {
   object.id = id;
-  object.pieItems.attach(col, col.isar.collection<PieItem>(), r'pieItems', id);
   object.profiles.attach(col, col.isar.collection<Profile>(), r'profiles', id);
 }
 
@@ -316,332 +372,12 @@ extension PieMenuQueryWhere on QueryBuilder<PieMenu, PieMenu, QWhereClause> {
 
 extension PieMenuQueryFilter
     on QueryBuilder<PieMenu, PieMenu, QFilterCondition> {
-  QueryBuilder<PieMenu, PieMenu, QAfterFilterCondition> activationModeEqualTo(
-      PieMenuActivationMode value) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.equalTo(
-        property: r'activationMode',
-        value: value,
-      ));
-    });
-  }
-
-  QueryBuilder<PieMenu, PieMenu, QAfterFilterCondition>
-      activationModeGreaterThan(
-    PieMenuActivationMode value, {
-    bool include = false,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.greaterThan(
-        include: include,
-        property: r'activationMode',
-        value: value,
-      ));
-    });
-  }
-
-  QueryBuilder<PieMenu, PieMenu, QAfterFilterCondition> activationModeLessThan(
-    PieMenuActivationMode value, {
-    bool include = false,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.lessThan(
-        include: include,
-        property: r'activationMode',
-        value: value,
-      ));
-    });
-  }
-
-  QueryBuilder<PieMenu, PieMenu, QAfterFilterCondition> activationModeBetween(
-    PieMenuActivationMode lower,
-    PieMenuActivationMode upper, {
-    bool includeLower = true,
-    bool includeUpper = true,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.between(
-        property: r'activationMode',
-        lower: lower,
-        includeLower: includeLower,
-        upper: upper,
-        includeUpper: includeUpper,
-      ));
-    });
-  }
-
-  QueryBuilder<PieMenu, PieMenu, QAfterFilterCondition> centerRadiusEqualTo(
-      int value) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.equalTo(
-        property: r'centerRadius',
-        value: value,
-      ));
-    });
-  }
-
-  QueryBuilder<PieMenu, PieMenu, QAfterFilterCondition> centerRadiusGreaterThan(
-    int value, {
-    bool include = false,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.greaterThan(
-        include: include,
-        property: r'centerRadius',
-        value: value,
-      ));
-    });
-  }
-
-  QueryBuilder<PieMenu, PieMenu, QAfterFilterCondition> centerRadiusLessThan(
-    int value, {
-    bool include = false,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.lessThan(
-        include: include,
-        property: r'centerRadius',
-        value: value,
-      ));
-    });
-  }
-
-  QueryBuilder<PieMenu, PieMenu, QAfterFilterCondition> centerRadiusBetween(
-    int lower,
-    int upper, {
-    bool includeLower = true,
-    bool includeUpper = true,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.between(
-        property: r'centerRadius',
-        lower: lower,
-        includeLower: includeLower,
-        upper: upper,
-        includeUpper: includeUpper,
-      ));
-    });
-  }
-
-  QueryBuilder<PieMenu, PieMenu, QAfterFilterCondition> centerThicknessEqualTo(
-      int value) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.equalTo(
-        property: r'centerThickness',
-        value: value,
-      ));
-    });
-  }
-
-  QueryBuilder<PieMenu, PieMenu, QAfterFilterCondition>
-      centerThicknessGreaterThan(
-    int value, {
-    bool include = false,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.greaterThan(
-        include: include,
-        property: r'centerThickness',
-        value: value,
-      ));
-    });
-  }
-
-  QueryBuilder<PieMenu, PieMenu, QAfterFilterCondition> centerThicknessLessThan(
-    int value, {
-    bool include = false,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.lessThan(
-        include: include,
-        property: r'centerThickness',
-        value: value,
-      ));
-    });
-  }
-
-  QueryBuilder<PieMenu, PieMenu, QAfterFilterCondition> centerThicknessBetween(
-    int lower,
-    int upper, {
-    bool includeLower = true,
-    bool includeUpper = true,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.between(
-        property: r'centerThickness',
-        lower: lower,
-        includeLower: includeLower,
-        upper: upper,
-        includeUpper: includeUpper,
-      ));
-    });
-  }
-
   QueryBuilder<PieMenu, PieMenu, QAfterFilterCondition> enabledEqualTo(
       bool value) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.equalTo(
         property: r'enabled',
         value: value,
-      ));
-    });
-  }
-
-  QueryBuilder<PieMenu, PieMenu, QAfterFilterCondition> escapeRadiusEqualTo(
-      int value) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.equalTo(
-        property: r'escapeRadius',
-        value: value,
-      ));
-    });
-  }
-
-  QueryBuilder<PieMenu, PieMenu, QAfterFilterCondition> escapeRadiusGreaterThan(
-    int value, {
-    bool include = false,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.greaterThan(
-        include: include,
-        property: r'escapeRadius',
-        value: value,
-      ));
-    });
-  }
-
-  QueryBuilder<PieMenu, PieMenu, QAfterFilterCondition> escapeRadiusLessThan(
-    int value, {
-    bool include = false,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.lessThan(
-        include: include,
-        property: r'escapeRadius',
-        value: value,
-      ));
-    });
-  }
-
-  QueryBuilder<PieMenu, PieMenu, QAfterFilterCondition> escapeRadiusBetween(
-    int lower,
-    int upper, {
-    bool includeLower = true,
-    bool includeUpper = true,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.between(
-        property: r'escapeRadius',
-        lower: lower,
-        includeLower: includeLower,
-        upper: upper,
-        includeUpper: includeUpper,
-      ));
-    });
-  }
-
-  QueryBuilder<PieMenu, PieMenu, QAfterFilterCondition> iconColorEqualTo(
-      int value) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.equalTo(
-        property: r'iconColor',
-        value: value,
-      ));
-    });
-  }
-
-  QueryBuilder<PieMenu, PieMenu, QAfterFilterCondition> iconColorGreaterThan(
-    int value, {
-    bool include = false,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.greaterThan(
-        include: include,
-        property: r'iconColor',
-        value: value,
-      ));
-    });
-  }
-
-  QueryBuilder<PieMenu, PieMenu, QAfterFilterCondition> iconColorLessThan(
-    int value, {
-    bool include = false,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.lessThan(
-        include: include,
-        property: r'iconColor',
-        value: value,
-      ));
-    });
-  }
-
-  QueryBuilder<PieMenu, PieMenu, QAfterFilterCondition> iconColorBetween(
-    int lower,
-    int upper, {
-    bool includeLower = true,
-    bool includeUpper = true,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.between(
-        property: r'iconColor',
-        lower: lower,
-        includeLower: includeLower,
-        upper: upper,
-        includeUpper: includeUpper,
-      ));
-    });
-  }
-
-  QueryBuilder<PieMenu, PieMenu, QAfterFilterCondition> iconSizeEqualTo(
-      int value) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.equalTo(
-        property: r'iconSize',
-        value: value,
-      ));
-    });
-  }
-
-  QueryBuilder<PieMenu, PieMenu, QAfterFilterCondition> iconSizeGreaterThan(
-    int value, {
-    bool include = false,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.greaterThan(
-        include: include,
-        property: r'iconSize',
-        value: value,
-      ));
-    });
-  }
-
-  QueryBuilder<PieMenu, PieMenu, QAfterFilterCondition> iconSizeLessThan(
-    int value, {
-    bool include = false,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.lessThan(
-        include: include,
-        property: r'iconSize',
-        value: value,
-      ));
-    });
-  }
-
-  QueryBuilder<PieMenu, PieMenu, QAfterFilterCondition> iconSizeBetween(
-    int lower,
-    int upper, {
-    bool includeLower = true,
-    bool includeUpper = true,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.between(
-        property: r'iconSize',
-        lower: lower,
-        includeLower: includeLower,
-        upper: upper,
-        includeUpper: includeUpper,
       ));
     });
   }
@@ -690,59 +426,6 @@ extension PieMenuQueryFilter
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.between(
         property: r'id',
-        lower: lower,
-        includeLower: includeLower,
-        upper: upper,
-        includeUpper: includeUpper,
-      ));
-    });
-  }
-
-  QueryBuilder<PieMenu, PieMenu, QAfterFilterCondition> mainColorEqualTo(
-      int value) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.equalTo(
-        property: r'mainColor',
-        value: value,
-      ));
-    });
-  }
-
-  QueryBuilder<PieMenu, PieMenu, QAfterFilterCondition> mainColorGreaterThan(
-    int value, {
-    bool include = false,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.greaterThan(
-        include: include,
-        property: r'mainColor',
-        value: value,
-      ));
-    });
-  }
-
-  QueryBuilder<PieMenu, PieMenu, QAfterFilterCondition> mainColorLessThan(
-    int value, {
-    bool include = false,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.lessThan(
-        include: include,
-        property: r'mainColor',
-        value: value,
-      ));
-    });
-  }
-
-  QueryBuilder<PieMenu, PieMenu, QAfterFilterCondition> mainColorBetween(
-    int lower,
-    int upper, {
-    bool includeLower = true,
-    bool includeUpper = true,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.between(
-        property: r'mainColor',
         lower: lower,
         includeLower: includeLower,
         upper: upper,
@@ -882,294 +565,142 @@ extension PieMenuQueryFilter
   }
 
   QueryBuilder<PieMenu, PieMenu, QAfterFilterCondition>
-      openInScreenCenterEqualTo(bool value) {
+      pieItemInstancesLengthEqualTo(int length) {
     return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.equalTo(
-        property: r'openInScreenCenter',
-        value: value,
-      ));
-    });
-  }
-
-  QueryBuilder<PieMenu, PieMenu, QAfterFilterCondition> pieItemRoundnessEqualTo(
-      int value) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.equalTo(
-        property: r'pieItemRoundness',
-        value: value,
-      ));
+      return query.listLength(
+        r'pieItemInstances',
+        length,
+        true,
+        length,
+        true,
+      );
     });
   }
 
   QueryBuilder<PieMenu, PieMenu, QAfterFilterCondition>
-      pieItemRoundnessGreaterThan(
-    int value, {
-    bool include = false,
-  }) {
+      pieItemInstancesIsEmpty() {
     return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.greaterThan(
-        include: include,
-        property: r'pieItemRoundness',
-        value: value,
-      ));
+      return query.listLength(
+        r'pieItemInstances',
+        0,
+        true,
+        0,
+        true,
+      );
     });
   }
 
   QueryBuilder<PieMenu, PieMenu, QAfterFilterCondition>
-      pieItemRoundnessLessThan(
-    int value, {
-    bool include = false,
-  }) {
+      pieItemInstancesIsNotEmpty() {
     return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.lessThan(
-        include: include,
-        property: r'pieItemRoundness',
-        value: value,
-      ));
+      return query.listLength(
+        r'pieItemInstances',
+        0,
+        false,
+        999999,
+        true,
+      );
     });
   }
 
-  QueryBuilder<PieMenu, PieMenu, QAfterFilterCondition> pieItemRoundnessBetween(
+  QueryBuilder<PieMenu, PieMenu, QAfterFilterCondition>
+      pieItemInstancesLengthLessThan(
+    int length, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.listLength(
+        r'pieItemInstances',
+        0,
+        true,
+        length,
+        include,
+      );
+    });
+  }
+
+  QueryBuilder<PieMenu, PieMenu, QAfterFilterCondition>
+      pieItemInstancesLengthGreaterThan(
+    int length, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.listLength(
+        r'pieItemInstances',
+        length,
+        include,
+        999999,
+        true,
+      );
+    });
+  }
+
+  QueryBuilder<PieMenu, PieMenu, QAfterFilterCondition>
+      pieItemInstancesLengthBetween(
     int lower,
     int upper, {
     bool includeLower = true,
     bool includeUpper = true,
   }) {
     return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.between(
-        property: r'pieItemRoundness',
-        lower: lower,
-        includeLower: includeLower,
-        upper: upper,
-        includeUpper: includeUpper,
-      ));
-    });
-  }
-
-  QueryBuilder<PieMenu, PieMenu, QAfterFilterCondition> pieItemSpreadEqualTo(
-      int value) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.equalTo(
-        property: r'pieItemSpread',
-        value: value,
-      ));
-    });
-  }
-
-  QueryBuilder<PieMenu, PieMenu, QAfterFilterCondition>
-      pieItemSpreadGreaterThan(
-    int value, {
-    bool include = false,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.greaterThan(
-        include: include,
-        property: r'pieItemSpread',
-        value: value,
-      ));
-    });
-  }
-
-  QueryBuilder<PieMenu, PieMenu, QAfterFilterCondition> pieItemSpreadLessThan(
-    int value, {
-    bool include = false,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.lessThan(
-        include: include,
-        property: r'pieItemSpread',
-        value: value,
-      ));
-    });
-  }
-
-  QueryBuilder<PieMenu, PieMenu, QAfterFilterCondition> pieItemSpreadBetween(
-    int lower,
-    int upper, {
-    bool includeLower = true,
-    bool includeUpper = true,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.between(
-        property: r'pieItemSpread',
-        lower: lower,
-        includeLower: includeLower,
-        upper: upper,
-        includeUpper: includeUpper,
-      ));
-    });
-  }
-
-  QueryBuilder<PieMenu, PieMenu, QAfterFilterCondition> pieItemWidthEqualTo(
-      int value) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.equalTo(
-        property: r'pieItemWidth',
-        value: value,
-      ));
-    });
-  }
-
-  QueryBuilder<PieMenu, PieMenu, QAfterFilterCondition> pieItemWidthGreaterThan(
-    int value, {
-    bool include = false,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.greaterThan(
-        include: include,
-        property: r'pieItemWidth',
-        value: value,
-      ));
-    });
-  }
-
-  QueryBuilder<PieMenu, PieMenu, QAfterFilterCondition> pieItemWidthLessThan(
-    int value, {
-    bool include = false,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.lessThan(
-        include: include,
-        property: r'pieItemWidth',
-        value: value,
-      ));
-    });
-  }
-
-  QueryBuilder<PieMenu, PieMenu, QAfterFilterCondition> pieItemWidthBetween(
-    int lower,
-    int upper, {
-    bool includeLower = true,
-    bool includeUpper = true,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.between(
-        property: r'pieItemWidth',
-        lower: lower,
-        includeLower: includeLower,
-        upper: upper,
-        includeUpper: includeUpper,
-      ));
-    });
-  }
-
-  QueryBuilder<PieMenu, PieMenu, QAfterFilterCondition> secondaryColorEqualTo(
-      int value) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.equalTo(
-        property: r'secondaryColor',
-        value: value,
-      ));
-    });
-  }
-
-  QueryBuilder<PieMenu, PieMenu, QAfterFilterCondition>
-      secondaryColorGreaterThan(
-    int value, {
-    bool include = false,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.greaterThan(
-        include: include,
-        property: r'secondaryColor',
-        value: value,
-      ));
-    });
-  }
-
-  QueryBuilder<PieMenu, PieMenu, QAfterFilterCondition> secondaryColorLessThan(
-    int value, {
-    bool include = false,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.lessThan(
-        include: include,
-        property: r'secondaryColor',
-        value: value,
-      ));
-    });
-  }
-
-  QueryBuilder<PieMenu, PieMenu, QAfterFilterCondition> secondaryColorBetween(
-    int lower,
-    int upper, {
-    bool includeLower = true,
-    bool includeUpper = true,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.between(
-        property: r'secondaryColor',
-        lower: lower,
-        includeLower: includeLower,
-        upper: upper,
-        includeUpper: includeUpper,
-      ));
+      return query.listLength(
+        r'pieItemInstances',
+        lower,
+        includeLower,
+        upper,
+        includeUpper,
+      );
     });
   }
 }
 
 extension PieMenuQueryObject
-    on QueryBuilder<PieMenu, PieMenu, QFilterCondition> {}
+    on QueryBuilder<PieMenu, PieMenu, QFilterCondition> {
+  QueryBuilder<PieMenu, PieMenu, QAfterFilterCondition> behavior(
+      FilterQuery<PieMenuBehavior> q) {
+    return QueryBuilder.apply(this, (query) {
+      return query.object(q, r'behavior');
+    });
+  }
+
+  QueryBuilder<PieMenu, PieMenu, QAfterFilterCondition> colors(
+      FilterQuery<PieMenuColors> q) {
+    return QueryBuilder.apply(this, (query) {
+      return query.object(q, r'colors');
+    });
+  }
+
+  QueryBuilder<PieMenu, PieMenu, QAfterFilterCondition> font(
+      FilterQuery<PieMenuFont> q) {
+    return QueryBuilder.apply(this, (query) {
+      return query.object(q, r'font');
+    });
+  }
+
+  QueryBuilder<PieMenu, PieMenu, QAfterFilterCondition> icon(
+      FilterQuery<PieMenuIcon> q) {
+    return QueryBuilder.apply(this, (query) {
+      return query.object(q, r'icon');
+    });
+  }
+
+  QueryBuilder<PieMenu, PieMenu, QAfterFilterCondition> pieItemInstancesElement(
+      FilterQuery<PieItemInstance> q) {
+    return QueryBuilder.apply(this, (query) {
+      return query.object(q, r'pieItemInstances');
+    });
+  }
+
+  QueryBuilder<PieMenu, PieMenu, QAfterFilterCondition> shape(
+      FilterQuery<PieMenuShape> q) {
+    return QueryBuilder.apply(this, (query) {
+      return query.object(q, r'shape');
+    });
+  }
+}
 
 extension PieMenuQueryLinks
     on QueryBuilder<PieMenu, PieMenu, QFilterCondition> {
-  QueryBuilder<PieMenu, PieMenu, QAfterFilterCondition> pieItems(
-      FilterQuery<PieItem> q) {
-    return QueryBuilder.apply(this, (query) {
-      return query.link(q, r'pieItems');
-    });
-  }
-
-  QueryBuilder<PieMenu, PieMenu, QAfterFilterCondition> pieItemsLengthEqualTo(
-      int length) {
-    return QueryBuilder.apply(this, (query) {
-      return query.linkLength(r'pieItems', length, true, length, true);
-    });
-  }
-
-  QueryBuilder<PieMenu, PieMenu, QAfterFilterCondition> pieItemsIsEmpty() {
-    return QueryBuilder.apply(this, (query) {
-      return query.linkLength(r'pieItems', 0, true, 0, true);
-    });
-  }
-
-  QueryBuilder<PieMenu, PieMenu, QAfterFilterCondition> pieItemsIsNotEmpty() {
-    return QueryBuilder.apply(this, (query) {
-      return query.linkLength(r'pieItems', 0, false, 999999, true);
-    });
-  }
-
-  QueryBuilder<PieMenu, PieMenu, QAfterFilterCondition> pieItemsLengthLessThan(
-    int length, {
-    bool include = false,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.linkLength(r'pieItems', 0, true, length, include);
-    });
-  }
-
-  QueryBuilder<PieMenu, PieMenu, QAfterFilterCondition>
-      pieItemsLengthGreaterThan(
-    int length, {
-    bool include = false,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.linkLength(r'pieItems', length, include, 999999, true);
-    });
-  }
-
-  QueryBuilder<PieMenu, PieMenu, QAfterFilterCondition> pieItemsLengthBetween(
-    int lower,
-    int upper, {
-    bool includeLower = true,
-    bool includeUpper = true,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.linkLength(
-          r'pieItems', lower, includeLower, upper, includeUpper);
-    });
-  }
-
   QueryBuilder<PieMenu, PieMenu, QAfterFilterCondition> profiles(
       FilterQuery<Profile> q) {
     return QueryBuilder.apply(this, (query) {
@@ -1229,42 +760,6 @@ extension PieMenuQueryLinks
 }
 
 extension PieMenuQuerySortBy on QueryBuilder<PieMenu, PieMenu, QSortBy> {
-  QueryBuilder<PieMenu, PieMenu, QAfterSortBy> sortByActivationMode() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'activationMode', Sort.asc);
-    });
-  }
-
-  QueryBuilder<PieMenu, PieMenu, QAfterSortBy> sortByActivationModeDesc() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'activationMode', Sort.desc);
-    });
-  }
-
-  QueryBuilder<PieMenu, PieMenu, QAfterSortBy> sortByCenterRadius() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'centerRadius', Sort.asc);
-    });
-  }
-
-  QueryBuilder<PieMenu, PieMenu, QAfterSortBy> sortByCenterRadiusDesc() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'centerRadius', Sort.desc);
-    });
-  }
-
-  QueryBuilder<PieMenu, PieMenu, QAfterSortBy> sortByCenterThickness() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'centerThickness', Sort.asc);
-    });
-  }
-
-  QueryBuilder<PieMenu, PieMenu, QAfterSortBy> sortByCenterThicknessDesc() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'centerThickness', Sort.desc);
-    });
-  }
-
   QueryBuilder<PieMenu, PieMenu, QAfterSortBy> sortByEnabled() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'enabled', Sort.asc);
@@ -1274,54 +769,6 @@ extension PieMenuQuerySortBy on QueryBuilder<PieMenu, PieMenu, QSortBy> {
   QueryBuilder<PieMenu, PieMenu, QAfterSortBy> sortByEnabledDesc() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'enabled', Sort.desc);
-    });
-  }
-
-  QueryBuilder<PieMenu, PieMenu, QAfterSortBy> sortByEscapeRadius() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'escapeRadius', Sort.asc);
-    });
-  }
-
-  QueryBuilder<PieMenu, PieMenu, QAfterSortBy> sortByEscapeRadiusDesc() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'escapeRadius', Sort.desc);
-    });
-  }
-
-  QueryBuilder<PieMenu, PieMenu, QAfterSortBy> sortByIconColor() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'iconColor', Sort.asc);
-    });
-  }
-
-  QueryBuilder<PieMenu, PieMenu, QAfterSortBy> sortByIconColorDesc() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'iconColor', Sort.desc);
-    });
-  }
-
-  QueryBuilder<PieMenu, PieMenu, QAfterSortBy> sortByIconSize() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'iconSize', Sort.asc);
-    });
-  }
-
-  QueryBuilder<PieMenu, PieMenu, QAfterSortBy> sortByIconSizeDesc() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'iconSize', Sort.desc);
-    });
-  }
-
-  QueryBuilder<PieMenu, PieMenu, QAfterSortBy> sortByMainColor() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'mainColor', Sort.asc);
-    });
-  }
-
-  QueryBuilder<PieMenu, PieMenu, QAfterSortBy> sortByMainColorDesc() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'mainColor', Sort.desc);
     });
   }
 
@@ -1336,106 +783,10 @@ extension PieMenuQuerySortBy on QueryBuilder<PieMenu, PieMenu, QSortBy> {
       return query.addSortBy(r'name', Sort.desc);
     });
   }
-
-  QueryBuilder<PieMenu, PieMenu, QAfterSortBy> sortByOpenInScreenCenter() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'openInScreenCenter', Sort.asc);
-    });
-  }
-
-  QueryBuilder<PieMenu, PieMenu, QAfterSortBy> sortByOpenInScreenCenterDesc() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'openInScreenCenter', Sort.desc);
-    });
-  }
-
-  QueryBuilder<PieMenu, PieMenu, QAfterSortBy> sortByPieItemRoundness() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'pieItemRoundness', Sort.asc);
-    });
-  }
-
-  QueryBuilder<PieMenu, PieMenu, QAfterSortBy> sortByPieItemRoundnessDesc() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'pieItemRoundness', Sort.desc);
-    });
-  }
-
-  QueryBuilder<PieMenu, PieMenu, QAfterSortBy> sortByPieItemSpread() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'pieItemSpread', Sort.asc);
-    });
-  }
-
-  QueryBuilder<PieMenu, PieMenu, QAfterSortBy> sortByPieItemSpreadDesc() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'pieItemSpread', Sort.desc);
-    });
-  }
-
-  QueryBuilder<PieMenu, PieMenu, QAfterSortBy> sortByPieItemWidth() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'pieItemWidth', Sort.asc);
-    });
-  }
-
-  QueryBuilder<PieMenu, PieMenu, QAfterSortBy> sortByPieItemWidthDesc() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'pieItemWidth', Sort.desc);
-    });
-  }
-
-  QueryBuilder<PieMenu, PieMenu, QAfterSortBy> sortBySecondaryColor() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'secondaryColor', Sort.asc);
-    });
-  }
-
-  QueryBuilder<PieMenu, PieMenu, QAfterSortBy> sortBySecondaryColorDesc() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'secondaryColor', Sort.desc);
-    });
-  }
 }
 
 extension PieMenuQuerySortThenBy
     on QueryBuilder<PieMenu, PieMenu, QSortThenBy> {
-  QueryBuilder<PieMenu, PieMenu, QAfterSortBy> thenByActivationMode() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'activationMode', Sort.asc);
-    });
-  }
-
-  QueryBuilder<PieMenu, PieMenu, QAfterSortBy> thenByActivationModeDesc() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'activationMode', Sort.desc);
-    });
-  }
-
-  QueryBuilder<PieMenu, PieMenu, QAfterSortBy> thenByCenterRadius() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'centerRadius', Sort.asc);
-    });
-  }
-
-  QueryBuilder<PieMenu, PieMenu, QAfterSortBy> thenByCenterRadiusDesc() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'centerRadius', Sort.desc);
-    });
-  }
-
-  QueryBuilder<PieMenu, PieMenu, QAfterSortBy> thenByCenterThickness() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'centerThickness', Sort.asc);
-    });
-  }
-
-  QueryBuilder<PieMenu, PieMenu, QAfterSortBy> thenByCenterThicknessDesc() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'centerThickness', Sort.desc);
-    });
-  }
-
   QueryBuilder<PieMenu, PieMenu, QAfterSortBy> thenByEnabled() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'enabled', Sort.asc);
@@ -1445,42 +796,6 @@ extension PieMenuQuerySortThenBy
   QueryBuilder<PieMenu, PieMenu, QAfterSortBy> thenByEnabledDesc() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'enabled', Sort.desc);
-    });
-  }
-
-  QueryBuilder<PieMenu, PieMenu, QAfterSortBy> thenByEscapeRadius() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'escapeRadius', Sort.asc);
-    });
-  }
-
-  QueryBuilder<PieMenu, PieMenu, QAfterSortBy> thenByEscapeRadiusDesc() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'escapeRadius', Sort.desc);
-    });
-  }
-
-  QueryBuilder<PieMenu, PieMenu, QAfterSortBy> thenByIconColor() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'iconColor', Sort.asc);
-    });
-  }
-
-  QueryBuilder<PieMenu, PieMenu, QAfterSortBy> thenByIconColorDesc() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'iconColor', Sort.desc);
-    });
-  }
-
-  QueryBuilder<PieMenu, PieMenu, QAfterSortBy> thenByIconSize() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'iconSize', Sort.asc);
-    });
-  }
-
-  QueryBuilder<PieMenu, PieMenu, QAfterSortBy> thenByIconSizeDesc() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'iconSize', Sort.desc);
     });
   }
 
@@ -1496,18 +811,6 @@ extension PieMenuQuerySortThenBy
     });
   }
 
-  QueryBuilder<PieMenu, PieMenu, QAfterSortBy> thenByMainColor() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'mainColor', Sort.asc);
-    });
-  }
-
-  QueryBuilder<PieMenu, PieMenu, QAfterSortBy> thenByMainColorDesc() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'mainColor', Sort.desc);
-    });
-  }
-
   QueryBuilder<PieMenu, PieMenu, QAfterSortBy> thenByName() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'name', Sort.asc);
@@ -1519,115 +822,13 @@ extension PieMenuQuerySortThenBy
       return query.addSortBy(r'name', Sort.desc);
     });
   }
-
-  QueryBuilder<PieMenu, PieMenu, QAfterSortBy> thenByOpenInScreenCenter() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'openInScreenCenter', Sort.asc);
-    });
-  }
-
-  QueryBuilder<PieMenu, PieMenu, QAfterSortBy> thenByOpenInScreenCenterDesc() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'openInScreenCenter', Sort.desc);
-    });
-  }
-
-  QueryBuilder<PieMenu, PieMenu, QAfterSortBy> thenByPieItemRoundness() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'pieItemRoundness', Sort.asc);
-    });
-  }
-
-  QueryBuilder<PieMenu, PieMenu, QAfterSortBy> thenByPieItemRoundnessDesc() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'pieItemRoundness', Sort.desc);
-    });
-  }
-
-  QueryBuilder<PieMenu, PieMenu, QAfterSortBy> thenByPieItemSpread() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'pieItemSpread', Sort.asc);
-    });
-  }
-
-  QueryBuilder<PieMenu, PieMenu, QAfterSortBy> thenByPieItemSpreadDesc() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'pieItemSpread', Sort.desc);
-    });
-  }
-
-  QueryBuilder<PieMenu, PieMenu, QAfterSortBy> thenByPieItemWidth() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'pieItemWidth', Sort.asc);
-    });
-  }
-
-  QueryBuilder<PieMenu, PieMenu, QAfterSortBy> thenByPieItemWidthDesc() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'pieItemWidth', Sort.desc);
-    });
-  }
-
-  QueryBuilder<PieMenu, PieMenu, QAfterSortBy> thenBySecondaryColor() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'secondaryColor', Sort.asc);
-    });
-  }
-
-  QueryBuilder<PieMenu, PieMenu, QAfterSortBy> thenBySecondaryColorDesc() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'secondaryColor', Sort.desc);
-    });
-  }
 }
 
 extension PieMenuQueryWhereDistinct
     on QueryBuilder<PieMenu, PieMenu, QDistinct> {
-  QueryBuilder<PieMenu, PieMenu, QDistinct> distinctByActivationMode() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addDistinctBy(r'activationMode');
-    });
-  }
-
-  QueryBuilder<PieMenu, PieMenu, QDistinct> distinctByCenterRadius() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addDistinctBy(r'centerRadius');
-    });
-  }
-
-  QueryBuilder<PieMenu, PieMenu, QDistinct> distinctByCenterThickness() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addDistinctBy(r'centerThickness');
-    });
-  }
-
   QueryBuilder<PieMenu, PieMenu, QDistinct> distinctByEnabled() {
     return QueryBuilder.apply(this, (query) {
       return query.addDistinctBy(r'enabled');
-    });
-  }
-
-  QueryBuilder<PieMenu, PieMenu, QDistinct> distinctByEscapeRadius() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addDistinctBy(r'escapeRadius');
-    });
-  }
-
-  QueryBuilder<PieMenu, PieMenu, QDistinct> distinctByIconColor() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addDistinctBy(r'iconColor');
-    });
-  }
-
-  QueryBuilder<PieMenu, PieMenu, QDistinct> distinctByIconSize() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addDistinctBy(r'iconSize');
-    });
-  }
-
-  QueryBuilder<PieMenu, PieMenu, QDistinct> distinctByMainColor() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addDistinctBy(r'mainColor');
     });
   }
 
@@ -1635,36 +836,6 @@ extension PieMenuQueryWhereDistinct
       {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
       return query.addDistinctBy(r'name', caseSensitive: caseSensitive);
-    });
-  }
-
-  QueryBuilder<PieMenu, PieMenu, QDistinct> distinctByOpenInScreenCenter() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addDistinctBy(r'openInScreenCenter');
-    });
-  }
-
-  QueryBuilder<PieMenu, PieMenu, QDistinct> distinctByPieItemRoundness() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addDistinctBy(r'pieItemRoundness');
-    });
-  }
-
-  QueryBuilder<PieMenu, PieMenu, QDistinct> distinctByPieItemSpread() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addDistinctBy(r'pieItemSpread');
-    });
-  }
-
-  QueryBuilder<PieMenu, PieMenu, QDistinct> distinctByPieItemWidth() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addDistinctBy(r'pieItemWidth');
-    });
-  }
-
-  QueryBuilder<PieMenu, PieMenu, QDistinct> distinctBySecondaryColor() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addDistinctBy(r'secondaryColor');
     });
   }
 }
@@ -1677,22 +848,15 @@ extension PieMenuQueryProperty
     });
   }
 
-  QueryBuilder<PieMenu, PieMenuActivationMode, QQueryOperations>
-      activationModeProperty() {
+  QueryBuilder<PieMenu, PieMenuBehavior, QQueryOperations> behaviorProperty() {
     return QueryBuilder.apply(this, (query) {
-      return query.addPropertyName(r'activationMode');
+      return query.addPropertyName(r'behavior');
     });
   }
 
-  QueryBuilder<PieMenu, int, QQueryOperations> centerRadiusProperty() {
+  QueryBuilder<PieMenu, PieMenuColors, QQueryOperations> colorsProperty() {
     return QueryBuilder.apply(this, (query) {
-      return query.addPropertyName(r'centerRadius');
-    });
-  }
-
-  QueryBuilder<PieMenu, int, QQueryOperations> centerThicknessProperty() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addPropertyName(r'centerThickness');
+      return query.addPropertyName(r'colors');
     });
   }
 
@@ -1702,27 +866,15 @@ extension PieMenuQueryProperty
     });
   }
 
-  QueryBuilder<PieMenu, int, QQueryOperations> escapeRadiusProperty() {
+  QueryBuilder<PieMenu, PieMenuFont, QQueryOperations> fontProperty() {
     return QueryBuilder.apply(this, (query) {
-      return query.addPropertyName(r'escapeRadius');
+      return query.addPropertyName(r'font');
     });
   }
 
-  QueryBuilder<PieMenu, int, QQueryOperations> iconColorProperty() {
+  QueryBuilder<PieMenu, PieMenuIcon, QQueryOperations> iconProperty() {
     return QueryBuilder.apply(this, (query) {
-      return query.addPropertyName(r'iconColor');
-    });
-  }
-
-  QueryBuilder<PieMenu, int, QQueryOperations> iconSizeProperty() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addPropertyName(r'iconSize');
-    });
-  }
-
-  QueryBuilder<PieMenu, int, QQueryOperations> mainColorProperty() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addPropertyName(r'mainColor');
+      return query.addPropertyName(r'icon');
     });
   }
 
@@ -1732,33 +884,1767 @@ extension PieMenuQueryProperty
     });
   }
 
-  QueryBuilder<PieMenu, bool, QQueryOperations> openInScreenCenterProperty() {
+  QueryBuilder<PieMenu, List<PieItemInstance>, QQueryOperations>
+      pieItemInstancesProperty() {
     return QueryBuilder.apply(this, (query) {
-      return query.addPropertyName(r'openInScreenCenter');
+      return query.addPropertyName(r'pieItemInstances');
     });
   }
 
-  QueryBuilder<PieMenu, int, QQueryOperations> pieItemRoundnessProperty() {
+  QueryBuilder<PieMenu, PieMenuShape, QQueryOperations> shapeProperty() {
     return QueryBuilder.apply(this, (query) {
-      return query.addPropertyName(r'pieItemRoundness');
-    });
-  }
-
-  QueryBuilder<PieMenu, int, QQueryOperations> pieItemSpreadProperty() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addPropertyName(r'pieItemSpread');
-    });
-  }
-
-  QueryBuilder<PieMenu, int, QQueryOperations> pieItemWidthProperty() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addPropertyName(r'pieItemWidth');
-    });
-  }
-
-  QueryBuilder<PieMenu, int, QQueryOperations> secondaryColorProperty() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addPropertyName(r'secondaryColor');
+      return query.addPropertyName(r'shape');
     });
   }
 }
+
+// **************************************************************************
+// IsarEmbeddedGenerator
+// **************************************************************************
+
+// coverage:ignore-file
+// ignore_for_file: duplicate_ignore, non_constant_identifier_names, constant_identifier_names, invalid_use_of_protected_member, unnecessary_cast, prefer_const_constructors, lines_longer_than_80_chars, require_trailing_commas, inference_failure_on_function_invocation, unnecessary_parenthesis, unnecessary_raw_strings, unnecessary_null_checks, join_return_with_assignment, prefer_final_locals, avoid_js_rounded_ints, avoid_positional_boolean_parameters, always_specify_types
+
+const PieMenuColorsSchema = Schema(
+  name: r'PieMenuColors',
+  id: -5289383185187812041,
+  properties: {
+    r'primary': PropertySchema(
+      id: 0,
+      name: r'primary',
+      type: IsarType.long,
+    ),
+    r'secondary': PropertySchema(
+      id: 1,
+      name: r'secondary',
+      type: IsarType.long,
+    )
+  },
+  estimateSize: _pieMenuColorsEstimateSize,
+  serialize: _pieMenuColorsSerialize,
+  deserialize: _pieMenuColorsDeserialize,
+  deserializeProp: _pieMenuColorsDeserializeProp,
+);
+
+int _pieMenuColorsEstimateSize(
+  PieMenuColors object,
+  List<int> offsets,
+  Map<Type, List<int>> allOffsets,
+) {
+  var bytesCount = offsets.last;
+  return bytesCount;
+}
+
+void _pieMenuColorsSerialize(
+  PieMenuColors object,
+  IsarWriter writer,
+  List<int> offsets,
+  Map<Type, List<int>> allOffsets,
+) {
+  writer.writeLong(offsets[0], object.primary);
+  writer.writeLong(offsets[1], object.secondary);
+}
+
+PieMenuColors _pieMenuColorsDeserialize(
+  Id id,
+  IsarReader reader,
+  List<int> offsets,
+  Map<Type, List<int>> allOffsets,
+) {
+  final object = PieMenuColors();
+  object.primary = reader.readLong(offsets[0]);
+  object.secondary = reader.readLong(offsets[1]);
+  return object;
+}
+
+P _pieMenuColorsDeserializeProp<P>(
+  IsarReader reader,
+  int propertyId,
+  int offset,
+  Map<Type, List<int>> allOffsets,
+) {
+  switch (propertyId) {
+    case 0:
+      return (reader.readLong(offset)) as P;
+    case 1:
+      return (reader.readLong(offset)) as P;
+    default:
+      throw IsarError('Unknown property with id $propertyId');
+  }
+}
+
+extension PieMenuColorsQueryFilter
+    on QueryBuilder<PieMenuColors, PieMenuColors, QFilterCondition> {
+  QueryBuilder<PieMenuColors, PieMenuColors, QAfterFilterCondition>
+      primaryEqualTo(int value) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'primary',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<PieMenuColors, PieMenuColors, QAfterFilterCondition>
+      primaryGreaterThan(
+    int value, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        include: include,
+        property: r'primary',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<PieMenuColors, PieMenuColors, QAfterFilterCondition>
+      primaryLessThan(
+    int value, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.lessThan(
+        include: include,
+        property: r'primary',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<PieMenuColors, PieMenuColors, QAfterFilterCondition>
+      primaryBetween(
+    int lower,
+    int upper, {
+    bool includeLower = true,
+    bool includeUpper = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.between(
+        property: r'primary',
+        lower: lower,
+        includeLower: includeLower,
+        upper: upper,
+        includeUpper: includeUpper,
+      ));
+    });
+  }
+
+  QueryBuilder<PieMenuColors, PieMenuColors, QAfterFilterCondition>
+      secondaryEqualTo(int value) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'secondary',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<PieMenuColors, PieMenuColors, QAfterFilterCondition>
+      secondaryGreaterThan(
+    int value, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        include: include,
+        property: r'secondary',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<PieMenuColors, PieMenuColors, QAfterFilterCondition>
+      secondaryLessThan(
+    int value, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.lessThan(
+        include: include,
+        property: r'secondary',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<PieMenuColors, PieMenuColors, QAfterFilterCondition>
+      secondaryBetween(
+    int lower,
+    int upper, {
+    bool includeLower = true,
+    bool includeUpper = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.between(
+        property: r'secondary',
+        lower: lower,
+        includeLower: includeLower,
+        upper: upper,
+        includeUpper: includeUpper,
+      ));
+    });
+  }
+}
+
+extension PieMenuColorsQueryObject
+    on QueryBuilder<PieMenuColors, PieMenuColors, QFilterCondition> {}
+
+// coverage:ignore-file
+// ignore_for_file: duplicate_ignore, non_constant_identifier_names, constant_identifier_names, invalid_use_of_protected_member, unnecessary_cast, prefer_const_constructors, lines_longer_than_80_chars, require_trailing_commas, inference_failure_on_function_invocation, unnecessary_parenthesis, unnecessary_raw_strings, unnecessary_null_checks, join_return_with_assignment, prefer_final_locals, avoid_js_rounded_ints, avoid_positional_boolean_parameters, always_specify_types
+
+const PieMenuIconSchema = Schema(
+  name: r'PieMenuIcon',
+  id: 5631395984661722160,
+  properties: {
+    r'color': PropertySchema(
+      id: 0,
+      name: r'color',
+      type: IsarType.long,
+    ),
+    r'size': PropertySchema(
+      id: 1,
+      name: r'size',
+      type: IsarType.double,
+    )
+  },
+  estimateSize: _pieMenuIconEstimateSize,
+  serialize: _pieMenuIconSerialize,
+  deserialize: _pieMenuIconDeserialize,
+  deserializeProp: _pieMenuIconDeserializeProp,
+);
+
+int _pieMenuIconEstimateSize(
+  PieMenuIcon object,
+  List<int> offsets,
+  Map<Type, List<int>> allOffsets,
+) {
+  var bytesCount = offsets.last;
+  return bytesCount;
+}
+
+void _pieMenuIconSerialize(
+  PieMenuIcon object,
+  IsarWriter writer,
+  List<int> offsets,
+  Map<Type, List<int>> allOffsets,
+) {
+  writer.writeLong(offsets[0], object.color);
+  writer.writeDouble(offsets[1], object.size);
+}
+
+PieMenuIcon _pieMenuIconDeserialize(
+  Id id,
+  IsarReader reader,
+  List<int> offsets,
+  Map<Type, List<int>> allOffsets,
+) {
+  final object = PieMenuIcon();
+  object.color = reader.readLong(offsets[0]);
+  object.size = reader.readDouble(offsets[1]);
+  return object;
+}
+
+P _pieMenuIconDeserializeProp<P>(
+  IsarReader reader,
+  int propertyId,
+  int offset,
+  Map<Type, List<int>> allOffsets,
+) {
+  switch (propertyId) {
+    case 0:
+      return (reader.readLong(offset)) as P;
+    case 1:
+      return (reader.readDouble(offset)) as P;
+    default:
+      throw IsarError('Unknown property with id $propertyId');
+  }
+}
+
+extension PieMenuIconQueryFilter
+    on QueryBuilder<PieMenuIcon, PieMenuIcon, QFilterCondition> {
+  QueryBuilder<PieMenuIcon, PieMenuIcon, QAfterFilterCondition> colorEqualTo(
+      int value) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'color',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<PieMenuIcon, PieMenuIcon, QAfterFilterCondition>
+      colorGreaterThan(
+    int value, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        include: include,
+        property: r'color',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<PieMenuIcon, PieMenuIcon, QAfterFilterCondition> colorLessThan(
+    int value, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.lessThan(
+        include: include,
+        property: r'color',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<PieMenuIcon, PieMenuIcon, QAfterFilterCondition> colorBetween(
+    int lower,
+    int upper, {
+    bool includeLower = true,
+    bool includeUpper = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.between(
+        property: r'color',
+        lower: lower,
+        includeLower: includeLower,
+        upper: upper,
+        includeUpper: includeUpper,
+      ));
+    });
+  }
+
+  QueryBuilder<PieMenuIcon, PieMenuIcon, QAfterFilterCondition> sizeEqualTo(
+    double value, {
+    double epsilon = Query.epsilon,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'size',
+        value: value,
+        epsilon: epsilon,
+      ));
+    });
+  }
+
+  QueryBuilder<PieMenuIcon, PieMenuIcon, QAfterFilterCondition> sizeGreaterThan(
+    double value, {
+    bool include = false,
+    double epsilon = Query.epsilon,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        include: include,
+        property: r'size',
+        value: value,
+        epsilon: epsilon,
+      ));
+    });
+  }
+
+  QueryBuilder<PieMenuIcon, PieMenuIcon, QAfterFilterCondition> sizeLessThan(
+    double value, {
+    bool include = false,
+    double epsilon = Query.epsilon,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.lessThan(
+        include: include,
+        property: r'size',
+        value: value,
+        epsilon: epsilon,
+      ));
+    });
+  }
+
+  QueryBuilder<PieMenuIcon, PieMenuIcon, QAfterFilterCondition> sizeBetween(
+    double lower,
+    double upper, {
+    bool includeLower = true,
+    bool includeUpper = true,
+    double epsilon = Query.epsilon,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.between(
+        property: r'size',
+        lower: lower,
+        includeLower: includeLower,
+        upper: upper,
+        includeUpper: includeUpper,
+        epsilon: epsilon,
+      ));
+    });
+  }
+}
+
+extension PieMenuIconQueryObject
+    on QueryBuilder<PieMenuIcon, PieMenuIcon, QFilterCondition> {}
+
+// coverage:ignore-file
+// ignore_for_file: duplicate_ignore, non_constant_identifier_names, constant_identifier_names, invalid_use_of_protected_member, unnecessary_cast, prefer_const_constructors, lines_longer_than_80_chars, require_trailing_commas, inference_failure_on_function_invocation, unnecessary_parenthesis, unnecessary_raw_strings, unnecessary_null_checks, join_return_with_assignment, prefer_final_locals, avoid_js_rounded_ints, avoid_positional_boolean_parameters, always_specify_types
+
+const PieMenuFontSchema = Schema(
+  name: r'PieMenuFont',
+  id: -1433570879642134295,
+  properties: {
+    r'color': PropertySchema(
+      id: 0,
+      name: r'color',
+      type: IsarType.long,
+    ),
+    r'fontFamily': PropertySchema(
+      id: 1,
+      name: r'fontFamily',
+      type: IsarType.string,
+    ),
+    r'size': PropertySchema(
+      id: 2,
+      name: r'size',
+      type: IsarType.double,
+    )
+  },
+  estimateSize: _pieMenuFontEstimateSize,
+  serialize: _pieMenuFontSerialize,
+  deserialize: _pieMenuFontDeserialize,
+  deserializeProp: _pieMenuFontDeserializeProp,
+);
+
+int _pieMenuFontEstimateSize(
+  PieMenuFont object,
+  List<int> offsets,
+  Map<Type, List<int>> allOffsets,
+) {
+  var bytesCount = offsets.last;
+  bytesCount += 3 + object.fontFamily.length * 3;
+  return bytesCount;
+}
+
+void _pieMenuFontSerialize(
+  PieMenuFont object,
+  IsarWriter writer,
+  List<int> offsets,
+  Map<Type, List<int>> allOffsets,
+) {
+  writer.writeLong(offsets[0], object.color);
+  writer.writeString(offsets[1], object.fontFamily);
+  writer.writeDouble(offsets[2], object.size);
+}
+
+PieMenuFont _pieMenuFontDeserialize(
+  Id id,
+  IsarReader reader,
+  List<int> offsets,
+  Map<Type, List<int>> allOffsets,
+) {
+  final object = PieMenuFont();
+  object.color = reader.readLong(offsets[0]);
+  object.fontFamily = reader.readString(offsets[1]);
+  object.size = reader.readDouble(offsets[2]);
+  return object;
+}
+
+P _pieMenuFontDeserializeProp<P>(
+  IsarReader reader,
+  int propertyId,
+  int offset,
+  Map<Type, List<int>> allOffsets,
+) {
+  switch (propertyId) {
+    case 0:
+      return (reader.readLong(offset)) as P;
+    case 1:
+      return (reader.readString(offset)) as P;
+    case 2:
+      return (reader.readDouble(offset)) as P;
+    default:
+      throw IsarError('Unknown property with id $propertyId');
+  }
+}
+
+extension PieMenuFontQueryFilter
+    on QueryBuilder<PieMenuFont, PieMenuFont, QFilterCondition> {
+  QueryBuilder<PieMenuFont, PieMenuFont, QAfterFilterCondition> colorEqualTo(
+      int value) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'color',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<PieMenuFont, PieMenuFont, QAfterFilterCondition>
+      colorGreaterThan(
+    int value, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        include: include,
+        property: r'color',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<PieMenuFont, PieMenuFont, QAfterFilterCondition> colorLessThan(
+    int value, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.lessThan(
+        include: include,
+        property: r'color',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<PieMenuFont, PieMenuFont, QAfterFilterCondition> colorBetween(
+    int lower,
+    int upper, {
+    bool includeLower = true,
+    bool includeUpper = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.between(
+        property: r'color',
+        lower: lower,
+        includeLower: includeLower,
+        upper: upper,
+        includeUpper: includeUpper,
+      ));
+    });
+  }
+
+  QueryBuilder<PieMenuFont, PieMenuFont, QAfterFilterCondition>
+      fontFamilyEqualTo(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'fontFamily',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<PieMenuFont, PieMenuFont, QAfterFilterCondition>
+      fontFamilyGreaterThan(
+    String value, {
+    bool include = false,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        include: include,
+        property: r'fontFamily',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<PieMenuFont, PieMenuFont, QAfterFilterCondition>
+      fontFamilyLessThan(
+    String value, {
+    bool include = false,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.lessThan(
+        include: include,
+        property: r'fontFamily',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<PieMenuFont, PieMenuFont, QAfterFilterCondition>
+      fontFamilyBetween(
+    String lower,
+    String upper, {
+    bool includeLower = true,
+    bool includeUpper = true,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.between(
+        property: r'fontFamily',
+        lower: lower,
+        includeLower: includeLower,
+        upper: upper,
+        includeUpper: includeUpper,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<PieMenuFont, PieMenuFont, QAfterFilterCondition>
+      fontFamilyStartsWith(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.startsWith(
+        property: r'fontFamily',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<PieMenuFont, PieMenuFont, QAfterFilterCondition>
+      fontFamilyEndsWith(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.endsWith(
+        property: r'fontFamily',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<PieMenuFont, PieMenuFont, QAfterFilterCondition>
+      fontFamilyContains(String value, {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.contains(
+        property: r'fontFamily',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<PieMenuFont, PieMenuFont, QAfterFilterCondition>
+      fontFamilyMatches(String pattern, {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.matches(
+        property: r'fontFamily',
+        wildcard: pattern,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<PieMenuFont, PieMenuFont, QAfterFilterCondition>
+      fontFamilyIsEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'fontFamily',
+        value: '',
+      ));
+    });
+  }
+
+  QueryBuilder<PieMenuFont, PieMenuFont, QAfterFilterCondition>
+      fontFamilyIsNotEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        property: r'fontFamily',
+        value: '',
+      ));
+    });
+  }
+
+  QueryBuilder<PieMenuFont, PieMenuFont, QAfterFilterCondition> sizeEqualTo(
+    double value, {
+    double epsilon = Query.epsilon,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'size',
+        value: value,
+        epsilon: epsilon,
+      ));
+    });
+  }
+
+  QueryBuilder<PieMenuFont, PieMenuFont, QAfterFilterCondition> sizeGreaterThan(
+    double value, {
+    bool include = false,
+    double epsilon = Query.epsilon,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        include: include,
+        property: r'size',
+        value: value,
+        epsilon: epsilon,
+      ));
+    });
+  }
+
+  QueryBuilder<PieMenuFont, PieMenuFont, QAfterFilterCondition> sizeLessThan(
+    double value, {
+    bool include = false,
+    double epsilon = Query.epsilon,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.lessThan(
+        include: include,
+        property: r'size',
+        value: value,
+        epsilon: epsilon,
+      ));
+    });
+  }
+
+  QueryBuilder<PieMenuFont, PieMenuFont, QAfterFilterCondition> sizeBetween(
+    double lower,
+    double upper, {
+    bool includeLower = true,
+    bool includeUpper = true,
+    double epsilon = Query.epsilon,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.between(
+        property: r'size',
+        lower: lower,
+        includeLower: includeLower,
+        upper: upper,
+        includeUpper: includeUpper,
+        epsilon: epsilon,
+      ));
+    });
+  }
+}
+
+extension PieMenuFontQueryObject
+    on QueryBuilder<PieMenuFont, PieMenuFont, QFilterCondition> {}
+
+// coverage:ignore-file
+// ignore_for_file: duplicate_ignore, non_constant_identifier_names, constant_identifier_names, invalid_use_of_protected_member, unnecessary_cast, prefer_const_constructors, lines_longer_than_80_chars, require_trailing_commas, inference_failure_on_function_invocation, unnecessary_parenthesis, unnecessary_raw_strings, unnecessary_null_checks, join_return_with_assignment, prefer_final_locals, avoid_js_rounded_ints, avoid_positional_boolean_parameters, always_specify_types
+
+const PieMenuBehaviorSchema = Schema(
+  name: r'PieMenuBehavior',
+  id: 3078188730846525007,
+  properties: {
+    r'activationMode': PropertySchema(
+      id: 0,
+      name: r'activationMode',
+      type: IsarType.byte,
+      enumMap: _PieMenuBehavioractivationModeEnumValueMap,
+    ),
+    r'escapeRadius': PropertySchema(
+      id: 1,
+      name: r'escapeRadius',
+      type: IsarType.double,
+    ),
+    r'openInScreenCenter': PropertySchema(
+      id: 2,
+      name: r'openInScreenCenter',
+      type: IsarType.bool,
+    ),
+    r'subMenuActivationMode': PropertySchema(
+      id: 3,
+      name: r'subMenuActivationMode',
+      type: IsarType.byte,
+      enumMap: _PieMenuBehaviorsubMenuActivationModeEnumValueMap,
+    )
+  },
+  estimateSize: _pieMenuBehaviorEstimateSize,
+  serialize: _pieMenuBehaviorSerialize,
+  deserialize: _pieMenuBehaviorDeserialize,
+  deserializeProp: _pieMenuBehaviorDeserializeProp,
+);
+
+int _pieMenuBehaviorEstimateSize(
+  PieMenuBehavior object,
+  List<int> offsets,
+  Map<Type, List<int>> allOffsets,
+) {
+  var bytesCount = offsets.last;
+  return bytesCount;
+}
+
+void _pieMenuBehaviorSerialize(
+  PieMenuBehavior object,
+  IsarWriter writer,
+  List<int> offsets,
+  Map<Type, List<int>> allOffsets,
+) {
+  writer.writeByte(offsets[0], object.activationMode.index);
+  writer.writeDouble(offsets[1], object.escapeRadius);
+  writer.writeBool(offsets[2], object.openInScreenCenter);
+  writer.writeByte(offsets[3], object.subMenuActivationMode.index);
+}
+
+PieMenuBehavior _pieMenuBehaviorDeserialize(
+  Id id,
+  IsarReader reader,
+  List<int> offsets,
+  Map<Type, List<int>> allOffsets,
+) {
+  final object = PieMenuBehavior();
+  object.activationMode = _PieMenuBehavioractivationModeValueEnumMap[
+          reader.readByteOrNull(offsets[0])] ??
+      ActivationMode.onRelease;
+  object.escapeRadius = reader.readDouble(offsets[1]);
+  object.openInScreenCenter = reader.readBool(offsets[2]);
+  object.subMenuActivationMode =
+      _PieMenuBehaviorsubMenuActivationModeValueEnumMap[
+              reader.readByteOrNull(offsets[3])] ??
+          ActivationMode.onRelease;
+  return object;
+}
+
+P _pieMenuBehaviorDeserializeProp<P>(
+  IsarReader reader,
+  int propertyId,
+  int offset,
+  Map<Type, List<int>> allOffsets,
+) {
+  switch (propertyId) {
+    case 0:
+      return (_PieMenuBehavioractivationModeValueEnumMap[
+              reader.readByteOrNull(offset)] ??
+          ActivationMode.onRelease) as P;
+    case 1:
+      return (reader.readDouble(offset)) as P;
+    case 2:
+      return (reader.readBool(offset)) as P;
+    case 3:
+      return (_PieMenuBehaviorsubMenuActivationModeValueEnumMap[
+              reader.readByteOrNull(offset)] ??
+          ActivationMode.onRelease) as P;
+    default:
+      throw IsarError('Unknown property with id $propertyId');
+  }
+}
+
+const _PieMenuBehavioractivationModeEnumValueMap = {
+  'onRelease': 0,
+  'onHover': 1,
+  'onClick': 2,
+};
+const _PieMenuBehavioractivationModeValueEnumMap = {
+  0: ActivationMode.onRelease,
+  1: ActivationMode.onHover,
+  2: ActivationMode.onClick,
+};
+const _PieMenuBehaviorsubMenuActivationModeEnumValueMap = {
+  'onRelease': 0,
+  'onHover': 1,
+  'onClick': 2,
+};
+const _PieMenuBehaviorsubMenuActivationModeValueEnumMap = {
+  0: ActivationMode.onRelease,
+  1: ActivationMode.onHover,
+  2: ActivationMode.onClick,
+};
+
+extension PieMenuBehaviorQueryFilter
+    on QueryBuilder<PieMenuBehavior, PieMenuBehavior, QFilterCondition> {
+  QueryBuilder<PieMenuBehavior, PieMenuBehavior, QAfterFilterCondition>
+      activationModeEqualTo(ActivationMode value) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'activationMode',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<PieMenuBehavior, PieMenuBehavior, QAfterFilterCondition>
+      activationModeGreaterThan(
+    ActivationMode value, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        include: include,
+        property: r'activationMode',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<PieMenuBehavior, PieMenuBehavior, QAfterFilterCondition>
+      activationModeLessThan(
+    ActivationMode value, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.lessThan(
+        include: include,
+        property: r'activationMode',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<PieMenuBehavior, PieMenuBehavior, QAfterFilterCondition>
+      activationModeBetween(
+    ActivationMode lower,
+    ActivationMode upper, {
+    bool includeLower = true,
+    bool includeUpper = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.between(
+        property: r'activationMode',
+        lower: lower,
+        includeLower: includeLower,
+        upper: upper,
+        includeUpper: includeUpper,
+      ));
+    });
+  }
+
+  QueryBuilder<PieMenuBehavior, PieMenuBehavior, QAfterFilterCondition>
+      escapeRadiusEqualTo(
+    double value, {
+    double epsilon = Query.epsilon,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'escapeRadius',
+        value: value,
+        epsilon: epsilon,
+      ));
+    });
+  }
+
+  QueryBuilder<PieMenuBehavior, PieMenuBehavior, QAfterFilterCondition>
+      escapeRadiusGreaterThan(
+    double value, {
+    bool include = false,
+    double epsilon = Query.epsilon,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        include: include,
+        property: r'escapeRadius',
+        value: value,
+        epsilon: epsilon,
+      ));
+    });
+  }
+
+  QueryBuilder<PieMenuBehavior, PieMenuBehavior, QAfterFilterCondition>
+      escapeRadiusLessThan(
+    double value, {
+    bool include = false,
+    double epsilon = Query.epsilon,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.lessThan(
+        include: include,
+        property: r'escapeRadius',
+        value: value,
+        epsilon: epsilon,
+      ));
+    });
+  }
+
+  QueryBuilder<PieMenuBehavior, PieMenuBehavior, QAfterFilterCondition>
+      escapeRadiusBetween(
+    double lower,
+    double upper, {
+    bool includeLower = true,
+    bool includeUpper = true,
+    double epsilon = Query.epsilon,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.between(
+        property: r'escapeRadius',
+        lower: lower,
+        includeLower: includeLower,
+        upper: upper,
+        includeUpper: includeUpper,
+        epsilon: epsilon,
+      ));
+    });
+  }
+
+  QueryBuilder<PieMenuBehavior, PieMenuBehavior, QAfterFilterCondition>
+      openInScreenCenterEqualTo(bool value) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'openInScreenCenter',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<PieMenuBehavior, PieMenuBehavior, QAfterFilterCondition>
+      subMenuActivationModeEqualTo(ActivationMode value) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'subMenuActivationMode',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<PieMenuBehavior, PieMenuBehavior, QAfterFilterCondition>
+      subMenuActivationModeGreaterThan(
+    ActivationMode value, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        include: include,
+        property: r'subMenuActivationMode',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<PieMenuBehavior, PieMenuBehavior, QAfterFilterCondition>
+      subMenuActivationModeLessThan(
+    ActivationMode value, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.lessThan(
+        include: include,
+        property: r'subMenuActivationMode',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<PieMenuBehavior, PieMenuBehavior, QAfterFilterCondition>
+      subMenuActivationModeBetween(
+    ActivationMode lower,
+    ActivationMode upper, {
+    bool includeLower = true,
+    bool includeUpper = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.between(
+        property: r'subMenuActivationMode',
+        lower: lower,
+        includeLower: includeLower,
+        upper: upper,
+        includeUpper: includeUpper,
+      ));
+    });
+  }
+}
+
+extension PieMenuBehaviorQueryObject
+    on QueryBuilder<PieMenuBehavior, PieMenuBehavior, QFilterCondition> {}
+
+// coverage:ignore-file
+// ignore_for_file: duplicate_ignore, non_constant_identifier_names, constant_identifier_names, invalid_use_of_protected_member, unnecessary_cast, prefer_const_constructors, lines_longer_than_80_chars, require_trailing_commas, inference_failure_on_function_invocation, unnecessary_parenthesis, unnecessary_raw_strings, unnecessary_null_checks, join_return_with_assignment, prefer_final_locals, avoid_js_rounded_ints, avoid_positional_boolean_parameters, always_specify_types
+
+const PieMenuShapeSchema = Schema(
+  name: r'PieMenuShape',
+  id: 4148130021120429092,
+  properties: {
+    r'centerRadius': PropertySchema(
+      id: 0,
+      name: r'centerRadius',
+      type: IsarType.double,
+    ),
+    r'centerThickness': PropertySchema(
+      id: 1,
+      name: r'centerThickness',
+      type: IsarType.double,
+    ),
+    r'pieItemRoundness': PropertySchema(
+      id: 2,
+      name: r'pieItemRoundness',
+      type: IsarType.double,
+    ),
+    r'pieItemSpread': PropertySchema(
+      id: 3,
+      name: r'pieItemSpread',
+      type: IsarType.double,
+    )
+  },
+  estimateSize: _pieMenuShapeEstimateSize,
+  serialize: _pieMenuShapeSerialize,
+  deserialize: _pieMenuShapeDeserialize,
+  deserializeProp: _pieMenuShapeDeserializeProp,
+);
+
+int _pieMenuShapeEstimateSize(
+  PieMenuShape object,
+  List<int> offsets,
+  Map<Type, List<int>> allOffsets,
+) {
+  var bytesCount = offsets.last;
+  return bytesCount;
+}
+
+void _pieMenuShapeSerialize(
+  PieMenuShape object,
+  IsarWriter writer,
+  List<int> offsets,
+  Map<Type, List<int>> allOffsets,
+) {
+  writer.writeDouble(offsets[0], object.centerRadius);
+  writer.writeDouble(offsets[1], object.centerThickness);
+  writer.writeDouble(offsets[2], object.pieItemRoundness);
+  writer.writeDouble(offsets[3], object.pieItemSpread);
+}
+
+PieMenuShape _pieMenuShapeDeserialize(
+  Id id,
+  IsarReader reader,
+  List<int> offsets,
+  Map<Type, List<int>> allOffsets,
+) {
+  final object = PieMenuShape();
+  object.centerRadius = reader.readDouble(offsets[0]);
+  object.centerThickness = reader.readDouble(offsets[1]);
+  object.pieItemRoundness = reader.readDouble(offsets[2]);
+  object.pieItemSpread = reader.readDouble(offsets[3]);
+  return object;
+}
+
+P _pieMenuShapeDeserializeProp<P>(
+  IsarReader reader,
+  int propertyId,
+  int offset,
+  Map<Type, List<int>> allOffsets,
+) {
+  switch (propertyId) {
+    case 0:
+      return (reader.readDouble(offset)) as P;
+    case 1:
+      return (reader.readDouble(offset)) as P;
+    case 2:
+      return (reader.readDouble(offset)) as P;
+    case 3:
+      return (reader.readDouble(offset)) as P;
+    default:
+      throw IsarError('Unknown property with id $propertyId');
+  }
+}
+
+extension PieMenuShapeQueryFilter
+    on QueryBuilder<PieMenuShape, PieMenuShape, QFilterCondition> {
+  QueryBuilder<PieMenuShape, PieMenuShape, QAfterFilterCondition>
+      centerRadiusEqualTo(
+    double value, {
+    double epsilon = Query.epsilon,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'centerRadius',
+        value: value,
+        epsilon: epsilon,
+      ));
+    });
+  }
+
+  QueryBuilder<PieMenuShape, PieMenuShape, QAfterFilterCondition>
+      centerRadiusGreaterThan(
+    double value, {
+    bool include = false,
+    double epsilon = Query.epsilon,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        include: include,
+        property: r'centerRadius',
+        value: value,
+        epsilon: epsilon,
+      ));
+    });
+  }
+
+  QueryBuilder<PieMenuShape, PieMenuShape, QAfterFilterCondition>
+      centerRadiusLessThan(
+    double value, {
+    bool include = false,
+    double epsilon = Query.epsilon,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.lessThan(
+        include: include,
+        property: r'centerRadius',
+        value: value,
+        epsilon: epsilon,
+      ));
+    });
+  }
+
+  QueryBuilder<PieMenuShape, PieMenuShape, QAfterFilterCondition>
+      centerRadiusBetween(
+    double lower,
+    double upper, {
+    bool includeLower = true,
+    bool includeUpper = true,
+    double epsilon = Query.epsilon,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.between(
+        property: r'centerRadius',
+        lower: lower,
+        includeLower: includeLower,
+        upper: upper,
+        includeUpper: includeUpper,
+        epsilon: epsilon,
+      ));
+    });
+  }
+
+  QueryBuilder<PieMenuShape, PieMenuShape, QAfterFilterCondition>
+      centerThicknessEqualTo(
+    double value, {
+    double epsilon = Query.epsilon,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'centerThickness',
+        value: value,
+        epsilon: epsilon,
+      ));
+    });
+  }
+
+  QueryBuilder<PieMenuShape, PieMenuShape, QAfterFilterCondition>
+      centerThicknessGreaterThan(
+    double value, {
+    bool include = false,
+    double epsilon = Query.epsilon,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        include: include,
+        property: r'centerThickness',
+        value: value,
+        epsilon: epsilon,
+      ));
+    });
+  }
+
+  QueryBuilder<PieMenuShape, PieMenuShape, QAfterFilterCondition>
+      centerThicknessLessThan(
+    double value, {
+    bool include = false,
+    double epsilon = Query.epsilon,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.lessThan(
+        include: include,
+        property: r'centerThickness',
+        value: value,
+        epsilon: epsilon,
+      ));
+    });
+  }
+
+  QueryBuilder<PieMenuShape, PieMenuShape, QAfterFilterCondition>
+      centerThicknessBetween(
+    double lower,
+    double upper, {
+    bool includeLower = true,
+    bool includeUpper = true,
+    double epsilon = Query.epsilon,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.between(
+        property: r'centerThickness',
+        lower: lower,
+        includeLower: includeLower,
+        upper: upper,
+        includeUpper: includeUpper,
+        epsilon: epsilon,
+      ));
+    });
+  }
+
+  QueryBuilder<PieMenuShape, PieMenuShape, QAfterFilterCondition>
+      pieItemRoundnessEqualTo(
+    double value, {
+    double epsilon = Query.epsilon,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'pieItemRoundness',
+        value: value,
+        epsilon: epsilon,
+      ));
+    });
+  }
+
+  QueryBuilder<PieMenuShape, PieMenuShape, QAfterFilterCondition>
+      pieItemRoundnessGreaterThan(
+    double value, {
+    bool include = false,
+    double epsilon = Query.epsilon,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        include: include,
+        property: r'pieItemRoundness',
+        value: value,
+        epsilon: epsilon,
+      ));
+    });
+  }
+
+  QueryBuilder<PieMenuShape, PieMenuShape, QAfterFilterCondition>
+      pieItemRoundnessLessThan(
+    double value, {
+    bool include = false,
+    double epsilon = Query.epsilon,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.lessThan(
+        include: include,
+        property: r'pieItemRoundness',
+        value: value,
+        epsilon: epsilon,
+      ));
+    });
+  }
+
+  QueryBuilder<PieMenuShape, PieMenuShape, QAfterFilterCondition>
+      pieItemRoundnessBetween(
+    double lower,
+    double upper, {
+    bool includeLower = true,
+    bool includeUpper = true,
+    double epsilon = Query.epsilon,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.between(
+        property: r'pieItemRoundness',
+        lower: lower,
+        includeLower: includeLower,
+        upper: upper,
+        includeUpper: includeUpper,
+        epsilon: epsilon,
+      ));
+    });
+  }
+
+  QueryBuilder<PieMenuShape, PieMenuShape, QAfterFilterCondition>
+      pieItemSpreadEqualTo(
+    double value, {
+    double epsilon = Query.epsilon,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'pieItemSpread',
+        value: value,
+        epsilon: epsilon,
+      ));
+    });
+  }
+
+  QueryBuilder<PieMenuShape, PieMenuShape, QAfterFilterCondition>
+      pieItemSpreadGreaterThan(
+    double value, {
+    bool include = false,
+    double epsilon = Query.epsilon,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        include: include,
+        property: r'pieItemSpread',
+        value: value,
+        epsilon: epsilon,
+      ));
+    });
+  }
+
+  QueryBuilder<PieMenuShape, PieMenuShape, QAfterFilterCondition>
+      pieItemSpreadLessThan(
+    double value, {
+    bool include = false,
+    double epsilon = Query.epsilon,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.lessThan(
+        include: include,
+        property: r'pieItemSpread',
+        value: value,
+        epsilon: epsilon,
+      ));
+    });
+  }
+
+  QueryBuilder<PieMenuShape, PieMenuShape, QAfterFilterCondition>
+      pieItemSpreadBetween(
+    double lower,
+    double upper, {
+    bool includeLower = true,
+    bool includeUpper = true,
+    double epsilon = Query.epsilon,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.between(
+        property: r'pieItemSpread',
+        lower: lower,
+        includeLower: includeLower,
+        upper: upper,
+        includeUpper: includeUpper,
+        epsilon: epsilon,
+      ));
+    });
+  }
+}
+
+extension PieMenuShapeQueryObject
+    on QueryBuilder<PieMenuShape, PieMenuShape, QFilterCondition> {}
+
+// coverage:ignore-file
+// ignore_for_file: duplicate_ignore, non_constant_identifier_names, constant_identifier_names, invalid_use_of_protected_member, unnecessary_cast, prefer_const_constructors, lines_longer_than_80_chars, require_trailing_commas, inference_failure_on_function_invocation, unnecessary_parenthesis, unnecessary_raw_strings, unnecessary_null_checks, join_return_with_assignment, prefer_final_locals, avoid_js_rounded_ints, avoid_positional_boolean_parameters, always_specify_types
+
+const PieItemInstanceSchema = Schema(
+  name: r'PieItemInstance',
+  id: -3357939713037499918,
+  properties: {
+    r'activationMode': PropertySchema(
+      id: 0,
+      name: r'activationMode',
+      type: IsarType.byte,
+      enumMap: _PieItemInstanceactivationModeEnumValueMap,
+    ),
+    r'keyCode': PropertySchema(
+      id: 1,
+      name: r'keyCode',
+      type: IsarType.string,
+    ),
+    r'pieItemId': PropertySchema(
+      id: 2,
+      name: r'pieItemId',
+      type: IsarType.long,
+    )
+  },
+  estimateSize: _pieItemInstanceEstimateSize,
+  serialize: _pieItemInstanceSerialize,
+  deserialize: _pieItemInstanceDeserialize,
+  deserializeProp: _pieItemInstanceDeserializeProp,
+);
+
+int _pieItemInstanceEstimateSize(
+  PieItemInstance object,
+  List<int> offsets,
+  Map<Type, List<int>> allOffsets,
+) {
+  var bytesCount = offsets.last;
+  bytesCount += 3 + object.keyCode.length * 3;
+  return bytesCount;
+}
+
+void _pieItemInstanceSerialize(
+  PieItemInstance object,
+  IsarWriter writer,
+  List<int> offsets,
+  Map<Type, List<int>> allOffsets,
+) {
+  writer.writeByte(offsets[0], object.activationMode.index);
+  writer.writeString(offsets[1], object.keyCode);
+  writer.writeLong(offsets[2], object.pieItemId);
+}
+
+PieItemInstance _pieItemInstanceDeserialize(
+  Id id,
+  IsarReader reader,
+  List<int> offsets,
+  Map<Type, List<int>> allOffsets,
+) {
+  final object = PieItemInstance(
+    keyCode: reader.readStringOrNull(offsets[1]) ?? "",
+    pieItemId: reader.readLongOrNull(offsets[2]) ?? 0,
+  );
+  object.activationMode = _PieItemInstanceactivationModeValueEnumMap[
+          reader.readByteOrNull(offsets[0])] ??
+      ActivationMode.onRelease;
+  return object;
+}
+
+P _pieItemInstanceDeserializeProp<P>(
+  IsarReader reader,
+  int propertyId,
+  int offset,
+  Map<Type, List<int>> allOffsets,
+) {
+  switch (propertyId) {
+    case 0:
+      return (_PieItemInstanceactivationModeValueEnumMap[
+              reader.readByteOrNull(offset)] ??
+          ActivationMode.onRelease) as P;
+    case 1:
+      return (reader.readStringOrNull(offset) ?? "") as P;
+    case 2:
+      return (reader.readLongOrNull(offset) ?? 0) as P;
+    default:
+      throw IsarError('Unknown property with id $propertyId');
+  }
+}
+
+const _PieItemInstanceactivationModeEnumValueMap = {
+  'onRelease': 0,
+  'onHover': 1,
+  'onClick': 2,
+};
+const _PieItemInstanceactivationModeValueEnumMap = {
+  0: ActivationMode.onRelease,
+  1: ActivationMode.onHover,
+  2: ActivationMode.onClick,
+};
+
+extension PieItemInstanceQueryFilter
+    on QueryBuilder<PieItemInstance, PieItemInstance, QFilterCondition> {
+  QueryBuilder<PieItemInstance, PieItemInstance, QAfterFilterCondition>
+      activationModeEqualTo(ActivationMode value) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'activationMode',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<PieItemInstance, PieItemInstance, QAfterFilterCondition>
+      activationModeGreaterThan(
+    ActivationMode value, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        include: include,
+        property: r'activationMode',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<PieItemInstance, PieItemInstance, QAfterFilterCondition>
+      activationModeLessThan(
+    ActivationMode value, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.lessThan(
+        include: include,
+        property: r'activationMode',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<PieItemInstance, PieItemInstance, QAfterFilterCondition>
+      activationModeBetween(
+    ActivationMode lower,
+    ActivationMode upper, {
+    bool includeLower = true,
+    bool includeUpper = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.between(
+        property: r'activationMode',
+        lower: lower,
+        includeLower: includeLower,
+        upper: upper,
+        includeUpper: includeUpper,
+      ));
+    });
+  }
+
+  QueryBuilder<PieItemInstance, PieItemInstance, QAfterFilterCondition>
+      keyCodeEqualTo(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'keyCode',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<PieItemInstance, PieItemInstance, QAfterFilterCondition>
+      keyCodeGreaterThan(
+    String value, {
+    bool include = false,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        include: include,
+        property: r'keyCode',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<PieItemInstance, PieItemInstance, QAfterFilterCondition>
+      keyCodeLessThan(
+    String value, {
+    bool include = false,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.lessThan(
+        include: include,
+        property: r'keyCode',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<PieItemInstance, PieItemInstance, QAfterFilterCondition>
+      keyCodeBetween(
+    String lower,
+    String upper, {
+    bool includeLower = true,
+    bool includeUpper = true,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.between(
+        property: r'keyCode',
+        lower: lower,
+        includeLower: includeLower,
+        upper: upper,
+        includeUpper: includeUpper,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<PieItemInstance, PieItemInstance, QAfterFilterCondition>
+      keyCodeStartsWith(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.startsWith(
+        property: r'keyCode',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<PieItemInstance, PieItemInstance, QAfterFilterCondition>
+      keyCodeEndsWith(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.endsWith(
+        property: r'keyCode',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<PieItemInstance, PieItemInstance, QAfterFilterCondition>
+      keyCodeContains(String value, {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.contains(
+        property: r'keyCode',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<PieItemInstance, PieItemInstance, QAfterFilterCondition>
+      keyCodeMatches(String pattern, {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.matches(
+        property: r'keyCode',
+        wildcard: pattern,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<PieItemInstance, PieItemInstance, QAfterFilterCondition>
+      keyCodeIsEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'keyCode',
+        value: '',
+      ));
+    });
+  }
+
+  QueryBuilder<PieItemInstance, PieItemInstance, QAfterFilterCondition>
+      keyCodeIsNotEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        property: r'keyCode',
+        value: '',
+      ));
+    });
+  }
+
+  QueryBuilder<PieItemInstance, PieItemInstance, QAfterFilterCondition>
+      pieItemIdEqualTo(int value) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'pieItemId',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<PieItemInstance, PieItemInstance, QAfterFilterCondition>
+      pieItemIdGreaterThan(
+    int value, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        include: include,
+        property: r'pieItemId',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<PieItemInstance, PieItemInstance, QAfterFilterCondition>
+      pieItemIdLessThan(
+    int value, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.lessThan(
+        include: include,
+        property: r'pieItemId',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<PieItemInstance, PieItemInstance, QAfterFilterCondition>
+      pieItemIdBetween(
+    int lower,
+    int upper, {
+    bool includeLower = true,
+    bool includeUpper = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.between(
+        property: r'pieItemId',
+        lower: lower,
+        includeLower: includeLower,
+        upper: upper,
+        includeUpper: includeUpper,
+      ));
+    });
+  }
+}
+
+extension PieItemInstanceQueryObject
+    on QueryBuilder<PieItemInstance, PieItemInstance, QFilterCondition> {}

@@ -2,29 +2,84 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:hotkey_manager/hotkey_manager.dart';
 
+// From the hotkey_manager package.
+class _VirtualKeyView extends StatelessWidget {
+  const _VirtualKeyView({required this.keyLabel});
+
+  final String keyLabel;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.only(left: 5, right: 5, top: 3, bottom: 3),
+      decoration: BoxDecoration(
+        color: Theme.of(context).canvasColor,
+        border: Border.all(
+          color: Theme.of(context).dividerColor,
+          width: 1,
+        ),
+        borderRadius: BorderRadius.circular(3),
+        boxShadow: <BoxShadow>[
+          BoxShadow(
+            color: Colors.black.withOpacity(0.3),
+            offset: const Offset(0.0, 1.0),
+          ),
+        ],
+      ),
+      child: Text(
+        keyLabel,
+        style: TextStyle(
+          color: Theme.of(context).textTheme.bodyMedium?.color,
+          fontSize: 12,
+        ),
+      ),
+    );
+  }
+}
+
 class KeyPressRecorder extends StatefulWidget {
   const KeyPressRecorder({
-    Key? key,
-    this.initalHotKey,
+    super.key,
+    this.initialHotkey,
     required this.onHotKeyRecorded,
-  }) : super(key: key);
-  final HotKey? initalHotKey;
+    this.validation,
+    this.onClear,
+  });
+
+  final HotKey? initialHotkey;
   final ValueChanged<HotKey> onHotKeyRecorded;
+  final ValueChanged<HotKey>? onClear;
+  final bool Function(HotKey hotkey)? validation;
 
   @override
   State<KeyPressRecorder> createState() => _KeyPressRecorderState();
 }
 
 class _KeyPressRecorderState extends State<KeyPressRecorder> {
-  HotKey? _hotKey;
-  bool _toReset = false;
-  final Set<KeyModifier> _keyModifiers = {};
+  bool ctrl = false;
+  bool alt = false;
+  bool shift = false;
+  KeyCode? key;
+
+  bool prevCtrl = false;
+  bool prevAlt = false;
+  bool prevShift = false;
+  KeyCode? prevKey;
+
   final FocusNode _focusNode = FocusNode();
 
   @override
   void initState() {
-    if (widget.initalHotKey != null) {
-      _hotKey = widget.initalHotKey!;
+    _focusNode.onKeyEvent = _handleKeyEvent;
+
+    if (widget.initialHotkey != null) {
+      final modifiers = widget.initialHotkey!.modifiers;
+      if (modifiers != null) {
+        ctrl = modifiers.contains(KeyModifier.control);
+        alt = modifiers.contains(KeyModifier.alt);
+        shift = modifiers.contains(KeyModifier.shift);
+      }
+      key = widget.initialHotkey!.keyCode;
     }
     super.initState();
   }
@@ -34,55 +89,48 @@ class _KeyPressRecorderState extends State<KeyPressRecorder> {
     super.dispose();
   }
 
-  KeyEventResult _handleKeyEvent(KeyEvent keyEvent) {
-    KeyCode keyCode = KeyCode.space;
+  KeyEventResult _handleKeyEvent(FocusNode node, KeyEvent keyEvent) {
+    var isKeyDown = keyEvent is KeyDownEvent || keyEvent is KeyRepeatEvent;
+    switch (keyEvent.logicalKey) {
+      case LogicalKeyboardKey.escape:
+        if (!ctrl && !alt && !shift) {
+          _focusNode.unfocus();
+          return KeyEventResult.handled;
+        }
+      case LogicalKeyboardKey.delete:
+        if (!ctrl && !alt && !shift) {
+          _clear();
+          return KeyEventResult.handled;
+        }
+      case LogicalKeyboardKey.control:
+      case LogicalKeyboardKey.controlLeft:
+      case LogicalKeyboardKey.controlRight:
+        ctrl = isKeyDown;
+        break;
+      case LogicalKeyboardKey.alt:
+      case LogicalKeyboardKey.altLeft:
+      case LogicalKeyboardKey.altRight:
+        alt = isKeyDown;
+        break;
+      case LogicalKeyboardKey.shift:
+      case LogicalKeyboardKey.shiftLeft:
+      case LogicalKeyboardKey.shiftRight:
+        shift = isKeyDown;
+        break;
+      default:
+        if (KeyModifierParser.fromLogicalKey(keyEvent.logicalKey) != null) {
+          return KeyEventResult.handled;
+        }
 
-    KeyModifier? keyModifier =
-    KeyModifierParser.fromLogicalKey(keyEvent.logicalKey);
-
-    if (keyEvent is KeyDownEvent) {
-      if (_toReset){
-        setState(() {
-          _toReset = false;
-          _hotKey = null;
-          _keyModifiers.clear();
-        });
-      }
-
-      // Only set keyCode if the key pressed is not a modifier key.
-      // Because we don't want to display two modifier keys in the widget.
-      if (keyModifier == null) {
-        keyCode =
-            KeyCodeParser.fromLogicalKey(keyEvent.logicalKey) ?? KeyCode.space;
-      } else {
-        _keyModifiers.add(keyModifier);
-      }
-    } else if (keyEvent is KeyUpEvent) {
-      if (keyModifier != null) {
-        _keyModifiers.remove(keyModifier);
-      }
-    }
-
-    // _hotkey is set in every key event so the widget display can respond
-    // immediately to the user's input.
-    _hotKey = HotKey(
-      keyCode,
-      modifiers: _keyModifiers.toList(),
-    );
-
-    // Remove the 'placeholder' empty block when no modifier keys are pressed.
-    if (_keyModifiers.isEmpty && keyCode == KeyCode.space) {
-      _hotKey = null;
-    }
-
-    // We use non-modifier keys as the 'trigger key' for
-    if (keyCode != KeyCode.space && _hotKey != null) {
-      widget.onHotKeyRecorded(_hotKey!);
-      _focusNode.unfocus();
+        if (isKeyDown) {
+          key = KeyCodeParser.fromLogicalKey(keyEvent.logicalKey);
+          _focusNode.unfocus();
+        } else if (keyEvent is KeyUpEvent) {
+          key = null;
+        }
     }
 
     setState(() {});
-
     return KeyEventResult.handled;
   }
 
@@ -91,30 +139,102 @@ class _KeyPressRecorderState extends State<KeyPressRecorder> {
     return Stack(
       alignment: AlignmentDirectional.center,
       children: [
-        if (_hotKey == null)
-          Container()
-        else
-          HotKeyVirtualView(hotKey: _hotKey!),
+        Wrap(
+          spacing: 8,
+          children: [
+            if (ctrl) const _VirtualKeyView(keyLabel: 'Ctrl'),
+            if (alt) const _VirtualKeyView(keyLabel: 'Alt'),
+            if (shift) const _VirtualKeyView(keyLabel: 'Shift'),
+            if (key != null) _VirtualKeyView(keyLabel: key!.keyLabel),
+          ],
+        ),
         Focus(
-          onFocusChange: (hasFocus) {
-            if (hasFocus) {
-              _toReset = true;
+          focusNode: _focusNode,
+          onFocusChange: (focused) {
+            if (focused) {
+              _onFocus();
+            } else {
+              _onBlur();
             }
           },
-          focusNode: _focusNode,
-          onKeyEvent: (focusNode, keyEvent) {
-            return _handleKeyEvent(keyEvent);
-          },
           child: const TextField(
-              cursorHeight: 0,
-              cursorWidth: 0,
-              decoration: InputDecoration(
-                border: OutlineInputBorder(),
-                contentPadding: EdgeInsets.all(10),
-                isDense: true,
-              )),
+            cursorHeight: 0,
+            cursorWidth: 0,
+            inputFormatters: [],
+            decoration: InputDecoration(
+              border: OutlineInputBorder(),
+              contentPadding: EdgeInsets.all(10),
+              isDense: true,
+            ),
+          ),
         ),
       ],
     );
+  }
+
+  void _onFocus() {
+    prevCtrl = ctrl;
+    prevAlt = alt;
+    prevShift = shift;
+    prevKey = key;
+    ctrl = false;
+    alt = false;
+    shift = false;
+    key = null;
+    setState(() {});
+  }
+
+  void resetToPrevious() {
+    ctrl = prevCtrl;
+    alt = prevAlt;
+    shift = prevShift;
+    key = prevKey;
+    setState(() {});
+
+    _focusNode.unfocus();
+  }
+
+  void _clear() {
+    widget.onClear?.call(HotKey(
+      prevKey!,
+      modifiers: [
+        if (prevCtrl) KeyModifier.control,
+        if (prevAlt) KeyModifier.alt,
+        if (prevShift) KeyModifier.shift,
+      ],
+    ));
+
+    prevAlt = false;
+    prevCtrl = false;
+    prevShift = false;
+    prevKey = null;
+    ctrl = false;
+    alt = false;
+    shift = false;
+    key = null;
+
+    _focusNode.unfocus();
+  }
+
+  void _onBlur() {
+    if (key == null) {
+      resetToPrevious();
+      return;
+    }
+
+    final hotkey = HotKey(
+      key!,
+      modifiers: [
+        if (ctrl) KeyModifier.control,
+        if (alt) KeyModifier.alt,
+        if (shift) KeyModifier.shift,
+      ],
+    );
+    final validationResult = widget.validation?.call(hotkey) ?? true;
+    if (validationResult) {
+      widget.onHotKeyRecorded(hotkey);
+    } else {
+      resetToPrevious();
+    }
   }
 }

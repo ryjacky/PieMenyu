@@ -7,50 +7,132 @@ import 'profile.dart';
 
 part 'pie_menu.g.dart';
 
+@embedded
+class PieMenuColors {
+  int primary = 0xFF1DAEAA;
+  int secondary = 0xFF282828;
+
+  PieMenuColors();
+
+  PieMenuColors.from(PieMenuColors colors)
+      : primary = colors.primary,
+        secondary = colors.secondary;
+}
+
+@embedded
+class PieMenuIcon {
+  int color = 0xFFFFFFFF;
+  double size = 32;
+
+  PieMenuIcon();
+
+  PieMenuIcon.from(PieMenuIcon icon)
+      : color = icon.color,
+        size = icon.size;
+}
+
+@embedded
+class PieMenuFont {
+  int color = 0xFFFFFFFF;
+  double size = 14;
+  String fontFamily = 'Roboto';
+
+  PieMenuFont();
+
+  PieMenuFont.from(PieMenuFont font)
+      : color = font.color,
+        size = font.size,
+        fontFamily = font.fontFamily;
+}
+
+enum ActivationMode { onRelease, onHover, onClick }
+
+@embedded
+class PieMenuBehavior {
+  double escapeRadius = 0;
+  bool openInScreenCenter = false;
+  @enumerated
+  ActivationMode activationMode = ActivationMode.onRelease;
+  @enumerated
+  ActivationMode subMenuActivationMode = ActivationMode.onHover;
+
+
+  PieMenuBehavior();
+
+  PieMenuBehavior.from(PieMenuBehavior behavior)
+      : escapeRadius = behavior.escapeRadius,
+        openInScreenCenter = behavior.openInScreenCenter,
+        activationMode = behavior.activationMode;
+}
+
+@embedded
+class PieMenuShape {
+  double centerRadius = 20;
+  double centerThickness = 10;
+  double pieItemRoundness = 7;
+  double pieItemSpread = 150;
+
+  PieMenuShape();
+
+  PieMenuShape.from(PieMenuShape shape)
+      : centerRadius = shape.centerRadius,
+        centerThickness = shape.centerThickness,
+        pieItemRoundness = shape.pieItemRoundness,
+        pieItemSpread = shape.pieItemSpread;
+}
+
+@embedded
+class PieItemInstance {
+  String keyCode = "";
+  int pieItemId;
+
+  /// This will only be used if [isMenu] is true
+  @enumerated
+  ActivationMode activationMode = ActivationMode.onRelease;
+
+  @ignore
+  PieItem? pieItem;
+
+  PieItemInstance({this.keyCode = "", this.pieItemId = 0});
+
+  factory PieItemInstance.from(PieItemInstance info) {
+    final instance =
+        PieItemInstance(keyCode: info.keyCode, pieItemId: info.pieItemId);
+    if (info.pieItem != null) {
+      instance.pieItem = PieItem.from(info.pieItem!);
+    }
+    return instance;
+  }
+}
+
 @collection
 class PieMenu {
   Id id = Isar.autoIncrement; // you can also use id = null to auto increment
 
-  String name;
-  bool enabled;
+  String name = 'New Pie Menu';
+  bool enabled = true;
 
-  @enumerated
-  PieMenuActivationMode activationMode;
-  bool openInScreenCenter;
-  int mainColor;
-  int secondaryColor;
-  int iconColor;
-  int escapeRadius;
-  int centerRadius;
-  int centerThickness;
-  int iconSize;
-  int pieItemRoundness;
-  int pieItemSpread;
+  PieMenuColors colors = PieMenuColors();
+  PieMenuIcon icon = PieMenuIcon();
+  PieMenuFont font = PieMenuFont();
+  PieMenuBehavior behavior = PieMenuBehavior();
+  PieMenuShape shape = PieMenuShape();
 
-  final int pieItemWidth = 512;
-
-  IsarLinks<PieItem> pieItems = IsarLinks<PieItem>();
+  List<PieItemInstance> pieItemInstances = [];
 
   @Backlink(to: 'pieMenus')
   IsarLinks<Profile> profiles = IsarLinks<Profile>();
 
-  PieMenu({
-    this.name = 'New Pie Menu',
-    this.enabled = true,
-    this.activationMode = PieMenuActivationMode.activateOnKeyDown,
-    this.escapeRadius = 0,
-    this.openInScreenCenter = false,
-    this.mainColor = 0x1DAEAA,
-    this.secondaryColor = 0x282828,
-    this.iconColor = 0xFFFFFF,
-    this.centerRadius = 20,
-    this.centerThickness = 10,
-    this.iconSize = 16,
-    this.pieItemRoundness = 7,
-    this.pieItemSpread = 150,
-  });
-}
+  PieMenu();
 
-enum PieMenuActivationMode {
-  activateOnKeyDown
+  PieMenu.from(PieMenu pieMenu)
+      : id = pieMenu.id,
+        colors = PieMenuColors.from(pieMenu.colors),
+        icon = PieMenuIcon.from(pieMenu.icon),
+        font = PieMenuFont.from(pieMenu.font),
+        behavior = PieMenuBehavior.from(pieMenu.behavior),
+        shape = PieMenuShape.from(pieMenu.shape),
+        pieItemInstances = pieMenu.pieItemInstances
+            .map((e) => PieItemInstance.from(e))
+            .toList();
 }
