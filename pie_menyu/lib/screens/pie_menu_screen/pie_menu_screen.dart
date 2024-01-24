@@ -75,7 +75,7 @@ class _PieMenuScreenState extends State<PieMenuScreen> {
               _pieMenuStates.last.pieItemInstances,
             );
 
-            if (instance != _pieMenuStates.last.activePieItemInstance) {
+            if (instance != _pieMenuStates.last.activePieItemInstance && instance != null) {
               _pieMenuStates.last.activePieItemInstance = instance;
             }
           },
@@ -95,11 +95,13 @@ class _PieMenuScreenState extends State<PieMenuScreen> {
     );
   }
 
-  PieItemInstance getPieItemInstanceAt(
+  PieItemInstance? getPieItemInstanceAt(
     Offset position,
     Offset pieCenterPosition,
     List<PieItemInstance> instances,
   ) {
+    if (instances.isEmpty) return null;
+
     final dx = position.dx - pieCenterPosition.dx;
     // 0,0 is top left, so dy is inverted
     final dy = pieCenterPosition.dy - position.dy;
