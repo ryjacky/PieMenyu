@@ -76,8 +76,7 @@ class PieMenyuWindowManager {
 
     final pieMenuState = PieMenuState(_db, pieMenu);
     _pieMenuStateProvider.replaceStates([pieMenuState]);
-    _pieMenuStateProvider.pieMenuPositions[pieMenuState] =
-        await screenRetriever.getCursorScreenPoint();
+    _pieMenuStateProvider.pieMenuPositions[pieMenuState] = await getRelativeCursorScreenPoint();
 
     windowManager.setBounds((await getCurrentDisplayBounds()).deflate(1));
     windowManager.show();
@@ -124,5 +123,15 @@ class PieMenyuWindowManager {
     if (pieMenuId == null) return null;
 
     return (await _db.getPieMenus(ids: [pieMenuId])).firstOrNull;
+  }
+
+  Future<Offset> getRelativeCursorScreenPoint() async {
+    Offset cursorPos = await screenRetriever.getCursorScreenPoint();
+    Rect screenBounds = await getCurrentDisplayBounds();
+
+    return Offset(
+      cursorPos.dx - screenBounds.left,
+      cursorPos.dy - screenBounds.top,
+    );
   }
 }
