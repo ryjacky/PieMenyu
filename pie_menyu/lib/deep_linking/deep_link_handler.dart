@@ -4,9 +4,12 @@ import 'dart:io';
 import 'package:app_links/app_links.dart';
 import 'package:flutter/material.dart';
 import 'package:win32_registry/win32_registry.dart';
+import 'package:window_manager/window_manager.dart';
 
 enum DeepLinkCommand {
   reload,
+  stop,
+  start,
 }
 
 class DeepLinkHandler {
@@ -22,11 +25,19 @@ class DeepLinkHandler {
     final appLinks = AppLinks();
 
     appLinks.allUriLinkStream.listen((uri) {
-      if (uri.toString().contains("reload")) {
-        for (var listener in _listeners) {
+      String url = uri.toString();
+      for (var listener in _listeners) {
+        if (url.contains("reload")) {
           listener(DeepLinkCommand.reload);
+        } else if (url.contains('start')) {
+          listener(DeepLinkCommand.start);
+        } else if (url.contains('stop')) {
+          listener(DeepLinkCommand.stop);
         }
       }
+
+      // deep links always open the window, we need to hide it programmatically
+      windowManager.hide();
     });
   }
 

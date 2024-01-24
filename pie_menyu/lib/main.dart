@@ -15,7 +15,7 @@ import 'hotkey/key_event_notifier.dart';
 import 'screens/pie_menu_screen/pie_menu_state_provider.dart';
 import 'tray/pie_menyu_system_tray.dart';
 
-Future<void> main() async {
+Future<void> main(dynamic args) async {
   WidgetsFlutterBinding.ensureInitialized();
 
   final deepLinkHandler = DeepLinkHandler();
@@ -28,11 +28,6 @@ Future<void> main() async {
     pieMenuStateProvider,
     globalKeyEvent,
   );
-
-  if (await isRunning()) {
-    debugPrint("PieMenyu is already running");
-    exit(0);
-  }
 
   windowManager.initialize();
   PieMenyuSystemTray.initialize();
@@ -53,14 +48,4 @@ Future<void> main() async {
       ),
     ),
   );
-}
-
-Future<bool> isRunning() async {
-  final exeName =
-      Platform.resolvedExecutable.split(Platform.pathSeparator).last;
-
-  final cmdQueryProcess = "tasklist /FI \"imagename eq $exeName\"";
-
-  final result = await Process.run(cmdQueryProcess, []);
-  return exeName.allMatches(result.stdout.toString()).length > 1;
 }

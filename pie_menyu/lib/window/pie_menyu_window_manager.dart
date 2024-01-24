@@ -59,6 +59,7 @@ class PieMenyuWindowManager {
       alwaysOnTop: true,
     );
     windowManager.waitUntilReadyToShow(windowOptions, () async {
+      await windowManager.show();
       await windowManager.setAsFrameless();
       await windowManager.hide();
     });
@@ -67,10 +68,7 @@ class PieMenyuWindowManager {
   }
 
   _tryShow(HotKey hotkey) async {
-    final foregroundWindowPath = ForegroundWindow().path;
-    if (foregroundWindowPath.contains("pie_menyu")) return;
-
-    Profile? profile = await _db.getProfileByExe(foregroundWindowPath);
+    Profile? profile = await _db.getProfileByExe(ForegroundWindow().path);
     profile ??= (await _db.getProfiles(ids: [1])).first;
 
     final pieMenu = await _getHotkeyPieMenuIn(profile, hotkey);

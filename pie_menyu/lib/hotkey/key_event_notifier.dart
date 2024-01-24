@@ -41,8 +41,12 @@ class SystemKeyEvent {
 
     deepLinkHandler.addListener((value) {
       switch (value) {
+        case DeepLinkCommand.start:
         case DeepLinkCommand.reload:
           _registerHotkey();
+          break;
+        case DeepLinkCommand.stop:
+          hotKeyManager.unregisterAll();
           break;
       }
     });
