@@ -68,7 +68,10 @@ class _PieMenuScreenState extends State<PieMenuScreen> {
           .where((instance) =>
               instance.keyCode.toUpperCase() == event.character?.toUpperCase())
           .firstOrNull;
-      if (instanceOfKey == null) return false;
+      if (instanceOfKey == null) {
+        context.read<PieMenyuWindowManager>().hide();
+        return false;
+      }
 
       lastPieMenuState.activePieItemInstance = instanceOfKey;
 
