@@ -35,7 +35,9 @@ class HomePageViewModel extends ChangeNotifier {
     profiles = await _db.getProfiles();
     pieMenus = await _db.getPieMenus();
 
-    activeProfile = profiles.firstOrNull ?? Profile(name: "Loading...");
+    if (activeProfile.id == Isar.autoIncrement) {
+      activeProfile = profiles.firstOrNull ?? Profile(name: "Loading...");
+    }
     notifyListeners();
   }
 
