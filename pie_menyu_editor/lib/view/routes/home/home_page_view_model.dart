@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:developer';
 
 import 'package:flutter/cupertino.dart';
@@ -19,12 +20,18 @@ class HomePageViewModel extends ChangeNotifier {
 
   Profile get activeProfile => _activeProfile;
 
+  MapEntry<PieMenu, Profile>? _toDelete;
+
+  MapEntry<PieMenu, Profile>? get toDelete => _toDelete;
+  Timer? _toDeleteTimer;
+
   set activeProfile(Profile profile) {
     _activeProfile = profile;
     notifyListeners();
   }
 
   final Database _db;
+
   HomePageViewModel(this._db) {
     updateState();
   }
@@ -42,14 +49,19 @@ class HomePageViewModel extends ChangeNotifier {
   }
 
   Iterable<PieMenu> getPieMenusOf(Profile profile) {
-    return pieMenus.where((element) => element.profiles
-        .where((element) => element.id == profile.id)
-        .isNotEmpty);
+    return pieMenus
+        .where((element) => element.profiles
+            .where((element) => element.id == profile.id)
+            .isNotEmpty)
+        .where((element) => element != toDelete?.key);
   }
 
   Iterable<PieMenu> getAllPieMenusExceptIn(Profile profile) {
-    return pieMenus.where((element) =>
-        element.profiles.where((element) => element.id == profile.id).isEmpty);
+    return pieMenus
+        .where((element) => element.profiles
+            .where((element) => element.id == profile.id)
+            .isEmpty)
+        .where((element) => element != toDelete?.key);
   }
 
   Future<void> createProfile(
@@ -74,9 +86,21 @@ class HomePageViewModel extends ChangeNotifier {
   }
 
   Future<void> removePieMenuFrom(Profile profile, PieMenu pieMenu) async {
-    profile.pieMenus.remove(pieMenu);
-    await _db.updateProfileToPieMenuLinks(profile);
-    await updateState();
+    _toDelete = MapEntry(pieMenu, profile);
+    _toDeleteTimer = Timer(const Duration(seconds: 5), () async {
+      profile.pieMenus.remove(pieMenu);
+      await _db.updateProfileToPieMenuLinks(profile);
+      await updateState();
+      _toDelete = null;
+    });
+
+    notifyListeners();
+  }
+
+  cancelDelete() {
+    _toDeleteTimer?.cancel();
+    _toDelete = null;
+    notifyListeners();
   }
 
   void makePieMenuUniqueIn(Profile profile, PieMenu pieMenu) async {
@@ -128,5 +152,4 @@ class HomePageViewModel extends ChangeNotifier {
     await _db.putProfile(profile);
     updateState();
   }
-
 }

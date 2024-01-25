@@ -1,15 +1,18 @@
 import 'package:flutter/cupertino.dart';
 import 'package:pie_menyu_core/db/db.dart';
 import 'package:pie_menyu_core/db/pie_item_task.dart';
+import 'package:pie_menyu_core/db/pie_menu.dart';
 import 'package:pie_menyu_core/widgets/pieMenuView/pie_menu_state.dart';
 
 class EditorPanelViewModel extends ChangeNotifier {
   final Database _db;
 
   /// Users will only be able to undo up to one level. See implementation of [removeTask] for details.
-  PieItemTask? _toDelete;
-  PieItemTask? get toDelete => _toDelete;
-  set toDelete(PieItemTask? value) {
+  MapEntry<PieItemTask, PieItemInstance>? _toDelete;
+
+  MapEntry<PieItemTask, PieItemInstance>? get toDelete => _toDelete;
+
+  set toDelete(MapEntry<PieItemTask, PieItemInstance>? value) {
     _toDelete = value;
     notifyListeners();
   }

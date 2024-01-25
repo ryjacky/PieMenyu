@@ -47,7 +47,6 @@ class _RightHomePanelState extends State<RightHomePanel> {
               ),
               Expanded(child: Container()),
               IconButton(
-
                 onPressed: () async {
                   bool result = await homePageViewModel.toggleActiveProfile();
                   if (!context.mounted) return;
@@ -55,15 +54,18 @@ class _RightHomePanelState extends State<RightHomePanel> {
                   ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                       backgroundColor: Theme.of(context).colorScheme.primary,
                       content: Text((result
-                          ? "message-profile-enabled"
-                          : "message-profile-disabled")
+                              ? "message-profile-enabled"
+                              : "message-profile-disabled")
                           .i18n())));
 
                   launchUrl(Uri.parse("piemenyu://reload"));
                 },
-                icon: Icon(activeProfile.enabled
-                    ? Icons.pause
-                    : Icons.play_arrow_outlined, size: 22,),
+                icon: Icon(
+                  activeProfile.enabled
+                      ? Icons.pause
+                      : Icons.play_arrow_outlined,
+                  size: 22,
+                ),
               ),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 10),
@@ -202,9 +204,28 @@ class _RightHomePanelState extends State<RightHomePanel> {
                                   message: "tooltip-remove-pie-menu".i18n(),
                                   child: OutlinedIconButton(
                                     icon: FontAwesomeIcons.trash,
-                                    onLongPress: () {
+                                    onPressed: () {
                                       homePageViewModel.removePieMenuFrom(
                                           activeProfile, pieMenu);
+                                      final scaffoldMessenger =
+                                          ScaffoldMessenger.of(context);
+                                      // Allow delete up to a single level.
+                                      scaffoldMessenger.clearSnackBars();
+                                      scaffoldMessenger.showSnackBar(
+                                        SnackBar(
+                                          content: Text(
+                                              "message-pie-menu-deleted".i18n()),
+                                          backgroundColor: Theme.of(context)
+                                              .colorScheme
+                                              .primary,
+                                          action: SnackBarAction(
+                                            label: "label-undo".i18n(),
+                                            onPressed: () {
+                                              homePageViewModel.cancelDelete();
+                                            },
+                                          ),
+                                        ),
+                                      );
                                     },
                                     color: Theme.of(context)
                                         .colorScheme

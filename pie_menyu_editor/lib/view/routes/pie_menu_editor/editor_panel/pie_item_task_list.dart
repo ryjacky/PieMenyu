@@ -37,7 +37,7 @@ class _PieItemTaskListState extends State<PieItemTaskList> {
   Widget build(BuildContext context) {
     final pieItemInstance = context.watch<PieMenuState>().activePieItemInstance;
     final toDelete = context.select<EditorPanelViewModel, PieItemTask?>(
-      (viewModel) => viewModel.toDelete,
+      (viewModel) => viewModel.toDelete?.key,
     );
 
     if (pieItemInstance.pieItem == null) {
@@ -126,9 +126,10 @@ class _PieItemTaskListState extends State<PieItemTaskList> {
 
     final viewModel = context.read<EditorPanelViewModel>();
 
-    viewModel.toDelete = task;
+    viewModel.toDelete = MapEntry(task, state.activePieItemInstance);
     final deletedTaskFuture = Timer(const Duration(seconds: 5), () {
-      state.removeTaskFrom(state.activePieItemInstance, task);
+      if (viewModel.toDelete == null) return;
+      state.removeTaskFrom(viewModel.toDelete!.value, viewModel.toDelete!.key);
       viewModel.toDelete = null;
     });
 
