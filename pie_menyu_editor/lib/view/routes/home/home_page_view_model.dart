@@ -129,7 +129,7 @@ class HomePageViewModel extends ChangeNotifier {
     await Future.wait(newPieItems.map((PieItem e) => _db.putPieItem(e)));
 
     await _db.addPieItemsToPieMenu(newPieItems, newPieMenu);
-    await updateState();
+    updateState();
   }
 
   Future<bool> toggleActiveProfile() async {
