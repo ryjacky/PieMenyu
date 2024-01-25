@@ -52,6 +52,10 @@ class _OpenSubMenuTaskCardState extends State<OpenSubMenuTaskCard> {
         ListTile(
           leading: Text("label-menu".i18n()),
           trailing: CompactDropdownMenu<PieMenu>(
+            width: 150,
+            initialSelection: allPieMenus
+                .where((pieMenu) => pieMenu.id == widget.task.subMenuId)
+                .firstOrNull,
             dropdownMenuEntries: [
               for (final pieMenu in allPieMenus)
                 DropdownMenuEntry(value: pieMenu, label: pieMenu.name),
