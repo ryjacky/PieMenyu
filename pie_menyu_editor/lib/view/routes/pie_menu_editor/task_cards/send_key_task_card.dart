@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:localization/localization.dart';
 import 'package:pie_menyu_core/pieItemTasks/send_key_task.dart';
 import 'package:pie_menyu_core/widgets/pieMenuView/pie_menu_state.dart';
+import 'package:pie_menyu_editor/view/widgets/keyboard_view.dart';
 import 'package:provider/provider.dart';
 
-import '../keyboard_view.dart';
 import 'pie_item_task_card.dart';
 
 class SendKeyTaskCard extends StatelessWidget {

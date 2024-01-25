@@ -10,10 +10,8 @@ class MonochromeIconButton extends TextButton {
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(3),
             ),
-            side: const BorderSide(
-              color: Colors.white24,
-              width: 2,
-            ),
+            backgroundColor: Colors.white12,
+
           ),
           child: Icon(
             icon,

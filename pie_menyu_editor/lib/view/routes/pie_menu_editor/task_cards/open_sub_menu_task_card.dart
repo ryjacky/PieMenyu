@@ -1,14 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_typeahead/flutter_typeahead.dart';
 import 'package:gap/gap.dart';
 import 'package:localization/localization.dart';
 import 'package:pie_menyu_core/db/db.dart';
 import 'package:pie_menyu_core/db/pie_menu.dart';
 import 'package:pie_menyu_core/pieItemTasks/open_sub_menu_task.dart';
 import 'package:pie_menyu_core/widgets/pieMenuView/pie_menu_state.dart';
+import 'package:pie_menyu_editor/view/widgets/compact_dropdown_menu.dart';
 import 'package:provider/provider.dart';
 
-import '../compact_dropdown_menu.dart';
 import 'pie_item_task_card.dart';
 
 class OpenSubMenuTaskCard extends StatefulWidget {
@@ -28,7 +27,7 @@ class OpenSubMenuTaskCard extends StatefulWidget {
 }
 
 class _OpenSubMenuTaskCardState extends State<OpenSubMenuTaskCard> {
-  var _controller = TextEditingController();
+  final _controller = TextEditingController();
   List<PieMenu> allPieMenus = [];
 
   @override
