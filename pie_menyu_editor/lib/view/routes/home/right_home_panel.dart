@@ -2,15 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:hotkey_manager/hotkey_manager.dart';
 import 'package:localization/localization.dart';
-import 'package:url_launcher/url_launcher.dart';
-import '../../../main.dart';
 import 'package:pie_menyu_core/db/pie_menu.dart';
 import 'package:pie_menyu_core/db/profile.dart';
-import 'package:pie_menyu_editor/view/widgets/primary_button.dart';
-import 'package:pie_menyu_editor/view/widgets/outlined_icon_button.dart';
+import 'package:pie_menyu_editor/view/widgets/flat_button.dart';
 import 'package:pie_menyu_editor/view/widgets/key_press_recorder.dart';
 import 'package:pie_menyu_editor/view/widgets/minimal_text_field.dart';
+import 'package:pie_menyu_editor/view/widgets/outlined_icon_button.dart';
 import 'package:provider/provider.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../pie_menu_editor/pie_menu_editor_route.dart';
 import 'home_page_view_model.dart';
@@ -68,7 +67,7 @@ class _RightHomePanelState extends State<RightHomePanel> {
               ),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 10),
-                child: PrimaryButton(
+                child: FlatButton(
                   onPressed: () =>
                       homePageViewModel.createPieMenuIn(activeProfile),
                   icon: FontAwesomeIcons.plus,
