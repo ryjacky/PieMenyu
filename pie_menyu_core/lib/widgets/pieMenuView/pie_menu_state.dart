@@ -133,7 +133,7 @@ class PieMenuState extends ChangeNotifier {
       throw Exception("PieItemInstance has no pieItem");
     }
 
-    pieItem.tasks.add(task..runtimeId = _nextId--);
+    pieItem.tasks.add(task);
     notifyListeners();
   }
 
