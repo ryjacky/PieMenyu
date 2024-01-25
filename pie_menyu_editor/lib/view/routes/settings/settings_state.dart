@@ -45,20 +45,6 @@ class SettingsState extends ChangeNotifier {
       allowedExtensions: ["isar"],
     );
 
-    if (result?.paths.firstOrNull != null) {
-      final dbPath = (await getApplicationSupportDirectory()).parent;
-      try {
-        _db.close();
-      } catch (e) {
-        log("DB already closed");
-      }
-
-      final dest = File(p.join(dbPath.path, Database.dbFileName));
-      if (await dest.exists()) {
-        await dest.delete();
-      }
-      await File(result!.paths.first!).copy(dest.path);
-      await _db.initialize(dbPath);
-    }
+    // TODO: Implementation
   }
 }

@@ -30,9 +30,10 @@ class Database {
           PieItemSchema,
           ProfileExeSchema,
         ], directory: dir.path),
-        _dbPath = dir.path;
+        _dbPath = dir.path {
+  }
 
-  initialize(Directory dbPath) async {
+  initialize() async {
     // Create initial record if not existed
     final defaultProf = Profile(name: 'Default Profile');
     final defaultProfExe = ProfileExe(path: "global")
