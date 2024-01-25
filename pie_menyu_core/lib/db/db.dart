@@ -113,6 +113,7 @@ class Database {
   }
 
   save(PieMenuState state) async {
+    log("Saving pie menu state", name: "db.dart save()");
     final pieItems = state.pieItemInstances.map((e) {
       if (e.pieItem != null && e.pieItem!.id < 0) {
         e.pieItem!.id = Isar.autoIncrement;

@@ -56,13 +56,13 @@ class PieMenuBehavior {
   @enumerated
   ActivationMode subMenuActivationMode = ActivationMode.onHover;
 
-
   PieMenuBehavior();
 
   PieMenuBehavior.from(PieMenuBehavior behavior)
       : escapeRadius = behavior.escapeRadius,
         openInScreenCenter = behavior.openInScreenCenter,
-        activationMode = behavior.activationMode;
+        activationMode = behavior.activationMode,
+        subMenuActivationMode = behavior.subMenuActivationMode;
 }
 
 @embedded

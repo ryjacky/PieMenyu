@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:localization/localization.dart';
@@ -15,6 +17,8 @@ class BehaviorSection extends StatelessWidget {
     final state = context.read<PieMenuState>();
     final behavior = context
         .select<PieMenuState, PieMenuBehavior>((value) => value.behavior);
+
+    log("Sub menu activation mode: ${behavior.subMenuActivationMode}", name: "BehaviorSection");
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
