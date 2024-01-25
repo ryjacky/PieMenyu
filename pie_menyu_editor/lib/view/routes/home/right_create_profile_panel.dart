@@ -2,8 +2,10 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:gap/gap.dart';
 import 'package:localization/localization.dart';
-import 'package:pie_menyu_editor/system/task_bar_process_info.dart';
+import 'package:pie_menyu_editor/system/task_bar_process_info/process_list_tile.dart';
+import 'package:pie_menyu_editor/system/task_bar_process_info/task_bar_process_info.dart';
 import 'package:provider/provider.dart';
 
 import 'home_page_view_model.dart';
@@ -24,6 +26,8 @@ class _RightCreateProfilePanelState extends State<RightCreateProfilePanel> {
         base64Icon: "",
         mainWindowTitle: "label-loading".i18n())
   };
+
+  String filterText = "";
 
   @override
   void initState() {
@@ -61,55 +65,39 @@ class _RightCreateProfilePanelState extends State<RightCreateProfilePanel> {
               border: const OutlineInputBorder(),
               labelText: "label-search".i18n(),
             ),
+            onChanged: (String text) => setState(() => filterText = text),
           ),
+          const Gap(10),
           Expanded(
             child: ListView(
               children: [
                 for (TaskBarProcessInfo activeApp in activeApps)
-                  Padding(
-                    padding: const EdgeInsets.fromLTRB(0, 10, 0, 0),
-                    child: Container(
-                      decoration: BoxDecoration(
-                        border: Border.all(
-                          color: Theme.of(context).colorScheme.surface,
-                        ),
-                        borderRadius: BorderRadius.circular(5),
-                        color: Theme.of(context).colorScheme.surface,
-                      ),
-                      child: ListTile(
-                        title: Text(activeApp.processName),
-                        subtitle: Text(activeApp.exePath),
-                        leading: Image.memory(
-                          base64Decode(activeApp.base64Icon),
-                          errorBuilder: (context, error, stackTrace) {
-                            return const Icon(FontAwesomeIcons.question,
-                                size: 32);
-                          },
-                        ),
-                        onTap: () {
-                          context
-                              .read<HomePageViewModel>()
-                              .createProfile(activeApp.processName,
-                                  activeApp.exePath, activeApp.base64Icon)
-                              .onError(
-                                (error, stackTrace) =>
-                                    ScaffoldMessenger.of(context).showSnackBar(
-                                  SnackBar(
-                                    backgroundColor:
-                                        Theme.of(context).colorScheme.error,
-                                    content: Text(error.toString()),
-                                  ),
-                                ),
-                              );
-                        },
-                      ),
-                    ),
-                  )
+                  if (activeApp.processName.contains(filterText) ||
+                      activeApp.exePath.contains(filterText))
+                    ProcessListTile(
+                      key: ValueKey(activeApp),
+                      processInfo: activeApp,
+                      onTap: (info) => tryCreateProfile(info),
+                    )
               ],
             ),
           )
         ],
       ),
     );
+  }
+
+  tryCreateProfile(TaskBarProcessInfo info) {
+    context
+        .read<HomePageViewModel>()
+        .createProfile(info.processName, info.exePath, info.base64Icon)
+        .onError(
+          (error, stackTrace) => ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              backgroundColor: Theme.of(context).colorScheme.error,
+              content: Text(error.toString()),
+            ),
+          ),
+        );
   }
 }
