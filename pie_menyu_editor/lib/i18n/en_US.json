@@ -122,6 +122,7 @@
   "message-pie-item-not-deleted-4": "No please! Please don't! It's the last Pie Item in this menu. (´ཀ`」∠):",
   "message-data-imported": "Data is imported!",
   "message-profile-enabled": "Profile is enabled",
+  "message-task-deleted": "Task is deleted",
   "message-profile-disabled": "Profile is disabled",
   "message-hotkey-is-used": "Hotkey is used in another pie menu",
   "description-check-ahp": "PieMenyu is originated from AutoHotPie, make sure you also check it out on Github!",

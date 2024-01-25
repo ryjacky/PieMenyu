@@ -1,5 +1,9 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
+import 'package:localization/localization.dart';
 import 'package:pie_menyu_core/db/pie_item_task.dart';
+import 'package:pie_menyu_core/db/pie_menu.dart';
 import 'package:pie_menyu_core/pieItemTasks/mouse_click_task.dart';
 import 'package:pie_menyu_core/pieItemTasks/open_app_task.dart';
 import 'package:pie_menyu_core/pieItemTasks/open_folder_task.dart';
@@ -9,16 +13,17 @@ import 'package:pie_menyu_core/pieItemTasks/run_file_task.dart';
 import 'package:pie_menyu_core/pieItemTasks/send_key_task.dart';
 import 'package:pie_menyu_core/pieItemTasks/send_text_task.dart';
 import 'package:pie_menyu_core/widgets/pieMenuView/pie_menu_state.dart';
+import 'package:pie_menyu_editor/view/routes/pie_menu_editor/editor_panel/editor_panel_view_model.dart';
 import 'package:provider/provider.dart';
 
-import 'task_cards/mouse_click_task_card.dart';
-import 'task_cards/open_app_task_card.dart';
-import 'task_cards/open_folder_task_card.dart';
-import 'task_cards/open_sub_menu_task_card.dart';
-import 'task_cards/open_url_task_card.dart';
-import 'task_cards/run_file_task_card.dart';
-import 'task_cards/send_key_task_card.dart';
-import 'task_cards/send_text_task_card.dart';
+import '../task_cards/mouse_click_task_card.dart';
+import '../task_cards/open_app_task_card.dart';
+import '../task_cards/open_folder_task_card.dart';
+import '../task_cards/open_sub_menu_task_card.dart';
+import '../task_cards/open_url_task_card.dart';
+import '../task_cards/run_file_task_card.dart';
+import '../task_cards/send_key_task_card.dart';
+import '../task_cards/send_text_task_card.dart';
 
 class PieItemTaskList extends StatefulWidget {
   const PieItemTaskList({super.key});
@@ -31,12 +36,15 @@ class _PieItemTaskListState extends State<PieItemTaskList> {
   @override
   Widget build(BuildContext context) {
     final pieItemInstance = context.watch<PieMenuState>().activePieItemInstance;
+    final toDelete = context.select<EditorPanelViewModel, PieItemTask?>(
+      (viewModel) => viewModel.toDelete,
+    );
 
     if (pieItemInstance.pieItem == null) {
       throw Exception("pieItem is null");
     }
 
-    final pieItemTasks = pieItemInstance.pieItem!.tasks;
+    final pieItemTasks = pieItemInstance.pieItem!.tasks.where((element) => element != toDelete);
 
     return ListView(
       children: [
@@ -114,6 +122,30 @@ class _PieItemTaskListState extends State<PieItemTaskList> {
 
   removeTask(PieItemTask task) {
     final state = context.read<PieMenuState>();
-    state.removeTaskFrom(state.activePieItemInstance, task);
+    final scaffoldMessenger = ScaffoldMessenger.of(context);
+
+    final viewModel = context.read<EditorPanelViewModel>();
+
+    viewModel.toDelete = task;
+    final deletedTaskFuture = Timer(const Duration(seconds: 5), () {
+      state.removeTaskFrom(state.activePieItemInstance, task);
+      viewModel.toDelete = null;
+    });
+
+    // Allow delete up to a single level.
+    scaffoldMessenger.clearSnackBars();
+    scaffoldMessenger.showSnackBar(
+      SnackBar(
+        content: Text("message-task-deleted".i18n()),
+        backgroundColor: Theme.of(context).colorScheme.primary,
+        action: SnackBarAction(
+          label: "label-undo".i18n(),
+          onPressed: () {
+            deletedTaskFuture.cancel();
+            viewModel.toDelete = null;
+          },
+        ),
+      ),
+    );
   }
 }
