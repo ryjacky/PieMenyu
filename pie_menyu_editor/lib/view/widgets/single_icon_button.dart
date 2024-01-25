@@ -1,21 +1,24 @@
 import 'package:flutter/material.dart';
 
-class MonochromeIconButton extends TextButton {
-  MonochromeIconButton({super.key, required IconData icon, super.onPressed})
-      : super(
+class SingleColorIconButton extends TextButton {
+  SingleColorIconButton({
+    super.key,
+    required IconData icon,
+    super.onPressed,
+    Color color = Colors.white70,
+  }) : super(
           style: TextButton.styleFrom(
-            foregroundColor: Colors.white70,
+            foregroundColor: color,
             padding: const EdgeInsets.all(0),
             minimumSize: const Size(45, 45),
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(3),
             ),
-            backgroundColor: Colors.white12,
-
+            backgroundColor: color.withOpacity(0.1),
           ),
           child: Icon(
             icon,
-            color: Colors.white70,
+            color: color,
             size: 17,
           ),
         );
