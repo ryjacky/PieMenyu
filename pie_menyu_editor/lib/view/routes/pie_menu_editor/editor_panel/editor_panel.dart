@@ -29,9 +29,9 @@ class _EditorPanelState extends State<EditorPanel> {
               children: [
                 TabBar(
                   tabs: [
-                    Tab(text: "tab-pie-items".i18n()),
-                    Tab(text: "tab-properties".i18n()),
-                    Tab(text: "tab-actions".i18n()),
+                    Tab(text: "label-pie-items".i18n()),
+                    Tab(text: "label-properties".i18n()),
+                    Tab(text: "label-tasks".i18n()),
                   ],
                 ),
                 const Expanded(
