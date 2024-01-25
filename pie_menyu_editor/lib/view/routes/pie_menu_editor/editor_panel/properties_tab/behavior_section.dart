@@ -6,6 +6,7 @@ import 'package:localization/localization.dart';
 import 'package:pie_menyu_core/db/pie_menu.dart';
 import 'package:pie_menyu_core/widgets/pieMenuView/pie_menu_state.dart';
 import 'package:pie_menyu_editor/view/widgets/collapasable_color_picker.dart';
+import 'package:pie_menyu_editor/view/widgets/compact_dropdown_menu.dart';
 import 'package:pie_menyu_editor/view/widgets/draggable_number_field.dart';
 import 'package:provider/provider.dart';
 
@@ -80,17 +81,8 @@ class BehaviorSection extends StatelessWidget {
               ),
             ),
             Text("label-activation-mode".i18n()),
-            DropdownMenu<ActivationMode>(
-              menuHeight: 300,
+            CompactDropdownMenu<ActivationMode>(
               width: 120,
-              inputDecorationTheme: InputDecorationTheme(
-                isDense: true,
-                constraints: BoxConstraints.tight(const Size(120, 40)),
-                contentPadding: const EdgeInsets.all(8),
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(4),
-                ),
-              ),
               initialSelection: behavior.activationMode,
               dropdownMenuEntries: [
                 DropdownMenuEntry(
@@ -124,17 +116,8 @@ class BehaviorSection extends StatelessWidget {
               ),
             ),
             SizedBox(width: 120, child: Text("label-sub-menu-activation-mode".i18n())),
-            DropdownMenu<ActivationMode>(
-              menuHeight: 300,
+            CompactDropdownMenu<ActivationMode>(
               width: 120,
-              inputDecorationTheme: InputDecorationTheme(
-                isDense: true,
-                constraints: BoxConstraints.tight(const Size(120, 40)),
-                contentPadding: const EdgeInsets.all(8),
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(4),
-                ),
-              ),
               initialSelection: behavior.subMenuActivationMode,
               dropdownMenuEntries: [
                 DropdownMenuEntry(

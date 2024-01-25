@@ -4,6 +4,7 @@ import 'package:localization/localization.dart';
 import 'package:pie_menyu_core/db/pie_menu.dart';
 import 'package:pie_menyu_core/widgets/pieMenuView/pie_menu_state.dart';
 import 'package:pie_menyu_editor/view/widgets/collapasable_color_picker.dart';
+import 'package:pie_menyu_editor/view/widgets/compact_dropdown_menu.dart';
 import 'package:pie_menyu_editor/view/widgets/draggable_number_field.dart';
 import 'package:provider/provider.dart';
 
@@ -41,16 +42,7 @@ class FontSection extends StatelessWidget {
             const Padding(
                 padding: EdgeInsets.fromLTRB(42, 0, 0, 0),
                 child: Text("Font Family")),
-            DropdownMenu(
-              menuHeight: 300,
-              inputDecorationTheme: InputDecorationTheme(
-                isDense: true,
-                constraints: BoxConstraints.tight(const Size.fromHeight(40)),
-                contentPadding: const EdgeInsets.all(8),
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(4),
-                ),
-              ),
+            CompactDropdownMenu(
               initialSelection: font.fontFamily,
               dropdownMenuEntries: fonts
                   .map((e) => DropdownMenuEntry(value: e, label: e))
