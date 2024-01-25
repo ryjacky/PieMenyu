@@ -33,8 +33,7 @@ class _PieItemTaskCardState extends State<PieItemTaskCard> {
                   minimumSize: const Size(0, 0),
                   padding: const EdgeInsets.all(12),
                 ),
-                onLongPress: widget.onDelete,
-                onPressed: () {  },
+                onPressed: widget.onDelete,
                 child: const Icon(
                   Icons.delete_outline,
                   color: Colors.red,
