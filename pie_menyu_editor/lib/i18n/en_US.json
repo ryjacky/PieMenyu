@@ -80,6 +80,8 @@
   "label-editing": "Editing",
   "label-activation-mode": "Activation mode",
   "label-release": "Release",
+  "tooltip-sub-menu-activation-mode-hint": "Click - Sub Menu will be activated when the pie item is clicked. \nHover - Sub Menu will be activated when the pie item is hovered.",
+  "label-sub-menu-activation-mode": "Sub Menu Activation Mode",
   "label-click": "Click",
   "label-hover": "Hover",
   "label-shape": "Shape",

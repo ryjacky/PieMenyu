@@ -215,7 +215,7 @@ class _PieMenuScreenState extends State<PieMenuScreen> {
     PieMenuState state,
     ActivationMode mode,
   ) async {
-    dev.log("Trying to activate pie item");
+    dev.log("tryActivate ------------ ActivationMode: $mode");
     final pieMenuStates = context.read<PieMenuStateProvider>().pieMenuStates;
     PieItem? activePieItem = state.activePieItemInstance.pieItem;
 
@@ -237,7 +237,7 @@ class _PieMenuScreenState extends State<PieMenuScreen> {
         debugPrint("Close");
         context.read<PieMenyuWindowManager>().hide();
       } else if (modeMatched) {
-        debugPrint("Open Sub Menu");
+        debugPrint("ActivationMode matched, opening sub menu");
 
         openSubMenu(activePieItem);
       }

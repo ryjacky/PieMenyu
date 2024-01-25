@@ -104,6 +104,47 @@ class BehaviorSection extends StatelessWidget {
             ),
           ],
         ),
+        const Gap(10),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Padding(
+              padding: const EdgeInsets.fromLTRB(8, 0, 16, 0),
+              child: Tooltip(
+                message: "tooltip-sub-menu-activation-mode-hint".i18n(),
+                child: const Icon(
+                  Icons.help_outline,
+                  size: 16,
+                  color: Colors.grey,
+                ),
+              ),
+            ),
+            SizedBox(width: 120, child: Text("label-sub-menu-activation-mode".i18n())),
+            DropdownMenu<ActivationMode>(
+              menuHeight: 300,
+              width: 120,
+              inputDecorationTheme: InputDecorationTheme(
+                isDense: true,
+                constraints: BoxConstraints.tight(const Size(120, 40)),
+                contentPadding: const EdgeInsets.all(8),
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(4),
+                ),
+              ),
+              initialSelection: behavior.subMenuActivationMode,
+              dropdownMenuEntries: [
+                DropdownMenuEntry(
+                    value: ActivationMode.onClick, label: "label-click".i18n()),
+                DropdownMenuEntry(
+                    value: ActivationMode.onHover, label: "label-hover".i18n()),
+              ],
+              onSelected: (ActivationMode? value) {
+                if (value == null) return;
+                state.updatePieMenu(behavior: behavior..subMenuActivationMode = value);
+              },
+            ),
+          ],
+        ),
       ],
     );
   }
