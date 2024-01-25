@@ -46,11 +46,13 @@ class _PieMenuScreenState extends State<PieMenuScreen> {
   void initState() {
     final keyEvent = context.read<SystemKeyEvent>();
     keyEvent.addKeyUpListener((hotkey) {
-      final lastPieMenuState = _pieMenuStates.lastOrNull;
-      if (lastPieMenuState == null) return false;
+      final pieMenuStates = _pieMenuStates;
+      if (pieMenuStates.lastOrNull == null ||
+          pieMenuStates.firstOrNull?.behavior.activationMode !=
+              ActivationMode.onRelease) return false;
 
       tryActivate(
-        lastPieMenuState,
+        pieMenuStates.last,
         ActivationMode.onRelease,
       );
       return true;
@@ -215,7 +217,8 @@ class _PieMenuScreenState extends State<PieMenuScreen> {
     PieMenuState state,
     ActivationMode mode,
   ) async {
-    dev.log("tryActivate ------------ ActivationMode: $mode");
+    dev.log("ActivationMode: $mode", name: "PieMenuScreen tryActivate()");
+
     final pieMenuStates = context.read<PieMenuStateProvider>().pieMenuStates;
     PieItem? activePieItem = state.activePieItemInstance.pieItem;
 
@@ -225,27 +228,23 @@ class _PieMenuScreenState extends State<PieMenuScreen> {
     final bool isSubMenuItem = activePieItem.tasks.firstOrNull?.taskType ==
         PieItemTaskType.openSubMenu;
 
-    final executorService = context.read<ExecutorService>();
-    if (mainMenuState == state) executorService.cancelAll();
-
     dev.log("isSubMenuItem: $isSubMenuItem");
 
-    if (isSubMenuItem) {
-      final modeMatched = mainMenuState.behavior.subMenuActivationMode == mode;
+    final activationMode = isSubMenuItem
+        ? mainMenuState.behavior.subMenuActivationMode
+        : mainMenuState.behavior.activationMode;
 
-      if (mode == ActivationMode.onRelease) {
-        debugPrint("Close");
-        context.read<PieMenyuWindowManager>().hide();
-      } else if (modeMatched) {
-        debugPrint("ActivationMode matched, opening sub menu");
+    if (mode == ActivationMode.onRelease){
+      await context.read<PieMenyuWindowManager>().hide();
+    }
 
+    if (activationMode == mode){
+      if (isSubMenuItem) {
         openSubMenu(activePieItem);
-      }
-    } else {
-      if (mainMenuState.behavior.activationMode == mode &&
-          await windowManager.isFocused() &&
-          context.mounted) {
-        debugPrint("Execute tasks and close");
+      } else if (await windowManager.isFocused() && context.mounted) {
+        final executorService = context.read<ExecutorService>();
+        if (mainMenuState == state) executorService.cancelAll();
+
         await context.read<PieMenyuWindowManager>().hide();
 
         addToExecutorQueue(executorService, activePieItem.tasks);
