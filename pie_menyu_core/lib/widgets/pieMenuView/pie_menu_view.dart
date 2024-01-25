@@ -10,8 +10,8 @@ import '../pie_item_view.dart';
 class PieMenuView extends StatefulWidget {
   final PieMenuState state;
 
-  final Function()? onTap;
-  final Function()? onHover;
+  final Function(PieItemInstance instance)? onTap;
+  final Function(PieItemInstance instance)? onHover;
 
   const PieMenuView({
     super.key,
@@ -87,13 +87,11 @@ class _PieMenuViewState extends State<PieMenuView> {
                     mouseCursor: SystemMouseCursors.basic,
                     splashColor: Colors.transparent,
                     onTap: () {
-                      state.activePieItemInstance = pieItemInstances[i];
-                      widget.onTap?.call();
+                      widget.onTap?.call(pieItemInstances[i]);
                     },
                     onHover: (value) {
                       if (value) {
-                        state.activePieItemInstance = pieItemInstances[i];
-                        widget.onHover?.call();
+                        widget.onHover?.call(pieItemInstances[i]);
                       }
                     },
                     child: PieItemView(

@@ -42,7 +42,12 @@ class _PieMenuEditorPageState extends State<PieMenuEditorPage> {
                 Expanded(
                   child: Container(
                     color: Colors.white30,
-                    child: PieMenuView(state: pieMenuState),
+                    child: PieMenuView(
+                      state: pieMenuState,
+                      onTap: (instance) {
+                        pieMenuState.activePieItemInstance = instance;
+                      },
+                    ),
                   ),
                 ),
                 const SizedBox(width: 325, child: EditorPanel()),

@@ -46,7 +46,6 @@ class _PieMenuScreenState extends State<PieMenuScreen> {
   void initState() {
     final keyEvent = context.read<SystemKeyEvent>();
     keyEvent.addKeyUpListener((hotkey) {
-
       final lastPieMenuState = _pieMenuStates.lastOrNull;
       if (lastPieMenuState == null) return false;
 
@@ -64,7 +63,6 @@ class _PieMenuScreenState extends State<PieMenuScreen> {
 
   bool _screenKeyEventHandler(KeyEvent event) {
     if (event is KeyDownEvent) {
-
       final lastPieMenuState = _pieMenuStates.lastOrNull;
       if (lastPieMenuState == null) {
         context.read<PieMenyuWindowManager>().hide();
@@ -198,8 +196,14 @@ class _PieMenuScreenState extends State<PieMenuScreen> {
             curve: _animationCurve,
             child: PieMenuView(
               state: state,
-              onTap: () => tryActivate(state, ActivationMode.onClick),
-              onHover: () => tryActivate(state, ActivationMode.onHover),
+              onTap: (instance) {
+                state.activePieItemInstance = instance;
+                tryActivate(state, ActivationMode.onClick);
+              },
+              onHover: (instance) {
+                state.activePieItemInstance = instance;
+                tryActivate(state, ActivationMode.onHover);
+              },
             ),
           ),
         ),
