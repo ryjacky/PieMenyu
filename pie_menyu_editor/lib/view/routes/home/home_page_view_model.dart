@@ -42,9 +42,11 @@ class HomePageViewModel extends ChangeNotifier {
     profiles = await _db.getProfiles();
     pieMenus = await _db.getPieMenus();
 
-    if (activeProfile.id == Isar.autoIncrement) {
-      activeProfile = profiles.firstOrNull ?? Profile(name: "Loading...");
-    }
+    activeProfile = profiles.firstWhere(
+      (element) => element.id == activeProfile.id,
+      orElse: () => Profile(name: "Loading..."),
+    );
+
     notifyListeners();
   }
 
@@ -127,7 +129,7 @@ class HomePageViewModel extends ChangeNotifier {
     await Future.wait(newPieItems.map((PieItem e) => _db.putPieItem(e)));
 
     await _db.addPieItemsToPieMenu(newPieItems, newPieMenu);
-    updateState();
+    await updateState();
   }
 
   Future<bool> toggleActiveProfile() async {
