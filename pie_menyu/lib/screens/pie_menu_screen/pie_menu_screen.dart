@@ -240,8 +240,10 @@ class _PieMenuScreenState extends State<PieMenuScreen> {
 
     if (activationMode == mode){
       if (isSubMenuItem) {
+        dev.log("Opening sub menu", name: "PieMenuScreen tryActivate()");
         openSubMenu(activePieItem);
-      } else if (await windowManager.isFocused() && context.mounted) {
+      } else if (context.mounted) {
+        dev.log("Executing tasks", name: "PieMenuScreen tryActivate()");
         final executorService = context.read<ExecutorService>();
         if (mainMenuState == state) executorService.cancelAll();
 
