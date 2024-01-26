@@ -8,6 +8,7 @@ list(APPEND FLUTTER_PLUGIN_LIST
   hotkey_manager
   isar_flutter_libs
   keyboard_event
+  mouse_event
   screen_retriever
   system_tray
   url_launcher_windows

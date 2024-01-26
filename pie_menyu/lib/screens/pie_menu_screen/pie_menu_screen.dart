@@ -1,8 +1,9 @@
+import 'dart:developer' as dev;
 import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:hotkey_manager/hotkey_manager.dart';
+import 'package:mouse_event/mouse_event.dart';
 import 'package:pie_menyu/hotkey/key_event_notifier.dart';
 import 'package:pie_menyu/screens/pie_menu_screen/pie_menu_state_provider.dart';
 import 'package:pie_menyu/window/pie_menyu_window_manager.dart';
@@ -26,7 +27,6 @@ import 'package:pie_menyu_core/widgets/pieMenuView/pie_menu_state.dart';
 import 'package:pie_menyu_core/widgets/pieMenuView/pie_menu_view.dart';
 import 'package:provider/provider.dart';
 import 'package:window_manager/window_manager.dart';
-import 'dart:developer' as dev;
 
 class PieMenuScreen extends StatefulWidget {
   const PieMenuScreen({super.key});
@@ -44,6 +44,24 @@ class _PieMenuScreenState extends State<PieMenuScreen> {
 
   @override
   void initState() {
+    MouseEventPlugin.startListening((event) async {
+      final pieMenuPos = context.read<PieMenuStateProvider>().pieMenuPositions;
+
+      if (!(await windowManager.isFocused()) || !context.mounted || pieMenuPos.isEmpty) return;
+
+      _mousePosition = Offset(event.x.toDouble(), event.y.toDouble());
+      final instance = getPieItemInstanceAt(
+        _mousePosition,
+        pieMenuPos[_pieMenuStates.last] ??= _mousePosition,
+        _pieMenuStates.last.pieItemInstances,
+      );
+
+      if (instance != _pieMenuStates.last.activePieItemInstance &&
+          instance != null) {
+        _pieMenuStates.last.activePieItemInstance = instance;
+      }
+    });
+
     final keyEvent = context.read<SystemKeyEvent>();
     keyEvent.addKeyUpListener((hotkey) {
       final pieMenuStates = _pieMenuStates;
@@ -97,6 +115,7 @@ class _PieMenuScreenState extends State<PieMenuScreen> {
   @override
   void dispose() {
     HardwareKeyboard.instance.removeHandler(_screenKeyEventHandler);
+    MouseEventPlugin.cancelListening();
     super.dispose();
   }
 
@@ -114,32 +133,16 @@ class _PieMenuScreenState extends State<PieMenuScreen> {
     return Scaffold(
       backgroundColor: Colors.transparent,
       body: LayoutBuilder(builder: (_, constraint) {
-        return MouseRegion(
-          onHover: (event) {
-            _mousePosition = event.position;
-            final instance = getPieItemInstanceAt(
-              event.position,
-              pieMenuPos[_pieMenuStates.last] ??=
-                  Offset(constraint.maxWidth / 2, constraint.maxHeight / 2),
-              _pieMenuStates.last.pieItemInstances,
-            );
-
-            if (instance != _pieMenuStates.last.activePieItemInstance &&
-                instance != null) {
-              _pieMenuStates.last.activePieItemInstance = instance;
-            }
-          },
-          child: Stack(
-            children: [
-              for (final state in _pieMenuStates)
-                buildPieMenuView(
-                  state,
-                  constraint,
-                  pieMenuPos[state] ??= _mousePosition,
-                  state == _pieMenuStates.last,
-                )
-            ],
-          ),
+        return Stack(
+          children: [
+            for (final state in _pieMenuStates)
+              buildPieMenuView(
+                state,
+                constraint,
+                pieMenuPos[state] ??= _mousePosition,
+                state == _pieMenuStates.last,
+              )
+          ],
         );
       }),
     );
