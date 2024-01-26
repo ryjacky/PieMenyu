@@ -105,9 +105,9 @@
   "label-data": "データ",
   "label-listening": "リスニング中...",
   "message-pie-item-not-deleted-0": "いや... 最後のパイアイテムを削除することは許しません。",
-  "message-pie-item-not-deleted-1": "ねえ、知ってる？最後のパイアイテムを削除するのは、最後のピザのスライスを食べても少し悲しい気持ちになるのと似ています。",
-  "message-pie-item-not-deleted-2": "ごめんなさい、デイブ。それはできません。 (デイブって誰？)",
-  "message-pie-item-not-deleted-3": "これが最後のパイアイテムです。本当に削除しますか？返品はできませんよ！",
+  "message-pie-item-not-deleted-1": "ねえ、知ってる？最後のパイアイテムを削除するのは、ピザの最後の一枚を食べるのに全然かなしまないのと同じよ。",
+  "message-pie-item-not-deleted-2": "させないよ！",
+  "message-pie-item-not-deleted-3": "これが最後のパイアイテムです。本当に削除しますか？返金はできませんよ！",
   "message-pie-item-not-deleted-4": "いや、お願い！削除しないでください！これがこのメニューの最後のパイアイテムです。 (´ཀ`」∠):",
   "message-data-imported": "データがインポートされました！",
   "message-profile-enabled": "プロファイルが有効化されました",
@@ -117,5 +117,9 @@
   "message-hotkey-is-used": "ホットキーは別のパイメニューで使用されています",
   "description-check-ahp": "PieMenyuはAutoHotPieから派生していますので、Githubでもチェックしてみてください！",
   "description-export-data": "すべてのプロファイル、パイメニュー、パイアイテム、およびパイアイテムタスクをファイルにエクスポートします。",
-  "description-import-data": "プロファイル、パイメニュー、パイアイテム、およびパイアイテムタスクをファイルからインポートします。"
+  "description-import-data": "プロファイル、パイメニュー、パイアイテム、およびパイアイテムタスクをファイルからインポートします。",
+  "description-language-setting": "PieMenyuの言語を変更する。",
+  "label-language": "言語",
+  "label-hotkey-task": "ホットキータスク",
+  "label-icon-color": "アイコンの色"
 }
