@@ -200,37 +200,34 @@ class _RightHomePanelState extends State<RightHomePanel> {
                                   color:
                                       Theme.of(context).colorScheme.secondary,
                                 ),
-                                Tooltip(
-                                  message: "tooltip-remove-pie-menu".tr(),
-                                  child: OutlinedIconButton(
-                                    icon: FontAwesomeIcons.trash,
-                                    onPressed: () {
-                                      homePageViewModel.removePieMenuFrom(
-                                          activeProfile, pieMenu);
-                                      final scaffoldMessenger =
-                                          ScaffoldMessenger.of(context);
-                                      // Allow delete up to a single level.
-                                      scaffoldMessenger.clearSnackBars();
-                                      scaffoldMessenger.showSnackBar(
-                                        SnackBar(
-                                          content: Text(
-                                              "message-pie-menu-deleted".tr()),
-                                          backgroundColor: Theme.of(context)
-                                              .colorScheme
-                                              .primary,
-                                          action: SnackBarAction(
-                                            label: "label-undo".tr(),
-                                            onPressed: () {
-                                              homePageViewModel.cancelDelete();
-                                            },
-                                          ),
+                                OutlinedIconButton(
+                                  icon: FontAwesomeIcons.trash,
+                                  onPressed: () {
+                                    homePageViewModel.removePieMenuFrom(
+                                        activeProfile, pieMenu);
+                                    final scaffoldMessenger =
+                                        ScaffoldMessenger.of(context);
+                                    // Allow delete up to a single level.
+                                    scaffoldMessenger.clearSnackBars();
+                                    scaffoldMessenger.showSnackBar(
+                                      SnackBar(
+                                        content: Text(
+                                            "message-pie-menu-deleted".tr()),
+                                        backgroundColor: Theme.of(context)
+                                            .colorScheme
+                                            .primary,
+                                        action: SnackBarAction(
+                                          label: "label-undo".tr(),
+                                          onPressed: () {
+                                            homePageViewModel.cancelDelete();
+                                          },
                                         ),
-                                      );
-                                    },
-                                    color: Theme.of(context)
-                                        .colorScheme
-                                        .errorContainer,
-                                  ),
+                                      ),
+                                    );
+                                  },
+                                  color: Theme.of(context)
+                                      .colorScheme
+                                      .errorContainer,
                                 ),
                               ],
                             ),

@@ -99,33 +99,30 @@ class _PieItemListItemState extends State<PieItemListItem> {
   }
 
   Widget createDeleteButton(PieItem pieItem) {
-    return Tooltip(
-      message: "tooltip-long-press-to-delete".tr(),
-      child: TextButton(
-        style: TextButton.styleFrom(
-          foregroundColor: Colors.red,
-          padding: const EdgeInsets.all(5),
-          minimumSize: const Size(36, 36),
-        ),
-        onPressed: () {},
-        child: const Icon(FontAwesomeIcons.minus, color: Colors.red, size: 12),
-        onLongPress: () {
-          final result = context.read<PieMenuState>().removePieItem(pieItem);
-          final scaffoldMessenger = ScaffoldMessenger.of(context);
-          if (!result) {
-            scaffoldMessenger.hideCurrentSnackBar();
-            scaffoldMessenger.showSnackBar(
-              SnackBar(
-                backgroundColor: Colors.red[400],
-                content: Text(
-                  "message-pie-item-not-deleted-${Random().nextInt(5)}".tr(),
-                ),
-                duration: const Duration(seconds: 5),
-              ),
-            );
-          }
-        },
+    return TextButton(
+      style: TextButton.styleFrom(
+        foregroundColor: Colors.red,
+        padding: const EdgeInsets.all(5),
+        minimumSize: const Size(36, 36),
       ),
+      onPressed: () {},
+      child: const Icon(FontAwesomeIcons.minus, color: Colors.red, size: 12),
+      onLongPress: () {
+        final result = context.read<PieMenuState>().removePieItem(pieItem);
+        final scaffoldMessenger = ScaffoldMessenger.of(context);
+        if (!result) {
+          scaffoldMessenger.hideCurrentSnackBar();
+          scaffoldMessenger.showSnackBar(
+            SnackBar(
+              backgroundColor: Colors.red[400],
+              content: Text(
+                "message-pie-item-not-deleted-${Random().nextInt(5)}".tr(),
+              ),
+              duration: const Duration(seconds: 5),
+            ),
+          );
+        }
+      },
     );
   }
 

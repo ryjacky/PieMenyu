@@ -34,7 +34,7 @@ Future<void> main() async {
   await db.initialize();
 
   runApp(EasyLocalization(
-    supportedLocales: const [Locale('en')],
+    supportedLocales: const [Locale('en'), Locale('ja')],
     path: 'assets/translations',
     fallbackLocale: const Locale('en'),
     child: PieMenyu(db: db),
@@ -57,12 +57,14 @@ class PieMenyu extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
+    context.setLocale(Locale('ja'));
+
     return MultiProvider(
       providers: [
         Provider(create: (_) => _db),
       ],
       child: MaterialApp(
-          title: 'app-name'.tr(),
+          title: "PieMenyu Editor",
           localizationsDelegates: context.localizationDelegates,
           supportedLocales: context.supportedLocales,
           locale: context.locale,
