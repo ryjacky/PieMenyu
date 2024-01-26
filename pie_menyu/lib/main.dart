@@ -22,7 +22,7 @@ Future<void> main(dynamic args) async {
   final db = Database(dbDir);
   final pieMenuStateProvider = PieMenuStateProvider();
   final globalKeyEvent = SystemKeyEvent(db, deepLinkHandler);
-  final windowManager = PieMenyuWindowManager(
+  final windowManager = PieMenyuWindow(
     db,
     pieMenuStateProvider,
     globalKeyEvent,

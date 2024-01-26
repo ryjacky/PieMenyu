@@ -49,6 +49,7 @@ class _PieMenuScreenState extends State<PieMenuScreen> {
 
       if (!(await windowManager.isFocused()) || !context.mounted || pieMenuPos.isEmpty) return;
 
+      await context.read<PieMenyuWindow>().getCurrentDisplayBounds();
       _mousePosition = Offset(event.x.toDouble(), event.y.toDouble());
       final instance = getPieItemInstanceAt(
         _mousePosition,
@@ -85,7 +86,7 @@ class _PieMenuScreenState extends State<PieMenuScreen> {
     if (event is KeyDownEvent) {
       final lastPieMenuState = _pieMenuStates.lastOrNull;
       if (lastPieMenuState == null) {
-        context.read<PieMenyuWindowManager>().hide();
+        context.read<PieMenyuWindow>().hide();
         return false;
       }
 
@@ -95,7 +96,7 @@ class _PieMenuScreenState extends State<PieMenuScreen> {
           .firstOrNull;
       if (instanceOfKey == null) {
         if (!_isModifierKey(event.logicalKey)) {
-          context.read<PieMenyuWindowManager>().hide();
+          context.read<PieMenyuWindow>().hide();
         }
         return false;
       }
@@ -126,7 +127,7 @@ class _PieMenuScreenState extends State<PieMenuScreen> {
 
     if (_pieMenuStates.isEmpty) {
       dev.log("No state is found, closing the window");
-      context.read<PieMenyuWindowManager>().hide();
+      context.read<PieMenyuWindow>().hide();
       return Container();
     }
 
@@ -238,7 +239,7 @@ class _PieMenuScreenState extends State<PieMenuScreen> {
         : mainMenuState.behavior.activationMode;
 
     if (mode == ActivationMode.onRelease){
-      await context.read<PieMenyuWindowManager>().hide();
+      await context.read<PieMenyuWindow>().hide();
     }
 
     if (activationMode == mode){
@@ -250,7 +251,7 @@ class _PieMenuScreenState extends State<PieMenuScreen> {
         final executorService = context.read<ExecutorService>();
         if (mainMenuState == state) executorService.cancelAll();
 
-        await context.read<PieMenyuWindowManager>().hide();
+        await context.read<PieMenyuWindow>().hide();
 
         addToExecutorQueue(executorService, activePieItem.tasks);
         executorService.start();

@@ -14,14 +14,14 @@ import 'package:window_manager/window_manager.dart';
 
 import 'foreground_window.dart';
 
-class PieMenyuWindowManager {
-  static PieMenyuWindowManager? instance;
+class PieMenyuWindow {
+  static PieMenyuWindow? instance;
 
   Database _db;
   PieMenuStateProvider _pieMenuStateProvider;
   SystemKeyEvent _keyEventNotifier;
 
-  PieMenyuWindowManager._(
+  PieMenyuWindow._(
     this._db,
     this._pieMenuStateProvider,
     this._keyEventNotifier,
@@ -33,12 +33,12 @@ class PieMenyuWindowManager {
 
   }
 
-  factory PieMenyuWindowManager(
+  factory PieMenyuWindow(
     Database db,
     PieMenuStateProvider pieMenuStateProvider,
     SystemKeyEvent keyUpNotifier,
   ) {
-    instance ??= PieMenyuWindowManager._(
+    instance ??= PieMenyuWindow._(
       db,
       pieMenuStateProvider,
       keyUpNotifier,
