@@ -3,6 +3,7 @@ import 'package:gap/gap.dart';
 import 'package:launch_at_startup/launch_at_startup.dart';
 import 'package:localization/localization.dart';
 import 'package:pie_menyu_editor/view/routes/settings/settings_state.dart';
+import 'package:pie_menyu_editor/view/widgets/compact_dropdown_menu.dart';
 import 'package:pie_menyu_editor/view/widgets/setting_list_tile.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -18,6 +19,7 @@ class _RightSettingPanelState extends State<RightSettingPanel> {
   final GlobalKey generalSectionKey = GlobalKey();
   final GlobalKey dataSectionKey = GlobalKey();
   final GlobalKey aboutSectionKey = GlobalKey();
+  final GlobalKey languageSectionKey = GlobalKey();
 
   final double gap = 20;
 
@@ -50,6 +52,8 @@ class _RightSettingPanelState extends State<RightSettingPanel> {
         scrollTo(aboutSectionKey);
       case SettingsSection.data:
         scrollTo(dataSectionKey);
+      case SettingsSection.language:
+        scrollTo(languageSectionKey);
     }
 
     return Padding(
@@ -61,6 +65,8 @@ class _RightSettingPanelState extends State<RightSettingPanel> {
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               ...buildGeneralSettingsSection(),
+              Gap(gap),
+              ...buildLanguageSection(),
               Gap(gap),
               ...buildDataSection(state),
               Gap(gap),
@@ -187,6 +193,31 @@ class _RightSettingPanelState extends State<RightSettingPanel> {
           },
         ),
       ),
+    ];
+  }
+
+  List<Widget> buildLanguageSection() {
+    return [
+      Padding(
+        key: languageSectionKey,
+        padding: const EdgeInsets.fromLTRB(0, 20, 0, 20),
+        child: Text(
+          "label-language".i18n(),
+          style: Theme.of(context).textTheme.displayLarge,
+        ),
+      ),
+      SettingListTile(
+          title: "label-language".i18n(),
+          subtitle: "description-language-setting".i18n(),
+          tileColor: Theme.of(context).colorScheme.surface,
+          trailing: CompactDropdownMenu<String>(
+            dropdownMenuEntries: const [
+              DropdownMenuEntry(
+                label: "English",
+                value: "en_US",
+              ),
+            ],
+          )),
     ];
   }
 }

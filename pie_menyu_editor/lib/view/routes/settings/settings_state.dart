@@ -1,18 +1,16 @@
-import 'dart:developer';
 import 'dart:io';
 
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:path/path.dart' as p;
-import 'package:path_provider/path_provider.dart';
 import 'package:pie_menyu_core/db/db.dart';
-import '../../../main.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 enum SettingsSection {
   general,
   data,
   about,
+  language,
 }
 
 class SettingsState extends ChangeNotifier {
