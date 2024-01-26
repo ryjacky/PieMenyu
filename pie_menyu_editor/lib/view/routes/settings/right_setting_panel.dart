@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:launch_at_startup/launch_at_startup.dart';
-import 'package:localization/localization.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:pie_menyu_editor/view/routes/settings/settings_state.dart';
 import 'package:pie_menyu_editor/view/widgets/compact_dropdown_menu.dart';
 import 'package:pie_menyu_editor/view/widgets/setting_list_tile.dart';
@@ -95,29 +95,29 @@ class _RightSettingPanelState extends State<RightSettingPanel> {
         key: aboutSectionKey,
         padding: const EdgeInsets.fromLTRB(0, 20, 0, 20),
         child: Text(
-          "label-about".i18n(),
+          "label-about".tr(),
           style: Theme.of(context).textTheme.displayLarge,
         ),
       ),
       SettingListTile(
-        title: "about-view-on-github".i18n(),
-        subtitle: "about-view-on-github-description".i18n(),
+        title: "about-view-on-github".tr(),
+        subtitle: "about-view-on-github-description".tr(),
         tileColor: Theme.of(context).colorScheme.surface,
         trailing: TextButton(
           onPressed: () =>
               launchUrl(Uri.parse("https://github.com/ryjacky/PieMenyu")),
-          child: Text("label-view-on-github".i18n()),
+          child: Text("label-view-on-github".tr()),
         ),
       ),
       Gap(gap),
       SettingListTile(
-        title: "label-check-ahp".i18n(),
-        subtitle: "description-check-ahp".i18n(),
+        title: "label-check-ahp".tr(),
+        subtitle: "description-check-ahp".tr(),
         tileColor: Theme.of(context).colorScheme.surface,
         trailing: TextButton(
           onPressed: () =>
               launchUrl(Uri.parse("https://github.com/dumbeau/AutoHotPie")),
-          child: Text("label-view-on-github".i18n()),
+          child: Text("label-view-on-github".tr()),
         ),
       ),
     ];
@@ -129,23 +129,23 @@ class _RightSettingPanelState extends State<RightSettingPanel> {
         key: dataSectionKey,
         padding: const EdgeInsets.fromLTRB(0, 20, 0, 20),
         child: Text(
-          "label-data".i18n(),
+          "label-data".tr(),
           style: Theme.of(context).textTheme.displayLarge,
         ),
       ),
       SettingListTile(
-        title: "label-export-data".i18n(),
-        subtitle: "description-export-data".i18n(),
+        title: "label-export-data".tr(),
+        subtitle: "description-export-data".tr(),
         tileColor: Theme.of(context).colorScheme.surface,
         trailing: TextButton(
           onPressed: state.exportDataThenShowDir,
-          child: Text("label-export".i18n()),
+          child: Text("label-export".tr()),
         ),
       ),
       Gap(gap),
       SettingListTile(
-        title: "label-import-data".i18n(),
-        subtitle: "description-import-data".i18n(),
+        title: "label-import-data".tr(),
+        subtitle: "description-import-data".tr(),
         tileColor: Theme.of(context).colorScheme.surface,
         trailing: TextButton(
           onPressed: () async {
@@ -154,12 +154,12 @@ class _RightSettingPanelState extends State<RightSettingPanel> {
               ScaffoldMessenger.of(context).showSnackBar(
                 SnackBar(
                   backgroundColor: Theme.of(context).colorScheme.primary,
-                  content: Text("message-data-imported".i18n()),
+                  content: Text("message-data-imported".tr()),
                 ),
               );
             }
           },
-          child: Text("label-import".i18n()),
+          child: Text("label-import".tr()),
         ),
       ),
     ];
@@ -171,13 +171,13 @@ class _RightSettingPanelState extends State<RightSettingPanel> {
         key: generalSectionKey,
         padding: const EdgeInsets.fromLTRB(0, 20, 0, 20),
         child: Text(
-          "label-general-settings".i18n(),
+          "label-general-settings".tr(),
           style: Theme.of(context).textTheme.displayLarge,
         ),
       ),
       SettingListTile(
-        title: "setting-launch-at-startup".i18n(),
-        subtitle: "setting-launch-at-startup-description".i18n(),
+        title: "setting-launch-at-startup".tr(),
+        subtitle: "setting-launch-at-startup-description".tr(),
         tileColor: Theme.of(context).colorScheme.surface,
         trailing: Switch(
           value: isLaunchAtStartup,
@@ -202,13 +202,13 @@ class _RightSettingPanelState extends State<RightSettingPanel> {
         key: languageSectionKey,
         padding: const EdgeInsets.fromLTRB(0, 20, 0, 20),
         child: Text(
-          "label-language".i18n(),
+          "label-language".tr(),
           style: Theme.of(context).textTheme.displayLarge,
         ),
       ),
       SettingListTile(
-          title: "label-language".i18n(),
-          subtitle: "description-language-setting".i18n(),
+          title: "label-language".tr(),
+          subtitle: "description-language-setting".tr(),
           tileColor: Theme.of(context).colorScheme.surface,
           trailing: CompactDropdownMenu<String>(
             dropdownMenuEntries: const [

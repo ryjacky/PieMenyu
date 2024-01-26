@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
-import 'package:localization/localization.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:pie_menyu_core/db/db.dart';
 import 'package:pie_menyu_core/db/pie_menu.dart';
 import 'package:pie_menyu_core/pieItemTasks/open_sub_menu_task.dart';
@@ -45,11 +45,11 @@ class _OpenSubMenuTaskCardState extends State<OpenSubMenuTaskCard> {
   @override
   Widget build(BuildContext context) {
     return PieItemTaskCard(
-      label: "label-open-sub-menu-task".i18n(),
+      label: "label-open-sub-menu-task".tr(),
       onDelete: widget.onDelete,
       children: [
         ListTile(
-          leading: Text("label-menu".i18n()),
+          leading: Text("label-menu".tr()),
           trailing: CompactDropdownMenu<PieMenu>(
             width: 150,
             initialSelection: allPieMenus

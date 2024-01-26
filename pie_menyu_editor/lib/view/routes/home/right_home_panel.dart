@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:hotkey_manager/hotkey_manager.dart';
-import 'package:localization/localization.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:pie_menyu_core/db/pie_menu.dart';
 import 'package:pie_menyu_core/db/profile.dart';
 import 'package:pie_menyu_editor/view/widgets/flat_button.dart';
@@ -56,7 +56,7 @@ class _RightHomePanelState extends State<RightHomePanel> {
                       content: Text((result
                               ? "message-profile-enabled"
                               : "message-profile-disabled")
-                          .i18n())));
+                          .tr())));
 
                   launchUrl(Uri.parse("piemenyu://reload"));
                 },
@@ -73,7 +73,7 @@ class _RightHomePanelState extends State<RightHomePanel> {
                   onPressed: () =>
                       homePageViewModel.createPieMenuIn(activeProfile),
                   icon: FontAwesomeIcons.plus,
-                  label: Text("button-new-pie-menu".i18n()),
+                  label: Text("button-new-pie-menu".tr()),
                 ),
               )
             ],
@@ -95,11 +95,11 @@ class _RightHomePanelState extends State<RightHomePanel> {
                       children: [
                         Text('',
                             style: Theme.of(context).textTheme.labelMedium),
-                        Text("table-header-name".i18n(),
+                        Text("table-header-name".tr(),
                             style: Theme.of(context).textTheme.labelMedium),
-                        Text("table-header-hotkey".i18n(),
+                        Text("table-header-hotkey".tr(),
                             style: Theme.of(context).textTheme.labelMedium),
-                        Text("table-header-actions".i18n(),
+                        Text("table-header-actions".tr(),
                             style: Theme.of(context).textTheme.labelMedium),
                       ],
                     ),
@@ -174,7 +174,7 @@ class _RightHomePanelState extends State<RightHomePanel> {
                                             backgroundColor: Colors.red[400],
                                             content: Text(
                                                 "message-hotkey-is-used"
-                                                    .i18n())));
+                                                    .tr())));
                                     return false;
                                   }
                                 }
@@ -201,7 +201,7 @@ class _RightHomePanelState extends State<RightHomePanel> {
                                       Theme.of(context).colorScheme.secondary,
                                 ),
                                 Tooltip(
-                                  message: "tooltip-remove-pie-menu".i18n(),
+                                  message: "tooltip-remove-pie-menu".tr(),
                                   child: OutlinedIconButton(
                                     icon: FontAwesomeIcons.trash,
                                     onPressed: () {
@@ -214,12 +214,12 @@ class _RightHomePanelState extends State<RightHomePanel> {
                                       scaffoldMessenger.showSnackBar(
                                         SnackBar(
                                           content: Text(
-                                              "message-pie-menu-deleted".i18n()),
+                                              "message-pie-menu-deleted".tr()),
                                           backgroundColor: Theme.of(context)
                                               .colorScheme
                                               .primary,
                                           action: SnackBarAction(
-                                            label: "label-undo".i18n(),
+                                            label: "label-undo".tr(),
                                             onPressed: () {
                                               homePageViewModel.cancelDelete();
                                             },
@@ -243,7 +243,7 @@ class _RightHomePanelState extends State<RightHomePanel> {
             ),
           ),
           ExpansionTile(
-            title: Text("title-add-pie-menu-from-other-profiles".i18n()),
+            title: Text("title-add-pie-menu-from-other-profiles".tr()),
             children: [
               Padding(
                 padding: const EdgeInsets.all(8.0),
@@ -273,7 +273,7 @@ class _RightHomePanelState extends State<RightHomePanel> {
 
     ScaffoldMessenger.of(context).showSnackBar(SnackBar(
         backgroundColor: Theme.of(context).colorScheme.primary,
-        content: Text("pie-menu-name-saved".i18n())));
+        content: Text("pie-menu-name-saved".tr())));
 
     await context.read<HomePageViewModel>().putPieMenu(pieMenu);
   }

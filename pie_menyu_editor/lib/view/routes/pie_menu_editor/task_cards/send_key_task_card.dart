@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:localization/localization.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:pie_menyu_core/pieItemTasks/send_key_task.dart';
 import 'package:pie_menyu_core/widgets/pieMenuView/pie_menu_state.dart';
 import 'package:pie_menyu_editor/view/widgets/keyboard_view.dart';
@@ -21,11 +21,11 @@ class SendKeyTaskCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return PieItemTaskCard(
-        label: "label-send-key-task".i18n(),
+        label: "label-send-key-task".tr(),
         onDelete: onDelete,
         children: [
           ListTile(
-              leading: Text("label-hotkey".i18n()),
+              leading: Text("label-hotkey".tr()),
               title: Text(sendKeyTask.hotkeyStrings.join("+")),
               trailing: TextButton(
                 onPressed: () async {
@@ -38,7 +38,7 @@ class SendKeyTaskCard extends StatelessWidget {
                 },
                 style: TextButton.styleFrom(
                     backgroundColor: Theme.of(context).colorScheme.background),
-                child: Text("label-change".i18n()),
+                child: Text("label-change".tr()),
               )),
         ]);
   }
@@ -75,7 +75,7 @@ class SendKeyTaskCard extends StatelessWidget {
             },
             style: TextButton.styleFrom(
                 backgroundColor: Theme.of(context).colorScheme.background),
-            child: Text("label-cancel".i18n()),
+            child: Text("label-cancel".tr()),
           ),
           TextButton(
             style: TextButton.styleFrom(
@@ -83,7 +83,7 @@ class SendKeyTaskCard extends StatelessWidget {
             onPressed: () {
               Navigator.pop(context, sendKeyTask);
             },
-            child: Text("label-ok".i18n()),
+            child: Text("label-ok".tr()),
           ),
         ],
       ),

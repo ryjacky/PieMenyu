@@ -1,7 +1,5 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:localization/localization.dart';
-import 'package:pie_menyu_core/db/pie_item.dart';
-import 'package:pie_menyu_core/widgets/pieMenuView/pie_item_order_index_controller.dart';
 import 'package:pie_menyu_core/widgets/pieMenuView/pie_menu_state.dart';
 import 'package:pie_menyu_core/widgets/pieMenuView/pie_menu_view.dart';
 import 'package:provider/provider.dart';
@@ -31,7 +29,7 @@ class _PieMenuEditorPageState extends State<PieMenuEditorPage> {
               child: const Icon(Icons.arrow_back_rounded, size: 15),
             ),
             title: Text(
-              "${"label-editing".i18n()}: ${pieMenuState.name}",
+              "${"label-editing".tr()}: ${pieMenuState.name}",
               style: const TextStyle(color: Colors.grey),
             ),
           ),

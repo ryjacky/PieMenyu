@@ -1,7 +1,7 @@
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
-import 'package:localization/localization.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:pie_menyu_core/pieItemTasks/run_file_task.dart';
 import 'package:pie_menyu_core/widgets/pieMenuView/pie_menu_state.dart';
 import 'package:provider/provider.dart';
@@ -32,11 +32,11 @@ class _RunFileTaskCardState extends State<RunFileTaskCard> {
   @override
   Widget build(BuildContext context) {
     return PieItemTaskCard(
-      label: "label-run-file-task".i18n(),
+      label: "label-run-file-task".tr(),
       onDelete: widget.onDelete,
       children: [
         ListTile(
-          leading: Text("label-file-path".i18n()),
+          leading: Text("label-file-path".tr()),
           title: Text(task.filePath),
         ),
         TextButton(
@@ -54,7 +54,7 @@ class _RunFileTaskCardState extends State<RunFileTaskCard> {
           },
           style: TextButton.styleFrom(
               backgroundColor: Theme.of(context).colorScheme.background),
-          child: Text("label-pick-file".i18n()),
+          child: Text("label-pick-file".tr()),
         ),
         const Gap(10),
       ],

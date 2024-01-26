@@ -1,5 +1,5 @@
 {
-  "app-name": "PieMenyus",
+  "app-name": "PieMenyu",
   "title-profiles": "Profiles",
   "button-create": "Create",
   "button-add-pie-menu": "Add Pie Menu",
@@ -114,6 +114,7 @@
   "label-button": "Button",
   "label-listen": "Listen",
   "label-data": "Data",
+  "label-language": "Language",
   "label-listening": "Listening...",
   "message-pie-item-not-deleted-0": "Nah... I won't allow you to delete the last Pie Item.",
   "message-pie-item-not-deleted-1": "You know what? Deleting the last Pie Item is like trying to eat the last slice of pizza and not feeling a little bit sad inside.",
@@ -128,5 +129,6 @@
   "message-hotkey-is-used": "Hotkey is used in another pie menu",
   "description-check-ahp": "PieMenyu is originated from AutoHotPie, make sure you also check it out on Github!",
   "description-export-data": "Export all profiles, pie menus, pie items, and pie item tasks to file.",
-  "description-import-data": "Import profiles, pie menus, pie items, and pie item tasks from file."
+  "description-import-data": "Import profiles, pie menus, pie items, and pie item tasks from file.",
+  "description-language-setting": "Change PieMenyu language."
 }

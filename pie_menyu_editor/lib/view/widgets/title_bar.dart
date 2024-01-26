@@ -1,6 +1,6 @@
 import 'package:bitsdojo_window/bitsdojo_window.dart';
 import 'package:flutter/material.dart';
-import 'package:localization/localization.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class TitleBar extends StatefulWidget {
@@ -46,7 +46,7 @@ class _TitleBarState extends State<TitleBar> {
               if (widget.title != null) widget.title!,
               Expanded(child: MoveWindow()),
               Text(
-                "label-pie-menyu-status".i18n(),
+                "label-pie-menyu-status".tr(),
                 style: const TextStyle(color: Colors.grey),
               ),
               Padding(

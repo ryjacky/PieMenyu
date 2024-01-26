@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
-import 'package:localization/localization.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:pie_menyu_core/db/pie_menu.dart';
 import 'package:pie_menyu_core/widgets/pieMenuView/pie_menu_state.dart';
 import 'package:pie_menyu_editor/view/widgets/collapasable_color_picker.dart';
@@ -27,10 +27,10 @@ class FontSection extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text("label-font".i18n(),
+        Text("label-font".tr(),
             style: const TextStyle(fontWeight: FontWeight.bold)),
         CollapsableColorPicker(
-          title: Text("label-font-color".i18n()),
+          title: Text("label-font-color".tr()),
           color: Color(font.color),
           onColorChanged: (color) {
             state.updatePieMenu(font: font..color = color.value);

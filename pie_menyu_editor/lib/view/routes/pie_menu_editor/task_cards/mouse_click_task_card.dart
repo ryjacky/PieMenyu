@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_auto_gui/flutter_auto_gui.dart';
 import 'package:gap/gap.dart';
-import 'package:localization/localization.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:pie_menyu_core/pieItemTasks/mouse_click_task.dart';
 import 'package:pie_menyu_core/widgets/pieMenuView/pie_menu_state.dart';
 import 'package:provider/provider.dart';
@@ -56,10 +56,10 @@ class _MouseClickTaskCardState extends State<MouseClickTaskCard> {
   Widget build(BuildContext context) {
     return PieItemTaskCard(
       onDelete: widget.onDelete,
-      label: "label-mouse-click-task".i18n(),
+      label: "label-mouse-click-task".tr(),
       children: [
         ListTile(
-          leading: Text("label-position".i18n()),
+          leading: Text("label-position".tr()),
           title:
               Text("(${widget.mouseClickTask.x}, ${widget.mouseClickTask.y})"),
           trailing: TextButton(
@@ -68,18 +68,18 @@ class _MouseClickTaskCardState extends State<MouseClickTaskCard> {
             onPressed: () {
               ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                   backgroundColor: Theme.of(context).colorScheme.secondary,
-                  content: Text("hint-select-mouse-pos".i18n())));
+                  content: Text("hint-select-mouse-pos".tr())));
               setState(() {
                 _isListening = !_isListening;
               });
             },
             child: Text(
-                (_isListening ? "label-listening" : "label-listen").i18n()),
+                (_isListening ? "label-listening" : "label-listen").tr()),
           ),
         ),
         ListTile(
           leading: Text(
-            "label-button".i18n(),
+            "label-button".tr(),
           ),
           trailing: ToggleButtons(
             borderRadius: BorderRadius.circular(10),
@@ -104,9 +104,9 @@ class _MouseClickTaskCardState extends State<MouseClickTaskCard> {
               });
             },
             children: [
-              Text("label-left-short".i18n()),
-              Text("label-middle-short".i18n()),
-              Text("label-right-short".i18n()),
+              Text("label-left-short".tr()),
+              Text("label-middle-short".tr()),
+              Text("label-right-short".tr()),
             ],
           ),
         ),

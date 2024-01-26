@@ -1,11 +1,10 @@
 import 'dart:developer';
 
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
-import 'package:localization/localization.dart';
 import 'package:pie_menyu_core/db/pie_menu.dart';
 import 'package:pie_menyu_core/widgets/pieMenuView/pie_menu_state.dart';
-import 'package:pie_menyu_editor/view/widgets/collapasable_color_picker.dart';
 import 'package:pie_menyu_editor/view/widgets/compact_dropdown_menu.dart';
 import 'package:pie_menyu_editor/view/widgets/draggable_number_field.dart';
 import 'package:provider/provider.dart';
@@ -24,7 +23,7 @@ class BehaviorSection extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text("label-behavior".i18n(),
+        Text("label-behavior".tr(),
             style: const TextStyle(fontWeight: FontWeight.bold)),
         const Gap(10),
         Row(
@@ -72,7 +71,7 @@ class BehaviorSection extends StatelessWidget {
             Padding(
               padding: const EdgeInsets.fromLTRB(8, 0, 0, 0),
               child: Tooltip(
-                message: "tooltip-activation-mode-hint".i18n(),
+                message: "tooltip-activation-mode-hint".tr(),
                 child: const Icon(
                   Icons.help_outline,
                   size: 16,
@@ -80,18 +79,18 @@ class BehaviorSection extends StatelessWidget {
                 ),
               ),
             ),
-            Text("label-activation-mode".i18n()),
+            Text("label-activation-mode".tr()),
             CompactDropdownMenu<ActivationMode>(
               width: 120,
               initialSelection: behavior.activationMode,
               dropdownMenuEntries: [
                 DropdownMenuEntry(
                     value: ActivationMode.onRelease,
-                    label: "label-release".i18n()),
+                    label: "label-release".tr()),
                 DropdownMenuEntry(
-                    value: ActivationMode.onClick, label: "label-click".i18n()),
+                    value: ActivationMode.onClick, label: "label-click".tr()),
                 DropdownMenuEntry(
-                    value: ActivationMode.onHover, label: "label-hover".i18n()),
+                    value: ActivationMode.onHover, label: "label-hover".tr()),
               ],
               onSelected: (ActivationMode? value) {
                 if (value == null) return;
@@ -107,7 +106,7 @@ class BehaviorSection extends StatelessWidget {
             Padding(
               padding: const EdgeInsets.fromLTRB(8, 0, 16, 0),
               child: Tooltip(
-                message: "tooltip-sub-menu-activation-mode-hint".i18n(),
+                message: "tooltip-sub-menu-activation-mode-hint".tr(),
                 child: const Icon(
                   Icons.help_outline,
                   size: 16,
@@ -115,15 +114,15 @@ class BehaviorSection extends StatelessWidget {
                 ),
               ),
             ),
-            SizedBox(width: 120, child: Text("label-sub-menu-activation-mode".i18n())),
+            SizedBox(width: 120, child: Text("label-sub-menu-activation-mode".tr())),
             CompactDropdownMenu<ActivationMode>(
               width: 120,
               initialSelection: behavior.subMenuActivationMode,
               dropdownMenuEntries: [
                 DropdownMenuEntry(
-                    value: ActivationMode.onClick, label: "label-click".i18n()),
+                    value: ActivationMode.onClick, label: "label-click".tr()),
                 DropdownMenuEntry(
-                    value: ActivationMode.onHover, label: "label-hover".i18n()),
+                    value: ActivationMode.onHover, label: "label-hover".tr()),
               ],
               onSelected: (ActivationMode? value) {
                 if (value == null) return;

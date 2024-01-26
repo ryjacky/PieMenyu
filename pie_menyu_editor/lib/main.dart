@@ -1,10 +1,9 @@
 import 'dart:io';
 
 import 'package:bitsdojo_window/bitsdojo_window.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:hotkey_manager/hotkey_manager.dart';
 import 'package:launch_at_startup/launch_at_startup.dart';
-import 'package:localization/localization.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:pie_menyu_core/db/db.dart';
@@ -16,10 +15,8 @@ import 'theme/color_schemes.g.dart';
 import 'theme/text_theme.g.dart';
 
 Future<void> main() async {
-  LocalJsonLocalization.delegate.directories = ['lib/i18n'];
   WidgetsFlutterBinding.ensureInitialized();
-  // For hot reload, `unregisterAll()` needs to be called.
-  await hotKeyManager.unregisterAll();
+  await EasyLocalization.ensureInitialized();
 
   // Start pieMenyu
   // Will not when both editor and pie_menyu is in debug mode
@@ -36,7 +33,12 @@ Future<void> main() async {
   Database db = Database((await getApplicationSupportDirectory()).parent);
   await db.initialize();
 
-  runApp(PieMenyu(db: db));
+  runApp(EasyLocalization(
+    supportedLocales: const [Locale('en')],
+    path: 'assets/translations',
+    fallbackLocale: const Locale('en'),
+    child: PieMenyu(db: db),
+  ));
 
   doWhenWindowReady(() {
     const initialSize = Size(900, 600);
@@ -49,6 +51,7 @@ Future<void> main() async {
 
 class PieMenyu extends StatelessWidget {
   final Database _db;
+
   const PieMenyu({super.key, required Database db}) : _db = db;
 
   // This widget is the root of your application.
@@ -59,18 +62,16 @@ class PieMenyu extends StatelessWidget {
         Provider(create: (_) => _db),
       ],
       child: MaterialApp(
-        title: 'app-name'.i18n(),
-        localizationsDelegates: [
-          LocalJsonLocalization.delegate
-        ],
-        darkTheme: ThemeData(
-            useMaterial3: true,
-            colorScheme: darkColorScheme,
-            textTheme: textTheme
-        ),
-        themeMode: ThemeMode.dark,
-        home: const HomeRoute()
-      ),
+          title: 'app-name'.tr(),
+          localizationsDelegates: context.localizationDelegates,
+          supportedLocales: context.supportedLocales,
+          locale: context.locale,
+          darkTheme: ThemeData(
+              useMaterial3: true,
+              colorScheme: darkColorScheme,
+              textTheme: textTheme),
+          themeMode: ThemeMode.dark,
+          home: const HomeRoute()),
     );
   }
 }

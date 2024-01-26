@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
-import 'package:localization/localization.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:pie_menyu_editor/view/widgets/back_icon_button.dart';
 import 'package:pie_menyu_editor/view/widgets/clickable_text.dart';
 import 'package:provider/provider.dart';
@@ -34,20 +34,20 @@ class _LeftSettingsPanelState extends State<LeftSettingsPanel> {
           Gap(gap),
           // Table of contents
           ClickableText(
-            title: 'label-general-settings'.i18n(),
+            title: 'label-general-settings'.tr(),
             onTap: () =>
                 settingsState.selectedSection = SettingsSection.general,
             isSelected: selectedSection == SettingsSection.general,
           ),
           Gap(gap),
           ClickableText(
-            title: 'label-data'.i18n(),
+            title: 'label-data'.tr(),
             onTap: () => settingsState.selectedSection = SettingsSection.data,
             isSelected: selectedSection == SettingsSection.data,
           ),
           Gap(gap),
           ClickableText(
-            title: 'label-about'.i18n(),
+            title: 'label-about'.tr(),
             onTap: () => settingsState.selectedSection = SettingsSection.about,
             isSelected: selectedSection == SettingsSection.about,
           ),

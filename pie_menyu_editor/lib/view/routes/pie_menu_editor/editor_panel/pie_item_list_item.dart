@@ -5,7 +5,7 @@ import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:gap/gap.dart';
-import 'package:localization/localization.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:pie_menyu_core/db/pie_item.dart';
 import 'package:pie_menyu_core/db/pie_menu.dart';
 import 'package:pie_menyu_core/widgets/pieMenuView/pie_menu_state.dart';
@@ -31,7 +31,7 @@ class _PieItemListItemState extends State<PieItemListItem> {
   @override
   Widget build(BuildContext context) {
     PieItem? pieItem = widget.piInstance.pieItem;
-    pieItem ??= PieItem(name: "Loading...".i18n());
+    pieItem ??= PieItem(name: "Loading...".tr());
 
     final pieMenuState = widget.pieMenuState;
     final piInstance = widget.piInstance;
@@ -55,7 +55,7 @@ class _PieItemListItemState extends State<PieItemListItem> {
         SizedBox(
           width: 32,
           child: Tooltip(
-            message: "tooltip-pie-item-key".i18n(),
+            message: "tooltip-pie-item-key".tr(),
             child: SingleKeyRecorder(
               initialValue: piInstance.keyCode,
               onSubmitted: (String value) {
@@ -100,7 +100,7 @@ class _PieItemListItemState extends State<PieItemListItem> {
 
   Widget createDeleteButton(PieItem pieItem) {
     return Tooltip(
-      message: "tooltip-long-press-to-delete".i18n(),
+      message: "tooltip-long-press-to-delete".tr(),
       child: TextButton(
         style: TextButton.styleFrom(
           foregroundColor: Colors.red,
@@ -118,7 +118,7 @@ class _PieItemListItemState extends State<PieItemListItem> {
               SnackBar(
                 backgroundColor: Colors.red[400],
                 content: Text(
-                  "message-pie-item-not-deleted-${Random().nextInt(5)}".i18n(),
+                  "message-pie-item-not-deleted-${Random().nextInt(5)}".tr(),
                 ),
                 duration: const Duration(seconds: 5),
               ),

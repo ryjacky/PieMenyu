@@ -1,7 +1,7 @@
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
-import 'package:localization/localization.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:pie_menyu_core/pieItemTasks/open_folder_task.dart';
 import 'package:pie_menyu_core/widgets/pieMenuView/pie_menu_state.dart';
 import 'package:provider/provider.dart';
@@ -32,11 +32,11 @@ class _OpenFolderTaskCardState extends State<OpenFolderTaskCard> {
   @override
   Widget build(BuildContext context) {
     return PieItemTaskCard(
-      label: "label-open-folder-task".i18n(),
+      label: "label-open-folder-task".tr(),
       onDelete: widget.onDelete,
       children: [
         ListTile(
-          leading: Text("label-directory".i18n()),
+          leading: Text("label-directory".tr()),
           title: Text(task.folderPath),
         ),
         TextButton(
@@ -56,7 +56,7 @@ class _OpenFolderTaskCardState extends State<OpenFolderTaskCard> {
           },
           style: TextButton.styleFrom(
               backgroundColor: Theme.of(context).colorScheme.background),
-          child: Text("label-pick-folder".i18n()),
+          child: Text("label-pick-folder".tr()),
         ),
         const Gap(10),
       ],

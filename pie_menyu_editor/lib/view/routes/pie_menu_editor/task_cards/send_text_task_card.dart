@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:localization/localization.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:pie_menyu_core/pieItemTasks/send_text_task.dart';
 import 'package:pie_menyu_core/widgets/pieMenuView/pie_menu_state.dart';
 import 'package:pie_menyu_editor/view/widgets/minimal_text_field.dart';
@@ -33,11 +33,11 @@ class _PasteTextTaskCardState extends State<PasteTextTaskCard> {
     final state = context.read<PieMenuState>();
 
     return PieItemTaskCard(
-      label: "label-paste-text-task".i18n(),
+      label: "label-paste-text-task".tr(),
       onDelete: widget.onDelete,
       children: [
         ListTile(
-          leading: Text("label-text".i18n()),
+          leading: Text("label-text".tr()),
           title: MinimalTextField(
             content: task.text,
             onSubmitted: (value) {

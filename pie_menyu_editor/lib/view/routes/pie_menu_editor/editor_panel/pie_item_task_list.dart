@@ -1,9 +1,8 @@
 import 'dart:async';
 
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:localization/localization.dart';
 import 'package:pie_menyu_core/db/pie_item_task.dart';
-import 'package:pie_menyu_core/db/pie_menu.dart';
 import 'package:pie_menyu_core/pieItemTasks/mouse_click_task.dart';
 import 'package:pie_menyu_core/pieItemTasks/open_app_task.dart';
 import 'package:pie_menyu_core/pieItemTasks/open_folder_task.dart';
@@ -137,10 +136,10 @@ class _PieItemTaskListState extends State<PieItemTaskList> {
     scaffoldMessenger.clearSnackBars();
     scaffoldMessenger.showSnackBar(
       SnackBar(
-        content: Text("message-task-deleted".i18n()),
+        content: Text("message-task-deleted".tr()),
         backgroundColor: Theme.of(context).colorScheme.primary,
         action: SnackBarAction(
-          label: "label-undo".i18n(),
+          label: "label-undo".tr(),
           onPressed: () {
             deletedTaskFuture.cancel();
             viewModel.toDelete = null;

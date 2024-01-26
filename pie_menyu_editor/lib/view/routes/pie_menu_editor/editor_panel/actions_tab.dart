@@ -1,7 +1,7 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:gap/gap.dart';
-import 'package:localization/localization.dart';
 import 'package:pie_menyu_core/db/pie_menu.dart';
 import 'package:pie_menyu_core/pieItemTasks/mouse_click_task.dart';
 import 'package:pie_menyu_core/pieItemTasks/open_app_task.dart';
@@ -12,7 +12,6 @@ import 'package:pie_menyu_core/pieItemTasks/run_file_task.dart';
 import 'package:pie_menyu_core/pieItemTasks/send_key_task.dart';
 import 'package:pie_menyu_core/pieItemTasks/send_text_task.dart';
 import 'package:pie_menyu_core/widgets/pieMenuView/pie_menu_state.dart';
-import 'package:pie_menyu_editor/view/routes/pie_menu_editor/editor_panel/editor_panel_view_model.dart';
 import 'package:pie_menyu_editor/view/widgets/single_icon_button.dart';
 import 'package:provider/provider.dart';
 
@@ -69,7 +68,7 @@ class ActionsTab extends StatelessWidget {
         endIndent: 7,
       ),
       Tooltip(
-        message: "tooltip-add-send-key-task".i18n(),
+        message: "tooltip-add-send-key-task".tr(),
         child: SingleColorIconButton(
           icon: Icons.keyboard,
           onPressed: () {
@@ -79,7 +78,7 @@ class ActionsTab extends StatelessWidget {
       ),
       Gap(gap),
       Tooltip(
-        message: "tooltip-add-mouse-click-task".i18n(),
+        message: "tooltip-add-mouse-click-task".tr(),
         child: SingleColorIconButton(
           icon: FontAwesomeIcons.handPointer,
           onPressed: () {
@@ -89,7 +88,7 @@ class ActionsTab extends StatelessWidget {
       ),
       Gap(gap),
       Tooltip(
-        message: "tooltip-add-run-file-task".i18n(),
+        message: "tooltip-add-run-file-task".tr(),
         child: SingleColorIconButton(
           icon: Icons.file_open,
           onPressed: () {
@@ -99,7 +98,7 @@ class ActionsTab extends StatelessWidget {
       ),
       Gap(gap),
       Tooltip(
-        message: "tooltip-add-open-sub-menu-task".i18n(),
+        message: "tooltip-add-open-sub-menu-task".tr(),
         child: SingleColorIconButton(
           icon: Icons.pie_chart,
           onPressed: () {
@@ -109,7 +108,7 @@ class ActionsTab extends StatelessWidget {
       ),
       Gap(gap),
       Tooltip(
-        message: "tooltip-add-open-folder-task".i18n(),
+        message: "tooltip-add-open-folder-task".tr(),
         child: SingleColorIconButton(
           icon: Icons.folder,
           onPressed: () {
@@ -119,7 +118,7 @@ class ActionsTab extends StatelessWidget {
       ),
       Gap(gap),
       Tooltip(
-        message: "tooltip-add-open-app-task".i18n(),
+        message: "tooltip-add-open-app-task".tr(),
         child: SingleColorIconButton(
           icon: Icons.play_arrow_rounded,
           onPressed: () {
@@ -129,7 +128,7 @@ class ActionsTab extends StatelessWidget {
       ),
       Gap(gap),
       Tooltip(
-        message: "tooltip-add-open-url-task".i18n(),
+        message: "tooltip-add-open-url-task".tr(),
         child: SingleColorIconButton(
           icon: Icons.link,
           onPressed: () {
@@ -139,7 +138,7 @@ class ActionsTab extends StatelessWidget {
       ),
       Gap(gap),
       Tooltip(
-        message: "tooltip-paste-text-task".i18n(),
+        message: "tooltip-paste-text-task".tr(),
         child: SingleColorIconButton(
           icon: Icons.text_fields,
           onPressed: () {
@@ -149,7 +148,7 @@ class ActionsTab extends StatelessWidget {
       ),
       // Gap(gap),
       // Tooltip(
-      //   message: "tooltip-add-open-editor-task".i18n(),
+      //   message: "tooltip-add-open-editor-task".tr(),
       //   child: MonochromeIconButton(
       //     icon: Icons.edit_note,
       //     onPressed: () => context
@@ -159,7 +158,7 @@ class ActionsTab extends StatelessWidget {
       // ),
       // Gap(gap),
       // Tooltip(
-      //   message: "tooltip-add-resize-window-task".i18n(),
+      //   message: "tooltip-add-resize-window-task".tr(),
       //   child: MonochromeIconButton(
       //     icon: Icons.photo_size_select_small,
       //     onPressed: () => context
@@ -169,7 +168,7 @@ class ActionsTab extends StatelessWidget {
       // ),
       // Gap(gap),
       // Tooltip(
-      //   message: "tooltip-add-move-window-task".i18n(),
+      //   message: "tooltip-add-move-window-task".tr(),
       //   child: MonochromeIconButton(
       //     icon: Icons.move_down,
       //     onPressed: () => context

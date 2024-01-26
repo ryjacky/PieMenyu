@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:localization/localization.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:pie_menyu_core/db/pie_menu.dart';
 import 'package:pie_menyu_core/widgets/pieMenuView/pie_menu_state.dart';
 import 'package:pie_menyu_editor/view/widgets/collapasable_color_picker.dart';
@@ -17,10 +17,10 @@ class IconSection extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text("label-icon".i18n(),
+        Text("label-icon".tr(),
             style: const TextStyle(fontWeight: FontWeight.bold)),
         CollapsableColorPicker(
-          title: Text("label-icon-color".i18n()),
+          title: Text("label-icon-color".tr()),
           color: Color(icon.color),
           onColorChanged: (color) {
             state.updatePieMenu(icon: icon..color = color.value);

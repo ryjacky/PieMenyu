@@ -1,7 +1,7 @@
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
-import 'package:localization/localization.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:pie_menyu_core/pieItemTasks/open_app_task.dart';
 import 'package:pie_menyu_core/widgets/pieMenuView/pie_menu_state.dart';
 import 'package:pie_menyu_editor/view/widgets/minimal_text_field.dart';
@@ -36,13 +36,13 @@ class _OpenAppTaskCardState extends State<OpenAppTaskCard> {
     final state = context.read<PieMenuState>();
 
     return PieItemTaskCard(
-      label: "label-open-app-task".i18n(),
+      label: "label-open-app-task".tr(),
       onDelete: widget.onDelete,
       children: [
         ListTile(
-          leading: Text("label-window-title".i18n()),
+          leading: Text("label-window-title".tr()),
           title: Tooltip(
-            message: "tooltip-always-launch-if-empty-window-title".i18n(),
+            message: "tooltip-always-launch-if-empty-window-title".tr(),
             child: MinimalTextField(
               content: task.windowTitle,
               onSubmitted: (value) {
@@ -56,7 +56,7 @@ class _OpenAppTaskCardState extends State<OpenAppTaskCard> {
           ),
         ),
         ListTile(
-          leading: Text("label-exe".i18n()),
+          leading: Text("label-exe".tr()),
           title: Text(task.appPath),
         ),
         TextButton(
@@ -76,7 +76,7 @@ class _OpenAppTaskCardState extends State<OpenAppTaskCard> {
           },
           style: TextButton.styleFrom(
               backgroundColor: Theme.of(context).colorScheme.background),
-          child: Text("label-pick-app".i18n()),
+          child: Text("label-pick-app".tr()),
         ),
         const Gap(10),
       ],

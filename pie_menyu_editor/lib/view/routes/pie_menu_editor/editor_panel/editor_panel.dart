@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
-import 'package:localization/localization.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:pie_menyu_core/widgets/pieMenuView/pie_menu_state.dart';
 import 'package:provider/provider.dart';
 
@@ -29,9 +29,9 @@ class _EditorPanelState extends State<EditorPanel> {
               children: [
                 TabBar(
                   tabs: [
-                    Tab(text: "label-pie-items".i18n()),
-                    Tab(text: "label-properties".i18n()),
-                    Tab(text: "label-tasks".i18n()),
+                    Tab(text: "label-pie-items".tr()),
+                    Tab(text: "label-properties".tr()),
+                    Tab(text: "label-tasks".tr()),
                   ],
                 ),
                 const Expanded(
@@ -58,7 +58,7 @@ class _EditorPanelState extends State<EditorPanel> {
                     viewModel.saveState(context.read<PieMenuState>());
                   },
                   icon: const Icon(Icons.save_outlined),
-                  label: Text("button-save".i18n()),
+                  label: Text("button-save".tr()),
                 ),
               ),
               const Gap(10),
@@ -75,7 +75,7 @@ class _EditorPanelState extends State<EditorPanel> {
                     color: Color(0xFFC47C00),
                   ),
                   label: Text(
-                    "button-reset".i18n(),
+                    "button-reset".tr(),
                     style: const TextStyle(color: Color(0xFFC47C00)),
                   ),
                 ),

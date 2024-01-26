@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:localization/localization.dart';
+import 'package:easy_localization/easy_localization.dart';
 
 class PieItemTaskCard extends StatefulWidget {
   final List<Widget> _children;
@@ -27,7 +27,7 @@ class _PieItemTaskCardState extends State<PieItemTaskCard> {
           ListTile(
             title: Text(widget._label),
             trailing: Tooltip(
-              message: "tooltip-long-press-to-delete".i18n(),
+              message: "tooltip-long-press-to-delete".tr(),
               child: TextButton(
                 style: TextButton.styleFrom(
                   minimumSize: const Size(0, 0),
