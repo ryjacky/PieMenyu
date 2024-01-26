@@ -3,6 +3,7 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:hotkey_manager/hotkey_manager.dart';
+import 'package:mouse_event/mouse_event.dart';
 import 'package:pie_menyu/hotkey/system_key_event.dart';
 import 'package:pie_menyu/screens/pie_menu_screen/pie_menu_state_provider.dart';
 import 'package:pie_menyu_core/db/db.dart';
@@ -14,12 +15,26 @@ import 'package:window_manager/window_manager.dart';
 
 import 'foreground_window.dart';
 
+/// A function that takes a [MouseEvent] and returns a [bool].
+/// If the function returns `false`, the [MouseEvent] will not be propagated to other listeners.
+typedef MouseEventListener = Function(PointerEvent event);
+
 class PieMenyuWindow {
   static PieMenyuWindow? instance;
 
   Database _db;
   PieMenuStateProvider _pieMenuStateProvider;
   SystemKeyEvent _keyEventNotifier;
+
+  final List<MouseEventListener> _mouseEventListener = [];
+
+  addMouseEventListener(MouseEventListener listener) {
+    _mouseEventListener.add(listener);
+  }
+
+  removeMouseEventListener(MouseEventListener listener) {
+    _mouseEventListener.remove(listener);
+  }
 
   PieMenyuWindow._(
     this._db,
@@ -31,6 +46,18 @@ class PieMenyuWindow {
       return true;
     });
 
+    MouseEventPlugin.startListening((mouseEvent) async {
+      if (!await windowManager.isFocused()) return;
+
+      for (final listener in _mouseEventListener) {
+        final Offset pos = await getRelativeCursorScreenPoint(
+          position: Offset(mouseEvent.x.toDouble(), mouseEvent.y.toDouble()),
+        );
+
+        PointerEvent event = PointerMoveEvent(position: pos);
+        listener(event);
+      }
+    });
   }
 
   factory PieMenyuWindow(
@@ -73,7 +100,8 @@ class PieMenyuWindow {
 
     final pieMenuState = PieMenuState(_db, pieMenu);
     _pieMenuStateProvider.replaceStates([pieMenuState]);
-    _pieMenuStateProvider.pieMenuPositions[pieMenuState] = await getRelativeCursorScreenPoint();
+    _pieMenuStateProvider.pieMenuPositions[pieMenuState] =
+        await getRelativeCursorScreenPoint();
 
     await windowManager.setBounds((await getCurrentDisplayBounds()).deflate(1));
     await windowManager.show();
@@ -124,13 +152,13 @@ class PieMenyuWindow {
     return (await _db.getPieMenus(ids: [pieMenuId])).firstOrNull;
   }
 
-  Future<Offset> getRelativeCursorScreenPoint() async {
-    Offset cursorPos = await screenRetriever.getCursorScreenPoint();
+  Future<Offset> getRelativeCursorScreenPoint({Offset? position}) async {
+    position ??= await screenRetriever.getCursorScreenPoint();
     Rect screenBounds = await getCurrentDisplayBounds();
 
     return Offset(
-      cursorPos.dx - screenBounds.left,
-      cursorPos.dy - screenBounds.top,
+      position.dx - screenBounds.left,
+      position.dy - screenBounds.top,
     );
   }
 }

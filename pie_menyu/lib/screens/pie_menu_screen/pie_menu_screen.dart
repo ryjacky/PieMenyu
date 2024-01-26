@@ -3,7 +3,6 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:mouse_event/mouse_event.dart';
 import 'package:pie_menyu/hotkey/system_key_event.dart';
 import 'package:pie_menyu/screens/pie_menu_screen/pie_menu_state_provider.dart';
 import 'package:pie_menyu/window/pie_menyu_window_manager.dart';
@@ -26,7 +25,6 @@ import 'package:pie_menyu_core/pieItemTasks/send_text_task.dart';
 import 'package:pie_menyu_core/widgets/pieMenuView/pie_menu_state.dart';
 import 'package:pie_menyu_core/widgets/pieMenuView/pie_menu_view.dart';
 import 'package:provider/provider.dart';
-import 'package:window_manager/window_manager.dart';
 
 class PieMenuScreen extends StatefulWidget {
   const PieMenuScreen({super.key});
@@ -44,25 +42,7 @@ class _PieMenuScreenState extends State<PieMenuScreen> {
 
   @override
   void initState() {
-    MouseEventPlugin.startListening((event) async {
-      final pieMenuPos = context.read<PieMenuStateProvider>().pieMenuPositions;
-
-      if (!(await windowManager.isFocused()) || !context.mounted || pieMenuPos.isEmpty) return;
-
-      await context.read<PieMenyuWindow>().getCurrentDisplayBounds();
-      _mousePosition = Offset(event.x.toDouble(), event.y.toDouble());
-      final instance = getPieItemInstanceAt(
-        _mousePosition,
-        pieMenuPos[_pieMenuStates.last] ??= _mousePosition,
-        _pieMenuStates.last.pieItemInstances,
-      );
-
-      if (instance != _pieMenuStates.last.activePieItemInstance &&
-          instance != null) {
-        _pieMenuStates.last.activePieItemInstance = instance;
-      }
-    });
-
+    context.read<PieMenyuWindow>().addMouseEventListener(_processMouseEvent);
     final keyEvent = context.read<SystemKeyEvent>();
     keyEvent.addKeyUpListener((hotkey) {
       final pieMenuStates = _pieMenuStates;
@@ -113,10 +93,27 @@ class _PieMenuScreenState extends State<PieMenuScreen> {
     return false;
   }
 
+  _processMouseEvent(PointerEvent event) {
+    final pieMenuPos = context.read<PieMenuStateProvider>().pieMenuPositions;
+    if (pieMenuPos.isEmpty) return;
+
+    _mousePosition = event.position;
+    final instance = getPieItemInstanceAt(
+      _mousePosition,
+      pieMenuPos[_pieMenuStates.last] ??= _mousePosition,
+      _pieMenuStates.last.pieItemInstances,
+    );
+
+    if (instance != _pieMenuStates.last.activePieItemInstance &&
+        instance != null) {
+      _pieMenuStates.last.activePieItemInstance = instance;
+    }
+  }
+
   @override
   void dispose() {
     HardwareKeyboard.instance.removeHandler(_screenKeyEventHandler);
-    MouseEventPlugin.cancelListening();
+    context.read<PieMenyuWindow>().removeMouseEventListener(_processMouseEvent);
     super.dispose();
   }
 
@@ -238,11 +235,11 @@ class _PieMenuScreenState extends State<PieMenuScreen> {
         ? mainMenuState.behavior.subMenuActivationMode
         : mainMenuState.behavior.activationMode;
 
-    if (mode == ActivationMode.onRelease){
+    if (mode == ActivationMode.onRelease) {
       await context.read<PieMenyuWindow>().hide();
     }
 
-    if (activationMode == mode){
+    if (activationMode == mode) {
       if (isSubMenuItem) {
         dev.log("Opening sub menu", name: "PieMenuScreen tryActivate()");
         openSubMenu(activePieItem);
