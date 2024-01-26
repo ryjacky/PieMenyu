@@ -10,7 +10,7 @@ import 'package:pie_menyu_core/executor/executor_service.dart';
 import 'package:provider/provider.dart';
 
 import 'deep_linking/deep_link_handler.dart';
-import 'hotkey/key_event_notifier.dart';
+import 'hotkey/system_key_event.dart';
 import 'screens/pie_menu_screen/pie_menu_state_provider.dart';
 import 'tray/pie_menyu_system_tray.dart';
 
