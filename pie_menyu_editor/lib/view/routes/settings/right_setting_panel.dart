@@ -207,17 +207,27 @@ class _RightSettingPanelState extends State<RightSettingPanel> {
         ),
       ),
       SettingListTile(
-          title: "label-language".tr(),
-          subtitle: "description-language-setting".tr(),
-          tileColor: Theme.of(context).colorScheme.surface,
-          trailing: CompactDropdownMenu<String>(
-            dropdownMenuEntries: const [
-              DropdownMenuEntry(
-                label: "English",
-                value: "en_US",
-              ),
-            ],
-          )),
+        title: "label-language".tr(),
+        subtitle: "description-language-setting".tr(),
+        tileColor: Theme.of(context).colorScheme.surface,
+        trailing: CompactDropdownMenu<String>(
+          initialSelection: context.locale.languageCode,
+          onSelected: (value) {
+            if (value == null) return;
+            context.setLocale(Locale(value));
+          },
+          dropdownMenuEntries: const [
+            DropdownMenuEntry(
+              label: "English",
+              value: "en",
+            ),
+            DropdownMenuEntry(
+              label: "日本語",
+              value: "ja",
+            ),
+          ],
+        ),
+      ),
     ];
   }
 }
