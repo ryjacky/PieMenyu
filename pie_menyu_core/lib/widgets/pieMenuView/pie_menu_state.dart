@@ -80,7 +80,7 @@ class PieMenuState extends ChangeNotifier {
 
   final Database _db;
 
-  PieMenuState(this._db, PieMenu pieMenu) : _initialPieMenu = pieMenu {
+  PieMenuState.fromPieMenu(this._db, PieMenu pieMenu) : _initialPieMenu = pieMenu {
     name = pieMenu.name;
     load();
   }

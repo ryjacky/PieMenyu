@@ -18,7 +18,8 @@ class BehaviorSection extends StatelessWidget {
     final behavior = context
         .select<PieMenuState, PieMenuBehavior>((value) => value.behavior);
 
-    log("Sub menu activation mode: ${behavior.subMenuActivationMode}", name: "BehaviorSection");
+    log("Sub menu activation mode: ${behavior.subMenuActivationMode}",
+        name: "BehaviorSection");
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -38,7 +39,9 @@ class BehaviorSection extends StatelessWidget {
               value: behavior.openInScreenCenter,
               activeColor: Theme.of(context).colorScheme.primary,
               onChanged: (bool value) {
-                state.updatePieMenu(behavior: behavior..openInScreenCenter = value);
+                state.updatePieMenu(
+                    behavior: PieMenuBehavior.from(
+                        behavior..openInScreenCenter = value));
               },
             ),
           ],
@@ -114,7 +117,8 @@ class BehaviorSection extends StatelessWidget {
                 ),
               ),
             ),
-            SizedBox(width: 120, child: Text("label-sub-menu-activation-mode".tr())),
+            SizedBox(
+                width: 120, child: Text("label-sub-menu-activation-mode".tr())),
             CompactDropdownMenu<ActivationMode>(
               width: 120,
               initialSelection: behavior.subMenuActivationMode,
@@ -126,7 +130,8 @@ class BehaviorSection extends StatelessWidget {
               ],
               onSelected: (ActivationMode? value) {
                 if (value == null) return;
-                state.updatePieMenu(behavior: behavior..subMenuActivationMode = value);
+                state.updatePieMenu(
+                    behavior: behavior..subMenuActivationMode = value);
               },
             ),
           ],
