@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:hotkey_manager/hotkey_manager.dart';
 import 'package:easy_localization/easy_localization.dart';
+import 'package:pie_menyu_core/db/db.dart';
 import 'package:pie_menyu_core/db/pie_menu.dart';
 import 'package:pie_menyu_core/db/profile.dart';
 import 'package:pie_menyu_editor/view/widgets/flat_button.dart';
@@ -189,11 +190,17 @@ class _RightHomePanelState extends State<RightHomePanel> {
                               children: [
                                 OutlinedIconButton(
                                   icon: FontAwesomeIcons.pencil,
-                                  onPressed: () {
+                                  onPressed: () async {
+                                    final db = context.read<Database>();
+                                    final pm = (await db
+                                            .getPieMenus(ids: [pieMenu.id]))
+                                        .firstOrNull;
+
+                                    if (pm == null || !context.mounted) return;
                                     Navigator.of(context).push(
                                       MaterialPageRoute(
                                         builder: (context) =>
-                                            PieMenuEditorRoute(pieMenu),
+                                            PieMenuEditorRoute(pm),
                                       ),
                                     );
                                   },
