@@ -12,17 +12,17 @@ import 'package:pie_menyu_editor/view/widgets/outlined_icon_button.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-import '../pie_menu_editor/pie_menu_editor_route.dart';
-import 'home_page_view_model.dart';
+import '../../pie_menu_editor/pie_menu_editor_route.dart';
+import '../home_page_view_model.dart';
 
-class RightHomePanel extends StatefulWidget {
-  const RightHomePanel({super.key});
+class ProfileEditorPanel extends StatefulWidget {
+  const ProfileEditorPanel({super.key});
 
   @override
-  State<RightHomePanel> createState() => _RightHomePanelState();
+  State<ProfileEditorPanel> createState() => _ProfileEditorPanelState();
 }
 
-class _RightHomePanelState extends State<RightHomePanel> {
+class _ProfileEditorPanelState extends State<ProfileEditorPanel> {
   final double tableRowGap = 10;
 
   @override

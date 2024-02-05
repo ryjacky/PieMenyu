@@ -6,7 +6,7 @@ import 'package:provider/provider.dart';
 import 'home_page_view_model.dart';
 import 'left_panel/left_panel.dart';
 import 'right_create_profile_panel.dart';
-import 'right_home_panel.dart';
+import 'right_panels/profile_editor_panel.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -38,7 +38,7 @@ class _HomePageState extends State<HomePage> {
                   flex: 7,
                   child: creatingProfile
                       ? const RightCreateProfilePanel()
-                      : const RightHomePanel()),
+                      : const ProfileEditorPanel()),
             ],
           ),
         ),
