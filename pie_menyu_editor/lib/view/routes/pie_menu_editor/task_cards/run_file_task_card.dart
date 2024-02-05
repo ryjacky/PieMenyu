@@ -1,9 +1,8 @@
-import 'package:file_picker/file_picker.dart';
-import 'package:flutter/material.dart';
-import 'package:gap/gap.dart';
 import 'package:easy_localization/easy_localization.dart';
+import 'package:flutter/material.dart';
 import 'package:pie_menyu_core/pieItemTasks/run_file_task.dart';
 import 'package:pie_menyu_core/widgets/pieMenuView/pie_menu_state.dart';
+import 'package:pie_menyu_editor/view/widgets/file_picker_droppable.dart';
 import 'package:provider/provider.dart';
 
 import 'pie_item_task_card.dart';
@@ -35,28 +34,21 @@ class _RunFileTaskCardState extends State<RunFileTaskCard> {
       label: "label-run-file-task".tr(),
       onDelete: widget.onDelete,
       children: [
-        ListTile(
-          leading: Text("label-file-path".tr()),
-          title: Text(task.filePath),
-        ),
-        TextButton(
-          onPressed: () async {
-            FilePickerResult? result = await FilePicker.platform.pickFiles();
-
-            if (result != null && context.mounted) {
+        Container(
+          width: 300,
+          padding: const EdgeInsets.all(8.0),
+          child: FilePickerDroppable(
+            path: task.filePath.isEmpty ? null : task.filePath,
+            isDirectory: false,
+            onPicked: (path) {
               setState(() {
-                task = task..filePath = result.files.single.path!;
+                final state = context.read<PieMenuState>();
+                final pieItem = state.activePieItemInstance;
+                state.updateTaskIn(pieItem, task..filePath = path);
               });
-              final state = context.read<PieMenuState>();
-              final pieItem = state.activePieItemInstance;
-              state.updateTaskIn(pieItem, task);
-            }
-          },
-          style: TextButton.styleFrom(
-              backgroundColor: Theme.of(context).colorScheme.background),
-          child: Text("label-pick-file".tr()),
+            },
+          ),
         ),
-        const Gap(10),
       ],
     );
   }

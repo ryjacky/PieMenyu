@@ -1,9 +1,9 @@
-import 'package:file_picker/file_picker.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
-import 'package:easy_localization/easy_localization.dart';
 import 'package:pie_menyu_core/pieItemTasks/open_app_task.dart';
 import 'package:pie_menyu_core/widgets/pieMenuView/pie_menu_state.dart';
+import 'package:pie_menyu_editor/view/widgets/file_picker_droppable.dart';
 import 'package:pie_menyu_editor/view/widgets/minimal_text_field.dart';
 import 'package:provider/provider.dart';
 
@@ -55,28 +55,21 @@ class _OpenAppTaskCardState extends State<OpenAppTaskCard> {
             ),
           ),
         ),
-        ListTile(
-          leading: Text("label-exe".tr()),
-          title: Text(task.appPath),
-        ),
-        TextButton(
-          onPressed: () async {
-            FilePickerResult? result = await FilePicker.platform.pickFiles(
-              type: FileType.custom,
-              allowedExtensions: ["exe"],
-            );
-
-            if (result != null) {
+        Container(
+          width: 300,
+          padding: const EdgeInsets.all(8.0),
+          child: FilePickerDroppable(
+            path: task.appPath.isEmpty ? null : task.appPath,
+            isDirectory: false,
+            allowedExtension: const ["exe"],
+            onPicked: (path) {
               setState(() {
-                task = task..appPath = result.files.single.path!;
+                final state = context.read<PieMenuState>();
+                final pieItem = state.activePieItemInstance;
+                state.updateTaskIn(pieItem, task..appPath = path);
               });
-              final pieItem = state.activePieItemInstance;
-              state.updateTaskIn(pieItem, task);
-            }
-          },
-          style: TextButton.styleFrom(
-              backgroundColor: Theme.of(context).colorScheme.background),
-          child: Text("label-pick-app".tr()),
+            },
+          ),
         ),
         const Gap(10),
       ],

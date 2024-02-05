@@ -10,10 +10,15 @@ import 'package:gap/gap.dart';
 class FilePickerDroppable extends StatelessWidget {
   final String? path;
   final bool isDirectory;
+  final List<String>? allowedExtension;
   final Function(String path)? onPicked;
 
   const FilePickerDroppable(
-      {super.key, this.path, this.onPicked, this.isDirectory = false});
+      {super.key,
+      this.path,
+      this.onPicked,
+      this.isDirectory = false,
+      this.allowedExtension});
 
   @override
   Widget build(BuildContext context) {
@@ -22,10 +27,16 @@ class FilePickerDroppable extends StatelessWidget {
         String? path = file.files.firstOrNull?.path;
         if (path == null) return;
 
-        if ((isDirectory && await Directory(path).exists()) ||
-            (!isDirectory && await File(path).exists())) {
-          onPicked?.call(path);
-        }
+        bool pValid = false;
+        pValid = pValid || (isDirectory && await Directory(path).exists());
+        pValid = pValid ||
+            (!isDirectory &&
+                await File(path).exists() &&
+                (allowedExtension?.any((ext) => path.endsWith(ext)) ?? true));
+
+        if (!pValid) return;
+
+        onPicked?.call(path);
       },
       child: DottedBorder(
         stackFit: StackFit.passthrough,
@@ -46,7 +57,12 @@ class FilePickerDroppable extends StatelessWidget {
                 if (isDirectory) {
                   result = await FilePicker.platform.getDirectoryPath();
                 } else {
-                  result = (await FilePicker.platform.pickFiles())
+                  result = (await FilePicker.platform.pickFiles(
+                    allowedExtensions: allowedExtension,
+                    type: allowedExtension == null
+                        ? FileType.any
+                        : FileType.custom,
+                  ))
                       ?.files
                       .firstOrNull
                       ?.path;
