@@ -54,6 +54,8 @@ dependencies:
   url_launcher: ^6.2.3
   google_fonts: ^6.1.0
   easy_localization: ^3.0.3
+  desktop_drop: ^0.4.4
+  dotted_border: ^2.1.0
 
 dev_dependencies:
   flutter_test:
