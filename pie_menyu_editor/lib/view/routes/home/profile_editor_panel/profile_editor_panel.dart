@@ -5,6 +5,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:pie_menyu_core/db/db.dart';
 import 'package:pie_menyu_core/db/pie_menu.dart';
 import 'package:pie_menyu_core/db/profile.dart';
+import 'package:pie_menyu_editor/view/routes/home/profile_editor_panel/profile_editor_panel_header.dart';
 import 'package:pie_menyu_editor/view/widgets/flat_button.dart';
 import 'package:pie_menyu_editor/view/widgets/key_press_recorder.dart';
 import 'package:pie_menyu_editor/view/widgets/minimal_text_field.dart';
@@ -38,7 +39,7 @@ class _ProfileEditorPanelState extends State<ProfileEditorPanel> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          buildHeader(homePageViewModel, activeProfile),
+          const ProfileEditorPanelHeader(),
           Expanded(
             child: Padding(
               padding: const EdgeInsets.fromLTRB(0, 20, 0, 0),
@@ -118,46 +119,6 @@ class _ProfileEditorPanelState extends State<ProfileEditorPanel> {
 
     profile.hotkeyToPieMenuIdList = hotkeyToPieMenuIdList;
     context.read<HomePageViewModel>().putProfile(profile);
-  }
-
-  buildHeader(HomePageViewModel homePageViewModel, Profile activeProfile) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        Text(
-          activeProfile.name,
-          style: Theme.of(context).textTheme.displayLarge,
-        ),
-        Expanded(child: Container()),
-        IconButton(
-          onPressed: () async {
-            bool result = await homePageViewModel.toggleActiveProfile();
-            if (!context.mounted) return;
-            ScaffoldMessenger.of(context).clearSnackBars();
-            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                backgroundColor: Theme.of(context).colorScheme.primary,
-                content: Text((result
-                        ? "message-profile-enabled"
-                        : "message-profile-disabled")
-                    .tr())));
-
-            launchUrl(Uri.parse("piemenyu://reload"));
-          },
-          icon: Icon(
-            activeProfile.enabled ? Icons.pause : Icons.play_arrow_outlined,
-            size: 22,
-          ),
-        ),
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 10),
-          child: FlatButton(
-            onPressed: () => homePageViewModel.createPieMenuIn(activeProfile),
-            icon: FontAwesomeIcons.plus,
-            label: Text("button-new-pie-menu".tr()),
-          ),
-        )
-      ],
-    );
   }
 
   buildPieMenuList(HomePageViewModel homePageViewModel, Profile activeProfile) {
