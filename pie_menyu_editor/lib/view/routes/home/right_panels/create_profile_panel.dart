@@ -5,17 +5,17 @@ import 'package:pie_menyu_editor/system/task_bar_process_info/process_list_tile.
 import 'package:pie_menyu_editor/system/task_bar_process_info/task_bar_process_info.dart';
 import 'package:provider/provider.dart';
 
-import 'home_page_view_model.dart';
+import '../home_page_view_model.dart';
 
-class RightCreateProfilePanel extends StatefulWidget {
-  const RightCreateProfilePanel({super.key});
+class CreateProfilePanel extends StatefulWidget {
+  const CreateProfilePanel({super.key});
 
   @override
-  State<RightCreateProfilePanel> createState() =>
-      _RightCreateProfilePanelState();
+  State<CreateProfilePanel> createState() =>
+      _CreateProfilePanelState();
 }
 
-class _RightCreateProfilePanelState extends State<RightCreateProfilePanel> {
+class _CreateProfilePanelState extends State<CreateProfilePanel> {
   Set<TaskBarProcessInfo> activeApps = {
     TaskBarProcessInfo(
         processName: "label-loading".tr(),
