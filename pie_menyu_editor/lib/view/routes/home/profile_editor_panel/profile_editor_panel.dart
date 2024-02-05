@@ -1,19 +1,12 @@
-import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:hotkey_manager/hotkey_manager.dart';
 import 'package:easy_localization/easy_localization.dart';
-import 'package:pie_menyu_core/db/db.dart';
+import 'package:flutter/material.dart';
+import 'package:hotkey_manager/hotkey_manager.dart';
 import 'package:pie_menyu_core/db/pie_menu.dart';
 import 'package:pie_menyu_core/db/profile.dart';
+import 'package:pie_menyu_editor/view/routes/home/profile_editor_panel/pie_menu_table.dart';
 import 'package:pie_menyu_editor/view/routes/home/profile_editor_panel/profile_editor_panel_header.dart';
-import 'package:pie_menyu_editor/view/widgets/flat_button.dart';
-import 'package:pie_menyu_editor/view/widgets/key_press_recorder.dart';
-import 'package:pie_menyu_editor/view/widgets/minimal_text_field.dart';
-import 'package:pie_menyu_editor/view/widgets/outlined_icon_button.dart';
 import 'package:provider/provider.dart';
-import 'package:url_launcher/url_launcher.dart';
 
-import '../../pie_menu_editor/pie_menu_editor_route.dart';
 import '../home_page_view_model.dart';
 
 class ProfileEditorPanel extends StatefulWidget {
@@ -40,11 +33,11 @@ class _ProfileEditorPanelState extends State<ProfileEditorPanel> {
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           const ProfileEditorPanelHeader(),
-          Expanded(
+          const Expanded(
             child: Padding(
-              padding: const EdgeInsets.fromLTRB(0, 20, 0, 0),
+              padding: EdgeInsets.fromLTRB(0, 20, 0, 0),
               child: SingleChildScrollView(
-                child: buildPieMenuList(homePageViewModel, activeProfile),
+                child: PieMenuTable(),
               ),
             ),
           ),
@@ -75,7 +68,7 @@ class _ProfileEditorPanelState extends State<ProfileEditorPanel> {
       pieMenu.name = name;
     });
 
-    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+    showSnackBar(SnackBar(
         backgroundColor: Theme.of(context).colorScheme.primary,
         content: Text("pie-menu-name-saved".tr())));
 
@@ -121,147 +114,10 @@ class _ProfileEditorPanelState extends State<ProfileEditorPanel> {
     context.read<HomePageViewModel>().putProfile(profile);
   }
 
-  buildPieMenuList(HomePageViewModel homePageViewModel, Profile activeProfile) {
-    final allPieMenuInProfile = homePageViewModel.getPieMenusOf(activeProfile);
-
-    return Table(
-      columnWidths: const {
-        0: FractionColumnWidth(0.07),
-        1: FractionColumnWidth(0.51),
-        2: FractionColumnWidth(0.26),
-        3: FractionColumnWidth(0.16),
-      },
-      defaultVerticalAlignment: TableCellVerticalAlignment.middle,
-      children: [
-        TableRow(
-          children: [
-            Text('', style: Theme.of(context).textTheme.labelMedium),
-            Text("table-header-name".tr(),
-                style: Theme.of(context).textTheme.labelMedium),
-            Text("table-header-hotkey".tr(),
-                style: Theme.of(context).textTheme.labelMedium),
-            Text("table-header-actions".tr(),
-                style: Theme.of(context).textTheme.labelMedium),
-          ],
-        ),
-        for (var pieMenu in allPieMenuInProfile)
-          TableRow(
-            children: [
-              Container(
-                alignment: Alignment.center,
-                padding: const EdgeInsets.fromLTRB(0, 15, 0, 0),
-                child: Draggable(
-                  data: pieMenu.id,
-                  feedback: Text(
-                    pieMenu.name,
-                    textAlign: TextAlign.center,
-                    style: Theme.of(context).textTheme.labelMedium,
-                  ),
-                  child: TextButton(
-                    style: TextButton.styleFrom(
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(5),
-                      ),
-                      minimumSize: const Size(32, 32),
-                    ),
-                    onPressed: () {
-                      homePageViewModel.makePieMenuUniqueIn(
-                          activeProfile, pieMenu);
-                    },
-                    child: Text(pieMenu.profiles.length.toString()),
-                  ),
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.fromLTRB(0, 15, 25, 0),
-                child: MinimalTextField(
-                  key: ValueKey(pieMenu.id),
-                  onSubmitted: (String? name) {
-                    setPieMenuName(name ?? "", pieMenu);
-                  },
-                  content: pieMenu.name,
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.fromLTRB(0, 15, 8, 0),
-                child: KeyPressRecorder(
-                  key: ValueKey(pieMenu.id),
-                  initialHotkey: getPieMenuHotkey(pieMenu, activeProfile),
-                  onHotKeyRecorded: (newHotkey) => {
-                    addHotkeyToProfile(activeProfile, newHotkey, pieMenu.id)
-                  },
-                  onClear: (prevHotkey) =>
-                      removeHotkeyFromProfile(activeProfile, prevHotkey),
-                  validation: (hotkey) {
-                    for (var htpm in activeProfile.hotkeyToPieMenuIdList) {
-                      if (htpm.keyCode == hotkey.keyCode &&
-                          htpm.keyModifiers.contains(KeyModifier.shift) ==
-                              hotkey.modifiers?.contains(KeyModifier.shift) &&
-                          htpm.keyModifiers.contains(KeyModifier.control) ==
-                              hotkey.modifiers?.contains(KeyModifier.control) &&
-                          htpm.keyModifiers.contains(KeyModifier.alt) ==
-                              hotkey.modifiers?.contains(KeyModifier.alt)) {
-                        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                            backgroundColor: Colors.red[400],
-                            content: Text("message-hotkey-is-used".tr())));
-                        return false;
-                      }
-                    }
-                    return true;
-                  },
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.fromLTRB(0, 15, 8, 0),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: [
-                    OutlinedIconButton(
-                      icon: FontAwesomeIcons.pencil,
-                      onPressed: () async {
-                        final db = context.read<Database>();
-                        final pm = (await db.getPieMenus(ids: [pieMenu.id]))
-                            .firstOrNull;
-
-                        if (pm == null || !context.mounted) return;
-                        Navigator.of(context).push(
-                          MaterialPageRoute(
-                            builder: (context) => PieMenuEditorRoute(pm),
-                          ),
-                        );
-                      },
-                      color: Theme.of(context).colorScheme.secondary,
-                    ),
-                    OutlinedIconButton(
-                      icon: FontAwesomeIcons.trash,
-                      onPressed: () {
-                        homePageViewModel.removePieMenuFrom(
-                            activeProfile, pieMenu);
-                        final scaffoldMessenger = ScaffoldMessenger.of(context);
-                        // Allow delete up to a single level.
-                        scaffoldMessenger.clearSnackBars();
-                        scaffoldMessenger.showSnackBar(
-                          SnackBar(
-                            content: Text("message-pie-menu-deleted".tr()),
-                            backgroundColor:
-                                Theme.of(context).colorScheme.primary,
-                            action: SnackBarAction(
-                              label: "label-undo".tr(),
-                              onPressed: () {
-                                homePageViewModel.cancelDelete();
-                              },
-                            ),
-                          ),
-                        );
-                      },
-                      color: Theme.of(context).colorScheme.errorContainer,
-                    ),
-                  ],
-                ),
-              ),
-            ],
-          ),
-      ],
-    );
+  showSnackBar(SnackBar snackBar){
+    final scaffoldMessenger = ScaffoldMessenger.of(context);
+    scaffoldMessenger.clearSnackBars();
+    scaffoldMessenger.showSnackBar(snackBar);
   }
+
 }
