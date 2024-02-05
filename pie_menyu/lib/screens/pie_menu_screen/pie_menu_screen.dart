@@ -184,7 +184,7 @@ class _PieMenuScreenState extends State<PieMenuScreen> {
     return AnimatedPositioned(
       left: position.dx - constraint.maxWidth / 2 - (inForeground ? 0 : 200),
       top: position.dy - constraint.maxHeight / 2 + (inForeground ? 0 : 100),
-      duration: _animationDuration,
+      duration: state == _pieMenuStates.lastOrNull ? const Duration() : _animationDuration,
       curve: _animationCurve,
       child: SizedBox(
         width: constraint.maxWidth,
