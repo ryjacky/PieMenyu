@@ -15,7 +15,7 @@ class ExecutorService extends ChangeNotifier {
     _pieItemTasks.add(task);
   }
 
-  void start() async {
+  Future<void> start() async {
     _isExecuting = true;
     notifyListeners();
 
