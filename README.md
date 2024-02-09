@@ -12,8 +12,9 @@ cd ..\pie_menyu_editor\
 flutter build windows
 cd ../
 del Release/
-mv .\pie_menyu_editor\build\windows\x64\runner\Release\ .\Release\
-mv .\pie_menyu\build\windows\x64\runner\Release\ .\Release\pie_menyu\
+mkdir Release/
+mv .\pie_menyu_editor\build\windows\x64\runner\Release\ .\Release\PieMenyuEditor
+mv .\pie_menyu\build\windows\x64\runner\Release\ .\Release\PieMenyu\
 ```
 3. Check out the build in Release/ folder of the project root
 
