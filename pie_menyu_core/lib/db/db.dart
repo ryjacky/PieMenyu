@@ -30,8 +30,7 @@ class Database {
           PieItemSchema,
           ProfileExeSchema,
         ], directory: dir.path),
-        _dbPath = dir.path {
-  }
+        _dbPath = dir.path;
 
   initialize() async {
     // Create initial record if not existed
