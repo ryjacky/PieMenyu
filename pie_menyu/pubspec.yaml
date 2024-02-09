@@ -52,6 +52,7 @@ dependencies:
   keyboard_event: ^0.3.4
   app_links: ^3.5.0
   mouse_event: ^0.2.1
+  url_launcher: ^6.2.4
 
 dev_dependencies:
   flutter_test:
