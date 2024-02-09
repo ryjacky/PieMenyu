@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:localization/localization.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:pie_menyu/bindings/stylus_gesture_binding.dart';
 import 'package:pie_menyu/screens/pie_menu_screen/pie_menu_screen.dart';
 import 'package:pie_menyu/window/pie_menyu_window_manager.dart';
 import 'package:pie_menyu_core/db/db.dart';
@@ -16,6 +17,7 @@ import 'tray/pie_menyu_system_tray.dart';
 
 Future<void> main(dynamic args) async {
   WidgetsFlutterBinding.ensureInitialized();
+  StylusGestureBinding.initialize();
 
   final deepLinkHandler = DeepLinkHandler();
   final dbDir = (await getApplicationSupportDirectory()).parent;

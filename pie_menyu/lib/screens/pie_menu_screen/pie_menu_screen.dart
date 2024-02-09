@@ -42,7 +42,6 @@ class _PieMenuScreenState extends State<PieMenuScreen> {
 
   @override
   void initState() {
-    context.read<PieMenyuWindow>().addMouseEventListener(_processMouseEvent);
     final keyEvent = context.read<SystemKeyEvent>();
     keyEvent.addKeyUpListener((hotkey) {
       final pieMenuStates = _pieMenuStates;
@@ -113,7 +112,6 @@ class _PieMenuScreenState extends State<PieMenuScreen> {
   @override
   void dispose() {
     HardwareKeyboard.instance.removeHandler(_screenKeyEventHandler);
-    context.read<PieMenyuWindow>().removeMouseEventListener(_processMouseEvent);
     super.dispose();
   }
 
@@ -128,21 +126,24 @@ class _PieMenuScreenState extends State<PieMenuScreen> {
       return Container();
     }
 
-    return Scaffold(
-      backgroundColor: Colors.transparent,
-      body: LayoutBuilder(builder: (_, constraint) {
-        return Stack(
-          children: [
-            for (final state in _pieMenuStates)
-              buildPieMenuView(
-                state,
-                constraint,
-                pieMenuPos[state] ??= _mousePosition,
-                state == _pieMenuStates.last,
-              )
-          ],
-        );
-      }),
+    return MouseRegion(
+      onHover: _processMouseEvent,
+      child: Scaffold(
+        backgroundColor: Colors.transparent,
+        body: LayoutBuilder(builder: (_, constraint) {
+          return Stack(
+            children: [
+              for (final state in _pieMenuStates)
+                buildPieMenuView(
+                  state,
+                  constraint,
+                  pieMenuPos[state] ??= _mousePosition,
+                  state == _pieMenuStates.last,
+                )
+            ],
+          );
+        }),
+      ),
     );
   }
 
@@ -184,7 +185,9 @@ class _PieMenuScreenState extends State<PieMenuScreen> {
     return AnimatedPositioned(
       left: position.dx - constraint.maxWidth / 2 - (inForeground ? 0 : 200),
       top: position.dy - constraint.maxHeight / 2 + (inForeground ? 0 : 100),
-      duration: state == _pieMenuStates.lastOrNull ? const Duration() : _animationDuration,
+      duration: state == _pieMenuStates.lastOrNull
+          ? const Duration()
+          : _animationDuration,
       curve: _animationCurve,
       child: SizedBox(
         width: constraint.maxWidth,
@@ -267,7 +270,7 @@ class _PieMenuScreenState extends State<PieMenuScreen> {
 
     if (pieMenu == null || !context.mounted) return;
 
-    final pieMenuState = PieMenuState(db, pieMenu);
+    final pieMenuState = PieMenuState.fromPieMenu(db, pieMenu);
     final pieMenuStateProvider = context.read<PieMenuStateProvider>();
     pieMenuStateProvider.addState(pieMenuState);
   }

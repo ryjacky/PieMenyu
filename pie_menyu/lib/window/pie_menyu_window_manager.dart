@@ -26,16 +26,6 @@ class PieMenyuWindow {
   PieMenuStateProvider _pieMenuStateProvider;
   SystemKeyEvent _keyEventNotifier;
 
-  final List<MouseEventListener> _mouseEventListener = [];
-
-  addMouseEventListener(MouseEventListener listener) {
-    _mouseEventListener.add(listener);
-  }
-
-  removeMouseEventListener(MouseEventListener listener) {
-    _mouseEventListener.remove(listener);
-  }
-
   PieMenyuWindow._(
     this._db,
     this._pieMenuStateProvider,
@@ -44,19 +34,6 @@ class PieMenyuWindow {
     _keyEventNotifier.addKeyDownListener((hotKey) {
       _tryShow(hotKey);
       return true;
-    });
-
-    MouseEventPlugin.startListening((mouseEvent) async {
-      if (!await windowManager.isFocused()) return;
-
-      for (final listener in _mouseEventListener) {
-        final Offset pos = await getRelativeCursorScreenPoint(
-          position: Offset(mouseEvent.x.toDouble(), mouseEvent.y.toDouble()),
-        );
-
-        PointerEvent event = PointerMoveEvent(position: pos);
-        listener(event);
-      }
     });
   }
 
@@ -98,7 +75,7 @@ class PieMenyuWindow {
     final pieMenu = await _getHotkeyPieMenuIn(profile, hotkey);
     if (pieMenu == null) return;
 
-    final pieMenuState = PieMenuState(_db, pieMenu);
+    final pieMenuState = PieMenuState.fromPieMenu(_db, pieMenu);
     _pieMenuStateProvider.replaceStates([pieMenuState]);
     _pieMenuStateProvider.pieMenuPositions[pieMenuState] =
         await getRelativeCursorScreenPoint();
@@ -114,7 +91,7 @@ class PieMenyuWindow {
   }
 
   // Modified from calcWindowPosition
-  Future<Rect> getCurrentDisplayBounds() async {
+  static Future<Rect> getCurrentDisplayBounds() async {
     Display primaryDisplay = await screenRetriever.getPrimaryDisplay();
     List<Display> allDisplays = await screenRetriever.getAllDisplays();
     Offset cursorScreenPoint = await screenRetriever.getCursorScreenPoint();
@@ -152,7 +129,7 @@ class PieMenyuWindow {
     return (await _db.getPieMenus(ids: [pieMenuId])).firstOrNull;
   }
 
-  Future<Offset> getRelativeCursorScreenPoint({Offset? position}) async {
+  static Future<Offset> getRelativeCursorScreenPoint({Offset? position}) async {
     position ??= await screenRetriever.getCursorScreenPoint();
     Rect screenBounds = await getCurrentDisplayBounds();
 

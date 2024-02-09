@@ -53,7 +53,6 @@ class _PieMenuViewState extends State<PieMenuView> {
       builder: (context, constraints) {
         return Stack(
           alignment: Alignment.center,
-
           children: [
             Positioned(
               left: getOriginX(constraints) - centerRadius - centerThickness,
@@ -81,32 +80,28 @@ class _PieMenuViewState extends State<PieMenuView> {
                       ? getHorizontalOffset(i, constraints)
                       : null,
                   bottom: getVerticalOffset(i, constraints),
-                  child: InkWell(
-                    highlightColor: Colors.transparent,
-                    hoverColor: Colors.transparent,
-                    mouseCursor: SystemMouseCursors.basic,
-                    splashColor: Colors.transparent,
-                    onTap: () {
+                  child: GestureDetector(
+                    onTapUp: (event) {
                       widget.onTap?.call(pieItemInstances[i]);
                     },
-                    onHover: (value) {
-                      if (value) {
+                    child: MouseRegion(
+                      onHover: (value) {
                         widget.onHover?.call(pieItemInstances[i]);
-                      }
-                    },
-                    child: PieItemView(
-                      horizontalOffset: i % (nInstances / 2) == 0
-                          ? PieItemOffset.center
-                          : i > nInstances / 2
-                              ? PieItemOffset.toLeft
-                              : PieItemOffset.toRight,
-                      icon: state.icon,
-                      font: state.font,
-                      colors: state.colors,
-                      shape: state.shape,
-                      instance: state.pieItemInstances[i],
-                      active:
-                          state.activePieItemInstance == pieItemInstances[i],
+                      },
+                      child: PieItemView(
+                        horizontalOffset: i % (nInstances / 2) == 0
+                            ? PieItemOffset.center
+                            : i > nInstances / 2
+                                ? PieItemOffset.toLeft
+                                : PieItemOffset.toRight,
+                        icon: state.icon,
+                        font: state.font,
+                        colors: state.colors,
+                        shape: state.shape,
+                        instance: state.pieItemInstances[i],
+                        active:
+                            state.activePieItemInstance == pieItemInstances[i],
+                      ),
                     ),
                   ),
                 ),
@@ -140,6 +135,4 @@ class _PieMenuViewState extends State<PieMenuView> {
         ((shape.centerRadius + shape.pieItemSpread) * cos(i * angleDelta)) -
         widget.state.icon.size / 2;
   }
-
-
 }
