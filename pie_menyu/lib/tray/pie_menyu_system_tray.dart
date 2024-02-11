@@ -24,8 +24,12 @@ class PieMenyuSystemTray {
     // create context menu
     final Menu menu = Menu();
     await menu.buildFrom([
-      MenuItemLabel(label: 'Hide', onClicked: (menuItem) => appWindow.hide()),
-      MenuItemLabel(label: 'Exit', onClicked: (menuItem) {
+      MenuItemLabel(label: 'Hide', onClicked: (menuItem) {
+        launchUrl(Uri.parse("piemenyueditor://close"));
+        appWindow.hide();
+      }),
+      MenuItemLabel(label: 'Exit', onClicked: (menuItem) async {
+        await launchUrl(Uri.parse("piemenyueditor://close"));
         for (var callback in _onExitCallbacks) {
           callback();
         }

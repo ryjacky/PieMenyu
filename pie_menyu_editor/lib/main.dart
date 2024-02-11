@@ -7,6 +7,7 @@ import 'package:launch_at_startup/launch_at_startup.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:pie_menyu_core/db/db.dart';
+import 'package:pie_menyu_editor/deep_linking/deep_link_handler.dart';
 import 'package:pie_menyu_editor/view/routes/home/home_route.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -17,6 +18,7 @@ import 'theme/text_theme.g.dart';
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await EasyLocalization.ensureInitialized();
+  DeepLinkHandler.initialize();
 
   // Start pieMenyu
   // Will not when both editor and pie_menyu is in debug mode

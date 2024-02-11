@@ -82,8 +82,6 @@ class PieMenyuWindow {
 
     await windowManager.setBounds((await getCurrentDisplayBounds()).deflate(1));
     await windowManager.show();
-    await windowManager.focus();
-    await windowManager.setAlwaysOnTop(true);
   }
 
   Future<void> hide() async {
