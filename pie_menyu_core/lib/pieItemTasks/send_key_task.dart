@@ -1,8 +1,12 @@
 library pie_menyu_core;
 
-import 'package:ffi/ffi.dart';
 import 'dart:ffi';
+import 'dart:io';
+
+import 'package:ffi/ffi.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_auto_gui/flutter_auto_gui.dart';
+import 'package:hotkey_manager/hotkey_manager.dart';
 import 'package:pie_menyu_core/db/pie_item_task.dart';
 import 'package:win32/win32.dart';
 
@@ -13,7 +17,7 @@ class SendKeyTask extends PieItemTask with Executable {
     _fieldCheck();
   }
 
-  SendKeyTask.from(PieItemTask pieItemTask) : super.from(pieItemTask) {
+  SendKeyTask.from(super.pieItemTask) : super.from() {
     _fieldCheck();
   }
 
@@ -42,29 +46,24 @@ class SendKeyTask extends PieItemTask with Executable {
 
   bool get alt => arguments[2] == "true";
 
-  set key(String value) {
-    arguments[3] = value;
+  set key(LogicalKeyboardKey value) {
+    arguments[3] = value.keyId.toString();
   }
 
-  String get key => arguments[3];
+  LogicalKeyboardKey get key => LogicalKeyboardKey(int.tryParse(arguments[3]) ?? 0);
 
   List<String> get hotkeyStrings {
     final keys = <String>[];
-    if (ctrl) {
-      keys.add("Ctrl");
-    }
-    if (shift) {
-      keys.add("Shift");
-    }
-    if (alt) {
-      keys.add("Alt");
-    }
-    keys.add(key);
+
+    if (ctrl) keys.add("Ctrl");
+    if (shift) keys.add("Shift");
+    if (alt) keys.add("Alt");
+
+    keys.add(key.keyLabel);
     return keys;
   }
 
-  @override
-  Future<void> execute() async {
+  void releasePressedKeysWindows() {
     // Get the state of all keys
     final keyboardState = calloc<BYTE>(256);
     GetKeyboardState(keyboardState);
@@ -86,13 +85,20 @@ class SendKeyTask extends PieItemTask with Executable {
 
     // Free the allocated memory
     calloc.free(keyboardState);
+  }
 
-    final keys = hotkeyStrings
-        .map((e) => e.toLowerCase())
-        .toList();
+  @override
+  Future<void> execute() async {
+    if (Platform.isWindows) {
+      releasePressedKeysWindows();
+    } else if (Platform.isMacOS) {
+    } else if (Platform.isLinux) {
 
-    await FlutterAutoGUI.hotkey(keys: keys, interval: const Duration(milliseconds: 10));
+    }
+    final keys = hotkeyStrings.map((e) => e.toLowerCase()).toList();
 
+    await FlutterAutoGUI.hotkey(
+        keys: keys, interval: const Duration(milliseconds: 10));
     // I've spent so much time debugging this and find out that
     // FlutterAutoGUI.hotkey is a fake future that returns before hotkey
     // is pressed.
