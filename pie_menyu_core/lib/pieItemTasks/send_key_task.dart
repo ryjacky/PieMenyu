@@ -248,14 +248,7 @@ class SendKeyTask extends PieItemTask with Executable {
       final keyState = GetAsyncKeyState(i);
 
       // Release the key if it is currently being pressed
-      if ((keyState & 0x8000) != 0) {
-        final inputs = calloc<INPUT>(1);
-        inputs[0].type = INPUT_KEYBOARD;
-        inputs[0].ki.wVk = i;
-        inputs[0].ki.dwFlags = KEYEVENTF_KEYUP;
-        SendInput(1, inputs, sizeOf<INPUT>());
-        calloc.free(inputs);
-      }
+      if ((keyState & 0x8000) != 0) releaseKeyWindows(i);
     }
 
     // Free the allocated memory
@@ -296,9 +289,6 @@ class SendKeyTask extends PieItemTask with Executable {
       if (shift) releaseKeyWindows(VK_SHIFT);
       if (ctrl) releaseKeyWindows(VK_CONTROL);
     } else if (Platform.isMacOS) {
-
-    } else if (Platform.isLinux) {
-
-    }
+    } else if (Platform.isLinux) {}
   }
 }
