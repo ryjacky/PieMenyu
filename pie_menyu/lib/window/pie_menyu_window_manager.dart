@@ -85,6 +85,7 @@ class PieMenyuWindow {
   }
 
   Future<void> hide() async {
+    await windowManager.setBounds(const Rect.fromLTRB(0,0,0,0));
     await windowManager.hide();
   }
 
