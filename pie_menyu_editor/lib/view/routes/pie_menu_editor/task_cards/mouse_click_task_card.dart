@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_auto_gui/flutter_auto_gui.dart';
 import 'package:gap/gap.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:pie_menyu_core/pieItemTasks/mouse_click_task.dart';
