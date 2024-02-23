@@ -46,7 +46,6 @@ dependencies:
   win32: ^5.1.1
   path: ^1.8.3
   ffi: ^2.1.0
-  flutter_auto_gui: ^0.0.3
   path_provider: ^2.1.2
   google_fonts: ^6.1.0
   keyboard_event: ^0.3.4

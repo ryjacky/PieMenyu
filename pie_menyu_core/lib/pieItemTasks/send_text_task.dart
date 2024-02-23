@@ -2,7 +2,6 @@ library pie_menyu_core;
 
 import 'package:clipboard/clipboard.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_auto_gui/flutter_auto_gui.dart';
 import 'package:pie_menyu_core/db/pie_item_task.dart';
 import 'package:pie_menyu_core/pieItemTasks/send_key_task.dart';
 

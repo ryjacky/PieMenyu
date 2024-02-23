@@ -94,30 +94,6 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.0"
-  flutter_auto_gui:
-    dependency: "direct main"
-    description:
-      name: flutter_auto_gui
-      sha256: "39dc7f1180ba73e77c577502f670dcaaec2d652ea7e53c54742d5adac0458729"
-      url: "https://pub.dev"
-    source: hosted
-    version: "0.0.3"
-  flutter_auto_gui_platform_interface:
-    dependency: transitive
-    description:
-      name: flutter_auto_gui_platform_interface
-      sha256: f4b4e8272db4c3ed07469aae2f962ff71b6a7eb0c6fd352dda371584d5b8e0e2
-      url: "https://pub.dev"
-    source: hosted
-    version: "0.0.3"
-  flutter_auto_gui_windows:
-    dependency: transitive
-    description:
-      name: flutter_auto_gui_windows
-      sha256: "8493d57c564ffdf0c042fa53b801da3feb03cb7654f8eac5f9043dc0cd6a24b5"
-      url: "https://pub.dev"
-    source: hosted
-    version: "0.0.3"
   flutter_lints:
     dependency: "direct dev"
     description:
@@ -440,18 +416,18 @@ packages:
     dependency: "direct main"
     description:
       name: url_launcher
-      sha256: c512655380d241a337521703af62d2c122bf7b77a46ff7dd750092aa9433499c
+      sha256: "0ecc004c62fd3ed36a2ffcbe0dd9700aee63bd7532d0b642a488b1ec310f492e"
       url: "https://pub.dev"
     source: hosted
-    version: "6.2.4"
+    version: "6.2.5"
   url_launcher_android:
     dependency: transitive
     description:
       name: url_launcher_android
-      sha256: "507dc655b1d9cb5ebc756032eb785f114e415f91557b73bf60b7e201dfedeb2f"
+      sha256: d4ed0711849dd8e33eb2dd69c25db0d0d3fdc37e0a62e629fe32f57a22db2745
       url: "https://pub.dev"
     source: hosted
-    version: "6.2.2"
+    version: "6.3.0"
   url_launcher_ios:
     dependency: transitive
     description:
@@ -480,10 +456,10 @@ packages:
     dependency: transitive
     description:
       name: url_launcher_platform_interface
-      sha256: a932c3a8082e118f80a475ce692fde89dc20fddb24c57360b96bc56f7035de1f
+      sha256: "552f8a1e663569be95a8190206a38187b531910283c3e982193e4f2733f01029"
       url: "https://pub.dev"
     source: hosted
-    version: "2.3.1"
+    version: "2.3.2"
   url_launcher_web:
     dependency: transitive
     description:
@@ -536,10 +512,10 @@ packages:
     dependency: "direct main"
     description:
       name: window_manager
-      sha256: dcc865277f26a7dad263a47d0e405d77e21f12cb71f30333a52710a408690bd7
+      sha256: b3c895bdf936c77b83c5254bec2e6b3f066710c1f89c38b20b8acc382b525494
       url: "https://pub.dev"
     source: hosted
-    version: "0.3.7"
+    version: "0.3.8"
   xdg_directories:
     dependency: transitive
     description:
