@@ -29,7 +29,6 @@ class PieMenyuSystemTray {
         appWindow.hide();
       }),
       MenuItemLabel(label: 'Exit', onClicked: (menuItem) async {
-        await launchUrl(Uri.parse("piemenyueditor://close"));
         for (var callback in _onExitCallbacks) {
           callback();
         }
