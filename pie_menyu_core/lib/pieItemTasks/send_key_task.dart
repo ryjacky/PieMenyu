@@ -6,7 +6,6 @@ import 'dart:io';
 import 'package:ffi/ffi.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_auto_gui/flutter_auto_gui.dart';
-import 'package:hotkey_manager/hotkey_manager.dart';
 import 'package:pie_menyu_core/db/pie_item_task.dart';
 import 'package:win32/win32.dart';
 
@@ -46,11 +45,15 @@ class SendKeyTask extends PieItemTask with Executable {
 
   bool get alt => arguments[2] == "true";
 
-  set key(LogicalKeyboardKey value) {
-    arguments[3] = value.keyId.toString();
+  set key(LogicalKeyboardKey? value) {
+    if (value != null) arguments[3] = value.keyId.toString();
   }
 
-  LogicalKeyboardKey get key => LogicalKeyboardKey(int.tryParse(arguments[3]) ?? 0);
+  LogicalKeyboardKey? get key {
+    final keyId = int.tryParse(arguments[3]);
+    if (keyId == null) return null;
+    return LogicalKeyboardKey(keyId);
+  }
 
   List<String> get hotkeyStrings {
     final keys = <String>[];
@@ -59,7 +62,7 @@ class SendKeyTask extends PieItemTask with Executable {
     if (shift) keys.add("Shift");
     if (alt) keys.add("Alt");
 
-    keys.add(key.keyLabel);
+    keys.add(key?.keyLabel ?? "");
     return keys;
   }
 
@@ -91,8 +94,7 @@ class SendKeyTask extends PieItemTask with Executable {
   Future<void> execute() async {
     if (Platform.isWindows) {
       releasePressedKeysWindows();
-    } else if (Platform.isMacOS) {
-    } else if (Platform.isLinux) {
+    } else if (Platform.isMacOS) {} else if (Platform.isLinux) {
 
     }
     final keys = hotkeyStrings.map((e) => e.toLowerCase()).toList();
