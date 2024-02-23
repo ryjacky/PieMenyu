@@ -1,8 +1,8 @@
-import 'package:flutter/material.dart';
 import 'package:easy_localization/easy_localization.dart';
+import 'package:flutter/material.dart';
 import 'package:pie_menyu_core/pieItemTasks/send_key_task.dart';
 import 'package:pie_menyu_core/widgets/pieMenuView/pie_menu_state.dart';
-import 'package:pie_menyu_editor/view/widgets/keyboard_view.dart';
+import 'package:pie_menyu_editor/view/widgets/keyboard_key_selector.dart';
 import 'package:provider/provider.dart';
 
 import 'pie_item_task_card.dart';
@@ -48,26 +48,21 @@ class SendKeyTaskCard extends StatelessWidget {
       context: context,
       builder: (context) => AlertDialog(
         scrollable: true,
+        shape: const RoundedRectangleBorder(
+            borderRadius: BorderRadius.all(Radius.circular(10))),
         contentPadding: const EdgeInsets.all(20),
-        backgroundColor: Theme.of(context).colorScheme.secondaryContainer,
+        backgroundColor: Theme.of(context).colorScheme.background,
         content: SizedBox(
-          width: 1000,
-          height: 300,
-          child: KeyboardView(
-            initialKeys: sendKeyTask.hotkeyStrings,
-            onKeyPressed: (String key) {
-              if (key == "Ctrl") {
-                sendKeyTask.ctrl = !sendKeyTask.ctrl;
-              } else if (key == "Shift") {
-                sendKeyTask.shift = !sendKeyTask.shift;
-              } else if (key == "Alt") {
-                sendKeyTask.alt = !sendKeyTask.alt;
-              } else {
-                sendKeyTask.key = key;
-              }
-            },
-          ),
-        ),
+            width: 1000,
+            height: 300,
+            child: KeyboardKeySelector(
+              onChange: (task){
+                sendKeyTask.ctrl = task.ctrl;
+                sendKeyTask.shift = task.shift;
+                sendKeyTask.alt = task.alt;
+                sendKeyTask.key = task.key;
+              },
+            )),
         actions: [
           TextButton(
             onPressed: () {
