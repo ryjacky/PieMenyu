@@ -62,7 +62,8 @@ class _PieMenuScreenState extends State<PieMenuScreen> {
   }
 
   bool _screenKeyEventHandler(KeyEvent event) {
-    if (event is KeyDownEvent) {
+    // Handles slice hotkey
+    if (event is KeyUpEvent) {
       final lastPieMenuState = _pieMenuStates.lastOrNull;
       if (lastPieMenuState == null) {
         context.read<PieMenyuWindow>().hide();
