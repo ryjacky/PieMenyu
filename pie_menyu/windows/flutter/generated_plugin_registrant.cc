@@ -7,7 +7,7 @@
 #include "generated_plugin_registrant.h"
 
 #include <app_links/app_links_plugin_c_api.h>
-#include <hotkey_manager/hotkey_manager_plugin.h>
+#include <hotkey_manager_windows/hotkey_manager_windows_plugin_c_api.h>
 #include <isar_flutter_libs/isar_flutter_libs_plugin.h>
 #include <keyboard_event/keyboard_event_plugin.h>
 #include <mouse_event/mouse_event_plugin.h>
@@ -19,8 +19,8 @@
 void RegisterPlugins(flutter::PluginRegistry* registry) {
   AppLinksPluginCApiRegisterWithRegistrar(
       registry->GetRegistrarForPlugin("AppLinksPluginCApi"));
-  HotkeyManagerPluginRegisterWithRegistrar(
-      registry->GetRegistrarForPlugin("HotkeyManagerPlugin"));
+  HotkeyManagerWindowsPluginCApiRegisterWithRegistrar(
+      registry->GetRegistrarForPlugin("HotkeyManagerWindowsPluginCApi"));
   IsarFlutterLibsPluginRegisterWithRegistrar(
       registry->GetRegistrarForPlugin("IsarFlutterLibsPlugin"));
   KeyboardEventPluginRegisterWithRegistrar(

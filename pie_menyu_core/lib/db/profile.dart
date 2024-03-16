@@ -43,9 +43,9 @@ class Profile {
 @embedded
 class HotkeyToPieMenuId {
   @enumerated
-  KeyCode keyCode = KeyCode.space;
+  int? keyCode = KeyCode.space;
   @enumerated
-  List<KeyModifier> keyModifiers = [];
+  List<HotKeyModifier> keyModifiers = [];
 
   int pieMenuId = 0;
 

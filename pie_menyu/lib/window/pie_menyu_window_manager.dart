@@ -11,6 +11,7 @@ import 'package:pie_menyu_core/db/pie_menu.dart';
 import 'package:pie_menyu_core/db/profile.dart';
 import 'package:pie_menyu_core/widgets/pieMenuView/pie_menu_state.dart';
 import 'package:screen_retriever/screen_retriever.dart';
+import 'package:uni_platform/uni_platform.dart';
 import 'package:window_manager/window_manager.dart';
 
 import 'foreground_window.dart';
@@ -115,7 +116,7 @@ class PieMenyuWindow {
     int? pieMenuId = profile.hotkeyToPieMenuIdList
         .where(
           (htpm) =>
-              htpm.keyCode == hotkey.keyCode &&
+              htpm.keyCode == hotkey.physicalKey.keyCode &&
               htpm.keyModifiers.every(
                   (element) => hotkey.modifiers?.contains(element) ?? false),
         )

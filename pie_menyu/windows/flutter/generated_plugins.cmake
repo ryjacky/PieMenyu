@@ -4,7 +4,7 @@
 
 list(APPEND FLUTTER_PLUGIN_LIST
   app_links
-  hotkey_manager
+  hotkey_manager_windows
   isar_flutter_libs
   keyboard_event
   mouse_event

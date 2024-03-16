@@ -7,6 +7,7 @@ import 'package:hotkey_manager/hotkey_manager.dart';
 import 'package:keyboard_event/keyboard_event.dart' as hook;
 import 'package:pie_menyu/deep_linking/deep_link_handler.dart';
 import 'package:pie_menyu_core/db/db.dart';
+import 'package:uni_platform/uni_platform.dart';
 
 import 'known_v_key.dart';
 
@@ -58,7 +59,7 @@ class SystemKeyEvent {
     final hotkeys = await _db.getAllHotkeys();
     for (HotKey hotkey in hotkeys) {
       hotKeyManager.register(
-        hotkey..scope = HotKeyScope.system,
+        hotkey,
         keyDownHandler: _onKeyDown,
         keyUpHandler: _onKeyUp,
       );
@@ -70,7 +71,7 @@ class SystemKeyEvent {
       keyUpRegistered = true;
       hook.KeyboardEvent().startListening((keyEvent) {
         if (keyEvent.isKeyUP && _pressedKeys.contains(keyEvent.vkCode)) {
-          _onKeyUp(HotKey(KeyCode.space));
+          _onKeyUp(HotKey(key: LogicalKeyboardKey.space));
         }
       });
     }
@@ -99,9 +100,9 @@ class SystemKeyEvent {
     log("Hotkey pressed: $hotkey");
     _keyEventType = KeyEventType.down;
     _pressedKeys = [
-      kKnownVirtualKeyCodes[hotkey.keyCode.stringValue],
+      hotkey.physicalKey.keyCode,
       if (hotkey.modifiers != null)
-        ...hotkey.modifiers!.map((e) => kKnownVirtualKeyCodes[e.stringValue])
+        ...hotkey.modifiers!.map((e) => e.physicalKeys[0].keyCode)
     ];
 
     for (final listener in _keyDownListeners) {
