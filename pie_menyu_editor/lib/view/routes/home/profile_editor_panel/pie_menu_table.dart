@@ -207,6 +207,7 @@ class _PieMenuTableState extends State<PieMenuTable> {
     PieMenu pieMenu,
   ) {
     viewModel.removePieMenuFrom(activeProfile, pieMenu);
+    setState(() {});
     // Allow delete up to a single level.
     showSnackBar(
       SnackBar(
@@ -216,6 +217,7 @@ class _PieMenuTableState extends State<PieMenuTable> {
           label: "label-undo".tr(),
           onPressed: () {
             viewModel.cancelDelete();
+            setState(() {});
           },
         ),
       ),
