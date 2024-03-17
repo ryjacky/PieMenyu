@@ -5,22 +5,18 @@ import 'package:pie_menyu_editor/view/widgets/back_icon_button.dart';
 import 'package:pie_menyu_editor/view/widgets/clickable_text.dart';
 import 'package:provider/provider.dart';
 
-import 'settings_state.dart';
+import 'settings_page_state.dart';
 
-class LeftSettingsPanel extends StatefulWidget {
-  const LeftSettingsPanel({super.key});
+@protected
+class SettingsPageNavigationPanel extends StatelessWidget {
+  static const gap = 16.0;
 
-  @override
-  State<LeftSettingsPanel> createState() => _LeftSettingsPanelState();
-}
-
-class _LeftSettingsPanelState extends State<LeftSettingsPanel> {
-  final gap = 16.0;
+  const SettingsPageNavigationPanel({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final settingsState = context.read<SettingsState>();
-    final selectedSection = context.select<SettingsState, SettingsSection>(
+    final settingsState = context.read<SettingsPageState>();
+    final selectedSection = context.select<SettingsPageState, SettingsSection>(
         (value) => value.selectedSection);
 
     return Container(
@@ -31,7 +27,7 @@ class _LeftSettingsPanelState extends State<LeftSettingsPanel> {
         children: [
           // Custom back button
           const BackIconButton(),
-          Gap(gap),
+          const Gap(gap),
           // Table of contents
           ClickableText(
             title: 'label-general-settings'.tr(),
@@ -39,13 +35,13 @@ class _LeftSettingsPanelState extends State<LeftSettingsPanel> {
                 settingsState.selectedSection = SettingsSection.general,
             isSelected: selectedSection == SettingsSection.general,
           ),
-          Gap(gap),
+          const Gap(gap),
           ClickableText(
             title: 'label-data'.tr(),
             onTap: () => settingsState.selectedSection = SettingsSection.data,
             isSelected: selectedSection == SettingsSection.data,
           ),
-          Gap(gap),
+          const Gap(gap),
           ClickableText(
             title: 'label-about'.tr(),
             onTap: () => settingsState.selectedSection = SettingsSection.about,

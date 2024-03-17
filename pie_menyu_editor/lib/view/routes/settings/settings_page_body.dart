@@ -2,20 +2,21 @@ import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:launch_at_startup/launch_at_startup.dart';
 import 'package:easy_localization/easy_localization.dart';
-import 'package:pie_menyu_editor/view/routes/settings/settings_state.dart';
+import 'package:pie_menyu_editor/view/routes/settings/settings_page_state.dart';
 import 'package:pie_menyu_editor/view/widgets/compact_dropdown_menu.dart';
 import 'package:pie_menyu_editor/view/widgets/setting_list_tile.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-class RightSettingPanel extends StatefulWidget {
-  const RightSettingPanel({super.key});
+@protected
+class SettingsPageBody extends StatefulWidget {
+  const SettingsPageBody({super.key});
 
   @override
-  State<RightSettingPanel> createState() => _RightSettingPanelState();
+  State<SettingsPageBody> createState() => _SettingsPageBodyState();
 }
 
-class _RightSettingPanelState extends State<RightSettingPanel> {
+class _SettingsPageBodyState extends State<SettingsPageBody> {
   final GlobalKey generalSectionKey = GlobalKey();
   final GlobalKey dataSectionKey = GlobalKey();
   final GlobalKey aboutSectionKey = GlobalKey();
@@ -40,9 +41,9 @@ class _RightSettingPanelState extends State<RightSettingPanel> {
 
   @override
   Widget build(BuildContext context) {
-    final state = context.read<SettingsState>();
+    final state = context.read<SettingsPageState>();
 
-    final selectedSection = context.select<SettingsState, SettingsSection>(
+    final selectedSection = context.select<SettingsPageState, SettingsSection>(
         (value) => value.selectedSection);
 
     switch (selectedSection) {
@@ -123,7 +124,7 @@ class _RightSettingPanelState extends State<RightSettingPanel> {
     ];
   }
 
-  List<Widget> buildDataSection(SettingsState state) {
+  List<Widget> buildDataSection(SettingsPageState state) {
     return [
       Padding(
         key: dataSectionKey,

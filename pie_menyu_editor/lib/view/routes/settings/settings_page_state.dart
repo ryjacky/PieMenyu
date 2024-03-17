@@ -6,6 +6,7 @@ import 'package:path/path.dart' as p;
 import 'package:pie_menyu_core/db/db.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+@protected
 enum SettingsSection {
   general,
   data,
@@ -13,7 +14,8 @@ enum SettingsSection {
   language,
 }
 
-class SettingsState extends ChangeNotifier {
+@protected
+class SettingsPageState extends ChangeNotifier {
   SettingsSection _selectedSection = SettingsSection.general;
 
   SettingsSection get selectedSection => _selectedSection;
@@ -23,9 +25,9 @@ class SettingsState extends ChangeNotifier {
     notifyListeners();
   }
   
-  Database _db;
+  final Database _db;
   
-  SettingsState(this._db);
+  SettingsPageState(this._db);
 
   Future<void> exportDataThenShowDir() async {
     String? result = await FilePicker.platform.getDirectoryPath();

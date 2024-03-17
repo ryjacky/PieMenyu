@@ -1,20 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:pie_menyu_core/db/db.dart';
-import 'package:pie_menyu_editor/view/routes/settings/right_setting_panel.dart';
-import 'package:pie_menyu_editor/view/routes/settings/settings_state.dart';
 import 'package:pie_menyu_editor/view/widgets/title_bar.dart';
 import 'package:provider/provider.dart';
 
-import 'left_settings_panel.dart';
+import 'settings_page_nav_panel.dart';
+import 'settings_page_body.dart';
+import 'settings_page_state.dart';
 
-class SettingsPage extends StatefulWidget {
+class SettingsPage extends StatelessWidget {
   const SettingsPage({super.key});
 
-  @override
-  State<SettingsPage> createState() => _SettingsPageState();
-}
-
-class _SettingsPageState extends State<SettingsPage> {
   @override
   Widget build(BuildContext context) {
     final db = context.read<Database>();
@@ -23,7 +18,7 @@ class _SettingsPageState extends State<SettingsPage> {
       backgroundColor: Theme.of(context).colorScheme.background,
       body: MultiProvider(
         providers: [
-          ChangeNotifierProvider(create: (_) => SettingsState(db)),
+          ChangeNotifierProvider(create: (_) => SettingsPageState(db)),
         ],
         child: const Column(
           children: [
@@ -31,8 +26,8 @@ class _SettingsPageState extends State<SettingsPage> {
             Expanded(
               child: Row(
                 children: [
-                  Expanded(flex: 3, child: LeftSettingsPanel()),
-                  Expanded(flex: 7, child: RightSettingPanel()),
+                  Expanded(flex: 3, child: SettingsPageNavigationPanel()),
+                  Expanded(flex: 7, child: SettingsPageBody()),
                 ],
               ),
             ),
