@@ -1,11 +1,13 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:pie_menyu_editor/system/task_bar_process_info/task_bar_process_info.dart';
+
+import 'gui_process.dart';
 
 class ProcessListTile extends StatefulWidget {
-  final TaskBarProcessInfo processInfo;
-  final Function(TaskBarProcessInfo info)? onTap;
+  final GUIProcess processInfo;
+  final Function(GUIProcess info)? onTap;
+
   const ProcessListTile({super.key, required this.processInfo, this.onTap});
 
   @override
@@ -20,8 +22,7 @@ class _ProcessListTileState extends State<ProcessListTile> {
     image ??= Image.memory(
       base64Decode(widget.processInfo.base64Icon),
       errorBuilder: (context, error, stackTrace) {
-        return const Icon(Icons.question_mark,
-            size: 32);
+        return const Icon(Icons.question_mark, size: 32);
       },
     );
 

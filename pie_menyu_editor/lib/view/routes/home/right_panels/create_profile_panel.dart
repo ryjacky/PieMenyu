@@ -2,7 +2,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:pie_menyu_editor/system/task_bar_process_info/process_list_tile.dart';
-import 'package:pie_menyu_editor/system/task_bar_process_info/task_bar_process_info.dart';
+import 'package:pie_menyu_editor/system/task_bar_process_info/gui_process.dart';
 import 'package:provider/provider.dart';
 
 import '../home_page_view_model.dart';
@@ -16,8 +16,8 @@ class CreateProfilePanel extends StatefulWidget {
 }
 
 class _CreateProfilePanelState extends State<CreateProfilePanel> {
-  Set<TaskBarProcessInfo> activeApps = {
-    TaskBarProcessInfo(
+  Set<GUIProcess> activeApps = {
+    GUIProcess(
         processName: "label-loading".tr(),
         exePath: "label-loading".tr(),
         base64Icon: "",
@@ -33,7 +33,7 @@ class _CreateProfilePanelState extends State<CreateProfilePanel> {
   }
 
   setActiveWindow() async {
-    activeApps = await TaskBarProcessInfo.getAllUnique();
+    activeApps = await GUIProcess.getAllUnique();
     setState(() {});
   }
 
@@ -68,7 +68,7 @@ class _CreateProfilePanelState extends State<CreateProfilePanel> {
           Expanded(
             child: ListView(
               children: [
-                for (TaskBarProcessInfo activeApp in activeApps)
+                for (GUIProcess activeApp in activeApps)
                   if (activeApp.processName.contains(filterText) ||
                       activeApp.exePath.contains(filterText))
                     ProcessListTile(
@@ -84,7 +84,7 @@ class _CreateProfilePanelState extends State<CreateProfilePanel> {
     );
   }
 
-  tryCreateProfile(TaskBarProcessInfo info) {
+  tryCreateProfile(GUIProcess info) {
     context
         .read<HomePageViewModel>()
         .createProfile(info.processName, info.exePath, info.base64Icon)
