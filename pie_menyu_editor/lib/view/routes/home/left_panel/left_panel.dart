@@ -6,7 +6,7 @@ import 'package:pie_menyu_editor/view/routes/home/left_panel/create_profile_butt
 import 'package:pie_menyu_editor/view/routes/home/left_panel/profile_list_view.dart';
 import 'package:provider/provider.dart';
 
-import '../../settings/settings_page.dart';
+import '../../settings_page/settings_page.dart';
 import '../home_page_view_model.dart';
 
 class LeftPanel extends StatefulWidget {

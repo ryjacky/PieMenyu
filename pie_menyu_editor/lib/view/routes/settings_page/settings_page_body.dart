@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:launch_at_startup/launch_at_startup.dart';
 import 'package:easy_localization/easy_localization.dart';
-import 'package:pie_menyu_editor/view/routes/settings/settings_page_state.dart';
+import 'package:pie_menyu_editor/view/routes/settings_page/settings_page_state.dart';
 import 'package:pie_menyu_editor/view/widgets/compact_dropdown_menu.dart';
 import 'package:pie_menyu_editor/view/widgets/setting_list_tile.dart';
 import 'package:provider/provider.dart';
