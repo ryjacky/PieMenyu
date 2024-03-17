@@ -11,7 +11,6 @@ import 'package:pie_menyu_core/db/pie_menu.dart';
 import 'package:pie_menyu_core/db/profile.dart';
 import 'package:pie_menyu_core/widgets/pieMenuView/pie_menu_state.dart';
 import 'package:screen_retriever/screen_retriever.dart';
-import 'package:uni_platform/uni_platform.dart';
 import 'package:window_manager/window_manager.dart';
 
 import 'foreground_window.dart';
@@ -113,13 +112,17 @@ class PieMenyuWindow {
   }
 
   Future<PieMenu?> _getHotkeyPieMenuIn(Profile profile, HotKey hotkey) async {
-    int? pieMenuId = profile.hotkeyToPieMenuIdList
-        .where(
-          (htpm) =>
-              htpm.keyCode == hotkey.physicalKey.keyCode &&
-              htpm.keyModifiers.every(
-                  (element) => hotkey.modifiers?.contains(element) ?? false),
-        )
+    int? pieMenuId = profile.pieMenuHotkeys
+        .where((pieMenuHotkey) {
+          return pieMenuHotkey.keyId == hotkey.logicalKey.keyId &&
+              pieMenuHotkey.ctrl ==
+                  (hotkey.modifiers?.contains(HotKeyModifier.control) ??
+                      false) &&
+              pieMenuHotkey.shift ==
+                  (hotkey.modifiers?.contains(HotKeyModifier.shift) ?? false) &&
+              pieMenuHotkey.alt ==
+                  (hotkey.modifiers?.contains(HotKeyModifier.alt) ?? false);
+        })
         .firstOrNull
         ?.pieMenuId;
 

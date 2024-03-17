@@ -1,6 +1,5 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:hotkey_manager/hotkey_manager.dart';
 import 'package:pie_menyu_core/db/pie_menu.dart';
 import 'package:pie_menyu_core/db/profile.dart';
 import 'package:pie_menyu_editor/view/routes/home/profile_editor_panel/pie_menu_table.dart';
@@ -75,49 +74,9 @@ class _ProfileEditorPanelState extends State<ProfileEditorPanel> {
     await context.read<HomePageViewModel>().putPieMenu(pieMenu);
   }
 
-  HotKey? getPieMenuHotkey(PieMenu pieMenu, Profile profile) {
-    try {
-      HotkeyToPieMenuId htpm = profile.hotkeyToPieMenuIdList
-          .firstWhere((element) => element.pieMenuId == pieMenu.id);
-
-      return HotKey(htpm.keyCode, modifiers: htpm.keyModifiers);
-    } catch (e) {
-      return null;
-    }
-  }
-
-  addHotkeyToProfile(Profile profile, HotKey hotKey, int pieMenuId) async {
-    List<HotkeyToPieMenuId> hotkeyToPieMenuIdList = profile
-        .hotkeyToPieMenuIdList
-        .where((element) => element.pieMenuId != pieMenuId)
-        .toList();
-    hotkeyToPieMenuIdList.add(HotkeyToPieMenuId.fromHotKey(hotKey, pieMenuId));
-
-    profile.hotkeyToPieMenuIdList = hotkeyToPieMenuIdList;
-    context.read<HomePageViewModel>().putProfile(profile);
-  }
-
-  removeHotkeyFromProfile(Profile profile, HotKey hotKey) async {
-    List<HotkeyToPieMenuId> hotkeyToPieMenuIdList = profile
-        .hotkeyToPieMenuIdList
-        .where((element) =>
-            element.keyCode != hotKey.keyCode ||
-            element.keyModifiers.contains(KeyModifier.shift) !=
-                hotKey.modifiers?.contains(KeyModifier.shift) ||
-            element.keyModifiers.contains(KeyModifier.control) !=
-                hotKey.modifiers?.contains(KeyModifier.control) ||
-            element.keyModifiers.contains(KeyModifier.alt) !=
-                hotKey.modifiers?.contains(KeyModifier.alt))
-        .toList();
-
-    profile.hotkeyToPieMenuIdList = hotkeyToPieMenuIdList;
-    context.read<HomePageViewModel>().putProfile(profile);
-  }
-
-  showSnackBar(SnackBar snackBar){
+  showSnackBar(SnackBar snackBar) {
     final scaffoldMessenger = ScaffoldMessenger.of(context);
     scaffoldMessenger.clearSnackBars();
     scaffoldMessenger.showSnackBar(snackBar);
   }
-
 }

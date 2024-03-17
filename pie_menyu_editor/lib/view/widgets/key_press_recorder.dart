@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:hotkey_manager/hotkey_manager.dart';
 
 // From the hotkey_manager package.
 class _VirtualKeyView extends StatelessWidget {
@@ -46,10 +45,10 @@ class KeyPressRecorder extends StatefulWidget {
     this.onClear,
   });
 
-  final HotKey? initialHotkey;
-  final ValueChanged<HotKey> onHotKeyRecorded;
-  final ValueChanged<HotKey>? onClear;
-  final bool Function(HotKey hotkey)? validation;
+  final LogicalKeySet? initialHotkey;
+  final ValueChanged<LogicalKeySet> onHotKeyRecorded;
+  final ValueChanged<LogicalKeySet>? onClear;
+  final bool Function(LogicalKeySet hotkey)? validation;
 
   @override
   State<KeyPressRecorder> createState() => _KeyPressRecorderState();
@@ -59,12 +58,12 @@ class _KeyPressRecorderState extends State<KeyPressRecorder> {
   bool ctrl = false;
   bool alt = false;
   bool shift = false;
-  KeyCode? key;
+  LogicalKeyboardKey? key;
 
   bool prevCtrl = false;
   bool prevAlt = false;
   bool prevShift = false;
-  KeyCode? prevKey;
+  LogicalKeyboardKey? prevKey;
 
   final FocusNode _focusNode = FocusNode();
 
@@ -73,13 +72,18 @@ class _KeyPressRecorderState extends State<KeyPressRecorder> {
     _focusNode.onKeyEvent = _handleKeyEvent;
 
     if (widget.initialHotkey != null) {
-      final modifiers = widget.initialHotkey!.modifiers;
-      if (modifiers != null) {
-        ctrl = modifiers.contains(KeyModifier.control);
-        alt = modifiers.contains(KeyModifier.alt);
-        shift = modifiers.contains(KeyModifier.shift);
+      for (final key in widget.initialHotkey!.keys) {
+        if (key == LogicalKeyboardKey.control) {
+          ctrl = true;
+        } else if (key == LogicalKeyboardKey.alt) {
+          alt = true;
+        } else if (key == LogicalKeyboardKey.shift) {
+          shift = true;
+        } else {
+          this.key = key;
+        }
       }
-      key = widget.initialHotkey!.keyCode;
+
     }
     super.initState();
   }
@@ -117,13 +121,13 @@ class _KeyPressRecorderState extends State<KeyPressRecorder> {
       case LogicalKeyboardKey.shiftRight:
         shift = isKeyDown;
         break;
+      case LogicalKeyboardKey.metaRight:
+      case LogicalKeyboardKey.metaLeft:
+      case LogicalKeyboardKey.capsLock:
+        return KeyEventResult.handled;
       default:
-        if (KeyModifierParser.fromLogicalKey(keyEvent.logicalKey) != null) {
-          return KeyEventResult.handled;
-        }
-
         if (isKeyDown) {
-          key = KeyCodeParser.fromLogicalKey(keyEvent.logicalKey);
+          key = keyEvent.logicalKey;
           _focusNode.unfocus();
         } else if (keyEvent is KeyUpEvent) {
           key = null;
@@ -195,14 +199,12 @@ class _KeyPressRecorderState extends State<KeyPressRecorder> {
   }
 
   void _clear() {
-    widget.onClear?.call(HotKey(
+    widget.onClear?.call(LogicalKeySet.fromSet({
       prevKey!,
-      modifiers: [
-        if (prevCtrl) KeyModifier.control,
-        if (prevAlt) KeyModifier.alt,
-        if (prevShift) KeyModifier.shift,
-      ],
-    ));
+      if (prevCtrl) LogicalKeyboardKey.control,
+      if (prevAlt) LogicalKeyboardKey.alt,
+      if (prevShift) LogicalKeyboardKey.shift,
+    }));
 
     prevAlt = false;
     prevCtrl = false;
@@ -222,14 +224,13 @@ class _KeyPressRecorderState extends State<KeyPressRecorder> {
       return;
     }
 
-    final hotkey = HotKey(
+    final hotkey = LogicalKeySet.fromSet({
       key!,
-      modifiers: [
-        if (ctrl) KeyModifier.control,
-        if (alt) KeyModifier.alt,
-        if (shift) KeyModifier.shift,
-      ],
-    );
+      if (ctrl) LogicalKeyboardKey.control,
+      if (alt) LogicalKeyboardKey.alt,
+      if (shift) LogicalKeyboardKey.shift,
+    });
+
     final validationResult = widget.validation?.call(hotkey) ?? true;
     if (validationResult) {
       widget.onHotKeyRecorded(hotkey);

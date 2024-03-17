@@ -7,9 +7,8 @@ import 'package:hotkey_manager/hotkey_manager.dart';
 import 'package:keyboard_event/keyboard_event.dart' as hook;
 import 'package:pie_menyu/deep_linking/deep_link_handler.dart';
 import 'package:pie_menyu_core/db/db.dart';
+import 'package:pie_menyu_core/db/profile.dart';
 import 'package:uni_platform/uni_platform.dart';
-
-import 'known_v_key.dart';
 
 typedef KeyEventListener = bool Function(HotKey hotKey);
 
@@ -56,10 +55,16 @@ class SystemKeyEvent {
   _registerHotkey() async {
     await hotKeyManager.unregisterAll();
 
-    final hotkeys = await _db.getAllHotkeys();
-    for (HotKey hotkey in hotkeys) {
+    final pieMenuHotkeys = await _db.getAllHotkeys();
+    for (PieMenuHotkey hotkey in pieMenuHotkeys) {
+      if (hotkey.keyId == null) continue;
+
       hotKeyManager.register(
-        hotkey,
+        HotKey(key: LogicalKeyboardKey(hotkey.keyId!), modifiers: [
+          if (hotkey.ctrl) HotKeyModifier.control,
+          if (hotkey.shift) HotKeyModifier.shift,
+          if (hotkey.alt) HotKeyModifier.alt,
+        ]),
         keyDownHandler: _onKeyDown,
         keyUpHandler: _onKeyUp,
       );

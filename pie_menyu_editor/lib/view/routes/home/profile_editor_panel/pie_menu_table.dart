@@ -1,7 +1,8 @@
 import 'package:easy_localization/easy_localization.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:hotkey_manager/hotkey_manager.dart';
 import 'package:pie_menyu_core/db/db.dart';
 import 'package:pie_menyu_core/db/pie_menu.dart';
 import 'package:pie_menyu_core/db/profile.dart';
@@ -94,8 +95,12 @@ class _PieMenuTableState extends State<PieMenuTable> {
                 onClear: (prevHotkey) =>
                     removeHotkeyFromProfile(activeProfile, prevHotkey),
                 validation: (hotkey) {
-                  final isHotkeyUsed = activeProfile.hotkeyToPieMenuIdList
-                      .any((htpm) => isHotkeyEqual(htpm, hotkey));
+                  final isHotkeyUsed =
+                      activeProfile.pieMenuHotkeys.any((pieMenuHotkey) {
+                    final keySet = pieMenuHotkey.keySet;
+                    if (keySet == null) return true;
+                    return isKeySetEqual(keySet, hotkey);
+                  });
                   if (!isHotkeyUsed) return true;
 
                   showSnackBar(SnackBar(
@@ -159,46 +164,56 @@ class _PieMenuTableState extends State<PieMenuTable> {
     await context.read<HomePageViewModel>().putPieMenu(pieMenu);
   }
 
-  HotKey? getPieMenuHotkey(PieMenu pieMenu, Profile profile) {
+  LogicalKeySet? getPieMenuHotkey(PieMenu pieMenu, Profile profile) {
     try {
-      HotkeyToPieMenuId htpm = profile.hotkeyToPieMenuIdList
+      PieMenuHotkey hotkey = profile.pieMenuHotkeys
           .firstWhere((element) => element.pieMenuId == pieMenu.id);
 
-      return HotKey(htpm.keyCode, modifiers: htpm.keyModifiers);
+      print(hotkey.keySet);
+      return hotkey.keySet;
     } catch (e) {
       return null;
     }
   }
 
-  addHotkeyToProfile(Profile profile, HotKey hotKey, int pieMenuId) async {
-    List<HotkeyToPieMenuId> hotkeyToPieMenuIdList = profile
-        .hotkeyToPieMenuIdList
+  addHotkeyToProfile(
+      Profile profile, LogicalKeySet keySet, int pieMenuId) async {
+    List<PieMenuHotkey> hotkeyToPieMenuIdList = profile.pieMenuHotkeys
         .where((element) => element.pieMenuId != pieMenuId)
         .toList();
-    hotkeyToPieMenuIdList.add(HotkeyToPieMenuId.fromHotKey(hotKey, pieMenuId));
 
-    profile.hotkeyToPieMenuIdList = hotkeyToPieMenuIdList;
+    final pieMenuHotkey = PieMenuHotkey(pieMenuId: pieMenuId);
+    for (final key in keySet.keys) {
+      if (key == LogicalKeyboardKey.control) {
+        pieMenuHotkey.ctrl = true;
+      } else if (key == LogicalKeyboardKey.shift) {
+        pieMenuHotkey.shift = true;
+      } else if (key == LogicalKeyboardKey.alt) {
+        pieMenuHotkey.alt = true;
+      } else {
+        pieMenuHotkey.keyId = key.keyId;
+      }
+    }
+    hotkeyToPieMenuIdList.add(pieMenuHotkey);
+
+    profile.pieMenuHotkeys = hotkeyToPieMenuIdList;
     context.read<HomePageViewModel>().putProfile(profile);
   }
 
-  removeHotkeyFromProfile(Profile profile, HotKey hotKey) async {
-    List<HotkeyToPieMenuId> hotkeyToPieMenuIdList = profile
-        .hotkeyToPieMenuIdList
-        .where((element) => !isHotkeyEqual(element, hotKey))
-        .toList();
+  removeHotkeyFromProfile(Profile profile, LogicalKeySet keySet) async {
+    List<PieMenuHotkey> hotkeyToPieMenuIdList =
+        profile.pieMenuHotkeys.where((element) {
+      if (element.keySet == null) return false;
+      return !isKeySetEqual(element.keySet!, keySet);
+    }).toList();
 
-    profile.hotkeyToPieMenuIdList = hotkeyToPieMenuIdList;
+    profile.pieMenuHotkeys = hotkeyToPieMenuIdList;
     context.read<HomePageViewModel>().putProfile(profile);
   }
 
-  isHotkeyEqual(HotkeyToPieMenuId htpm, HotKey hotkey) {
-    return htpm.keyCode == hotkey.keyCode &&
-        htpm.keyModifiers.contains(KeyModifier.shift) ==
-            hotkey.modifiers?.contains(KeyModifier.shift) &&
-        htpm.keyModifiers.contains(KeyModifier.control) ==
-            hotkey.modifiers?.contains(KeyModifier.control) &&
-        htpm.keyModifiers.contains(KeyModifier.alt) ==
-            hotkey.modifiers?.contains(KeyModifier.alt);
+  /// return false when both s1 and s2 are null
+  isKeySetEqual(LogicalKeySet s1, LogicalKeySet s2) {
+    return listEquals(s1.keys.toList(), s2.keys.toList());
   }
 
   void removePieMenu(

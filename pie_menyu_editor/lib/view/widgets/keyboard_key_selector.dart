@@ -1,11 +1,11 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:gap/gap.dart';
 import 'package:pie_menyu_core/pieItemTasks/send_key_task.dart';
 import 'package:pie_menyu_editor/view/widgets/key_press_recorder.dart';
 import 'package:pie_menyu_editor/view/widgets/modifier_key_toggle_buttons.dart';
 import 'package:pie_menyu_editor/view/widgets/special_key_selector.dart';
-import 'package:hotkey_manager/hotkey_manager.dart';
 
 class KeyboardKeySelector extends StatefulWidget {
   final Function(SendKeyTask hotkey)? onChange;
@@ -64,16 +64,17 @@ class _KeyboardKeySelectorState extends State<KeyboardKeySelector> {
                         width: 450,
                         child: KeyPressRecorder(
                           onHotKeyRecorded: (event) {
-                            _hotkey.ctrl = event.modifiers
-                                    ?.contains(KeyModifier.control) ??
-                                false;
-                            _hotkey.shift =
-                                event.modifiers?.contains(KeyModifier.shift) ??
-                                    false;
-                            _hotkey.alt =
-                                event.modifiers?.contains(KeyModifier.alt) ??
-                                    false;
-                            _hotkey.key = event.keyCode.logicalKey;
+                            for (LogicalKeyboardKey key in event.keys) {
+                              if (key == LogicalKeyboardKey.control) {
+                                _hotkey.ctrl = true;
+                              } else if (key == LogicalKeyboardKey.alt) {
+                                _hotkey.alt = true;
+                              } else if (key == LogicalKeyboardKey.shift) {
+                                _hotkey.shift = true;
+                              } else {
+                                _hotkey.key = key;
+                              }
+                            }
 
                             widget.onChange?.call(_hotkey);
                           },

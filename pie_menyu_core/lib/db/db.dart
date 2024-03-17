@@ -3,7 +3,6 @@ library pie_menyu_core;
 import 'dart:developer';
 import 'dart:io';
 
-import 'package:hotkey_manager/hotkey_manager.dart';
 import 'package:isar/isar.dart';
 import 'package:pie_menyu_core/db/profile_exe.dart';
 import 'package:pie_menyu_core/widgets/pieMenuView/pie_menu_state.dart';
@@ -69,46 +68,17 @@ class Database {
     return profileExe.profile.value;
   }
 
-  Future<List<HotKey>> getAllHotkeys() async {
-    final List<HotKey> hotkeys = [];
+  Future<List<PieMenuHotkey>> getAllHotkeys() async {
+    final List<PieMenuHotkey> hotkeys = [];
 
     final List<Profile> profiles =
         await _isar.profiles.where().filter().enabledEqualTo(true).findAll();
+
     for (Profile profile in profiles) {
-      for (HotkeyToPieMenuId htpm in profile.hotkeyToPieMenuIdList) {
-        hotkeys.add(HotKey(htpm.keyCode, modifiers: htpm.keyModifiers));
-      }
+      hotkeys.addAll(profile.pieMenuHotkeys);
     }
 
     return hotkeys;
-  }
-
-  Future<Map<String, List<HotKey>>> getExeToHotkeyMap() async {
-    final Map<String, List<HotKey>> exeToHotkeyMap = {};
-
-    final List<ProfileExe> profileExes =
-        await _isar.profileExes.where().findAll();
-    for (ProfileExe profileExe in profileExes) {
-      await profileExe.profile.load();
-      final Profile? profile = profileExe.profile.value;
-
-      if (profile == null) {
-        log("Profile not found, id: ${profileExe.profile}");
-        continue;
-      }
-
-      final List<HotKey> hotkeys = [];
-      for (HotkeyToPieMenuId hotkeyToPieMenuId
-          in profile.hotkeyToPieMenuIdList) {
-        hotkeys.add(HotKey(hotkeyToPieMenuId.keyCode,
-            modifiers: hotkeyToPieMenuId.keyModifiers,
-            scope: HotKeyScope.system));
-      }
-
-      exeToHotkeyMap[profileExe.path] = hotkeys;
-    }
-
-    return exeToHotkeyMap;
   }
 
   save(PieMenuState state) async {

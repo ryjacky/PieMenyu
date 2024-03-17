@@ -6,7 +6,6 @@ list(APPEND FLUTTER_PLUGIN_LIST
   app_links
   bitsdojo_window_windows
   desktop_drop
-  hotkey_manager
   isar_flutter_libs
   screen_retriever
   url_launcher_windows
