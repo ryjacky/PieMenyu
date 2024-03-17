@@ -7,14 +7,9 @@ import 'package:provider/provider.dart';
 import '../../widgets/title_bar.dart';
 import 'editor_panel/editor_panel.dart';
 
-class PieMenuEditorPage extends StatefulWidget {
+class PieMenuEditorPage extends StatelessWidget {
   const PieMenuEditorPage({super.key});
 
-  @override
-  State<PieMenuEditorPage> createState() => _PieMenuEditorPageState();
-}
-
-class _PieMenuEditorPageState extends State<PieMenuEditorPage> {
   @override
   Widget build(BuildContext context) {
     final pieMenuState = context.watch<PieMenuState>();
