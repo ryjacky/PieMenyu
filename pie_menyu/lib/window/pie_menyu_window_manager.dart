@@ -77,8 +77,6 @@ class PieMenyuWindow {
 
     final pieMenuState = PieMenuState.fromPieMenu(_db, pieMenu);
     _pieMenuStateProvider.replaceStates([pieMenuState]);
-    _pieMenuStateProvider.pieMenuPositions[pieMenuState] =
-        await getRelativeCursorScreenPoint();
 
     await windowManager.setBounds((await getCurrentDisplayBounds()).deflate(1));
     await windowManager.show();

@@ -129,18 +129,22 @@ class _PieMenuScreenState extends State<PieMenuScreen> {
 
     return MouseRegion(
       onHover: _processMouseEvent,
+      onEnter: (e) => setState(() {
+        pieMenuPos[_pieMenuStates.last] ??= e.position;
+      }),
       child: Scaffold(
         backgroundColor: Colors.transparent,
         body: LayoutBuilder(builder: (_, constraint) {
           return Stack(
             children: [
               for (final state in _pieMenuStates)
-                buildPieMenuView(
-                  state,
-                  constraint,
-                  pieMenuPos[state] ??= _mousePosition,
-                  state == _pieMenuStates.last,
-                )
+                if (pieMenuPos[state] != null)
+                  buildPieMenuView(
+                    state,
+                    constraint,
+                    pieMenuPos[state]!,
+                    state == _pieMenuStates.last,
+                  )
             ],
           );
         }),
