@@ -101,6 +101,7 @@ class _PieMenuScreenState extends State<PieMenuScreen> {
     final instance = getPieItemInstanceAt(
       _mousePosition,
       pieMenuPos[_pieMenuStates.last] ??= _mousePosition,
+      _pieMenuStates.last.shape.centerRadius,
       _pieMenuStates.last.pieItemInstances,
     );
 
@@ -155,9 +156,15 @@ class _PieMenuScreenState extends State<PieMenuScreen> {
   PieItemInstance? getPieItemInstanceAt(
     Offset position,
     Offset pieCenterPosition,
+    double pieCenterRadius,
     List<PieItemInstance> instances,
   ) {
+
     if (instances.isEmpty) return null;
+
+    if (sqrt(pow(position.dx - pieCenterPosition.dx, 2) + pow(position.dy - pieCenterPosition.dy, 2)) <= pieCenterRadius) {
+      return instances[0];
+    }
 
     final dx = position.dx - pieCenterPosition.dx;
     // 0,0 is top left, so dy is inverted
@@ -169,16 +176,17 @@ class _PieMenuScreenState extends State<PieMenuScreen> {
       pieCenterRotation += 2 * pi;
     }
 
+    final nPieItems = instances.length - 1;
     // Offset the rotation by half the angle of a pie item,
     // which is the detection range
-    pieCenterRotation += 2 * pi / instances.length / 2;
+    pieCenterRotation += 2 * pi / nPieItems / 2;
 
     var activeBtnIndex =
-        (instances.length * pieCenterRotation / (2 * pi)).floor();
+        (nPieItems * pieCenterRotation / (2 * pi)).floor();
 
     // Because we offset the rotation by half the angle of a pie item,
     // we need to mod by the number of pie items to get the correct index
-    return instances[activeBtnIndex % instances.length];
+    return instances[activeBtnIndex % nPieItems + 1];
   }
 
   Widget buildPieMenuView(
