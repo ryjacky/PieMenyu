@@ -69,8 +69,9 @@ class _SettingsPageBodyState extends State<SettingsPageBody> {
               Gap(gap),
               ...buildLanguageSection(),
               Gap(gap),
-              ...buildDataSection(state),
-              Gap(gap),
+              // TODO: #9 https://github.com/ryjacky/PieMenyu/issues/9
+              // ...buildDataSection(state),
+              // Gap(gap),
               ...buildAboutSection(),
             ],
           ),
