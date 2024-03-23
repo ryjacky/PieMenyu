@@ -51,7 +51,7 @@ class _PieItemListTabState extends State<PieItemListTab> {
                     child: Icon(
                       FontAwesomeIcons.gripVertical,
                       size: 15,
-                      color: Theme.of(context).colorScheme.secondary,
+                      color: piInstance == pieMenuState.activePieItemInstance ? Theme.of(context).colorScheme.primary : Theme.of(context).colorScheme.secondary,
                     ),
                   ),
                 ),
