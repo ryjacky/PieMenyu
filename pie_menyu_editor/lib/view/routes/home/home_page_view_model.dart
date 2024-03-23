@@ -20,9 +20,9 @@ class HomePageViewModel extends ChangeNotifier {
 
   Profile get activeProfile => _activeProfile;
 
-  MapEntry<PieMenu, Profile>? _toDelete;
+  Map<PieMenu, Profile> _toDelete = {};
 
-  MapEntry<PieMenu, Profile>? get toDelete => _toDelete;
+  Map<PieMenu, Profile> get toDelete => _toDelete;
   Timer? _toDeleteTimer;
 
   set activeProfile(Profile profile) {
@@ -88,20 +88,22 @@ class HomePageViewModel extends ChangeNotifier {
   }
 
   Future<void> removePieMenuFrom(Profile profile, PieMenu pieMenu) async {
-    _toDelete = MapEntry(pieMenu, profile);
+    _toDelete[pieMenu] = profile;
     _toDeleteTimer = Timer(const Duration(seconds: 5), () async {
-      profile.pieMenus.remove(pieMenu);
+      for (final toDeleteEntry in _toDelete.entries) {
+        profile.pieMenus.remove(toDeleteEntry.key);
+      }
       await _db.updateProfileToPieMenuLinks(profile);
       await updateState();
-      _toDelete = null;
+      _toDelete.remove(pieMenu);
     });
 
     notifyListeners();
   }
 
-  cancelDelete() {
+  cancelDelete(PieMenu pieMenu) {
     _toDeleteTimer?.cancel();
-    _toDelete = null;
+    _toDelete.remove(pieMenu);
     notifyListeners();
   }
 
