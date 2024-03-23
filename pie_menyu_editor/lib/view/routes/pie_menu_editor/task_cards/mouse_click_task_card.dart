@@ -97,7 +97,7 @@ class _MouseClickTaskCardState extends State<MouseClickTaskCard> {
                 }
 
                 final state = context.read<PieMenuState>();
-                final pieItem = state.activePieItemInstance;
+                final pieItem = state.activePieItemDelegate;
                 state.updateTaskIn(
                     pieItem, widget.mouseClickTask..mouseButton = btn);
               });
@@ -125,7 +125,7 @@ class _MouseClickTaskCardState extends State<MouseClickTaskCard> {
         ..y = mousePos.dy.toInt();
 
       final state = context.read<PieMenuState>();
-      final pieItem = state.activePieItemInstance;
+      final pieItem = state.activePieItemDelegate;
       state.updateTaskIn(pieItem, widget.mouseClickTask);
 
       setState(() {

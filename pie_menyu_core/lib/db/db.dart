@@ -83,7 +83,7 @@ class Database {
 
   save(PieMenuState state) async {
     log("Saving pie menu state", name: "db.dart save()");
-    final pieItems = state.pieItemInstances.map((e) {
+    final pieItems = state.pieItemDelegates.map((e) {
       if (e.pieItem != null && e.pieItem!.id < 0) {
         e.pieItem!.id = Isar.autoIncrement;
       }
@@ -91,7 +91,7 @@ class Database {
     }).whereType<PieItem>();
 
     await putPieItems(pieItems.toList());
-    for (PieItemInstance pieItemInstance in state.pieItemInstances) {
+    for (PieItemDelegate pieItemInstance in state.pieItemDelegates) {
       pieItemInstance.pieItemId = pieItemInstance.pieItem!.id;
     }
 
@@ -224,7 +224,7 @@ class Database {
       return;
     }
 
-    pieMenu.pieItemInstances.add(PieItemInstance(pieItemId: pieItem.id));
+    pieMenu.pieItemInstances.add(PieItemDelegate(pieItemId: pieItem.id));
     await _isar.writeTxn(() async {
       await _isar.pieMenus.put(pieMenu);
     });
@@ -233,13 +233,13 @@ class Database {
   @Deprecated("Use createPieItemIn instead in the future")
   addPieItemsToPieMenu(List<PieItem> pieItems, PieMenu pieMenu) async {
     pieMenu.pieItemInstances
-        .addAll(pieItems.map((e) => PieItemInstance(pieItemId: e.id)));
+        .addAll(pieItems.map((e) => PieItemDelegate(pieItemId: e.id)));
     await _isar.writeTxn(() async {
       await _isar.pieMenus.put(pieMenu);
     });
   }
 
-  Future<void> loadPieItemInstance(PieItemInstance pieItemInstance) async {
+  Future<void> loadPieItemInstance(PieItemDelegate pieItemInstance) async {
     pieItemInstance.pieItem =
         await _isar.pieItems.get(pieItemInstance.pieItemId);
   }

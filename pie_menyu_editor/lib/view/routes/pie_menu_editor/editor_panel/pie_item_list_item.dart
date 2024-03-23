@@ -15,7 +15,7 @@ import 'package:pie_menyu_editor/view/widgets/single_key_recorder.dart';
 import 'package:provider/provider.dart';
 
 class PieItemListItem extends StatefulWidget {
-  final PieItemInstance piInstance;
+  final PieItemDelegate piInstance;
   final PieMenuState pieMenuState;
 
   const PieItemListItem(
@@ -59,7 +59,7 @@ class _PieItemListItemState extends State<PieItemListItem> {
             child: SingleKeyRecorder(
               initialValue: piInstance.keyCode,
               onSubmitted: (String value) {
-                pieMenuState.updatePieItemInstance(piInstance..keyCode = value);
+                pieMenuState.updatePieItemDelegate(piInstance..keyCode = value);
               },
             ),
           ),

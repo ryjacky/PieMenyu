@@ -34,7 +34,7 @@ class PieItemTaskList extends StatefulWidget {
 class _PieItemTaskListState extends State<PieItemTaskList> {
   @override
   Widget build(BuildContext context) {
-    final pieItemInstance = context.watch<PieMenuState>().activePieItemInstance;
+    final pieItemInstance = context.watch<PieMenuState>().activePieItemDelegate;
     final toDelete = context.select<EditorPanelViewModel, PieItemTask?>(
       (viewModel) => viewModel.toDelete?.key,
     );
@@ -125,7 +125,7 @@ class _PieItemTaskListState extends State<PieItemTaskList> {
 
     final viewModel = context.read<EditorPanelViewModel>();
 
-    viewModel.toDelete = MapEntry(task, state.activePieItemInstance);
+    viewModel.toDelete = MapEntry(task, state.activePieItemDelegate);
     final deletedTaskFuture = Timer(const Duration(seconds: 5), () {
       if (viewModel.toDelete == null) return;
       state.removeTaskFrom(viewModel.toDelete!.value, viewModel.toDelete!.key);

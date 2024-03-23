@@ -38,7 +38,7 @@ class PieMenuEditorPage extends StatelessWidget {
                     child: PieMenuView(
                       state: pieMenuState,
                       onTap: (instance) {
-                        pieMenuState.activePieItemInstance = instance;
+                        pieMenuState.activePieItemDelegate = instance;
                       },
                     ),
                   ),

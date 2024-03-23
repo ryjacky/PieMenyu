@@ -43,7 +43,7 @@ class _RunFileTaskCardState extends State<RunFileTaskCard> {
             onPicked: (path) {
               setState(() {
                 final state = context.read<PieMenuState>();
-                final pieItem = state.activePieItemInstance;
+                final pieItem = state.activePieItemDelegate;
                 state.updateTaskIn(pieItem, task..filePath = path);
               });
             },

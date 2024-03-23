@@ -21,8 +21,8 @@ class _PieItemListTabState extends State<PieItemListTab> {
   @override
   Widget build(BuildContext context) {
     final pieItemInstances =
-        context.select<PieMenuState, List<PieItemInstance>>(
-            (state) => state.pieItemInstances);
+        context.select<PieMenuState, List<PieItemDelegate>>(
+            (state) => state.pieItemDelegates);
     final pieMenuState = context.watch<PieMenuState>();
 
     return ReorderableListView(
@@ -51,7 +51,7 @@ class _PieItemListTabState extends State<PieItemListTab> {
                     child: Icon(
                       FontAwesomeIcons.gripVertical,
                       size: 15,
-                      color: piInstance == pieMenuState.activePieItemInstance ? Theme.of(context).colorScheme.primary : Theme.of(context).colorScheme.secondary,
+                      color: piInstance == pieMenuState.activePieItemDelegate ? Theme.of(context).colorScheme.primary : Theme.of(context).colorScheme.secondary,
                     ),
                   ),
                 ),

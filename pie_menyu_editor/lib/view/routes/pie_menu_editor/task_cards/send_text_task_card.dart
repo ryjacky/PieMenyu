@@ -44,7 +44,7 @@ class _PasteTextTaskCardState extends State<PasteTextTaskCard> {
               setState(() {
                 task = task..text = value;
               });
-              final pieItem = state.activePieItemInstance;
+              final pieItem = state.activePieItemDelegate;
               state.updateTaskIn(pieItem, task);
             },
           ),

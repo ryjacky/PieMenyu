@@ -8,11 +8,11 @@ class EditorPanelViewModel extends ChangeNotifier {
   final Database _db;
 
   /// Users will only be able to undo up to one level. See implementation of [removeTask] for details.
-  MapEntry<PieItemTask, PieItemInstance>? _toDelete;
+  MapEntry<PieItemTask, PieItemDelegate>? _toDelete;
 
-  MapEntry<PieItemTask, PieItemInstance>? get toDelete => _toDelete;
+  MapEntry<PieItemTask, PieItemDelegate>? get toDelete => _toDelete;
 
-  set toDelete(MapEntry<PieItemTask, PieItemInstance>? value) {
+  set toDelete(MapEntry<PieItemTask, PieItemDelegate>? value) {
     _toDelete = value;
     notifyListeners();
   }

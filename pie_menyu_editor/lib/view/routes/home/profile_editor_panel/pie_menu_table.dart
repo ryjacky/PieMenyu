@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -221,6 +223,8 @@ class _PieMenuTableState extends State<PieMenuTable> {
     Profile activeProfile,
     PieMenu pieMenu,
   ) {
+    log("Removing pie menu ${pieMenu.id} from profile ${activeProfile.name}",
+        name: "PieMenuTable.removePieMenu");
     viewModel.removePieMenuFrom(activeProfile, pieMenu);
     setState(() {});
     // Allow delete up to a single level.
@@ -231,7 +235,7 @@ class _PieMenuTableState extends State<PieMenuTable> {
         action: SnackBarAction(
           label: "label-undo".tr(),
           onPressed: () {
-            viewModel.cancelDelete();
+            viewModel.cancelDelete(pieMenu);
             setState(() {});
           },
         ),

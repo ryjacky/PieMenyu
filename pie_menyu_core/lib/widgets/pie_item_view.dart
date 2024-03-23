@@ -12,7 +12,7 @@ class PieItemView extends StatefulWidget {
   final PieMenuFont font;
   final PieMenuColors colors;
   final PieMenuShape shape;
-  final PieItemInstance instance;
+  final PieItemDelegate instance;
   final bool active;
 
   const PieItemView({

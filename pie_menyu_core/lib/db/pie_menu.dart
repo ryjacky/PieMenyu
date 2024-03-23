@@ -82,7 +82,7 @@ class PieMenuShape {
 }
 
 @embedded
-class PieItemInstance {
+class PieItemDelegate {
   String keyCode = "";
   int pieItemId;
 
@@ -93,11 +93,11 @@ class PieItemInstance {
   @ignore
   PieItem? pieItem;
 
-  PieItemInstance({this.keyCode = "", this.pieItemId = 0});
+  PieItemDelegate({this.keyCode = "", this.pieItemId = 0});
 
-  factory PieItemInstance.from(PieItemInstance info) {
+  factory PieItemDelegate.from(PieItemDelegate info) {
     final instance =
-        PieItemInstance(keyCode: info.keyCode, pieItemId: info.pieItemId);
+        PieItemDelegate(keyCode: info.keyCode, pieItemId: info.pieItemId);
     if (info.pieItem != null) {
       instance.pieItem = PieItem.from(info.pieItem!);
     }
@@ -118,7 +118,7 @@ class PieMenu {
   PieMenuBehavior behavior = PieMenuBehavior();
   PieMenuShape shape = PieMenuShape();
 
-  List<PieItemInstance> pieItemInstances = [];
+  List<PieItemDelegate> pieItemInstances = [];
 
   @Backlink(to: 'pieMenus')
   IsarLinks<Profile> profiles = IsarLinks<Profile>();
@@ -133,6 +133,6 @@ class PieMenu {
         behavior = PieMenuBehavior.from(pieMenu.behavior),
         shape = PieMenuShape.from(pieMenu.shape),
         pieItemInstances = pieMenu.pieItemInstances
-            .map((e) => PieItemInstance.from(e))
+            .map((e) => PieItemDelegate.from(e))
             .toList();
 }

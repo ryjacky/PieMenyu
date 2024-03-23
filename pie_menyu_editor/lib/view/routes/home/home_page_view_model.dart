@@ -51,19 +51,19 @@ class HomePageViewModel extends ChangeNotifier {
   }
 
   Iterable<PieMenu> getPieMenusOf(Profile profile) {
-    return pieMenus
-        .where((element) => element.profiles
-            .where((element) => element.id == profile.id)
-            .isNotEmpty)
-        .where((element) => element != toDelete?.key);
+    return pieMenus.where((pieMenu) =>
+        pieMenu.profiles
+            .where((thisProfile) => thisProfile.id == profile.id)
+            .isNotEmpty &&
+        !toDelete.containsKey(pieMenu));
   }
 
   Iterable<PieMenu> getAllPieMenusExceptIn(Profile profile) {
-    return pieMenus
-        .where((element) => element.profiles
-            .where((element) => element.id == profile.id)
-            .isEmpty)
-        .where((element) => element != toDelete?.key);
+    return pieMenus.where((pieMenu) =>
+        pieMenu.profiles
+            .where((thisProfile) => thisProfile.id == profile.id)
+            .isEmpty &&
+        !toDelete.containsKey(pieMenu));
   }
 
   Future<void> createProfile(

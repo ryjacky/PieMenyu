@@ -44,7 +44,7 @@ class _OpenUrlTaskCardState extends State<OpenUrlTaskCard> {
               setState(() {
                 task = task..url = value;
               });
-              final pieItem = state.activePieItemInstance;
+              final pieItem = state.activePieItemDelegate;
               state.updateTaskIn(pieItem, task);
             },
           ),

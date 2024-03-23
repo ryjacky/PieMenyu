@@ -70,7 +70,7 @@ class _PieMenuScreenState extends State<PieMenuScreen> {
         return false;
       }
 
-      PieItemInstance? instanceOfKey = lastPieMenuState.pieItemInstances
+      PieItemDelegate? instanceOfKey = lastPieMenuState.pieItemDelegates
           .where((instance) =>
               instance.keyCode.toUpperCase() == event.character?.toUpperCase())
           .firstOrNull;
@@ -81,7 +81,7 @@ class _PieMenuScreenState extends State<PieMenuScreen> {
         return false;
       }
 
-      lastPieMenuState.activePieItemInstance = instanceOfKey;
+      lastPieMenuState.activePieItemDelegate = instanceOfKey;
 
       tryActivate(
         lastPieMenuState,
@@ -98,16 +98,16 @@ class _PieMenuScreenState extends State<PieMenuScreen> {
     if (pieMenuPos.isEmpty) return;
 
     _mousePosition = event.position;
-    final instance = getPieItemInstanceAt(
+    final instance = getPieItemDelegateAt(
       _mousePosition,
       pieMenuPos[_pieMenuStates.last] ??= _mousePosition,
       _pieMenuStates.last.shape.centerRadius,
-      _pieMenuStates.last.pieItemInstances,
+      _pieMenuStates.last.pieItemDelegates,
     );
 
-    if (instance != _pieMenuStates.last.activePieItemInstance &&
+    if (instance != _pieMenuStates.last.activePieItemDelegate &&
         instance != null) {
-      _pieMenuStates.last.activePieItemInstance = instance;
+      _pieMenuStates.last.activePieItemDelegate = instance;
     }
   }
 
@@ -153,11 +153,11 @@ class _PieMenuScreenState extends State<PieMenuScreen> {
     );
   }
 
-  PieItemInstance? getPieItemInstanceAt(
+  PieItemDelegate? getPieItemDelegateAt(
     Offset position,
     Offset pieCenterPosition,
     double pieCenterRadius,
-    List<PieItemInstance> instances,
+    List<PieItemDelegate> instances,
   ) {
 
     if (instances.isEmpty) return null;
@@ -216,11 +216,11 @@ class _PieMenuScreenState extends State<PieMenuScreen> {
             child: PieMenuView(
               state: state,
               onTap: (instance) {
-                state.activePieItemInstance = instance;
+                state.activePieItemDelegate = instance;
                 tryActivate(state, ActivationMode.onClick);
               },
               onHover: (instance) {
-                state.activePieItemInstance = instance;
+                state.activePieItemDelegate = instance;
                 tryActivate(state, ActivationMode.onHover);
               },
             ),
@@ -237,7 +237,7 @@ class _PieMenuScreenState extends State<PieMenuScreen> {
     dev.log("ActivationMode: $mode", name: "PieMenuScreen tryActivate()");
 
     final pieMenuStates = context.read<PieMenuStateProvider>().pieMenuStates;
-    PieItem? activePieItem = state.activePieItemInstance.pieItem;
+    PieItem? activePieItem = state.activePieItemDelegate.pieItem;
 
     if (state != pieMenuStates.last || activePieItem == null) return;
 

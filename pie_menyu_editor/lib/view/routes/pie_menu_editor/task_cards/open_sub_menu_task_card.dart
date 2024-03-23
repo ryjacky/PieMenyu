@@ -66,7 +66,7 @@ class _OpenSubMenuTaskCardState extends State<OpenSubMenuTaskCard> {
               _controller.text = pieMenu.name;
 
               final state = context.read<PieMenuState>();
-              final pieItem = state.activePieItemInstance;
+              final pieItem = state.activePieItemDelegate;
               state.updateTaskIn(pieItem, widget.task);
             },
           ),

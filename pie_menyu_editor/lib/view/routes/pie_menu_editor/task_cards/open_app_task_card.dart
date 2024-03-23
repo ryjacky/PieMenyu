@@ -49,7 +49,7 @@ class _OpenAppTaskCardState extends State<OpenAppTaskCard> {
                 setState(() {
                   task = task..windowTitle = value;
                 });
-                final pieItem = state.activePieItemInstance;
+                final pieItem = state.activePieItemDelegate;
                 state.updateTaskIn(pieItem, task);
               },
             ),
@@ -65,7 +65,7 @@ class _OpenAppTaskCardState extends State<OpenAppTaskCard> {
             onPicked: (path) {
               setState(() {
                 final state = context.read<PieMenuState>();
-                final pieItem = state.activePieItemInstance;
+                final pieItem = state.activePieItemDelegate;
                 state.updateTaskIn(pieItem, task..appPath = path);
               });
             },

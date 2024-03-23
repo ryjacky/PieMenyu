@@ -43,7 +43,7 @@ class _OpenFolderTaskCardState extends State<OpenFolderTaskCard> {
             onPicked: (path) {
               setState(() {
                 final state = context.read<PieMenuState>();
-                final pieItem = state.activePieItemInstance;
+                final pieItem = state.activePieItemDelegate;
                 state.updateTaskIn(pieItem, task..folderPath = path);
               });
             },

@@ -24,10 +24,10 @@ class ActionsTab extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final activePieItemInstance = context.select<PieMenuState, PieItemInstance>(
-        (state) => state.activePieItemInstance);
+    final activePieItemDelegate = context.select<PieMenuState, PieItemDelegate>(
+        (state) => state.activePieItemDelegate);
 
-    if (activePieItemInstance.pieItem == null) {
+    if (activePieItemDelegate.pieItem == null) {
       throw Exception("activePieItem is null");
     }
 
@@ -43,7 +43,7 @@ class ActionsTab extends StatelessWidget {
           padding: const EdgeInsets.fromLTRB(5, 0, 5, 0),
           width: 50,
           child: buildAddTaskButtonListView(
-              pieMenuState, activePieItemInstance),
+              pieMenuState, activePieItemDelegate),
         ),
       ],
     );
@@ -51,7 +51,7 @@ class ActionsTab extends StatelessWidget {
 
   buildAddTaskButtonListView(
     PieMenuState pieMenuState,
-    PieItemInstance activePieItemInstance,
+    PieItemDelegate activePieItemDelegate,
   ) {
     return ListView(children: [
       Container(
@@ -72,7 +72,7 @@ class ActionsTab extends StatelessWidget {
         child: SingleColorIconButton(
           icon: Icons.keyboard,
           onPressed: () {
-            pieMenuState.addTaskTo(activePieItemInstance, SendKeyTask());
+            pieMenuState.addTaskTo(activePieItemDelegate, SendKeyTask());
           },
         ),
       ),
@@ -82,7 +82,7 @@ class ActionsTab extends StatelessWidget {
         child: SingleColorIconButton(
           icon: FontAwesomeIcons.handPointer,
           onPressed: () {
-            pieMenuState.addTaskTo(activePieItemInstance, MouseClickTask());
+            pieMenuState.addTaskTo(activePieItemDelegate, MouseClickTask());
           },
         ),
       ),
@@ -92,7 +92,7 @@ class ActionsTab extends StatelessWidget {
         child: SingleColorIconButton(
           icon: Icons.file_open,
           onPressed: () {
-            pieMenuState.addTaskTo(activePieItemInstance, RunFileTask());
+            pieMenuState.addTaskTo(activePieItemDelegate, RunFileTask());
           },
         ),
       ),
@@ -102,7 +102,7 @@ class ActionsTab extends StatelessWidget {
         child: SingleColorIconButton(
           icon: Icons.pie_chart,
           onPressed: () {
-            pieMenuState.addTaskTo(activePieItemInstance, OpenSubMenuTask());
+            pieMenuState.addTaskTo(activePieItemDelegate, OpenSubMenuTask());
           },
         ),
       ),
@@ -112,7 +112,7 @@ class ActionsTab extends StatelessWidget {
         child: SingleColorIconButton(
           icon: Icons.folder,
           onPressed: () {
-            pieMenuState.addTaskTo(activePieItemInstance, OpenFolderTask());
+            pieMenuState.addTaskTo(activePieItemDelegate, OpenFolderTask());
           },
         ),
       ),
@@ -122,7 +122,7 @@ class ActionsTab extends StatelessWidget {
         child: SingleColorIconButton(
           icon: Icons.play_arrow_rounded,
           onPressed: () {
-            pieMenuState.addTaskTo(activePieItemInstance, OpenAppTask());
+            pieMenuState.addTaskTo(activePieItemDelegate, OpenAppTask());
           },
         ),
       ),
@@ -132,7 +132,7 @@ class ActionsTab extends StatelessWidget {
         child: SingleColorIconButton(
           icon: Icons.link,
           onPressed: () {
-            pieMenuState.addTaskTo(activePieItemInstance, OpenUrlTask());
+            pieMenuState.addTaskTo(activePieItemDelegate, OpenUrlTask());
           },
         ),
       ),
@@ -142,7 +142,7 @@ class ActionsTab extends StatelessWidget {
         child: SingleColorIconButton(
           icon: Icons.text_fields,
           onPressed: () {
-            pieMenuState.addTaskTo(activePieItemInstance, PasteTextTask());
+            pieMenuState.addTaskTo(activePieItemDelegate, PasteTextTask());
           },
         ),
       ),

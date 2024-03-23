@@ -10,8 +10,8 @@ import '../pie_item_view.dart';
 class PieMenuView extends StatefulWidget {
   final PieMenuState state;
 
-  final Function(PieItemInstance instance)? onTap;
-  final Function(PieItemInstance instance)? onHover;
+  final Function(PieItemDelegate instance)? onTap;
+  final Function(PieItemDelegate instance)? onHover;
 
   const PieMenuView({
     super.key,
@@ -41,8 +41,8 @@ class _PieMenuViewState extends State<PieMenuView> {
     final PieMenuState state = widget.state;
     final centerRadius = state.shape.centerRadius;
     final centerThickness = state.shape.centerThickness;
-    final nSlices = state.pieItemInstances.length - 1;
-    final pieItemInstances = state.pieItemInstances;
+    final nSlices = state.pieItemDelegates.length - 1;
+    final pieItemInstances = state.pieItemDelegates;
     final colors = state.colors;
 
     final double pieCenterSize = (centerRadius + centerThickness) * 2;
@@ -68,7 +68,7 @@ class _PieMenuViewState extends State<PieMenuView> {
                     centerThickness: centerThickness.toDouble(),
                     backgroundColor: Color(colors.secondary),
                     highlightColor: Color(colors.primary),
-                    arcAngle: state.activePieItemInstance == pieItemInstances.firstOrNull ? 2 * pi : angleDelta,
+                    arcAngle: state.activePieItemDelegate == pieItemInstances.firstOrNull ? 2 * pi : angleDelta,
                   ),
                 ),
               ),
@@ -101,9 +101,9 @@ class _PieMenuViewState extends State<PieMenuView> {
                         font: state.font,
                         colors: state.colors,
                         shape: state.shape,
-                        instance: state.pieItemInstances[i + 1],
+                        instance: state.pieItemDelegates[i + 1],
                         active:
-                            state.activePieItemInstance == pieItemInstances[i + 1],
+                            state.activePieItemDelegate == pieItemInstances[i + 1],
                       ),
                     ),
                   ),
@@ -115,18 +115,18 @@ class _PieMenuViewState extends State<PieMenuView> {
   }
 
   double getPieCenterRotation() {
-    final pieItemPosition = widget.state.pieItemInstances
-        .indexOf(widget.state.activePieItemInstance);
+    final pieItemPosition = widget.state.pieItemDelegates
+        .indexOf(widget.state.activePieItemDelegate);
 
     if (pieItemPosition == 0) {
       return 2 * pi;
     } else {
       double result = 2 *
           pi *
-          (widget.state.pieItemInstances
-                  .indexOf(widget.state.activePieItemInstance) -
+          (widget.state.pieItemDelegates
+                  .indexOf(widget.state.activePieItemDelegate) -
               1) /
-          (widget.state.pieItemInstances.length - 1);
+          (widget.state.pieItemDelegates.length - 1);
       return (result.isNaN || result.isInfinite) ? 0 : result;
     }
   }
