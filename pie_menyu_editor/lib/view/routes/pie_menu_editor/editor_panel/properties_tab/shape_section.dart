@@ -73,7 +73,7 @@ class ShapeSection extends StatelessWidget {
               width: 70,
               child: DraggableNumberField(
                 min: 0,
-                max: 500,
+                max: 100,
                 value: shape.pieItemRoundness,
                 onChanged: (double value) {
                   state.updatePieMenu(shape: shape..pieItemRoundness = value);
