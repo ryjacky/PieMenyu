@@ -82,7 +82,9 @@ class _PieMenuTableState extends State<PieMenuTable> {
               child: MinimalTextField(
                 key: ValueKey(pieMenu.id),
                 onSubmitted: (String? name) {
-                  setPieMenuName(name ?? "", pieMenu);
+                  context
+                      .read<HomePageViewModel>()
+                      .putPieMenu(pieMenu..name = name ?? "");
                 },
                 content: pieMenu.name,
               ),
@@ -152,18 +154,6 @@ class _PieMenuTableState extends State<PieMenuTable> {
     final scaffoldMessenger = ScaffoldMessenger.of(context);
     scaffoldMessenger.clearSnackBars();
     scaffoldMessenger.showSnackBar(snackBar);
-  }
-
-  void setPieMenuName(String name, PieMenu pieMenu) async {
-    setState(() {
-      pieMenu.name = name;
-    });
-
-    showSnackBar(SnackBar(
-        backgroundColor: Theme.of(context).colorScheme.primary,
-        content: Text("pie-menu-name-saved".tr())));
-
-    await context.read<HomePageViewModel>().putPieMenu(pieMenu);
   }
 
   LogicalKeySet? getPieMenuHotkey(PieMenu pieMenu, Profile profile) {
