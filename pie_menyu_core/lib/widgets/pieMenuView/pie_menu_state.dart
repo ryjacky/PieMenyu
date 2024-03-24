@@ -1,3 +1,5 @@
+import 'dart:math' as math;
+
 import 'package:flutter/material.dart';
 import 'package:pie_menyu_core/db/db.dart';
 import 'package:pie_menyu_core/db/pie_item.dart';
@@ -66,6 +68,8 @@ class PieMenuState extends ChangeNotifier {
   List<PieItemDelegate> _pieItemDelegates = [];
 
   List<PieItemDelegate> get pieItemDelegates => _pieItemDelegates;
+
+  double get runtimeHeight => math.max(icon.size, font.size + 18);
 
   final PieMenu _initialPieMenu;
 

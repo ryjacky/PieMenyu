@@ -68,7 +68,10 @@ class _PieMenuViewState extends State<PieMenuView> {
                     centerThickness: centerThickness.toDouble(),
                     backgroundColor: Color(colors.secondary),
                     highlightColor: Color(colors.primary),
-                    arcAngle: state.activePieItemDelegate == pieItemInstances.firstOrNull ? 2 * pi : angleDelta,
+                    arcAngle: state.activePieItemDelegate ==
+                            pieItemInstances.firstOrNull
+                        ? 2 * pi
+                        : angleDelta,
                   ),
                 ),
               ),
@@ -102,8 +105,9 @@ class _PieMenuViewState extends State<PieMenuView> {
                         colors: state.colors,
                         shape: state.shape,
                         instance: state.pieItemDelegates[i + 1],
-                        active:
-                            state.activePieItemDelegate == pieItemInstances[i + 1],
+                        active: state.activePieItemDelegate ==
+                            pieItemInstances[i + 1],
+                        height: state.runtimeHeight,
                       ),
                     ),
                   ),
@@ -136,7 +140,7 @@ class _PieMenuViewState extends State<PieMenuView> {
     return getOriginX(constraints) +
         ((shape.centerRadius + shape.pieItemSpread) * sin(i * angleDelta))
             .abs() -
-        widget.state.icon.size / 2;
+        widget.state.runtimeHeight / 2;
   }
 
   double getVerticalOffset(int i, BoxConstraints constraints) {
@@ -144,6 +148,6 @@ class _PieMenuViewState extends State<PieMenuView> {
 
     return getOriginY(constraints) +
         ((shape.centerRadius + shape.pieItemSpread) * cos(i * angleDelta)) -
-        widget.state.icon.size / 2;
+        widget.state.runtimeHeight / 2;
   }
 }
