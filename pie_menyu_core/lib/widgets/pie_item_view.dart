@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -14,6 +15,7 @@ class PieItemView extends StatefulWidget {
   final PieMenuShape shape;
   final PieItemDelegate instance;
   final bool active;
+  final double height;
 
   const PieItemView({
     super.key,
@@ -24,6 +26,7 @@ class PieItemView extends StatefulWidget {
     required this.shape,
     required this.instance,
     required this.active,
+    required this.height,
   });
 
   @override
@@ -58,7 +61,7 @@ class _PieItemViewState extends State<PieItemView> {
     );
 
     return Container(
-      height: widget.icon.size,
+      height: widget.height,
       decoration: BoxDecoration(
         border: Border.all(color: Colors.black),
         borderRadius:
@@ -75,8 +78,7 @@ class _PieItemViewState extends State<PieItemView> {
           Text(
             pieItem.name,
             style: GoogleFonts.getFont(widget.font.fontFamily,
-                color: Color(widget.font.color),
-                fontSize: widget.font.size),
+                color: Color(widget.font.color), fontSize: widget.font.size),
           ),
           Padding(
             padding: EdgeInsets.fromLTRB(
@@ -84,8 +86,7 @@ class _PieItemViewState extends State<PieItemView> {
             child: Text(
               widget.instance.keyCode,
               style: GoogleFonts.getFont(widget.font.fontFamily,
-                  color: Color(widget.font.color),
-                  fontSize: widget.font.size),
+                  color: Color(widget.font.color), fontSize: widget.font.size),
             ),
           ),
         ],
