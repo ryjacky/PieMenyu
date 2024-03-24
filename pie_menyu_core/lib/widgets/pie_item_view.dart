@@ -64,11 +64,10 @@ class _PieItemViewState extends State<PieItemView> {
       height: widget.height,
       decoration: BoxDecoration(
         border: Border.all(color: Colors.black),
-        borderRadius:
-            BorderRadius.circular(widget.shape.pieItemRoundness),
-        color: Color(widget.active
-            ? widget.colors.primary
-            : widget.colors.secondary),
+        borderRadius: BorderRadius.circular(
+            widget.height * widget.shape.pieItemRoundness / 200),
+        color: Color(
+            widget.active ? widget.colors.primary : widget.colors.secondary),
       ),
       padding: const EdgeInsets.all(5),
       child: Row(
