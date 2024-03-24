@@ -15,11 +15,16 @@ import 'package:pie_menyu_editor/view/widgets/single_key_recorder.dart';
 import 'package:provider/provider.dart';
 
 class PieItemListItem extends StatefulWidget {
-  final PieItemDelegate piInstance;
+  final PieItemDelegate pieItemDelegate;
   final PieMenuState pieMenuState;
+  final bool allowDelete;
 
-  const PieItemListItem(
-      {super.key, required this.piInstance, required this.pieMenuState});
+  const PieItemListItem({
+    super.key,
+    required this.pieItemDelegate,
+    required this.pieMenuState,
+    this.allowDelete = true,
+  });
 
   @override
   State<PieItemListItem> createState() => _PieItemListItemState();
@@ -30,11 +35,11 @@ class _PieItemListItemState extends State<PieItemListItem> {
 
   @override
   Widget build(BuildContext context) {
-    PieItem? pieItem = widget.piInstance.pieItem;
+    PieItem? pieItem = widget.pieItemDelegate.pieItem;
     pieItem ??= PieItem(name: "Loading...".tr());
 
     final pieMenuState = widget.pieMenuState;
-    final piInstance = widget.piInstance;
+    final piInstance = widget.pieItemDelegate;
 
     _icon = createIconWidget(pieItem.iconBase64);
 
@@ -65,7 +70,7 @@ class _PieItemListItemState extends State<PieItemListItem> {
           ),
         ),
         const Gap(6),
-        createDeleteButton(pieItem),
+        if (widget.allowDelete) createDeleteButton(pieItem),
       ],
     );
   }
