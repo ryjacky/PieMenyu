@@ -121,6 +121,7 @@
   "message-task-deleted": "Task is deleted",
   "message-pie-menu-deleted": "Pie Menu is deleted",
   "message-profile-disabled": "Profile is disabled",
+  "label-no-pie-menu-hint": "No Pie Menu yet. Click 'Add Pie Menu' to create one.",
   "message-drag-n-drop-to-pick-file": "You can drag and drop to select a file.",
   "message-keyboard-selector-hint-simple-mode": "Click the following and press on your keyboard to record hotkey",
   "message-hotkey-is-used": "Hotkey is used in another pie menu",

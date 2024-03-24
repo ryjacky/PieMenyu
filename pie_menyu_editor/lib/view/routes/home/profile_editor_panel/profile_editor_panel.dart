@@ -2,6 +2,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:pie_menyu_core/db/pie_menu.dart';
 import 'package:pie_menyu_core/db/profile.dart';
+import 'package:pie_menyu_editor/view/routes/home/profile_editor_panel/no_pie_menu_hint.dart';
 import 'package:pie_menyu_editor/view/routes/home/profile_editor_panel/pie_menu_table.dart';
 import 'package:pie_menyu_editor/view/routes/home/profile_editor_panel/profile_editor_panel_header.dart';
 import 'package:provider/provider.dart';
@@ -16,8 +17,6 @@ class ProfileEditorPanel extends StatefulWidget {
 }
 
 class _ProfileEditorPanelState extends State<ProfileEditorPanel> {
-  final double tableRowGap = 10;
-
   @override
   Widget build(BuildContext context) {
     final homePageViewModel = context.watch<HomePageViewModel>();
@@ -32,11 +31,13 @@ class _ProfileEditorPanelState extends State<ProfileEditorPanel> {
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           const ProfileEditorPanelHeader(),
-          const Expanded(
+          Expanded(
             child: Padding(
-              padding: EdgeInsets.fromLTRB(0, 20, 0, 0),
+              padding: const EdgeInsets.fromLTRB(0, 20, 0, 0),
               child: SingleChildScrollView(
-                child: PieMenuTable(),
+                child: homePageViewModel.getPieMenusOf(activeProfile).isNotEmpty
+                    ? const PieMenuTable()
+                    : const NoPieMenuHint(),
               ),
             ),
           ),
@@ -60,23 +61,5 @@ class _ProfileEditorPanelState extends State<ProfileEditorPanel> {
         ],
       ),
     );
-  }
-
-  void setPieMenuName(String name, PieMenu pieMenu) async {
-    setState(() {
-      pieMenu.name = name;
-    });
-
-    showSnackBar(SnackBar(
-        backgroundColor: Theme.of(context).colorScheme.primary,
-        content: Text("pie-menu-name-saved".tr())));
-
-    await context.read<HomePageViewModel>().putPieMenu(pieMenu);
-  }
-
-  showSnackBar(SnackBar snackBar) {
-    final scaffoldMessenger = ScaffoldMessenger.of(context);
-    scaffoldMessenger.clearSnackBars();
-    scaffoldMessenger.showSnackBar(snackBar);
   }
 }
