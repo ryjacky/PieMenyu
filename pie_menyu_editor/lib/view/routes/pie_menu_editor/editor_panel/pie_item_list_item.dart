@@ -104,19 +104,35 @@ class _PieItemListItemState extends State<PieItemListItem> {
         padding: const EdgeInsets.all(5),
         minimumSize: const Size(36, 36),
       ),
-      onPressed: () {},
       child: const Icon(FontAwesomeIcons.minus, color: Colors.red, size: 12),
-      onLongPress: () {
-        final result = context.read<PieMenuState>().removePieItem(pieItem);
+      onPressed: () {
+        final pieMenuState = context.read<PieMenuState>();
         final scaffoldMessenger = ScaffoldMessenger.of(context);
-        if (!result) {
+        if (!pieMenuState.removePieItem(pieItem)) {
           scaffoldMessenger.hideCurrentSnackBar();
           scaffoldMessenger.showSnackBar(
             SnackBar(
+              behavior: SnackBarBehavior.floating,
+              margin: const EdgeInsets.fromLTRB(8, 8, 334, 8),
               backgroundColor: Colors.red[400],
               content: Text(
                 "message-pie-item-not-deleted-${Random().nextInt(5)}".tr(),
               ),
+              duration: const Duration(seconds: 5),
+            ),
+          );
+        } else {
+          scaffoldMessenger.hideCurrentSnackBar();
+          scaffoldMessenger.showSnackBar(
+            SnackBar(
+              behavior: SnackBarBehavior.floating,
+              margin: const EdgeInsets.fromLTRB(8, 8, 334, 8),
+              action: SnackBarAction(
+                label: "label-undo".tr(),
+                onPressed: () => pieMenuState.undoRemove(),
+              ),
+              backgroundColor: Theme.of(context).colorScheme.primary,
+              content: Text("message-removed-pie-item".tr()),
               duration: const Duration(seconds: 5),
             ),
           );

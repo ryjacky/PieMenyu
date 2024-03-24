@@ -56,6 +56,8 @@ class PieMenuState extends ChangeNotifier {
     notifyListeners();
   }
 
+  final List<PieItem> toDeletePieItems = [];
+
   PieItemDelegate _activePieItemDelegate = PieItemDelegate();
 
   PieItemDelegate get activePieItemDelegate => _activePieItemDelegate;
@@ -67,14 +69,17 @@ class PieMenuState extends ChangeNotifier {
 
   List<PieItemDelegate> _pieItemDelegates = [];
 
-  List<PieItemDelegate> get pieItemDelegates => _pieItemDelegates;
+  List<PieItemDelegate> get pieItemDelegates => _pieItemDelegates
+      .where((pieItemDelegate) =>
+          !toDeletePieItems.contains(pieItemDelegate.pieItem))
+      .toList();
 
   double get runtimeHeight => math.max(icon.size, font.size + 18);
 
   final PieMenu _initialPieMenu;
 
   PieMenu get pieMenu => PieMenu.from(_initialPieMenu)
-    ..pieItemInstances = _pieItemDelegates
+    ..pieItemInstances = pieItemDelegates
     ..name = name
     ..icon = _icon
     ..font = _font
@@ -84,7 +89,8 @@ class PieMenuState extends ChangeNotifier {
 
   final Database _db;
 
-  PieMenuState.fromPieMenu(this._db, PieMenu pieMenu) : _initialPieMenu = pieMenu {
+  PieMenuState.fromPieMenu(this._db, PieMenu pieMenu)
+      : _initialPieMenu = pieMenu {
     name = pieMenu.name;
     load();
   }
@@ -160,8 +166,14 @@ class PieMenuState extends ChangeNotifier {
   }
 
   bool removePieItem(PieItem pieItem) {
-    if (_pieItemDelegates.length <= 1) return false;
-    _pieItemDelegates.removeWhere((element) => element.pieItemId == pieItem.id);
+    if (pieItemDelegates.length <= 1) return false;
+    toDeletePieItems.add(pieItem);
+    notifyListeners();
+    return true;
+  }
+
+  bool undoRemove() {
+    toDeletePieItems.removeLast();
     notifyListeners();
     return true;
   }
@@ -216,9 +228,11 @@ class PieMenuState extends ChangeNotifier {
       throw Exception("PieItemInstance has no pieItem");
     }
 
-    final index = pieItem.tasks.indexWhere((element) => element.runtimeId == pieItemTask.runtimeId);
+    final index = pieItem.tasks
+        .indexWhere((element) => element.runtimeId == pieItemTask.runtimeId);
     if (index == -1) {
-      throw Exception("PieItemTask not found, tasks available: ${pieItem.tasks.map((e) => e.runtimeId)}, finding: ${pieItemTask.runtimeId}");
+      throw Exception(
+          "PieItemTask not found, tasks available: ${pieItem.tasks.map((e) => e.runtimeId)}, finding: ${pieItemTask.runtimeId}");
     }
 
     pieItem.tasks[index] = pieItemTask;
