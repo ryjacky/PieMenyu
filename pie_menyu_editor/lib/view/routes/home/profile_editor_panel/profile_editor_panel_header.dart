@@ -2,6 +2,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:pie_menyu_core/db/profile.dart';
+import 'package:pie_menyu_editor/view/routes/home/profile_editor_panel/profile_action_buttons.dart';
 import 'package:pie_menyu_editor/view/widgets/flat_button.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -31,8 +32,11 @@ class _ProfileEditorPanelHeaderState extends State<ProfileEditorPanelHeader> {
           style: Theme.of(context).textTheme.displayLarge,
         ),
         Expanded(child: Container()),
-        IconButton(
-          onPressed: () async {
+        ProfileActionButtons(
+          onDelete: activeProfile.id == 1
+              ? null
+              : () => deleteProfileAndReload(homePageViewModel, activeProfile),
+          onPause: () async {
             await homePageViewModel.toggleActiveProfile();
 
             if (!context.mounted) return;
@@ -40,10 +44,6 @@ class _ProfileEditorPanelHeaderState extends State<ProfileEditorPanelHeader> {
 
             launchUrl(Uri.parse("piemenyu://reload"));
           },
-          icon: Icon(
-            activeProfile.enabled ? Icons.pause : Icons.play_arrow_outlined,
-            size: 22,
-          ),
         ),
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 10),
@@ -55,5 +55,11 @@ class _ProfileEditorPanelHeaderState extends State<ProfileEditorPanelHeader> {
         )
       ],
     );
+  }
+
+  void deleteProfileAndReload(
+      HomePageViewModel viewModel, Profile profile) async {
+    await viewModel.deleteProfile(profile);
+    launchUrl(Uri.parse("piemenyu://reload"));
   }
 }

@@ -156,4 +156,9 @@ class HomePageViewModel extends ChangeNotifier {
     await _db.putProfile(profile);
     updateState();
   }
+
+  Future<void> deleteProfile(Profile profile) async {
+    await _db.deleteProfile(profile);
+    updateState();
+  }
 }

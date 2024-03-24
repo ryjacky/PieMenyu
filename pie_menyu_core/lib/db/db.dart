@@ -286,4 +286,10 @@ class Database {
     pieItemInstance.pieItem =
         await _isar.pieItems.get(pieItemInstance.pieItemId);
   }
+
+  Future<void> deleteProfile(Profile profile) async {
+    await _isar.writeTxn(() async {
+      await _isar.profiles.delete(profile.id);
+    });
+  }
 }
