@@ -38,6 +38,7 @@
   "label-hotkey-task": "Hotkey Task",
   "label-hotkey": "Hotkey",
   "label-repeat": "Repeat",
+  "tooltip-font-icon-size-hint": "The max of font size and icon size determines the height of every pie slice.",
   "tooltip-add-send-key-task": "Add Send Key Task - Send key to the active window",
   "tooltip-paste-text-task": "Add Paste Text Task - Send text to the foreground window",
   "tooltip-pie-item-key": "Pie Item key",
