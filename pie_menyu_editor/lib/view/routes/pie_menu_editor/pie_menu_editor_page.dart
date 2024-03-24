@@ -28,6 +28,7 @@ class PieMenuEditorPage extends StatelessWidget {
               "${"label-editing".tr()}: $pieMenuName",
               style: const TextStyle(color: Colors.grey),
             ),
+            hidePieMenyuStatus: true,
           ),
           Expanded(
             child: Row(
