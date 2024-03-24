@@ -57,7 +57,7 @@ class _PieItemListTabState extends State<PieItemListTab> {
                 ),
                 Expanded(
                   child: PieItemListItem(
-                    piInstance: piInstance,
+                    pieItemDelegate: piInstance,
                     pieMenuState: pieMenuState,
                   ),
                 )

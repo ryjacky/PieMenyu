@@ -23,6 +23,7 @@ import '../task_cards/open_url_task_card.dart';
 import '../task_cards/run_file_task_card.dart';
 import '../task_cards/send_key_task_card.dart';
 import '../task_cards/send_text_task_card.dart';
+import 'pie_item_list_item.dart';
 
 class PieItemTaskList extends StatefulWidget {
   const PieItemTaskList({super.key});
@@ -34,19 +35,27 @@ class PieItemTaskList extends StatefulWidget {
 class _PieItemTaskListState extends State<PieItemTaskList> {
   @override
   Widget build(BuildContext context) {
-    final pieItemInstance = context.watch<PieMenuState>().activePieItemDelegate;
+    final pieItemDelegate = context.watch<PieMenuState>().activePieItemDelegate;
     final toDelete = context.select<EditorPanelViewModel, PieItemTask?>(
       (viewModel) => viewModel.toDelete?.key,
     );
 
-    if (pieItemInstance.pieItem == null) {
+    if (pieItemDelegate.pieItem == null) {
       throw Exception("pieItem is null");
     }
 
-    final pieItemTasks = pieItemInstance.pieItem!.tasks.where((element) => element != toDelete);
+    final pieItemTasks = pieItemDelegate.pieItem!.tasks.where((element) => element != toDelete);
 
     return ListView(
       children: [
+        Padding(
+          padding: const EdgeInsets.all(8),
+          child: PieItemListItem(
+            pieItemDelegate: pieItemDelegate,
+            pieMenuState: context.read<PieMenuState>(),
+            allowDelete: false,
+          ),
+        ),
         for (int i = 0; i < pieItemTasks.length; i++)
           getTaskCard(pieItemTasks.elementAt(i), i),
       ],

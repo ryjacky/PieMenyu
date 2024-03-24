@@ -51,6 +51,7 @@ class _PieItemListItemState extends State<PieItemListItem> {
         Expanded(
           child: MinimalTextField(
             content: pieItem.name,
+            controller: TextEditingController(text: pieItem.name),
             onSubmitted: (String value) {
               pieMenuState.putPieItem(pieItem!..name = value);
             },
