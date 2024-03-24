@@ -74,6 +74,7 @@ class BehaviorSection extends StatelessWidget {
             Padding(
               padding: const EdgeInsets.fromLTRB(8, 0, 0, 0),
               child: Tooltip(
+                preferBelow: false,
                 message: "tooltip-activation-mode-hint".tr(),
                 child: const Icon(
                   Icons.help_outline,
@@ -109,6 +110,7 @@ class BehaviorSection extends StatelessWidget {
             Padding(
               padding: const EdgeInsets.fromLTRB(8, 0, 16, 0),
               child: Tooltip(
+                preferBelow: false,
                 message: "tooltip-sub-menu-activation-mode-hint".tr(),
                 child: const Icon(
                   Icons.help_outline,
