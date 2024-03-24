@@ -33,16 +33,10 @@ class _ProfileEditorPanelHeaderState extends State<ProfileEditorPanelHeader> {
         Expanded(child: Container()),
         IconButton(
           onPressed: () async {
-            bool result = await homePageViewModel.toggleActiveProfile();
+            await homePageViewModel.toggleActiveProfile();
+
             if (!context.mounted) return;
             setState(() {});
-            ScaffoldMessenger.of(context).clearSnackBars();
-            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                backgroundColor: Theme.of(context).colorScheme.primary,
-                content: Text((result
-                        ? "message-profile-enabled"
-                        : "message-profile-disabled")
-                    .tr())));
 
             launchUrl(Uri.parse("piemenyu://reload"));
           },
