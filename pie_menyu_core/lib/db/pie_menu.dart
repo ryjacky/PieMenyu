@@ -70,7 +70,7 @@ class PieMenuShape {
   double centerRadius = 20;
   double centerThickness = 10;
   double pieItemRoundness = 7;
-  double pieItemSpread = 150;
+  double pieItemSpread = 65;
 
   PieMenuShape();
 
