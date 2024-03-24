@@ -127,6 +127,7 @@
   "message-drag-n-drop-to-pick-file": "You can drag and drop to select a file.",
   "message-keyboard-selector-hint-simple-mode": "Click the following and press on your keyboard to record hotkey",
   "message-hotkey-is-used": "Hotkey is used in another pie menu",
+  "message-slice-key-is-used": "This key is used in another slice",
   "description-check-ahp": "PieMenyu is originated from AutoHotPie, make sure you also check it out on Github!",
   "description-export-data": "Export all profiles, pie menus, pie items, and pie item tasks to file.",
   "description-import-data": "Import profiles, pie menus, pie items, and pie item tasks from file.",

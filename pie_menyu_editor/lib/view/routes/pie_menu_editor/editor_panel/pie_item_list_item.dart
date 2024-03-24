@@ -68,8 +68,13 @@ class _PieItemListItemState extends State<PieItemListItem> {
                 pieMenuState.updatePieItemDelegate(piInstance..keyCode = value);
               },
               validator: (String value) {
-                return pieMenuState.pieItemDelegates
+                final valid = pieMenuState.pieItemDelegates
                     .every((pieItem) => pieItem.keyCode != value);
+
+                if (!valid) {
+                  showErrorSnackBar();
+                }
+                return valid;
               },
             ),
           ),
@@ -158,6 +163,20 @@ class _PieItemListItemState extends State<PieItemListItem> {
       isAntiAlias: true,
       base64Decode(iconBase64),
       errorBuilder: (_, __, ___) => const Icon(Icons.upload_file),
+    );
+  }
+
+  void showErrorSnackBar() {
+    final scaffoldMessenger = ScaffoldMessenger.of(context);
+    scaffoldMessenger.hideCurrentSnackBar();
+    scaffoldMessenger.showSnackBar(
+      SnackBar(
+        behavior: SnackBarBehavior.floating,
+        margin: const EdgeInsets.fromLTRB(8, 8, 334, 8),
+        backgroundColor: Colors.red[400],
+        content: Text("message-slice-key-is-used".tr()),
+        duration: const Duration(seconds: 5),
+      ),
     );
   }
 }
