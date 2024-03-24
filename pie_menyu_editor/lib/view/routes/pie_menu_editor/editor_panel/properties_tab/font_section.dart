@@ -10,6 +10,7 @@ import 'package:provider/provider.dart';
 
 class FontSection extends StatelessWidget {
   const FontSection({super.key});
+
   final fonts = const [
     "Amatic SC",
     "Caveat",
@@ -22,7 +23,8 @@ class FontSection extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final state = context.read<PieMenuState>();
-    final font = context.select<PieMenuState, PieMenuFont>((value) => value.font);
+    final font =
+        context.select<PieMenuState, PieMenuFont>((value) => value.font);
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -58,10 +60,19 @@ class FontSection extends StatelessWidget {
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            const Padding(
-              padding: EdgeInsets.fromLTRB(42.0, 0, 0, 0),
-              child: Text("Font Size"),
+            Padding(
+              padding: const EdgeInsets.fromLTRB(8, 0, 0, 0),
+              child: Tooltip(
+                preferBelow: false,
+                message: "tooltip-font-icon-size-hint".tr(),
+                child: const Icon(
+                  Icons.help_outline,
+                  size: 16,
+                  color: Colors.grey,
+                ),
+              ),
             ),
+            const SizedBox(width: 160, child: Text("Font Size")),
             SizedBox(
               width: 70,
               child: DraggableNumberField(

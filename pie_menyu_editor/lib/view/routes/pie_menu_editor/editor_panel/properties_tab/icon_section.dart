@@ -12,7 +12,8 @@ class IconSection extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final state = context.read<PieMenuState>();
-    final icon = context.select<PieMenuState, PieMenuIcon>((value) => value.icon);
+    final icon =
+        context.select<PieMenuState, PieMenuIcon>((value) => value.icon);
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -29,8 +30,20 @@ class IconSection extends StatelessWidget {
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            const Padding(
-              padding: EdgeInsets.fromLTRB(42, 0, 0, 0),
+            Padding(
+              padding: const EdgeInsets.fromLTRB(8, 0, 0, 0),
+              child: Tooltip(
+                preferBelow: false,
+                message: "tooltip-font-icon-size-hint".tr(),
+                child: const Icon(
+                  Icons.help_outline,
+                  size: 16,
+                  color: Colors.grey,
+                ),
+              ),
+            ),
+            const SizedBox(
+              width: 160,
               child: Text("Icon Size"),
             ),
             SizedBox(
