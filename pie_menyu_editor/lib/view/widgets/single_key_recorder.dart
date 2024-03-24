@@ -3,14 +3,14 @@ import 'package:flutter/services.dart';
 
 class SingleKeyRecorder extends StatefulWidget {
   final Function(String value) onSubmitted;
-  final String initialValue;
   final TextEditingController controller;
+  final Function(String value)? validator;
 
-  const SingleKeyRecorder({super.key, required this.onSubmitted, required this.initialValue});
   const SingleKeyRecorder({
     super.key,
     required this.onSubmitted,
     required this.controller,
+    this.validator,
   });
 
   @override
@@ -30,12 +30,15 @@ class _SingleKeyRecorderState extends State<SingleKeyRecorder> {
         setState(() {});
         widget.onSubmitted("");
         _focusNode.unfocus();
-      } else if (event.character != null &&
-          RegExp(r'[a-zA-Z0-9]').hasMatch(event.character!)) {
-        _controller.text = event.character!.toUpperCase();
-        setState(() {});
-        widget.onSubmitted(_controller.text);
-        _focusNode.unfocus();
+      } else if (event.character != null) {
+        final inputChar = event.character!.toUpperCase();
+        if (RegExp(r'[a-zA-Z0-9]').hasMatch(inputChar) &&
+            widget.validator?.call(inputChar) != false) {
+          widget.controller.text = inputChar;
+          setState(() {});
+          widget.onSubmitted(widget.controller.text);
+          _focusNode.unfocus();
+        }
       }
       return KeyEventResult.handled;
     };

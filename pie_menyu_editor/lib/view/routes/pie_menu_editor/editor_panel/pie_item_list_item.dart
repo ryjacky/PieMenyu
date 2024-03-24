@@ -67,6 +67,10 @@ class _PieItemListItemState extends State<PieItemListItem> {
               onSubmitted: (String value) {
                 pieMenuState.updatePieItemDelegate(piInstance..keyCode = value);
               },
+              validator: (String value) {
+                return pieMenuState.pieItemDelegates
+                    .every((pieItem) => pieItem.keyCode != value);
+              },
             ),
           ),
         ),
