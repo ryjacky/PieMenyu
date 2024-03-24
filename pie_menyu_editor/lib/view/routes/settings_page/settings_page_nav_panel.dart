@@ -35,12 +35,12 @@ class SettingsPageNavigationPanel extends StatelessWidget {
                 settingsState.selectedSection = SettingsSection.general,
             isSelected: selectedSection == SettingsSection.general,
           ),
-          const Gap(gap),
-          ClickableText(
-            title: 'label-data'.tr(),
-            onTap: () => settingsState.selectedSection = SettingsSection.data,
-            isSelected: selectedSection == SettingsSection.data,
-          ),
+          // const Gap(gap),
+          // ClickableText(
+          //   title: 'label-data'.tr(),
+          //   onTap: () => settingsState.selectedSection = SettingsSection.data,
+          //   isSelected: selectedSection == SettingsSection.data,
+          // ),
           const Gap(gap),
           ClickableText(
             title: 'label-about'.tr(),
