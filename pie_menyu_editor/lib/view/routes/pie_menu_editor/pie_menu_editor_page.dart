@@ -1,7 +1,7 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:pie_menyu_core/widgets/pieMenuView/pie_menu_state.dart';
-import 'package:pie_menyu_core/widgets/pieMenuView/pie_menu_view.dart';
+import 'package:pie_menyu_editor/view/routes/pie_menu_editor/preview_panel/preview_panel.dart';
 import 'package:provider/provider.dart';
 
 import '../../widgets/title_bar.dart';
@@ -12,7 +12,8 @@ class PieMenuEditorPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final pieMenuState = context.watch<PieMenuState>();
+    final pieMenuName =
+        context.select<PieMenuState, String>((value) => value.name);
 
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.background,
@@ -24,7 +25,7 @@ class PieMenuEditorPage extends StatelessWidget {
               child: const Icon(Icons.arrow_back_rounded, size: 15),
             ),
             title: Text(
-              "${"label-editing".tr()}: ${pieMenuState.name}",
+              "${"label-editing".tr()}: $pieMenuName",
               style: const TextStyle(color: Colors.grey),
             ),
           ),
@@ -32,18 +33,17 @@ class PieMenuEditorPage extends StatelessWidget {
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                Expanded(
-                  child: Container(
-                    color: Colors.white30,
-                    child: PieMenuView(
-                      state: pieMenuState,
-                      onTap: (instance) {
-                        pieMenuState.activePieItemDelegate = instance;
-                      },
+                const Expanded(child: PreviewPanel()),
+                Container(
+                  decoration: BoxDecoration(
+                    border: Border(
+                      left: BorderSide(
+                          color: Theme.of(context).colorScheme.outlineVariant),
                     ),
                   ),
+                  width: 325,
+                  child: const EditorPanel(),
                 ),
-                const SizedBox(width: 325, child: EditorPanel()),
               ],
             ),
           ),
