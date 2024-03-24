@@ -50,9 +50,7 @@ class _PieItemViewState extends State<PieItemView> {
 
     imageIcon ??= Image.memory(
       base64Decode(pieItem.iconBase64),
-      width: widget.icon.size + 5,
       alignment: Alignment.centerLeft,
-      height: widget.icon.size,
       fit: BoxFit.fitHeight,
       isAntiAlias: true,
       errorBuilder: (context, object, error) {
@@ -73,20 +71,19 @@ class _PieItemViewState extends State<PieItemView> {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
-          imageIcon!,
-          Text(
-            pieItem.name,
-            style: GoogleFonts.getFont(widget.font.fontFamily,
-                color: Color(widget.font.color), fontSize: widget.font.size),
-          ),
+          SizedBox(height: widget.icon.size, child: imageIcon!),
           Padding(
-            padding: EdgeInsets.fromLTRB(
-                widget.instance.keyCode == "" ? 0 : 6, 0, 0, 0),
+            padding: const EdgeInsets.symmetric(horizontal: 6),
             child: Text(
-              widget.instance.keyCode,
+              pieItem.name,
               style: GoogleFonts.getFont(widget.font.fontFamily,
                   color: Color(widget.font.color), fontSize: widget.font.size),
             ),
+          ),
+          Text(
+            widget.instance.keyCode,
+            style: GoogleFonts.getFont(widget.font.fontFamily,
+                color: Color(widget.font.color), fontSize: widget.font.size),
           ),
         ],
       ),

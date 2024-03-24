@@ -36,7 +36,7 @@ class _PieItemListItemState extends State<PieItemListItem> {
     final pieMenuState = widget.pieMenuState;
     final piInstance = widget.piInstance;
 
-    _icon ??= createIconWidget(pieItem.iconBase64);
+    _icon = createIconWidget(pieItem.iconBase64);
 
     return Row(
       children: [
@@ -90,7 +90,6 @@ class _PieItemListItemState extends State<PieItemListItem> {
         }
 
         if (icon != null && context.mounted) {
-          createIconWidget(icon);
           context.read<PieMenuState>().putPieItem(pieItem..iconBase64 = icon);
         }
       },
