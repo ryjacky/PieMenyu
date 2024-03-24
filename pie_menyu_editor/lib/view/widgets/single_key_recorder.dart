@@ -4,24 +4,29 @@ import 'package:flutter/services.dart';
 class SingleKeyRecorder extends StatefulWidget {
   final Function(String value) onSubmitted;
   final String initialValue;
+  final TextEditingController controller;
 
   const SingleKeyRecorder({super.key, required this.onSubmitted, required this.initialValue});
+  const SingleKeyRecorder({
+    super.key,
+    required this.onSubmitted,
+    required this.controller,
+  });
 
   @override
   State<SingleKeyRecorder> createState() => _SingleKeyRecorderState();
 }
 
 class _SingleKeyRecorderState extends State<SingleKeyRecorder> {
-  final TextEditingController _controller = TextEditingController();
   final FocusNode _focusNode = FocusNode();
 
   @override
   void initState() {
     super.initState();
-    _controller.text = widget.initialValue;
+
     _focusNode.onKeyEvent = (node, event) {
       if (event.logicalKey == LogicalKeyboardKey.escape) {
-        _controller.clear();
+        widget.controller.clear();
         setState(() {});
         widget.onSubmitted("");
         _focusNode.unfocus();
@@ -38,7 +43,6 @@ class _SingleKeyRecorderState extends State<SingleKeyRecorder> {
 
   @override
   void dispose() {
-    _controller.dispose();
     _focusNode.dispose();
     super.dispose();
   }
@@ -46,9 +50,11 @@ class _SingleKeyRecorderState extends State<SingleKeyRecorder> {
   @override
   Widget build(BuildContext context) {
     return TextField(
-      controller: _controller,
+      controller: widget.controller,
       focusNode: _focusNode,
       keyboardType: TextInputType.text,
+      showCursor: false,
+      enableInteractiveSelection: false,
       textAlign: TextAlign.center,
       decoration: const InputDecoration(
         contentPadding: EdgeInsets.symmetric(horizontal: 6, vertical: 10),

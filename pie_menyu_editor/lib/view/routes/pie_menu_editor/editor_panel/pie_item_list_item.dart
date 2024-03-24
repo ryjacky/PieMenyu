@@ -63,7 +63,7 @@ class _PieItemListItemState extends State<PieItemListItem> {
           child: Tooltip(
             message: "tooltip-pie-item-key".tr(),
             child: SingleKeyRecorder(
-              initialValue: piInstance.keyCode,
+              controller: TextEditingController(text: piInstance.keyCode),
               onSubmitted: (String value) {
                 pieMenuState.updatePieItemDelegate(piInstance..keyCode = value);
               },
