@@ -42,8 +42,8 @@ class ActionsTab extends StatelessWidget {
         Container(
           padding: const EdgeInsets.fromLTRB(5, 0, 5, 0),
           width: 50,
-          child: buildAddTaskButtonListView(
-              pieMenuState, activePieItemDelegate),
+          child:
+              buildAddTaskButtonListView(pieMenuState, activePieItemDelegate),
         ),
       ],
     );
@@ -67,7 +67,7 @@ class ActionsTab extends StatelessWidget {
         indent: 7,
         endIndent: 7,
       ),
-      Tooltip(
+      _LeftTooltip(
         message: "tooltip-add-send-key-task".tr(),
         child: SingleColorIconButton(
           icon: Icons.keyboard,
@@ -77,7 +77,7 @@ class ActionsTab extends StatelessWidget {
         ),
       ),
       Gap(gap),
-      Tooltip(
+      _LeftTooltip(
         message: "tooltip-add-mouse-click-task".tr(),
         child: SingleColorIconButton(
           icon: FontAwesomeIcons.handPointer,
@@ -87,7 +87,7 @@ class ActionsTab extends StatelessWidget {
         ),
       ),
       Gap(gap),
-      Tooltip(
+      _LeftTooltip(
         message: "tooltip-add-run-file-task".tr(),
         child: SingleColorIconButton(
           icon: Icons.file_open,
@@ -97,7 +97,7 @@ class ActionsTab extends StatelessWidget {
         ),
       ),
       Gap(gap),
-      Tooltip(
+      _LeftTooltip(
         message: "tooltip-add-open-sub-menu-task".tr(),
         child: SingleColorIconButton(
           icon: Icons.pie_chart,
@@ -107,7 +107,7 @@ class ActionsTab extends StatelessWidget {
         ),
       ),
       Gap(gap),
-      Tooltip(
+      _LeftTooltip(
         message: "tooltip-add-open-folder-task".tr(),
         child: SingleColorIconButton(
           icon: Icons.folder,
@@ -117,7 +117,7 @@ class ActionsTab extends StatelessWidget {
         ),
       ),
       Gap(gap),
-      Tooltip(
+      _LeftTooltip(
         message: "tooltip-add-open-app-task".tr(),
         child: SingleColorIconButton(
           icon: Icons.play_arrow_rounded,
@@ -127,7 +127,7 @@ class ActionsTab extends StatelessWidget {
         ),
       ),
       Gap(gap),
-      Tooltip(
+      _LeftTooltip(
         message: "tooltip-add-open-url-task".tr(),
         child: SingleColorIconButton(
           icon: Icons.link,
@@ -137,7 +137,7 @@ class ActionsTab extends StatelessWidget {
         ),
       ),
       Gap(gap),
-      Tooltip(
+      _LeftTooltip(
         message: "tooltip-paste-text-task".tr(),
         child: SingleColorIconButton(
           icon: Icons.text_fields,
@@ -147,7 +147,7 @@ class ActionsTab extends StatelessWidget {
         ),
       ),
       // Gap(gap),
-      // Tooltip(
+      // _LeftTooltip(
       //   message: "tooltip-add-open-editor-task".tr(),
       //   child: MonochromeIconButton(
       //     icon: Icons.edit_note,
@@ -157,7 +157,7 @@ class ActionsTab extends StatelessWidget {
       //   ),
       // ),
       // Gap(gap),
-      // Tooltip(
+      // _LeftTooltip(
       //   message: "tooltip-add-resize-window-task".tr(),
       //   child: MonochromeIconButton(
       //     icon: Icons.photo_size_select_small,
@@ -167,7 +167,7 @@ class ActionsTab extends StatelessWidget {
       //   ),
       // ),
       // Gap(gap),
-      // Tooltip(
+      // _LeftTooltip(
       //   message: "tooltip-add-move-window-task".tr(),
       //   child: MonochromeIconButton(
       //     icon: Icons.move_down,
@@ -179,4 +179,12 @@ class ActionsTab extends StatelessWidget {
       // Gap(gap),
     ]);
   }
+}
+
+class _LeftTooltip extends Tooltip {
+  const _LeftTooltip({super.message, super.child})
+      : super(
+          verticalOffset: -13,
+          margin: const EdgeInsets.only(right: 40),
+        );
 }
