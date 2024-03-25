@@ -37,13 +37,13 @@ class SystemKeyEvent {
   List<int?> _pressedKeys = [];
 
   SystemKeyEvent(this._db, DeepLinkHandler deepLinkHandler) {
-    _registerHotkey();
+    registerHotkey();
 
     deepLinkHandler.addListener((value) {
       switch (value) {
         case DeepLinkCommand.start:
         case DeepLinkCommand.reload:
-          _registerHotkey();
+          registerHotkey();
           break;
         case DeepLinkCommand.stop:
           hotKeyManager.unregisterAll();
@@ -52,7 +52,7 @@ class SystemKeyEvent {
     });
   }
 
-  _registerHotkey() async {
+  registerHotkey() async {
     await hotKeyManager.unregisterAll();
 
     final pieMenuHotkeys = await _db.getAllHotkeys();
