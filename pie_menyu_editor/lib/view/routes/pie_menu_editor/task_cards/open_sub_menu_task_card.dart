@@ -27,7 +27,6 @@ class OpenSubMenuTaskCard extends StatefulWidget {
 }
 
 class _OpenSubMenuTaskCardState extends State<OpenSubMenuTaskCard> {
-  final _controller = TextEditingController();
   List<PieMenu> allPieMenus = [];
 
   @override
@@ -57,13 +56,12 @@ class _OpenSubMenuTaskCardState extends State<OpenSubMenuTaskCard> {
                 .firstOrNull,
             dropdownMenuEntries: [
               for (final pieMenu in allPieMenus)
-                DropdownMenuEntry(value: pieMenu, label: pieMenu.name),
+                DropdownMenuEntry(value: pieMenu, label: "${pieMenu.name}\n(id: ${pieMenu.id})"),
             ],
             onSelected: (pieMenu) {
               if (pieMenu == null) return;
 
               widget.task.subMenuId = pieMenu.id;
-              _controller.text = pieMenu.name;
 
               final state = context.read<PieMenuState>();
               final pieItem = state.activePieItemDelegate;
