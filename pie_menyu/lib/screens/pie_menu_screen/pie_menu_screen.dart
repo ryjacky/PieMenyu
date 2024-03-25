@@ -1,4 +1,3 @@
-import 'dart:developer' as dev;
 import 'dart:math';
 
 import 'package:flutter/material.dart';
@@ -6,7 +5,6 @@ import 'package:flutter/services.dart';
 import 'package:pie_menyu/hotkey/system_key_event.dart';
 import 'package:pie_menyu/screens/pie_menu_screen/pie_menu_screen_view_model.dart';
 import 'package:pie_menyu/screens/pie_menu_screen/pie_menu_state_provider.dart';
-import 'package:pie_menyu/window/pie_menyu_window_manager.dart';
 import 'package:pie_menyu_core/db/pie_menu.dart';
 import 'package:pie_menyu_core/widgets/pieMenuView/pie_menu_state.dart';
 import 'package:pie_menyu_core/widgets/pieMenuView/pie_menu_view.dart';
@@ -40,7 +38,7 @@ class _PieMenuScreenState extends State<PieMenuScreen> {
   _processMouseEvent(PointerEvent event) {
     final pieMenuPos = context.read<PieMenuStateProvider>().pieMenuPositions;
     final pieMenuStates = context.read<PieMenuStateProvider>().pieMenuStates;
-    if (pieMenuPos.isEmpty) return;
+    if (pieMenuPos.isEmpty || pieMenuStates.isEmpty) return;
 
     _mousePosition = event.position;
     final instance = getPieItemDelegateAt(
@@ -72,13 +70,7 @@ class _PieMenuScreenState extends State<PieMenuScreen> {
     final pieMenuStates = context.watch<PieMenuStateProvider>().pieMenuStates;
     final pieMenuPos = context.read<PieMenuStateProvider>().pieMenuPositions;
 
-    if (pieMenuStates.isEmpty) {
-      dev.log("No state is found, closing the window");
-      context.read<PieMenyuWindow>().hide();
-      return Container();
-    }
-
-    return MouseRegion(
+    return pieMenuStates.isEmpty ? Container() : MouseRegion(
       onHover: _processMouseEvent,
       onEnter: (e) => setState(() {
         pieMenuPos[pieMenuStates.last] ??= e.position;

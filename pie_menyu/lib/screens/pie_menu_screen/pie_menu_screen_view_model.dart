@@ -71,7 +71,7 @@ class PieMenuScreenViewModel extends ChangeNotifier {
         ? mainMenuState.behavior.subMenuActivationMode
         : mainMenuState.behavior.activationMode;
 
-    if (mode == ActivationMode.onRelease) await pieMenyuWindow.hide();
+    if (mode == ActivationMode.onRelease) clearStateAndHide();
 
     if (activationMode == mode) {
       if (isSubMenuItem) {
@@ -81,7 +81,7 @@ class PieMenuScreenViewModel extends ChangeNotifier {
         log("Executing tasks", name: "PieMenuScreen tryActivate()");
         if (mainMenuState == state) executorService.cancelAll();
 
-        await pieMenyuWindow.hide();
+        clearStateAndHide();
 
         addToExecutorQueue(executorService, activePieItem.tasks);
         await hotKeyManager.unregisterAll();
@@ -89,6 +89,13 @@ class PieMenuScreenViewModel extends ChangeNotifier {
         await systemKeyEvent.registerHotkey();
       }
     }
+  }
+
+  void clearStateAndHide() {
+    pieMenuStateProvider.clearStates();
+    WidgetsBinding.instance.addPostFrameCallback((timestamp) async {
+      await pieMenyuWindow.hide();
+    });
   }
 
   bool screenKeyEventHandler(KeyEvent event) {
