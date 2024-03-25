@@ -22,10 +22,18 @@ class SystemKeyEvent {
     _keyUpListeners.add(listener);
   }
 
+  removeKeyUpListener(KeyEventListener listener) {
+    _keyUpListeners.remove(listener);
+  }
+
   final List<KeyEventListener> _keyDownListeners = [];
 
   addKeyDownListener(KeyEventListener listener) {
     _keyDownListeners.add(listener);
+  }
+
+  removeKeyDownListener(KeyEventListener listener) {
+    _keyDownListeners.remove(listener);
   }
 
   KeyEventType? _keyEventType;
