@@ -131,5 +131,7 @@
   "tooltip-font-icon-size-hint": "フォントサイズとアイコンサイズの最大値はパイスライスの高さを決まります。",
   "tooltip-paste-text-task": "貼り付けタスクを追加 - 指定したテキストを貼り付く",
   "tooltip-pie-item-key": "パイアイテムキー",
+  "tooltip-make-pie-menu-unique": "クリックで共有から分離してコピーを作成します。",
+  "tooltip-duplicate-or-link-pie-menu": "クリックでコピーを作成、あるいは他のプロファイルへドラッグしパイメニューを共有します。",
   "tooltip-sub-menu-activation-mode-hint": "クリック - サブメニューはパイアイテムがクリックされたときにアクティベートされます。\nホバー - サブメニューはパイアイテムがホバーされたときにアクティベートされます。"
 }

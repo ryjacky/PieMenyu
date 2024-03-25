@@ -63,17 +63,26 @@ class _PieMenuTableState extends State<PieMenuTable> {
                   textAlign: TextAlign.center,
                   style: Theme.of(context).textTheme.labelMedium,
                 ),
-                child: TextButton(
-                  style: TextButton.styleFrom(
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(5),
+                child: Tooltip(
+                  message: pieMenu.profiles.length == 1
+                      ? "tooltip-duplicate-or-link-pie-menu".tr()
+                      : "tooltip-make-pie-menu-unique".tr(),
+                  child: TextButton(
+                    style: TextButton.styleFrom(
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(5),
+                      ),
+                      minimumSize: const Size(32, 32),
+                      maximumSize: const Size(32, 32),
+                      padding: const EdgeInsets.all(0),
                     ),
-                    minimumSize: const Size(32, 32),
+                    onPressed: () {
+                      viewModel.makePieMenuUniqueIn(activeProfile, pieMenu);
+                    },
+                    child: Text(pieMenu.profiles.length == 1
+                        ? "U"
+                        : pieMenu.profiles.length.toString()),
                   ),
-                  onPressed: () {
-                    viewModel.makePieMenuUniqueIn(activeProfile, pieMenu);
-                  },
-                  child: Text(pieMenu.profiles.length.toString()),
                 ),
               ),
             ),

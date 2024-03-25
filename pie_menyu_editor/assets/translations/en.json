@@ -131,5 +131,7 @@
   "tooltip-font-icon-size-hint": "The max of font size and icon size determines the height of every pie slice.",
   "tooltip-paste-text-task": "Add Paste Text Task - Send text to the foreground window",
   "tooltip-pie-item-key": "Pie Item key",
+  "tooltip-make-pie-menu-unique": "Click to make this pie menu unique",
+  "tooltip-duplicate-or-link-pie-menu": "Click to duplicate or drag to a profile to link the pie menu with other profiles",
   "tooltip-sub-menu-activation-mode-hint": "Click - Sub Menu will be activated when the pie item is clicked. \nHover - Sub Menu will be activated when the pie item is hovered."
 }
