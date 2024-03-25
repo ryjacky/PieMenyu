@@ -267,7 +267,9 @@ class _PieMenuScreenState extends State<PieMenuScreen> {
         await context.read<PieMenyuWindow>().hide();
 
         addToExecutorQueue(executorService, activePieItem.tasks);
+        await hotKeyManager.unregisterAll();
         executorService.start();
+        context.read<SystemKeyEvent>().registerHotkey();
       }
     }
   }
