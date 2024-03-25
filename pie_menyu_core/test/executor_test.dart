@@ -51,4 +51,26 @@ void main() {
 
     expect(executor.isExecuting, false);
   });
+
+  test('ExecutorService cancelAll() cancels all remaining tasks', () async {
+    final executor = ExecutorService();
+
+    expect(executor.isExecuting, false);
+
+    int count = 0;
+    executor.execute(MockExecutable(() {count++;}, delay: 1000));
+    executor.execute(MockExecutable(() {count++;}, delay: 2000));
+    executor.execute(MockExecutable(() {count++;}, delay: 3000));
+    executor.execute(MockExecutable(() {count++;}, delay: 3000));
+    executor.execute(MockExecutable(() {count++;}, delay: 2000));
+    executor.start();
+
+    await Future.delayed(const Duration(seconds: 5), () {
+      executor.cancelAll();
+    });
+    await Future.delayed(const Duration(seconds: 8), () {
+    });
+    expect(executor.isExecuting, false);
+    expect(count, 3);
+  });
 }
