@@ -4,24 +4,10 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:pie_menyu/hotkey/system_key_event.dart';
+import 'package:pie_menyu/screens/pie_menu_screen/pie_menu_screen_view_model.dart';
 import 'package:pie_menyu/screens/pie_menu_screen/pie_menu_state_provider.dart';
 import 'package:pie_menyu/window/pie_menyu_window_manager.dart';
-import 'package:pie_menyu_core/db/db.dart';
-import 'package:pie_menyu_core/db/pie_item.dart';
-import 'package:pie_menyu_core/db/pie_item_task.dart';
 import 'package:pie_menyu_core/db/pie_menu.dart';
-import 'package:pie_menyu_core/executor/executor_service.dart';
-import 'package:pie_menyu_core/pieItemTasks/mouse_click_task.dart';
-import 'package:pie_menyu_core/pieItemTasks/move_window_task.dart';
-import 'package:pie_menyu_core/pieItemTasks/open_app_task.dart';
-import 'package:pie_menyu_core/pieItemTasks/open_editor_task.dart';
-import 'package:pie_menyu_core/pieItemTasks/open_folder_task.dart';
-import 'package:pie_menyu_core/pieItemTasks/open_sub_menu_task.dart';
-import 'package:pie_menyu_core/pieItemTasks/open_url_task.dart';
-import 'package:pie_menyu_core/pieItemTasks/resize_window_task.dart';
-import 'package:pie_menyu_core/pieItemTasks/run_file_task.dart';
-import 'package:pie_menyu_core/pieItemTasks/send_key_task.dart';
-import 'package:pie_menyu_core/pieItemTasks/send_text_task.dart';
 import 'package:pie_menyu_core/widgets/pieMenuView/pie_menu_state.dart';
 import 'package:pie_menyu_core/widgets/pieMenuView/pie_menu_view.dart';
 import 'package:provider/provider.dart';
@@ -37,92 +23,56 @@ class _PieMenuScreenState extends State<PieMenuScreen> {
   static const _animationDuration = Duration(milliseconds: 200);
   static const _animationCurve = Curves.easeOutCubic;
 
-  List<PieMenuState> _pieMenuStates = [];
   Offset _mousePosition = Offset.zero;
 
   @override
   void initState() {
-    final keyEvent = context.read<SystemKeyEvent>();
-    keyEvent.addKeyUpListener((hotkey) {
-      final pieMenuStates = _pieMenuStates;
-      if (pieMenuStates.lastOrNull == null ||
-          pieMenuStates.firstOrNull?.behavior.activationMode !=
-              ActivationMode.onRelease) return false;
+    final viewModel = context.read<PieMenuScreenViewModel>();
+    context
+        .read<SystemKeyEvent>()
+        .addKeyUpListener(viewModel.systemKeyEventListener);
 
-      tryActivate(
-        pieMenuStates.last,
-        ActivationMode.onRelease,
-      );
-      return true;
-    });
-
-    HardwareKeyboard.instance.addHandler(_screenKeyEventHandler);
+    HardwareKeyboard.instance.addHandler(viewModel.screenKeyEventHandler);
 
     super.initState();
   }
 
-  bool _screenKeyEventHandler(KeyEvent event) {
-    // Handles slice hotkey
-    if (event is KeyUpEvent) {
-      final lastPieMenuState = _pieMenuStates.lastOrNull;
-      if (lastPieMenuState == null) {
-        context.read<PieMenyuWindow>().hide();
-        return false;
-      }
-
-      PieItemDelegate? instanceOfKey = lastPieMenuState.pieItemDelegates
-          .where((instance) =>
-              instance.keyCode.toUpperCase() == event.character?.toUpperCase())
-          .firstOrNull;
-      if (instanceOfKey == null) {
-        if (!_isModifierKey(event.logicalKey)) {
-          context.read<PieMenyuWindow>().hide();
-        }
-        return false;
-      }
-
-      lastPieMenuState.activePieItemDelegate = instanceOfKey;
-
-      tryActivate(
-        lastPieMenuState,
-        ActivationMode.onRelease,
-      );
-      return true;
-    }
-
-    return false;
-  }
-
   _processMouseEvent(PointerEvent event) {
     final pieMenuPos = context.read<PieMenuStateProvider>().pieMenuPositions;
+    final pieMenuStates = context.read<PieMenuStateProvider>().pieMenuStates;
     if (pieMenuPos.isEmpty) return;
 
     _mousePosition = event.position;
     final instance = getPieItemDelegateAt(
       _mousePosition,
-      pieMenuPos[_pieMenuStates.last] ??= _mousePosition,
-      _pieMenuStates.last.shape.centerRadius,
-      _pieMenuStates.last.pieItemDelegates,
+      pieMenuPos[pieMenuStates.last] ??= _mousePosition,
+      pieMenuStates.last.shape.centerRadius,
+      pieMenuStates.last.pieItemDelegates,
     );
 
-    if (instance != _pieMenuStates.last.activePieItemDelegate &&
+    if (instance != pieMenuStates.last.activePieItemDelegate &&
         instance != null) {
-      _pieMenuStates.last.activePieItemDelegate = instance;
+      pieMenuStates.last.activePieItemDelegate = instance;
     }
   }
 
   @override
   void dispose() {
-    HardwareKeyboard.instance.removeHandler(_screenKeyEventHandler);
+    final viewModel = context.read<PieMenuScreenViewModel>();
+
+    context
+        .read<SystemKeyEvent>()
+        .removeKeyUpListener(viewModel.systemKeyEventListener);
+    HardwareKeyboard.instance.removeHandler(viewModel.screenKeyEventHandler);
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    _pieMenuStates = context.watch<PieMenuStateProvider>().pieMenuStates;
+    final pieMenuStates = context.watch<PieMenuStateProvider>().pieMenuStates;
     final pieMenuPos = context.read<PieMenuStateProvider>().pieMenuPositions;
 
-    if (_pieMenuStates.isEmpty) {
+    if (pieMenuStates.isEmpty) {
       dev.log("No state is found, closing the window");
       context.read<PieMenyuWindow>().hide();
       return Container();
@@ -131,20 +81,20 @@ class _PieMenuScreenState extends State<PieMenuScreen> {
     return MouseRegion(
       onHover: _processMouseEvent,
       onEnter: (e) => setState(() {
-        pieMenuPos[_pieMenuStates.last] ??= e.position;
+        pieMenuPos[pieMenuStates.last] ??= e.position;
       }),
       child: Scaffold(
         backgroundColor: Colors.transparent,
         body: LayoutBuilder(builder: (_, constraint) {
           return Stack(
             children: [
-              for (final state in _pieMenuStates)
+              for (final state in pieMenuStates)
                 if (pieMenuPos[state] != null)
                   buildPieMenuView(
                     state,
                     constraint,
                     pieMenuPos[state]!,
-                    state == _pieMenuStates.last,
+                    state == pieMenuStates.last,
                   )
             ],
           );
@@ -159,10 +109,11 @@ class _PieMenuScreenState extends State<PieMenuScreen> {
     double pieCenterRadius,
     List<PieItemDelegate> instances,
   ) {
-
     if (instances.isEmpty) return null;
 
-    if (sqrt(pow(position.dx - pieCenterPosition.dx, 2) + pow(position.dy - pieCenterPosition.dy, 2)) <= pieCenterRadius) {
+    if (sqrt(pow(position.dx - pieCenterPosition.dx, 2) +
+            pow(position.dy - pieCenterPosition.dy, 2)) <=
+        pieCenterRadius) {
       return instances[0];
     }
 
@@ -181,8 +132,7 @@ class _PieMenuScreenState extends State<PieMenuScreen> {
     // which is the detection range
     pieCenterRotation += 2 * pi / nPieItems / 2;
 
-    var activeBtnIndex =
-        (nPieItems * pieCenterRotation / (2 * pi)).floor();
+    var activeBtnIndex = (nPieItems * pieCenterRotation / (2 * pi)).floor();
 
     // Because we offset the rotation by half the angle of a pie item,
     // we need to mod by the number of pie items to get the correct index
@@ -195,10 +145,13 @@ class _PieMenuScreenState extends State<PieMenuScreen> {
     Offset position,
     bool inForeground,
   ) {
+    final viewModel = context.read<PieMenuScreenViewModel>();
+    final pieMenuStates = context.watch<PieMenuStateProvider>().pieMenuStates;
+
     return AnimatedPositioned(
       left: position.dx - constraint.maxWidth / 2 - (inForeground ? 0 : 200),
       top: position.dy - constraint.maxHeight / 2 + (inForeground ? 0 : 100),
-      duration: state == _pieMenuStates.lastOrNull
+      duration: state == pieMenuStates.lastOrNull
           ? const Duration()
           : _animationDuration,
       curve: _animationCurve,
@@ -217,124 +170,16 @@ class _PieMenuScreenState extends State<PieMenuScreen> {
               state: state,
               onTap: (instance) {
                 state.activePieItemDelegate = instance;
-                tryActivate(state, ActivationMode.onClick);
+                viewModel.tryActivate(state, ActivationMode.onClick);
               },
               onHover: (instance) {
                 state.activePieItemDelegate = instance;
-                tryActivate(state, ActivationMode.onHover);
+                viewModel.tryActivate(state, ActivationMode.onHover);
               },
             ),
           ),
         ),
       ),
     );
-  }
-
-  tryActivate(
-    PieMenuState state,
-    ActivationMode mode,
-  ) async {
-    dev.log("ActivationMode: $mode", name: "PieMenuScreen tryActivate()");
-
-    final pieMenuStates = context.read<PieMenuStateProvider>().pieMenuStates;
-    PieItem? activePieItem = state.activePieItemDelegate.pieItem;
-
-    if (state != pieMenuStates.last || activePieItem == null) return;
-
-    final mainMenuState = pieMenuStates[0];
-    final bool isSubMenuItem = activePieItem.tasks.firstOrNull?.taskType ==
-        PieItemTaskType.openSubMenu;
-
-    dev.log("isSubMenuItem: $isSubMenuItem");
-
-    final activationMode = isSubMenuItem
-        ? mainMenuState.behavior.subMenuActivationMode
-        : mainMenuState.behavior.activationMode;
-
-    if (mode == ActivationMode.onRelease) {
-      await context.read<PieMenyuWindow>().hide();
-    }
-
-    if (activationMode == mode) {
-      if (isSubMenuItem) {
-        dev.log("Opening sub menu", name: "PieMenuScreen tryActivate()");
-        openSubMenu(activePieItem);
-      } else if (context.mounted) {
-        dev.log("Executing tasks", name: "PieMenuScreen tryActivate()");
-        final executorService = context.read<ExecutorService>();
-        if (mainMenuState == state) executorService.cancelAll();
-
-        await context.read<PieMenyuWindow>().hide();
-
-        addToExecutorQueue(executorService, activePieItem.tasks);
-        await hotKeyManager.unregisterAll();
-        executorService.start();
-        context.read<SystemKeyEvent>().registerHotkey();
-      }
-    }
-  }
-
-  void openSubMenu(PieItem activePieItem) async {
-    final tasks = activePieItem.tasks;
-    if (tasks.length != 1) return;
-
-    final openSubMenuTask = OpenSubMenuTask.from(tasks.first);
-    final db = context.read<Database>();
-    final pieMenu =
-        (await db.getPieMenus(ids: [openSubMenuTask.subMenuId])).firstOrNull;
-
-    if (pieMenu == null || !context.mounted) return;
-
-    final pieMenuState = PieMenuState.fromPieMenu(db, pieMenu);
-    final pieMenuStateProvider = context.read<PieMenuStateProvider>();
-    pieMenuStateProvider.addState(pieMenuState);
-  }
-
-  void addToExecutorQueue(
-      ExecutorService executorService, List<PieItemTask> tasks) {
-    for (PieItemTask task in tasks) {
-      switch (task.taskType) {
-        case PieItemTaskType.sendKey:
-          executorService.execute(SendKeyTask.from(task));
-        case PieItemTaskType.mouseClick:
-          executorService.execute(MouseClickTask.from(task));
-        case PieItemTaskType.runFile:
-          executorService.execute(RunFileTask.from(task));
-
-        case PieItemTaskType.openFolder:
-          executorService.execute(OpenFolderTask.from(task));
-        case PieItemTaskType.openApp:
-          executorService.execute(OpenAppTask.from(task));
-        case PieItemTaskType.openUrl:
-          executorService.execute(OpenUrlTask.from(task));
-        case PieItemTaskType.openEditor:
-          executorService.execute(OpenEditorTask.from(task));
-        case PieItemTaskType.resizeWindow:
-          executorService.execute(ResizeWindowTask.from(task));
-        case PieItemTaskType.moveWindow:
-          executorService.execute(MoveWindowTask.from(task));
-        case PieItemTaskType.sendText:
-          executorService.execute(PasteTextTask.from(task));
-        case PieItemTaskType.openSubMenu:
-          break;
-      }
-    }
-  }
-
-  bool _isModifierKey(LogicalKeyboardKey logicalKey) {
-    return [
-      LogicalKeyboardKey.control,
-      LogicalKeyboardKey.controlRight,
-      LogicalKeyboardKey.controlLeft,
-      LogicalKeyboardKey.shift,
-      LogicalKeyboardKey.shiftRight,
-      LogicalKeyboardKey.shiftLeft,
-      LogicalKeyboardKey.alt,
-      LogicalKeyboardKey.altRight,
-      LogicalKeyboardKey.altLeft,
-      LogicalKeyboardKey.meta,
-      LogicalKeyboardKey.metaRight,
-      LogicalKeyboardKey.metaLeft,
-    ].contains(logicalKey);
   }
 }
