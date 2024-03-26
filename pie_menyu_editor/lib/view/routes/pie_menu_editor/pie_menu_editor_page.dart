@@ -1,25 +1,19 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:localization/localization.dart';
-import 'package:pie_menyu_core/db/pie_item.dart';
-import 'package:pie_menyu_core/widgets/pieMenuView/pie_item_order_index_controller.dart';
 import 'package:pie_menyu_core/widgets/pieMenuView/pie_menu_state.dart';
-import 'package:pie_menyu_core/widgets/pieMenuView/pie_menu_view.dart';
+import 'package:pie_menyu_editor/view/routes/pie_menu_editor/preview_panel/preview_panel.dart';
 import 'package:provider/provider.dart';
 
 import '../../widgets/title_bar.dart';
 import 'editor_panel/editor_panel.dart';
 
-class PieMenuEditorPage extends StatefulWidget {
+class PieMenuEditorPage extends StatelessWidget {
   const PieMenuEditorPage({super.key});
 
   @override
-  State<PieMenuEditorPage> createState() => _PieMenuEditorPageState();
-}
-
-class _PieMenuEditorPageState extends State<PieMenuEditorPage> {
-  @override
   Widget build(BuildContext context) {
-    final pieMenuState = context.watch<PieMenuState>();
+    final pieMenuName =
+        context.select<PieMenuState, String>((value) => value.name);
 
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.background,
@@ -31,21 +25,26 @@ class _PieMenuEditorPageState extends State<PieMenuEditorPage> {
               child: const Icon(Icons.arrow_back_rounded, size: 15),
             ),
             title: Text(
-              "${"label-editing".i18n()}: ${pieMenuState.name}",
+              "${"label-editing".tr()}: $pieMenuName",
               style: const TextStyle(color: Colors.grey),
             ),
+            hidePieMenyuStatus: true,
           ),
           Expanded(
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                Expanded(
-                  child: Container(
-                    color: Colors.white30,
-                    child: PieMenuView(state: pieMenuState),
+                const Expanded(child: PreviewPanel()),
+                Container(
+                  decoration: BoxDecoration(
+                    border: Border(
+                      left: BorderSide(
+                          color: Theme.of(context).colorScheme.outlineVariant),
+                    ),
                   ),
+                  width: 325,
+                  child: const EditorPanel(),
                 ),
-                const SizedBox(width: 325, child: EditorPanel()),
               ],
             ),
           ),

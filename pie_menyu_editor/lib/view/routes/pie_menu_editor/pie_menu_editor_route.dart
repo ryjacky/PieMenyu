@@ -17,7 +17,7 @@ class PieMenuEditorRoute extends StatelessWidget {
     final db = context.read<Database>();
     return MultiProvider(
       providers: [
-        ChangeNotifierProvider(create: (_) => PieMenuState(db, pieMenu)),
+        ChangeNotifierProvider(create: (_) => PieMenuState.fromPieMenu(db, pieMenu)),
         ChangeNotifierProvider(create: (_) => EditorPanelViewModel(db)),
 
       ],

@@ -1,6 +1,6 @@
 import 'package:flex_color_picker/flex_color_picker.dart';
 import 'package:flutter/material.dart';
-import 'package:localization/localization.dart';
+import 'package:easy_localization/easy_localization.dart';
 
 class CollapsableColorPicker extends StatelessWidget {
   final Color color;
@@ -36,7 +36,7 @@ class CollapsableColorPicker extends StatelessWidget {
           ColorPicker(
             color: color,
             pickersEnabled: const {},
-            subheading: Text("label-select-color-shade".i18n()),
+            subheading: Text("label-select-color-shade".tr()),
             width: colorIndicatorSize,
             height: colorIndicatorSize,
             onColorChanged: onColorChanged,

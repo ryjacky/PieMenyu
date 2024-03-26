@@ -3,13 +3,12 @@
 #
 
 list(APPEND FLUTTER_PLUGIN_LIST
+  app_links
   bitsdojo_window_windows
-  flutter_auto_gui_windows
-  hotkey_manager
+  desktop_drop
   isar_flutter_libs
   screen_retriever
   url_launcher_windows
-  window_manager
 )
 
 list(APPEND FLUTTER_FFI_PLUGIN_LIST

@@ -1,3 +1,5 @@
+import 'dart:math' as math;
+
 import 'package:flutter/material.dart';
 import 'package:pie_menyu_core/db/db.dart';
 import 'package:pie_menyu_core/db/pie_item.dart';
@@ -54,23 +56,30 @@ class PieMenuState extends ChangeNotifier {
     notifyListeners();
   }
 
-  PieItemInstance _activePieItemInstance = PieItemInstance();
+  final List<PieItem> toDeletePieItems = [];
 
-  PieItemInstance get activePieItemInstance => _activePieItemInstance;
+  PieItemDelegate _activePieItemDelegate = PieItemDelegate();
 
-  set activePieItemInstance(PieItemInstance instance) {
-    _activePieItemInstance = instance;
+  PieItemDelegate get activePieItemDelegate => _activePieItemDelegate;
+
+  set activePieItemDelegate(PieItemDelegate instance) {
+    _activePieItemDelegate = instance;
     notifyListeners();
   }
 
-  List<PieItemInstance> _pieItemInstances = [];
+  List<PieItemDelegate> _pieItemDelegates = [];
 
-  List<PieItemInstance> get pieItemInstances => _pieItemInstances;
+  List<PieItemDelegate> get pieItemDelegates => _pieItemDelegates
+      .where((pieItemDelegate) =>
+          !toDeletePieItems.contains(pieItemDelegate.pieItem))
+      .toList();
+
+  double get runtimeHeight => math.max(icon.size, font.size + 18);
 
   final PieMenu _initialPieMenu;
 
   PieMenu get pieMenu => PieMenu.from(_initialPieMenu)
-    ..pieItemInstances = _pieItemInstances
+    ..pieItemInstances = pieItemDelegates
     ..name = name
     ..icon = _icon
     ..font = _font
@@ -80,7 +89,8 @@ class PieMenuState extends ChangeNotifier {
 
   final Database _db;
 
-  PieMenuState(this._db, PieMenu pieMenu) : _initialPieMenu = pieMenu {
+  PieMenuState.fromPieMenu(this._db, PieMenu pieMenu)
+      : _initialPieMenu = pieMenu {
     name = pieMenu.name;
     load();
   }
@@ -92,13 +102,13 @@ class PieMenuState extends ChangeNotifier {
     font = PieMenuFont.from(_initialPieMenu.font);
     behavior = PieMenuBehavior.from(_initialPieMenu.behavior);
 
-    for (PieItemInstance pieItemInstance in _initialPieMenu.pieItemInstances) {
+    for (PieItemDelegate pieItemInstance in _initialPieMenu.pieItemInstances) {
       await _db.loadPieItemInstance(pieItemInstance);
     }
-    _pieItemInstances = _initialPieMenu.pieItemInstances
-        .map((e) => PieItemInstance.from(e))
+    _pieItemDelegates = _initialPieMenu.pieItemInstances
+        .map((e) => PieItemDelegate.from(e))
         .toList();
-    _activePieItemInstance = _pieItemInstances.first;
+    _activePieItemDelegate = _pieItemDelegates.first;
 
     notifyListeners();
   }
@@ -127,27 +137,27 @@ class PieMenuState extends ChangeNotifier {
     notifyListeners();
   }
 
-  addTaskTo(PieItemInstance pieItemInstance, PieItemTask task) {
+  addTaskTo(PieItemDelegate pieItemInstance, PieItemTask task) {
     final pieItem = pieItemInstance.pieItem;
     if (pieItem == null) {
       throw Exception("PieItemInstance has no pieItem");
     }
 
-    pieItem.tasks.add(task..runtimeId = _nextId--);
+    pieItem.tasks.add(task);
     notifyListeners();
   }
 
   putPieItem(PieItem pieItem) {
-    final instance = _pieItemInstances
+    final instance = _pieItemDelegates
         .where((element) => element.pieItemId == pieItem.id)
         .firstOrNull;
 
     if (instance == null) {
       log("putPieItem: ${pieItem.id}");
-      log("_pieItemInstances: ${_pieItemInstances.map((e) => e.pieItemId)}");
+      log("_pieItemInstances: ${_pieItemDelegates.map((e) => e.pieItemId)}");
       pieItem.id = _nextId--;
-      _pieItemInstances
-          .add(PieItemInstance(pieItemId: pieItem.id)..pieItem = pieItem);
+      _pieItemDelegates
+          .add(PieItemDelegate(pieItemId: pieItem.id)..pieItem = pieItem);
     } else {
       instance.pieItem = pieItem;
     }
@@ -156,20 +166,26 @@ class PieMenuState extends ChangeNotifier {
   }
 
   bool removePieItem(PieItem pieItem) {
-    if (_pieItemInstances.length <= 1) return false;
-    _pieItemInstances.removeWhere((element) => element.pieItemId == pieItem.id);
+    if (pieItemDelegates.length <= 1) return false;
+    toDeletePieItems.add(pieItem);
     notifyListeners();
     return true;
   }
 
-  updatePieItemInstance(PieItemInstance instance) {
+  bool undoRemove() {
+    toDeletePieItems.removeLast();
+    notifyListeners();
+    return true;
+  }
+
+  updatePieItemDelegate(PieItemDelegate instance) {
     final index =
-        _pieItemInstances.indexWhere((element) => element == instance);
+        _pieItemDelegates.indexWhere((element) => element == instance);
     if (index == -1) {
       throw Exception("PieItemInstance not found");
     }
 
-    _pieItemInstances[index] = instance;
+    _pieItemDelegates[index] = instance;
     notifyListeners();
   }
 
@@ -182,21 +198,21 @@ class PieMenuState extends ChangeNotifier {
       toIndex += 1;
     }
 
-    PieItemInstance instance = _pieItemInstances.elementAt(fromIndex);
-    _pieItemInstances.remove(instance);
+    PieItemDelegate instance = _pieItemDelegates.elementAt(fromIndex);
+    _pieItemDelegates.remove(instance);
 
-    for (int i = toIndex; i < _pieItemInstances.length; i++) {
-      _pieItemInstances.add(instance);
+    for (int i = toIndex; i < _pieItemDelegates.length; i++) {
+      _pieItemDelegates.add(instance);
 
-      instance = _pieItemInstances.elementAt(toIndex);
-      _pieItemInstances.remove(instance);
+      instance = _pieItemDelegates.elementAt(toIndex);
+      _pieItemDelegates.remove(instance);
     }
-    _pieItemInstances.add(instance);
+    _pieItemDelegates.add(instance);
 
     notifyListeners();
   }
 
-  removeTaskFrom(PieItemInstance pieItemInstance, PieItemTask pieItemTask) {
+  removeTaskFrom(PieItemDelegate pieItemInstance, PieItemTask pieItemTask) {
     final pieItem = pieItemInstance.pieItem;
     if (pieItem == null) {
       throw Exception("PieItemInstance has no pieItem");
@@ -206,15 +222,17 @@ class PieMenuState extends ChangeNotifier {
     notifyListeners();
   }
 
-  updateTaskIn(PieItemInstance pieItemInstance, PieItemTask pieItemTask) {
+  updateTaskIn(PieItemDelegate pieItemInstance, PieItemTask pieItemTask) {
     final pieItem = pieItemInstance.pieItem;
     if (pieItem == null) {
       throw Exception("PieItemInstance has no pieItem");
     }
 
-    final index = pieItem.tasks.indexWhere((element) => element.runtimeId == pieItemTask.runtimeId);
+    final index = pieItem.tasks
+        .indexWhere((element) => element.runtimeId == pieItemTask.runtimeId);
     if (index == -1) {
-      throw Exception("PieItemTask not found, tasks available: ${pieItem.tasks.map((e) => e.runtimeId)}, finding: ${pieItemTask.runtimeId}");
+      throw Exception(
+          "PieItemTask not found, tasks available: ${pieItem.tasks.map((e) => e.runtimeId)}, finding: ${pieItemTask.runtimeId}");
     }
 
     pieItem.tasks[index] = pieItemTask;

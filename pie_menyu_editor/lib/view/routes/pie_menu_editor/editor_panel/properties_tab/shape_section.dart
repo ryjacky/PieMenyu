@@ -1,9 +1,8 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
-import 'package:localization/localization.dart';
 import 'package:pie_menyu_core/db/pie_menu.dart';
 import 'package:pie_menyu_core/widgets/pieMenuView/pie_menu_state.dart';
-import 'package:pie_menyu_editor/view/widgets/collapasable_color_picker.dart';
 import 'package:pie_menyu_editor/view/widgets/draggable_number_field.dart';
 import 'package:provider/provider.dart';
 
@@ -18,7 +17,7 @@ class ShapeSection extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text("label-shape".i18n(),
+        Text("label-shape".tr(),
             style: const TextStyle(fontWeight: FontWeight.bold)),
         const Gap(10),
         Row(
@@ -74,7 +73,7 @@ class ShapeSection extends StatelessWidget {
               width: 70,
               child: DraggableNumberField(
                 min: 0,
-                max: 500,
+                max: 100,
                 value: shape.pieItemRoundness,
                 onChanged: (double value) {
                   state.updatePieMenu(shape: shape..pieItemRoundness = value);

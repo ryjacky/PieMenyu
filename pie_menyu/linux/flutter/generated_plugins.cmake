@@ -4,7 +4,7 @@
 
 list(APPEND FLUTTER_PLUGIN_LIST
   gtk
-  hotkey_manager
+  hotkey_manager_linux
   isar_flutter_libs
   screen_retriever
   system_tray

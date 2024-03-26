@@ -22,4 +22,9 @@ class PieMenuStateProvider extends ChangeNotifier {
     }
     notifyListeners();
   }
+
+  clearStates() {
+    _pieMenuStates = [];
+    notifyListeners();
+  }
 }

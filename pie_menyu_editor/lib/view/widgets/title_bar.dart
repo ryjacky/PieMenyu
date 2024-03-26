@@ -1,13 +1,15 @@
 import 'package:bitsdojo_window/bitsdojo_window.dart';
 import 'package:flutter/material.dart';
-import 'package:localization/localization.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class TitleBar extends StatefulWidget {
   final Widget? leading;
   final Widget? title;
+  final bool hidePieMenyuStatus;
 
-  const TitleBar({super.key, this.leading, this.title});
+  const TitleBar(
+      {super.key, this.leading, this.title, this.hidePieMenyuStatus = false});
 
   @override
   State<TitleBar> createState() => _TitleBarState();
@@ -39,30 +41,39 @@ class _TitleBarState extends State<TitleBar> {
           color: Theme.of(context).colorScheme.surface,
           child: Row(
             children: [
+              // leading widget --------------
               Padding(
                 padding: titlebarItemPadding,
                 child: widget.leading,
               ),
+
+              // title widget -----------------
               if (widget.title != null) widget.title!,
               Expanded(child: MoveWindow()),
-              Text(
-                "label-pie-menyu-status".i18n(),
-                style: const TextStyle(color: Colors.grey),
-              ),
-              Padding(
-                padding: titlebarItemPadding,
-                child: Transform.scale(
-                  scale: 0.6,
-                  child: Switch(
-                    value: pieMenyuStatus,
-                    onChanged: (bool value) {
-                      setState(() => pieMenyuStatus = value);
-                      launchUrl(
-                          Uri.parse("piemenyu://${value ? "start" : "stop"}"));
-                    },
+
+              // pie menyu status switch ------
+              if (!widget.hidePieMenyuStatus)
+                Text(
+                  "label-pie-menyu-status".tr(),
+                  style: const TextStyle(color: Colors.grey),
+                ),
+              if (!widget.hidePieMenyuStatus)
+                Padding(
+                  padding: titlebarItemPadding,
+                  child: Transform.scale(
+                    scale: 0.6,
+                    child: Switch(
+                      value: pieMenyuStatus,
+                      onChanged: (bool value) {
+                        setState(() => pieMenyuStatus = value);
+                        launchUrl(Uri.parse(
+                            "piemenyu://${value ? "start" : "stop"}"));
+                      },
+                    ),
                   ),
                 ),
-              ),
+
+              // window buttons ---------------
               MinimizeWindowButton(colors: buttonColors),
               MaximizeWindowButton(colors: buttonColors),
               CloseWindowButton(colors: closeButtonColors),

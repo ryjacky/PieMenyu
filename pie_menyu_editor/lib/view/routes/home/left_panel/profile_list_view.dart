@@ -34,8 +34,8 @@ class _ProfileListViewState extends State<ProfileListView> {
                   return;
                 }
 
-                await homePageViewModel.addPieMenuTo(profile, pieMenu);
                 homePageViewModel.activeProfile = profile;
+                await homePageViewModel.addPieMenuTo(profile, pieMenu);
               },
               builder: (_, __, ___) {
                 return ProfileListItem(

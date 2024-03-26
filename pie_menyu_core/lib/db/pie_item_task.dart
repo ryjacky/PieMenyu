@@ -12,19 +12,23 @@ class PieItemTask {
   List<String> arguments = [];
 
   @ignore
-  int runtimeId = -1;
+  int _runtimeId = -1;
+  @ignore
+  int get runtimeId => _runtimeId;
 
   PieItemTask({
     this.taskType = PieItemTaskType.sendKey,
     this.repeat = 1,
     this.arguments = const [],
-  });
+  }) {
+    _runtimeId = identityHashCode(this);
+  }
 
   PieItemTask.from(PieItemTask pieItemTask) {
     repeat = pieItemTask.repeat;
     arguments = pieItemTask.arguments;
     taskType = pieItemTask.taskType;
-    runtimeId = pieItemTask.runtimeId;
+    _runtimeId = pieItemTask.runtimeId;
   }
 
 }

@@ -2,6 +2,7 @@ import 'dart:io';
 import 'dart:ui';
 
 import 'package:system_tray/system_tray.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class PieMenyuSystemTray {
   static final List<VoidCallback> _onExitCallbacks = [];
@@ -23,8 +24,11 @@ class PieMenyuSystemTray {
     // create context menu
     final Menu menu = Menu();
     await menu.buildFrom([
-      MenuItemLabel(label: 'Hide', onClicked: (menuItem) => appWindow.hide()),
-      MenuItemLabel(label: 'Exit', onClicked: (menuItem) {
+      MenuItemLabel(label: 'Hide', onClicked: (menuItem) {
+        launchUrl(Uri.parse("piemenyueditor://close"));
+        appWindow.hide();
+      }),
+      MenuItemLabel(label: 'Exit', onClicked: (menuItem) async {
         for (var callback in _onExitCallbacks) {
           callback();
         }
@@ -45,6 +49,7 @@ class PieMenyuSystemTray {
         case kSystemTrayEventRightClick:
           Platform.isWindows ? systemTray.popUpContextMenu() : appWindow.show();
         case kSystemTrayEventDoubleClick:
+          if (Platform.isWindows) launchUrl(Uri.parse("piemenyueditor://"));
           break;
       }
     });
