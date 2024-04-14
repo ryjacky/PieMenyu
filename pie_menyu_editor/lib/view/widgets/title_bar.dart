@@ -6,10 +6,16 @@ import 'package:url_launcher/url_launcher.dart';
 class TitleBar extends StatefulWidget {
   final Widget? leading;
   final Widget? title;
+  final Widget? trailing;
   final bool hidePieMenyuStatus;
 
-  const TitleBar(
-      {super.key, this.leading, this.title, this.hidePieMenyuStatus = false});
+  const TitleBar({
+    super.key,
+    this.leading,
+    this.title,
+    this.hidePieMenyuStatus = false,
+    this.trailing,
+  });
 
   @override
   State<TitleBar> createState() => _TitleBarState();
@@ -50,6 +56,10 @@ class _TitleBarState extends State<TitleBar> {
               // title widget -----------------
               if (widget.title != null) widget.title!,
               Expanded(child: MoveWindow()),
+
+              // trailing widget -------------
+              if (widget.trailing != null)
+                Padding(padding: titlebarItemPadding, child: widget.trailing),
 
               // pie menyu status switch ------
               if (!widget.hidePieMenyuStatus)
