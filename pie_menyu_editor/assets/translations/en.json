@@ -57,6 +57,7 @@
   "label-mouse-click-task": "Mouse Click Task",
   "label-new-pie-item": "New Pie Item",
   "label-no-pie-menu-hint": "No pie menu yet. Click 'New Pie Menu' to create one.",
+  "label-drag-to-pie-menu-hint": "Drag to a profile to link the pie menu with other profiles.",
   "label-ok": "OK",
   "label-open-app-task": "Open App Task",
   "label-open-folder-task": "Open Folder Task",

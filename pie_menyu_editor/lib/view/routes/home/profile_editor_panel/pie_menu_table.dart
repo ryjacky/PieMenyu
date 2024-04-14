@@ -64,6 +64,8 @@ class _PieMenuTableState extends State<PieMenuTable> {
                   textAlign: TextAlign.center,
                   style: Theme.of(context).textTheme.labelMedium,
                 ),
+                onDragStarted: () => viewModel.draggingPieMenu = true,
+                onDragEnd: (details) => viewModel.draggingPieMenu = false,
                 child: DelayedTooltip(
                   message: pieMenu.profiles.length == 1
                       ? "tooltip-duplicate-or-link-pie-menu".tr()

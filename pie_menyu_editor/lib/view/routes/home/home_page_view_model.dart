@@ -14,6 +14,15 @@ class HomePageViewModel extends ChangeNotifier {
 
   bool _creatingProfile = false;
 
+  bool _draggingPieMenu = false;
+
+  bool get draggingPieMenu => _draggingPieMenu;
+
+  set draggingPieMenu(bool value) {
+    _draggingPieMenu = value;
+    notifyListeners();
+  }
+
   get creatingProfile => _creatingProfile;
 
   Profile _activeProfile = Profile(name: "Loading...");
