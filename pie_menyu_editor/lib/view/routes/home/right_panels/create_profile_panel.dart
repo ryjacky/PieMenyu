@@ -1,6 +1,7 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
+import 'package:pie_menyu_editor/system/file_icon.dart';
 import 'package:pie_menyu_editor/system/task_bar_process_info/process_list_tile.dart';
 import 'package:pie_menyu_editor/system/task_bar_process_info/gui_process.dart';
 import 'package:provider/provider.dart';
@@ -33,7 +34,10 @@ class _CreateProfilePanelState extends State<CreateProfilePanel> {
   }
 
   setActiveWindow() async {
-    activeApps = await GUIProcess.getAllUnique();
+    activeApps = GUIProcess.enumerateWindows();
+    for (GUIProcess app in activeApps) {
+      app.base64Icon = (await FileIcon.getBase64(app.exePath)).trim();
+    }
     setState(() {});
   }
 

@@ -18,19 +18,14 @@ class _ProcessListTileState extends State<ProcessListTile> {
   Widget? image;
 
   @override
-  void initState() {
-    image ??= Image.memory(
+  Widget build(BuildContext context) {
+    image = Image.memory(
       base64Decode(widget.processInfo.base64Icon),
       errorBuilder: (context, error, stackTrace) {
         return const Icon(Icons.question_mark, size: 32);
       },
     );
 
-    super.initState();
-  }
-
-  @override
-  Widget build(BuildContext context) {
     return Card(
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(4),
