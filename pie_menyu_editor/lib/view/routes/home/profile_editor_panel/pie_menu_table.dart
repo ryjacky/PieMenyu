@@ -8,6 +8,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:pie_menyu_core/db/db.dart';
 import 'package:pie_menyu_core/db/pie_menu.dart';
 import 'package:pie_menyu_core/db/profile.dart';
+import 'package:pie_menyu_editor/view/widgets/delayed_tooltip.dart';
 import 'package:pie_menyu_editor/view/widgets/key_press_recorder.dart';
 import 'package:pie_menyu_editor/view/widgets/minimal_text_field.dart';
 import 'package:pie_menyu_editor/view/widgets/outlined_icon_button.dart';
@@ -63,7 +64,7 @@ class _PieMenuTableState extends State<PieMenuTable> {
                   textAlign: TextAlign.center,
                   style: Theme.of(context).textTheme.labelMedium,
                 ),
-                child: Tooltip(
+                child: DelayedTooltip(
                   message: pieMenu.profiles.length == 1
                       ? "tooltip-duplicate-or-link-pie-menu".tr()
                       : "tooltip-make-pie-menu-unique".tr(),
