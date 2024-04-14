@@ -12,6 +12,7 @@ import 'package:pie_menyu_core/pieItemTasks/run_file_task.dart';
 import 'package:pie_menyu_core/pieItemTasks/send_key_task.dart';
 import 'package:pie_menyu_core/pieItemTasks/send_text_task.dart';
 import 'package:pie_menyu_core/widgets/pieMenuView/pie_menu_state.dart';
+import 'package:pie_menyu_editor/view/widgets/delayed_tooltip.dart';
 import 'package:pie_menyu_editor/view/widgets/single_icon_button.dart';
 import 'package:provider/provider.dart';
 
@@ -67,7 +68,7 @@ class ActionsTab extends StatelessWidget {
         indent: 7,
         endIndent: 7,
       ),
-      _LeftTooltip(
+      DelayedTooltip(
         message: "tooltip-add-send-key-task".tr(),
         child: SingleColorIconButton(
           icon: Icons.keyboard,
@@ -77,7 +78,7 @@ class ActionsTab extends StatelessWidget {
         ),
       ),
       Gap(gap),
-      _LeftTooltip(
+      DelayedTooltip(
         message: "tooltip-add-mouse-click-task".tr(),
         child: SingleColorIconButton(
           icon: FontAwesomeIcons.handPointer,
@@ -87,7 +88,7 @@ class ActionsTab extends StatelessWidget {
         ),
       ),
       Gap(gap),
-      _LeftTooltip(
+      DelayedTooltip(
         message: "tooltip-add-run-file-task".tr(),
         child: SingleColorIconButton(
           icon: Icons.file_open,
@@ -97,7 +98,7 @@ class ActionsTab extends StatelessWidget {
         ),
       ),
       Gap(gap),
-      _LeftTooltip(
+      DelayedTooltip(
         message: "tooltip-add-open-sub-menu-task".tr(),
         child: SingleColorIconButton(
           icon: Icons.pie_chart,
@@ -107,7 +108,7 @@ class ActionsTab extends StatelessWidget {
         ),
       ),
       Gap(gap),
-      _LeftTooltip(
+      DelayedTooltip(
         message: "tooltip-add-open-folder-task".tr(),
         child: SingleColorIconButton(
           icon: Icons.folder,
@@ -117,7 +118,7 @@ class ActionsTab extends StatelessWidget {
         ),
       ),
       Gap(gap),
-      _LeftTooltip(
+      DelayedTooltip(
         message: "tooltip-add-open-app-task".tr(),
         child: SingleColorIconButton(
           icon: Icons.play_arrow_rounded,
@@ -127,7 +128,7 @@ class ActionsTab extends StatelessWidget {
         ),
       ),
       Gap(gap),
-      _LeftTooltip(
+      DelayedTooltip(
         message: "tooltip-add-open-url-task".tr(),
         child: SingleColorIconButton(
           icon: Icons.link,
@@ -137,7 +138,7 @@ class ActionsTab extends StatelessWidget {
         ),
       ),
       Gap(gap),
-      _LeftTooltip(
+      DelayedTooltip(
         message: "tooltip-paste-text-task".tr(),
         child: SingleColorIconButton(
           icon: Icons.text_fields,
@@ -179,13 +180,4 @@ class ActionsTab extends StatelessWidget {
       // Gap(gap),
     ]);
   }
-}
-
-class _LeftTooltip extends Tooltip {
-  const _LeftTooltip({super.message, super.child})
-      : super(
-          verticalOffset: -13,
-
-          margin: const EdgeInsets.only(right: 40),
-        );
 }
