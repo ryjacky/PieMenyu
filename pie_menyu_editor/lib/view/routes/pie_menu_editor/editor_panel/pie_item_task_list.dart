@@ -44,7 +44,8 @@ class _PieItemTaskListState extends State<PieItemTaskList> {
       throw Exception("pieItem is null");
     }
 
-    final pieItemTasks = pieItemDelegate.pieItem!.tasks.where((element) => element != toDelete);
+    final pieItemTasks =
+        pieItemDelegate.pieItem!.tasks.where((element) => element != toDelete);
 
     return ListView(
       children: [
@@ -134,8 +135,13 @@ class _PieItemTaskListState extends State<PieItemTaskList> {
 
     final viewModel = context.read<EditorPanelViewModel>();
 
+    if (viewModel.toDelete != null) {
+      viewModel.lazyDeleteTimer?.cancel();
+      state.removeTaskFrom(viewModel.toDelete!.value, viewModel.toDelete!.key);
+    }
+
     viewModel.toDelete = MapEntry(task, state.activePieItemDelegate);
-    final deletedTaskFuture = Timer(const Duration(seconds: 5), () {
+    viewModel.lazyDeleteTimer = Timer(const Duration(seconds: 5), () {
       if (viewModel.toDelete == null) return;
       state.removeTaskFrom(viewModel.toDelete!.value, viewModel.toDelete!.key);
       viewModel.toDelete = null;
@@ -150,7 +156,7 @@ class _PieItemTaskListState extends State<PieItemTaskList> {
         action: SnackBarAction(
           label: "label-undo".tr(),
           onPressed: () {
-            deletedTaskFuture.cancel();
+            viewModel.lazyDeleteTimer?.cancel();
             viewModel.toDelete = null;
           },
         ),

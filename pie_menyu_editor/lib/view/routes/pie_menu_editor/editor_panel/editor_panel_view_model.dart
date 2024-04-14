@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/cupertino.dart';
 import 'package:pie_menyu_core/db/db.dart';
 import 'package:pie_menyu_core/db/pie_item_task.dart';
@@ -12,6 +14,8 @@ class EditorPanelViewModel extends ChangeNotifier {
 
   MapEntry<PieItemTask, PieItemDelegate>? get toDelete => _toDelete;
 
+  Timer? lazyDeleteTimer;
+
   set toDelete(MapEntry<PieItemTask, PieItemDelegate>? value) {
     _toDelete = value;
     notifyListeners();
@@ -20,6 +24,11 @@ class EditorPanelViewModel extends ChangeNotifier {
   EditorPanelViewModel(this._db);
 
   void saveState(PieMenuState state) {
+    if (toDelete != null) {
+      lazyDeleteTimer?.cancel();
+      state.removeTaskFrom(toDelete!.value, toDelete!.key);
+    }
+
     _db.save(state);
   }
 }
