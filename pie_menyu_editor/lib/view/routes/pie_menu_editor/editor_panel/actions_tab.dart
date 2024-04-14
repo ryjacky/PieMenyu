@@ -185,6 +185,7 @@ class _LeftTooltip extends Tooltip {
   const _LeftTooltip({super.message, super.child})
       : super(
           verticalOffset: -13,
+
           margin: const EdgeInsets.only(right: 40),
         );
 }

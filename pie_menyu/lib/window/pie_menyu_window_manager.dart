@@ -69,17 +69,23 @@ class PieMenyuWindow {
   }
 
   _tryShow(HotKey hotkey) async {
-    Profile? profile = await _db.getProfileByExe(ForegroundWindow().path);
-    profile ??= (await _db.getProfiles(ids: [1])).first;
+    List<Profile?> profiles = [
+      await _db.getProfileByExe(ForegroundWindow().path),
+      (await _db.getProfiles(ids: [1])).firstOrNull
+    ];
 
-    final pieMenu = await _getHotkeyPieMenuIn(profile, hotkey);
-    if (pieMenu == null) return;
+    for (Profile profile in profiles.whereType<Profile>()) {
+      final pieMenu = await _getHotkeyPieMenuIn(profile, hotkey);
+      if (pieMenu == null) continue;
 
-    final pieMenuState = PieMenuState.fromPieMenu(_db, pieMenu);
-    _pieMenuStateProvider.replaceStates([pieMenuState]);
+      final pieMenuState = PieMenuState.fromPieMenu(_db, pieMenu);
+      _pieMenuStateProvider.replaceStates([pieMenuState]);
 
-    await windowManager.setBounds((await getCurrentDisplayBounds()).deflate(1));
-    await windowManager.show();
+      await windowManager.setBounds((await getCurrentDisplayBounds()).deflate(1));
+      await windowManager.show();
+
+      return;
+    }
   }
 
   Future<void> hide() async {
