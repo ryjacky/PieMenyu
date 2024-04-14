@@ -18,28 +18,10 @@ class PieMenuEditorPage extends StatefulWidget {
 class _PieMenuEditorPageState extends State<PieMenuEditorPage> {
   bool changed = false;
 
-  void _pieMenuStateListener() {
-    if (!context.mounted) return;
-    context.read<EditorPanelViewModel>().saveState(context.read<PieMenuState>());
-  }
-
-  @override
-  void initState() {
-    super.initState();
-
-    context.read<PieMenuState>().addListener(_pieMenuStateListener);
-  }
-
-  @override
-  void deactivate() {
-    context.read<PieMenuState>().removeListener(_pieMenuStateListener);
-    super.deactivate();
-  }
-
   @override
   Widget build(BuildContext context) {
     final pieMenuName =
-    context.select<PieMenuState, String>((value) => value.name);
+        context.select<PieMenuState, String>((value) => value.name);
 
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.background,
@@ -47,12 +29,24 @@ class _PieMenuEditorPageState extends State<PieMenuEditorPage> {
         children: [
           TitleBar(
             leading: TextButton(
-              onPressed: () => Navigator.of(context).pop(),
+              onPressed: () {
+                Navigator.of(context).pop();
+
+                final viewModel = context.read<EditorPanelViewModel>();
+                viewModel.saveState(context.read<PieMenuState>());
+              },
               child: const Icon(Icons.arrow_back_rounded, size: 15),
             ),
             title: Text(
               "${"label-editing".tr()}: $pieMenuName",
               style: const TextStyle(color: Colors.grey),
+            ),
+            trailing: TextButton(
+              onPressed: () {
+                final viewModel = context.read<EditorPanelViewModel>();
+                viewModel.saveState(context.read<PieMenuState>());
+              },
+              child: const Icon(Icons.save, size: 15),
             ),
             hidePieMenyuStatus: true,
           ),
