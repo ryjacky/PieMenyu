@@ -70,37 +70,46 @@ class _PieMenuScreenState extends State<PieMenuScreen> {
     final pieMenuStates = context.watch<PieMenuStateProvider>().pieMenuStates;
     final pieMenuPos = context.read<PieMenuStateProvider>().pieMenuPositions;
 
-    return pieMenuStates.isEmpty ? Container() : MouseRegion(
-      onHover: _processMouseEvent,
-      onEnter: (e) => setState(() {
-        if (pieMenuStates.last.behavior.openInScreenCenter) {
-          pieMenuPos[pieMenuStates.last] = Offset(
-            MediaQuery.of(context).size.width / 2,
-            MediaQuery.of(context).size.height / 2,
-          );
-        } else {
-          pieMenuPos[pieMenuStates.last] ??= e.position;
-        }
+    // When the top menu is a sub menu and the display position is not set,
+    // we want to set it prior to rendering for a seamless user experience
+    if (pieMenuStates.isNotEmpty &&
+        pieMenuPos[pieMenuStates.last] == null &&
+        pieMenuStates.last != pieMenuStates.first) {
+      pieMenuPos[pieMenuStates.last] = _mousePosition;
+    }
 
-      }),
-      child: Scaffold(
-        backgroundColor: Colors.transparent,
-        body: LayoutBuilder(builder: (_, constraint) {
-          return Stack(
-            children: [
-              for (final state in pieMenuStates)
-                if (pieMenuPos[state] != null)
-                  buildPieMenuView(
-                    state,
-                    constraint,
-                    pieMenuPos[state]!,
-                    state == pieMenuStates.last,
-                  )
-            ],
+    return pieMenuStates.isEmpty
+        ? Container()
+        : MouseRegion(
+            onHover: _processMouseEvent,
+            onEnter: (e) => setState(() {
+              if (pieMenuStates.last.behavior.openInScreenCenter) {
+                pieMenuPos[pieMenuStates.last] = Offset(
+                  MediaQuery.of(context).size.width / 2,
+                  MediaQuery.of(context).size.height / 2,
+                );
+              } else {
+                pieMenuPos[pieMenuStates.last] ??= e.position;
+              }
+            }),
+            child: Scaffold(
+              backgroundColor: Colors.transparent,
+              body: LayoutBuilder(builder: (_, constraint) {
+                return Stack(
+                  children: [
+                    for (final state in pieMenuStates)
+                      if (pieMenuPos[state] != null)
+                        buildPieMenuView(
+                          state,
+                          constraint,
+                          pieMenuPos[state]!,
+                          state == pieMenuStates.last,
+                        )
+                  ],
+                );
+              }),
+            ),
           );
-        }),
-      ),
-    );
   }
 
   PieItemDelegate? getPieItemDelegateAt(
