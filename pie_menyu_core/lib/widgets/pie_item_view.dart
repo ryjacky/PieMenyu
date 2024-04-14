@@ -77,7 +77,10 @@ class _PieItemViewState extends State<PieItemView> {
             child: Text(
               pieItem.name,
               style: GoogleFonts.getFont(widget.font.fontFamily,
-                  color: Color(widget.font.color), fontSize: widget.font.size),
+                  color: Color(widget.active
+                      ? widget.colors.secondary
+                      : widget.font.color,),
+                  fontSize: widget.font.size),
             ),
           ),
           Text(
