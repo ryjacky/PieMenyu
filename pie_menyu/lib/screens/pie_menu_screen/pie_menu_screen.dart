@@ -165,6 +165,8 @@ class _PieMenuScreenState extends State<PieMenuScreen> {
                 viewModel.tryActivate(state, ActivationMode.onClick);
               },
               onHover: (instance) {
+                if (state.activePieItemDelegate != instance) return;
+
                 state.activePieItemDelegate = instance;
                 viewModel.tryActivate(state, ActivationMode.onHover);
               },
