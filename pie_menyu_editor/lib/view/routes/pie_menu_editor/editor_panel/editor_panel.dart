@@ -47,42 +47,6 @@ class _EditorPanelState extends State<EditorPanel> {
             ),
           ),
         ),
-        Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: <Widget>[
-              Expanded(
-                child: ElevatedButton.icon(
-                  onPressed: () {
-                    viewModel.saveState(context.read<PieMenuState>());
-                  },
-                  icon: const Icon(Icons.save_outlined),
-                  label: Text("button-save".tr()),
-                ),
-              ),
-              const Gap(10),
-              Expanded(
-                child: ElevatedButton.icon(
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: const Color(0x1AFF9300),
-                  ),
-                  onPressed: () {
-                    context.read<PieMenuState>().load();
-                  },
-                  icon: const Icon(
-                    Icons.refresh,
-                    color: Color(0xFFC47C00),
-                  ),
-                  label: Text(
-                    "button-reset".tr(),
-                    style: const TextStyle(color: Color(0xFFC47C00)),
-                  ),
-                ),
-              ),
-            ],
-          ),
-        ),
       ],
     );
   }
