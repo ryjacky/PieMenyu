@@ -59,7 +59,7 @@ class PieMenuScreenViewModel extends ChangeNotifier {
     final pieMenuStates = pieMenuStateProvider.pieMenuStates;
     PieItem? activePieItem = state.activePieItemDelegate.pieItem;
 
-    if (state != pieMenuStates.last || activePieItem == null) return;
+    if (state != pieMenuStates.lastOrNull || activePieItem == null) return;
 
     final mainMenuState = pieMenuStates[0];
     final bool isSubMenuItem = activePieItem.tasks.firstOrNull?.taskType ==
