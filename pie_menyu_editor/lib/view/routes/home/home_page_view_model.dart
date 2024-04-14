@@ -90,9 +90,12 @@ class HomePageViewModel extends ChangeNotifier {
   Future<void> removePieMenuFrom(Profile profile, PieMenu pieMenu) async {
     _toDelete[pieMenu] = profile;
     _toDeleteTimer = Timer(const Duration(seconds: 5), () async {
+      final newLinks = profile.pieMenuHotkeys.toList();
       for (final toDeleteEntry in _toDelete.entries) {
         profile.pieMenus.remove(toDeleteEntry.key);
+        newLinks.removeWhere((element) => element.pieMenuId == toDeleteEntry.key.id);
       }
+      profile.pieMenuHotkeys = newLinks;
       await _db.updateProfileToPieMenuLinks(profile);
       await updateState();
       _toDelete.remove(pieMenu);

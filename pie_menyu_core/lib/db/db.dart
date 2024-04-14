@@ -230,6 +230,7 @@ class Database {
 
   Future<void> updateProfileToPieMenuLinks(Profile profile) async {
     await _isar.writeTxn(() async {
+      await _isar.profiles.put(profile);
       await profile.pieMenus.save();
     });
   }
