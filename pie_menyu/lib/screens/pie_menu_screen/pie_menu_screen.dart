@@ -73,7 +73,15 @@ class _PieMenuScreenState extends State<PieMenuScreen> {
     return pieMenuStates.isEmpty ? Container() : MouseRegion(
       onHover: _processMouseEvent,
       onEnter: (e) => setState(() {
-        pieMenuPos[pieMenuStates.last] ??= e.position;
+        if (pieMenuStates.last.behavior.openInScreenCenter) {
+          pieMenuPos[pieMenuStates.last] = Offset(
+            MediaQuery.of(context).size.width / 2,
+            MediaQuery.of(context).size.height / 2,
+          );
+        } else {
+          pieMenuPos[pieMenuStates.last] ??= e.position;
+        }
+
       }),
       child: Scaffold(
         backgroundColor: Colors.transparent,
