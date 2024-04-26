@@ -101,11 +101,12 @@ class _PieItemListItemState extends State<PieItemListItem> {
       onPressed: () async {
         String? icon;
 
-        PlatformFile? result = (await FilePicker.platform.pickFiles())?.files.firstOrNull;
+        PlatformFile? result =
+            (await FilePicker.platform.pickFiles())?.files.firstOrNull;
         if (result != null && result.path != null) {
           String mimeType = lookupMimeType(result.path!) ?? "";
 
-          if (mimeType.startsWith("image") && !result.path!.contains("svg")){
+          if (mimeType.startsWith("image") && !result.path!.contains("svg")) {
             icon = base64Encode(File(result.path!).readAsBytesSync());
           } else {
             icon = await FileIcon.getBase64(result.path!);
@@ -152,7 +153,10 @@ class _PieItemListItemState extends State<PieItemListItem> {
               margin: const EdgeInsets.fromLTRB(8, 8, 334, 8),
               action: SnackBarAction(
                 label: "label-undo".tr(),
-                onPressed: () => pieMenuState.undoRemove(),
+                onPressed: () {
+                  pieMenuState.undoRemove();
+                  scaffoldMessenger.clearSnackBars();
+                },
               ),
               backgroundColor: Theme.of(context).colorScheme.primary,
               content: Text("message-removed-pie-item".tr()),

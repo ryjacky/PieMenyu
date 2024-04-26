@@ -158,6 +158,8 @@ class _PieItemTaskListState extends State<PieItemTaskList> {
           onPressed: () {
             viewModel.lazyDeleteTimer?.cancel();
             viewModel.toDelete = null;
+            scaffoldMessenger.clearSnackBars();
+
           },
         ),
       ),

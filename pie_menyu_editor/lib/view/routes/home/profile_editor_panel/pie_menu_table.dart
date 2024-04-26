@@ -239,6 +239,7 @@ class _PieMenuTableState extends State<PieMenuTable> {
           onPressed: () {
             viewModel.cancelDelete(pieMenu);
             setState(() {});
+            ScaffoldMessenger.of(context).clearSnackBars();
           },
         ),
       ),
