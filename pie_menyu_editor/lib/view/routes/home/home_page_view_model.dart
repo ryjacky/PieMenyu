@@ -96,13 +96,16 @@ class HomePageViewModel extends ChangeNotifier {
     await updateState();
   }
 
-  Future<void> removePieMenuFrom(Profile profile, PieMenu pieMenu) async {
+  Future<void> removePieMenuFrom(Profile profile, PieMenu pieMenu,
+      {lazy = true}) async {
+
     _toDelete[pieMenu] = profile;
-    _toDeleteTimer = Timer(const Duration(seconds: 5), () async {
+    _toDeleteTimer = Timer(Duration(seconds: lazy ? 5 : 0), () async {
       final newLinks = profile.pieMenuHotkeys.toList();
       for (final toDeleteEntry in _toDelete.entries) {
         profile.pieMenus.remove(toDeleteEntry.key);
-        newLinks.removeWhere((element) => element.pieMenuId == toDeleteEntry.key.id);
+        newLinks.removeWhere(
+            (element) => element.pieMenuId == toDeleteEntry.key.id);
       }
       profile.pieMenuHotkeys = newLinks;
       await _db.updateProfileToPieMenuLinks(profile);
@@ -120,10 +123,12 @@ class HomePageViewModel extends ChangeNotifier {
   }
 
   void makePieMenuUniqueIn(Profile profile, PieMenu pieMenu) async {
-    await removePieMenuFrom(profile, pieMenu);
-    pieMenu.id = Isar.autoIncrement;
-    await _db.putPieMenu(pieMenu);
-    await addPieMenuTo(profile, pieMenu);
+    await removePieMenuFrom(profile, pieMenu, lazy: false);
+    PieMenu newPieMenu = PieMenu.from(pieMenu);
+    newPieMenu.id = Isar.autoIncrement;
+
+    await _db.putPieMenu(newPieMenu);
+    await addPieMenuTo(profile, newPieMenu);
   }
 
   void createPieMenuIn(Profile profile) async {
