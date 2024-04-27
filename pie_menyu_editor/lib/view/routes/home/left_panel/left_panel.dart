@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:gap/gap.dart';
 import 'package:easy_localization/easy_localization.dart';
+import 'package:pie_menyu_editor/flutter/navigator.dart';
 import 'package:pie_menyu_editor/view/routes/home/left_panel/create_profile_button.dart';
 import 'package:pie_menyu_editor/view/routes/home/left_panel/profile_list_view.dart';
 import 'package:provider/provider.dart';
@@ -48,7 +49,7 @@ class _LeftPanelState extends State<LeftPanel> {
             children: [
               ElevatedButton.icon(
                 onPressed: () async {
-                  await Navigator.of(context).push(
+                  await Navigator.of(context).pushAndClearSnackBar(
                     MaterialPageRoute(
                       builder: (context) => const SettingsPage(),
                     ),

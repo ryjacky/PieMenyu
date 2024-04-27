@@ -1,6 +1,7 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:pie_menyu_core/widgets/pieMenuView/pie_menu_state.dart';
+import 'package:pie_menyu_editor/flutter/navigator.dart';
 import 'package:pie_menyu_editor/view/routes/pie_menu_editor/editor_panel/editor_panel_view_model.dart';
 import 'package:pie_menyu_editor/view/routes/pie_menu_editor/preview_panel/preview_panel.dart';
 import 'package:provider/provider.dart';
@@ -30,7 +31,7 @@ class _PieMenuEditorPageState extends State<PieMenuEditorPage> {
           TitleBar(
             leading: TextButton(
               onPressed: () {
-                Navigator.of(context).pop();
+                Navigator.of(context).popAndClearSnackBar();
 
                 final viewModel = context.read<EditorPanelViewModel>();
                 viewModel.saveState(context.read<PieMenuState>());

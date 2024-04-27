@@ -8,6 +8,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:pie_menyu_core/db/db.dart';
 import 'package:pie_menyu_core/db/pie_menu.dart';
 import 'package:pie_menyu_core/db/profile.dart';
+import 'package:pie_menyu_editor/flutter/navigator.dart';
 import 'package:pie_menyu_editor/view/widgets/delayed_tooltip.dart';
 import 'package:pie_menyu_editor/view/widgets/key_press_recorder.dart';
 import 'package:pie_menyu_editor/view/widgets/minimal_text_field.dart';
@@ -140,7 +141,7 @@ class _PieMenuTableState extends State<PieMenuTable> {
                           (await db.getPieMenus(ids: [pieMenu.id])).firstOrNull;
 
                       if (pm == null || !context.mounted) return;
-                      Navigator.of(context).push(
+                      Navigator.of(context).pushAndClearSnackBar(
                         MaterialPageRoute(
                           builder: (context) => PieMenuEditorRoute(pm),
                         ),
