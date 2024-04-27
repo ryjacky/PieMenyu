@@ -8,66 +8,35 @@ import 'package:pie_menyu_core/db/pie_menu.dart';
 import 'dart:developer';
 
 class PieMenuState extends ChangeNotifier {
+  // Private Variables -------------------
+  final PieMenu _initialPieMenu;
+  final Database _db;
+
   int _nextId = -1;
-  String name = "Loading...";
-
   PieMenuColors _colors = PieMenuColors();
-
-  PieMenuColors get colors => _colors;
-
-  set colors(PieMenuColors colors) {
-    _colors = colors;
-    notifyListeners();
-  }
-
   PieMenuIconStyle _icon = PieMenuIconStyle();
+  PieMenuFont _font = PieMenuFont();
+  PieMenuBehavior _behavior = PieMenuBehavior();
+  PieMenuShape _shape = PieMenuShape();
+  PieItemDelegate _activePieItemDelegate = PieItemDelegate();
+  List<PieItemDelegate> _pieItemDelegates = [];
+
+  // Public Variables --------------------
+  String name = "Loading...";
+  final List<PieItem> toDeletePieItems = [];
+
+  // Getters -----------------------------
+  PieMenuColors get colors => _colors;
 
   PieMenuIconStyle get icon => _icon;
 
-  set icon(PieMenuIconStyle icon) {
-    _icon = icon;
-    notifyListeners();
-  }
-
-  PieMenuFont _font = PieMenuFont();
-
   PieMenuFont get font => _font;
-
-  set font(PieMenuFont font) {
-    _font = font;
-    notifyListeners();
-  }
-
-  PieMenuBehavior _behavior = PieMenuBehavior();
 
   PieMenuBehavior get behavior => _behavior;
 
-  set behavior(PieMenuBehavior behavior) {
-    _behavior = behavior;
-    notifyListeners();
-  }
-
-  PieMenuShape _shape = PieMenuShape();
-
   PieMenuShape get shape => _shape;
 
-  set shape(PieMenuShape shape) {
-    _shape = shape;
-    notifyListeners();
-  }
-
-  final List<PieItem> toDeletePieItems = [];
-
-  PieItemDelegate _activePieItemDelegate = PieItemDelegate();
-
   PieItemDelegate get activePieItemDelegate => _activePieItemDelegate;
-
-  set activePieItemDelegate(PieItemDelegate instance) {
-    _activePieItemDelegate = instance;
-    notifyListeners();
-  }
-
-  List<PieItemDelegate> _pieItemDelegates = [];
 
   List<PieItemDelegate> get pieItemDelegates => _pieItemDelegates
       .where((pieItemDelegate) =>
@@ -75,8 +44,6 @@ class PieMenuState extends ChangeNotifier {
       .toList();
 
   double get runtimeHeight => math.max(icon.size, font.size + 18);
-
-  final PieMenu _initialPieMenu;
 
   PieMenu get pieMenu => PieMenu.from(_initialPieMenu)
     ..pieItemInstances = pieItemDelegates
@@ -87,7 +54,36 @@ class PieMenuState extends ChangeNotifier {
     ..behavior = _behavior
     ..shape = _shape;
 
-  final Database _db;
+  // Setters -----------------------------
+  set colors(PieMenuColors colors) {
+    _colors = colors;
+    notifyListeners();
+  }
+
+  set icon(PieMenuIconStyle icon) {
+    _icon = icon;
+    notifyListeners();
+  }
+
+  set font(PieMenuFont font) {
+    _font = font;
+    notifyListeners();
+  }
+
+  set behavior(PieMenuBehavior behavior) {
+    _behavior = behavior;
+    notifyListeners();
+  }
+
+  set shape(PieMenuShape shape) {
+    _shape = shape;
+    notifyListeners();
+  }
+
+  set activePieItemDelegate(PieItemDelegate instance) {
+    _activePieItemDelegate = instance;
+    notifyListeners();
+  }
 
   PieMenuState.fromPieMenu(this._db, PieMenu pieMenu)
       : _initialPieMenu = pieMenu {
