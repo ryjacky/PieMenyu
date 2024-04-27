@@ -23,6 +23,7 @@ class PieMenuState extends ChangeNotifier {
 
   // Public Variables --------------------
   String name = "Loading...";
+  bool loaded = false;
   final List<PieItem> toDeletePieItems = [];
 
   // Getters -----------------------------
@@ -106,6 +107,7 @@ class PieMenuState extends ChangeNotifier {
         .toList();
     _activePieItemDelegate = _pieItemDelegates.first;
 
+    loaded = true;
     notifyListeners();
   }
 
