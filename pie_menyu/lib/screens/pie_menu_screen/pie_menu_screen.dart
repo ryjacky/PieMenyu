@@ -18,7 +18,7 @@ class PieMenuScreen extends StatefulWidget {
 }
 
 class _PieMenuScreenState extends State<PieMenuScreen> {
-  static const _animationDuration = Duration(milliseconds: 200);
+  static const _animationDuration = Duration(milliseconds: 500);
   static const _animationCurve = Curves.easeOutCubic;
 
   Offset _mousePosition = Offset.zero;
@@ -104,7 +104,29 @@ class _PieMenuScreenState extends State<PieMenuScreen> {
                           constraint,
                           pieMenuPos[state]!,
                           state == pieMenuStates.last,
-                        )
+                        ),
+                    Align(
+                      alignment: Alignment.topCenter,
+                      child: Container(
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(100),
+                          color: Colors.black54,
+                        ),
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 15,
+                          vertical: 5,
+                        ),
+                        margin: const EdgeInsets.all(10),
+                        child: AnimatedSwitcher(
+                          duration: const Duration(milliseconds: 200),
+                          child: Text(
+                            key: ValueKey(pieMenuStates.length),
+                            getPieMenuRoute(),
+                            style: const TextStyle(color: Colors.white),
+                          ),
+                        ),
+                      ),
+                    ),
                   ],
                 );
               }),
@@ -157,18 +179,14 @@ class _PieMenuScreenState extends State<PieMenuScreen> {
     final viewModel = context.read<PieMenuScreenViewModel>();
     final pieMenuStates = context.watch<PieMenuStateProvider>().pieMenuStates;
 
-    return AnimatedPositioned(
-      left: position.dx - constraint.maxWidth / 2 - (inForeground ? 0 : 200),
-      top: position.dy - constraint.maxHeight / 2 + (inForeground ? 0 : 100),
-      duration: state == pieMenuStates.lastOrNull
-          ? const Duration()
-          : _animationDuration,
-      curve: _animationCurve,
+    return Positioned(
+      left: position.dx - constraint.maxWidth / 2,
+      top: position.dy - constraint.maxHeight / 2,
       child: SizedBox(
         width: constraint.maxWidth,
         height: constraint.maxHeight,
         child: AnimatedOpacity(
-          opacity: inForeground ? 1.0 : 0.5,
+          opacity: inForeground ? 1.0 : 0,
           duration: _animationDuration,
           curve: _animationCurve,
           child: AnimatedScale(
@@ -192,5 +210,22 @@ class _PieMenuScreenState extends State<PieMenuScreen> {
         ),
       ),
     );
+  }
+
+  double getBackgroundSlicePositionY(PieMenuState state) {
+    double y = 0;
+    for (final s
+        in context.read<PieMenuStateProvider>().pieMenuStates.reversed) {
+      if (s == state) break;
+      y += s.runtimeHeight;
+    }
+
+    return y;
+  }
+
+  String getPieMenuRoute() {
+    final pieMenuStates = context.read<PieMenuStateProvider>().pieMenuStates;
+    final route = pieMenuStates.map((e) => e.name).join(" > ");
+    return route;
   }
 }
