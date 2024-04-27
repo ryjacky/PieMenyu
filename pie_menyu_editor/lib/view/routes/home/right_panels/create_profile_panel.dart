@@ -36,9 +36,12 @@ class _CreateProfilePanelState extends State<CreateProfilePanel> {
   setActiveWindow() async {
     activeApps = GUIProcess.enumerateWindows();
     for (GUIProcess app in activeApps) {
-      app.base64Icon = (await FileIcon.getBase64(app.exePath)).trim();
+      FileIcon.getBase64(app.exePath).then((value) {
+        app.base64Icon = value;
+
+        if (mounted) setState(() {});
+      });
     }
-    setState(() {});
   }
 
   @override
