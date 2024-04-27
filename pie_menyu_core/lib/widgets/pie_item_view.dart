@@ -9,7 +9,7 @@ enum PieItemOffset { toRight, toLeft, center }
 
 class PieItemView extends StatefulWidget {
   final PieItemOffset horizontalOffset;
-  final PieMenuIcon icon;
+  final PieMenuIconStyle icon;
   final PieMenuFont font;
   final PieMenuColors colors;
   final PieMenuShape shape;

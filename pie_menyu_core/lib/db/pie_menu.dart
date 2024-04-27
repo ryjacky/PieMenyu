@@ -20,13 +20,13 @@ class PieMenuColors {
 }
 
 @embedded
-class PieMenuIcon {
+class PieMenuIconStyle {
   int color = 0xFFFFFFFF;
   double size = 32;
 
-  PieMenuIcon();
+  PieMenuIconStyle();
 
-  PieMenuIcon.from(PieMenuIcon icon)
+  PieMenuIconStyle.from(PieMenuIconStyle icon)
       : color = icon.color,
         size = icon.size;
 }
@@ -113,7 +113,7 @@ class PieMenu {
   bool enabled = true;
 
   PieMenuColors colors = PieMenuColors();
-  PieMenuIcon icon = PieMenuIcon();
+  PieMenuIconStyle iconStyle = PieMenuIconStyle();
   PieMenuFont font = PieMenuFont();
   PieMenuBehavior behavior = PieMenuBehavior();
   PieMenuShape shape = PieMenuShape();
@@ -128,7 +128,7 @@ class PieMenu {
   PieMenu.from(PieMenu pieMenu)
       : id = pieMenu.id,
         colors = PieMenuColors.from(pieMenu.colors),
-        icon = PieMenuIcon.from(pieMenu.icon),
+        iconStyle = PieMenuIconStyle.from(pieMenu.iconStyle),
         font = PieMenuFont.from(pieMenu.font),
         behavior = PieMenuBehavior.from(pieMenu.behavior),
         shape = PieMenuShape.from(pieMenu.shape),

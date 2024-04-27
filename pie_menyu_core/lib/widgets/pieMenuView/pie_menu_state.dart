@@ -20,11 +20,11 @@ class PieMenuState extends ChangeNotifier {
     notifyListeners();
   }
 
-  PieMenuIcon _icon = PieMenuIcon();
+  PieMenuIconStyle _icon = PieMenuIconStyle();
 
-  PieMenuIcon get icon => _icon;
+  PieMenuIconStyle get icon => _icon;
 
-  set icon(PieMenuIcon icon) {
+  set icon(PieMenuIconStyle icon) {
     _icon = icon;
     notifyListeners();
   }
@@ -81,7 +81,7 @@ class PieMenuState extends ChangeNotifier {
   PieMenu get pieMenu => PieMenu.from(_initialPieMenu)
     ..pieItemInstances = pieItemDelegates
     ..name = name
-    ..icon = _icon
+    ..iconStyle = _icon
     ..font = _font
     ..colors = _colors
     ..behavior = _behavior
@@ -98,7 +98,7 @@ class PieMenuState extends ChangeNotifier {
   load() async {
     shape = PieMenuShape.from(_initialPieMenu.shape);
     colors = PieMenuColors.from(_initialPieMenu.colors);
-    icon = PieMenuIcon.from(_initialPieMenu.icon);
+    icon = PieMenuIconStyle.from(_initialPieMenu.iconStyle);
     font = PieMenuFont.from(_initialPieMenu.font);
     behavior = PieMenuBehavior.from(_initialPieMenu.behavior);
 
@@ -115,7 +115,7 @@ class PieMenuState extends ChangeNotifier {
 
   updatePieMenu(
       {PieMenuColors? colors,
-      PieMenuIcon? icon,
+      PieMenuIconStyle? icon,
       PieMenuFont? font,
       PieMenuBehavior? behavior,
       PieMenuShape? shape}) {

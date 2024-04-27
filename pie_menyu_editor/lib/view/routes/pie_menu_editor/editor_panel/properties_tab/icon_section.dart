@@ -13,7 +13,7 @@ class IconSection extends StatelessWidget {
   Widget build(BuildContext context) {
     final state = context.read<PieMenuState>();
     final icon =
-        context.select<PieMenuState, PieMenuIcon>((value) => value.icon);
+        context.select<PieMenuState, PieMenuIconStyle>((value) => value.icon);
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
