@@ -17,6 +17,13 @@ class PieMenuColors {
   PieMenuColors.from(PieMenuColors colors)
       : primary = colors.primary,
         secondary = colors.secondary;
+
+  @override
+  operator ==(Object other) {
+    return other is PieMenuColors &&
+        primary == other.primary &&
+        secondary == other.secondary;
+  }
 }
 
 @embedded
@@ -29,6 +36,13 @@ class PieMenuIconStyle {
   PieMenuIconStyle.from(PieMenuIconStyle icon)
       : color = icon.color,
         size = icon.size;
+
+  @override
+  operator ==(Object other) {
+    return other is PieMenuIconStyle &&
+        color == other.color &&
+        size == other.size;
+  }
 }
 
 @embedded
@@ -43,6 +57,14 @@ class PieMenuFont {
       : color = font.color,
         size = font.size,
         fontFamily = font.fontFamily;
+
+  @override
+  operator ==(Object other) {
+    return other is PieMenuFont &&
+        color == other.color &&
+        size == other.size &&
+        fontFamily == other.fontFamily;
+  }
 }
 
 enum ActivationMode { onRelease, onHover, onClick }
@@ -63,6 +85,15 @@ class PieMenuBehavior {
         openInScreenCenter = behavior.openInScreenCenter,
         activationMode = behavior.activationMode,
         subMenuActivationMode = behavior.subMenuActivationMode;
+
+  @override
+  operator ==(Object other) {
+    return other is PieMenuBehavior &&
+        escapeRadius == other.escapeRadius &&
+        openInScreenCenter == other.openInScreenCenter &&
+        activationMode == other.activationMode &&
+        subMenuActivationMode == other.subMenuActivationMode;
+  }
 }
 
 @embedded
@@ -79,6 +110,15 @@ class PieMenuShape {
         centerThickness = shape.centerThickness,
         pieItemRoundness = shape.pieItemRoundness,
         pieItemSpread = shape.pieItemSpread;
+
+  @override
+  operator ==(Object other) {
+    return other is PieMenuShape &&
+        centerRadius == other.centerRadius &&
+        centerThickness == other.centerThickness &&
+        pieItemRoundness == other.pieItemRoundness &&
+        pieItemSpread == other.pieItemSpread;
+  }
 }
 
 @embedded
