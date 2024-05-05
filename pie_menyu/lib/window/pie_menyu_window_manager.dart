@@ -2,7 +2,8 @@ import 'dart:async';
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
-import 'package:hotkey_manager/hotkey_manager.dart';
+import 'package:flutter/services.dart';
+import 'package:global_hotkey/hotkey.dart';
 import 'package:mouse_event/mouse_event.dart';
 import 'package:pie_menyu/hotkey/system_key_event.dart';
 import 'package:pie_menyu/screens/pie_menu_screen/pie_menu_state_provider.dart';
@@ -14,10 +15,6 @@ import 'package:screen_retriever/screen_retriever.dart';
 import 'package:window_manager/window_manager.dart';
 
 import 'foreground_window.dart';
-
-/// A function that takes a [MouseEvent] and returns a [bool].
-/// If the function returns `false`, the [MouseEvent] will not be propagated to other listeners.
-typedef MouseEventListener = Function(PointerEvent event);
 
 class PieMenyuWindow {
   static PieMenyuWindow? instance;
@@ -68,7 +65,7 @@ class PieMenyuWindow {
     log("Window manager initialized");
   }
 
-  _tryShow(HotKey hotkey) async {
+  _tryShow(Hotkey hotkey) async {
     List<Profile?> profiles = [
       await _db.getProfileByExe(ForegroundWindow().path),
       (await _db.getProfiles(ids: [1])).firstOrNull
@@ -115,17 +112,16 @@ class PieMenyuWindow {
         currentDisplay.size.height);
   }
 
-  Future<PieMenu?> _getHotkeyPieMenuIn(Profile profile, HotKey hotkey) async {
+  Future<PieMenu?> _getHotkeyPieMenuIn(Profile profile, Hotkey hotkey) async {
     int? pieMenuId = profile.pieMenuHotkeys
         .where((pieMenuHotkey) {
-          return pieMenuHotkey.keyId == hotkey.logicalKey.keyId &&
+          return hotkey.keySet.keys.contains(LogicalKeyboardKey(pieMenuHotkey.keyId!)) &&
               pieMenuHotkey.ctrl ==
-                  (hotkey.modifiers?.contains(HotKeyModifier.control) ??
-                      false) &&
+                  hotkey.keySet.keys.contains(LogicalKeyboardKey.control) &&
               pieMenuHotkey.shift ==
-                  (hotkey.modifiers?.contains(HotKeyModifier.shift) ?? false) &&
+                  hotkey.keySet.keys.contains(LogicalKeyboardKey.shift) &&
               pieMenuHotkey.alt ==
-                  (hotkey.modifiers?.contains(HotKeyModifier.alt) ?? false);
+                  hotkey.keySet.keys.contains(LogicalKeyboardKey.alt);
         })
         .firstOrNull
         ?.pieMenuId;

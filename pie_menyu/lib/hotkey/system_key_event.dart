@@ -1,21 +1,18 @@
 import 'dart:developer';
-import 'dart:io';
 import 'dart:ui';
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
-import 'package:hotkey_manager/hotkey_manager.dart';
-import 'package:keyboard_event/keyboard_event.dart' as hook;
+import 'package:global_hotkey/global_hotkey.dart';
+import 'package:global_hotkey/hotkey.dart';
+import 'package:global_hotkey/hotkey_event.dart';
 import 'package:pie_menyu/deep_linking/deep_link_handler.dart';
 import 'package:pie_menyu_core/db/db.dart';
 import 'package:pie_menyu_core/db/profile.dart';
-import 'package:uni_platform/uni_platform.dart';
 
-typedef KeyEventListener = bool Function(HotKey hotKey);
+typedef KeyEventListener = bool Function(Hotkey hotKey);
 
 class SystemKeyEvent {
-  /// Only be used in the Windows platform
-  bool keyUpRegistered = false;
-
   final List<KeyEventListener> _keyUpListeners = [];
 
   addKeyUpListener(KeyEventListener listener) {
@@ -42,8 +39,6 @@ class SystemKeyEvent {
 
   final Database _db;
 
-  List<int?> _pressedKeys = [];
-
   SystemKeyEvent(this._db, DeepLinkHandler deepLinkHandler) {
     registerHotkey();
 
@@ -54,77 +49,54 @@ class SystemKeyEvent {
           registerHotkey();
           break;
         case DeepLinkCommand.stop:
-          hotKeyManager.unregisterAll();
+          GlobalHotkey.instance.dispose();
           break;
       }
     });
   }
 
   registerHotkey() async {
-    await hotKeyManager.unregisterAll();
+    try {
+      GlobalHotkey.instance.dispose();
+    } catch (e) {
+      log("Failed to dispose hotkeys: $e");
+    }
 
     final pieMenuHotkeys = await _db.getAllHotkeys();
+    Set<Hotkey> hotkeys = {};
     for (PieMenuHotkey hotkey in pieMenuHotkeys) {
       if (hotkey.keyId == null) continue;
-
-      hotKeyManager.register(
-        HotKey(key: LogicalKeyboardKey(hotkey.keyId!), modifiers: [
-          if (hotkey.ctrl) HotKeyModifier.control,
-          if (hotkey.shift) HotKeyModifier.shift,
-          if (hotkey.alt) HotKeyModifier.alt,
-        ]),
-        keyDownHandler: _onKeyDown,
-        keyUpHandler: _onKeyUp,
-      );
+      hotkeys.add(Hotkey(LogicalKeySet.fromSet({
+        LogicalKeyboardKey(hotkey.keyId!),
+        if (hotkey.ctrl) LogicalKeyboardKey.control,
+        if (hotkey.shift) LogicalKeyboardKey.shift,
+        if (hotkey.alt) LogicalKeyboardKey.alt,
+      })));
     }
 
-    if (Platform.isWindows && !keyUpRegistered) {
-      await initPlatformState();
-
-      keyUpRegistered = true;
-      hook.KeyboardEvent().startListening((keyEvent) {
-        if (keyEvent.isKeyUP && _pressedKeys.contains(keyEvent.vkCode)) {
-          _onKeyUp(HotKey(key: LogicalKeyboardKey.space));
-        }
-      });
-    }
+    GlobalHotkey.initialize(hotkeys).keyEvents.listen((event) {
+      if (event.type == HotkeyEventType.hotkeyTriggered) {
+        _onKeyDown(event.hotkey);
+      } else if (event.type == HotkeyEventType.hotkeyReleased) {
+        _onKeyUp(event.hotkey);
+      }
+    });
 
     log("Hotkeys registered");
   }
 
-  Future<void> initPlatformState() async {
-    List<String> err = [];
-    // Platform messages may fail, so we use a try/catch PlatformException.
-    try {
-      await hook.KeyboardEvent.platformVersion;
-    } on PlatformException {
-      err.add('Failed to get platform version.');
-    }
-    try {
-      await hook.KeyboardEvent.init();
-    } on PlatformException {
-      err.add('Failed to get virtual-key map.');
-    }
-  }
-
-  _onKeyDown(HotKey hotkey) async {
+  _onKeyDown(Hotkey hotkey) async {
     if (_keyEventType == KeyEventType.down) return;
 
     log("Hotkey pressed: $hotkey");
     _keyEventType = KeyEventType.down;
-    _pressedKeys = [
-      hotkey.physicalKey.keyCode,
-      if (hotkey.modifiers != null)
-        ...hotkey.modifiers!.map((e) => e.physicalKeys[0].keyCode)
-    ];
 
     for (final listener in _keyDownListeners) {
       if (!listener(hotkey)) break;
     }
   }
 
-  /// On Windows platform hotkey is always HotKey(KeyCode.space)
-  _onKeyUp(HotKey hotkey) async {
+  _onKeyUp(Hotkey hotkey) async {
     if (_keyEventType != KeyEventType.down &&
         _keyEventType != KeyEventType.repeat) {
       return;

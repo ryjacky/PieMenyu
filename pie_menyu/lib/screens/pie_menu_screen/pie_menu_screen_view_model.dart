@@ -2,7 +2,7 @@ import 'dart:developer';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
-import 'package:hotkey_manager/hotkey_manager.dart';
+import 'package:global_hotkey/hotkey.dart';
 import 'package:pie_menyu/hotkey/system_key_event.dart';
 import 'package:pie_menyu/window/pie_menyu_window_manager.dart';
 import 'package:pie_menyu_core/db/db.dart';
@@ -29,8 +29,8 @@ class PieMenuScreenViewModel extends ChangeNotifier {
   PieMenuStateProvider pieMenuStateProvider;
   PieMenyuWindow pieMenyuWindow;
   ExecutorService executorService;
-  SystemKeyEvent systemKeyEvent;
   Database db;
+  SystemKeyEvent systemKeyEvent;
 
   PieMenuScreenViewModel(
     this.executorService,
@@ -40,7 +40,7 @@ class PieMenuScreenViewModel extends ChangeNotifier {
     this.db,
   );
 
-  bool systemKeyEventListener(HotKey hotKey) {
+  bool systemKeyEventListener(Hotkey hotKey) {
     final pieMenuStates = pieMenuStateProvider.pieMenuStates;
     if (pieMenuStates.lastOrNull == null ||
         pieMenuStates.firstOrNull?.behavior.activationMode !=
@@ -84,9 +84,7 @@ class PieMenuScreenViewModel extends ChangeNotifier {
         clearStateAndHide();
 
         addToExecutorQueue(executorService, activePieItem.tasks);
-        await hotKeyManager.unregisterAll();
         await executorService.start();
-        await systemKeyEvent.registerHotkey();
       }
     }
   }
