@@ -62,16 +62,25 @@ class SystemKeyEvent {
       log("Failed to dispose hotkeys: $e");
     }
 
-    final pieMenuHotkeys = await _db.getAllHotkeys();
+    List<Profile> profiles = await _db.getProfiles();
+
     Set<Hotkey> hotkeys = {};
-    for (PieMenuHotkey hotkey in pieMenuHotkeys) {
-      if (hotkey.keyId == null) continue;
-      hotkeys.add(Hotkey(LogicalKeySet.fromSet({
-        LogicalKeyboardKey(hotkey.keyId!),
-        if (hotkey.ctrl) LogicalKeyboardKey.control,
-        if (hotkey.shift) LogicalKeyboardKey.shift,
-        if (hotkey.alt) LogicalKeyboardKey.alt,
-      })));
+
+    for (final profile in profiles) {
+      if (!profile.enabled) continue;
+
+      for (PieMenuHotkey hotkey in profile.pieMenuHotkeys) {
+        if (hotkey.keyId == null) continue;
+        hotkeys.add(Hotkey(
+          LogicalKeySet.fromSet({
+            LogicalKeyboardKey(hotkey.keyId!),
+            if (hotkey.ctrl) LogicalKeyboardKey.control,
+            if (hotkey.shift) LogicalKeyboardKey.shift,
+            if (hotkey.alt) LogicalKeyboardKey.alt,
+          }),
+          context: profile.exes.map((e) => e.path).toSet(),
+        ));
+      }
     }
 
     GlobalHotkey.initialize(hotkeys).keyEvents.listen((event) {
