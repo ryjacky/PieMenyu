@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:pie_menyu_editor/view/widgets/title_bar.dart';
 import 'package:provider/provider.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 import 'home_page_view_model.dart';
 import 'left_panel/left_panel.dart';
@@ -34,8 +33,6 @@ class HomePage extends StatelessWidget {
                 value: pieMenyuStatus,
                 onChanged: (bool value) {
                   context.read<HomePageViewModel>().pieMenyuStatus = value;
-                  launchUrl(Uri.parse(
-                      "piemenyu://${value ? "start" : "stop"}"));
                 },
               ),
             ),

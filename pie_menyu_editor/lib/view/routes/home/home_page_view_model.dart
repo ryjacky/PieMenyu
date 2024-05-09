@@ -7,6 +7,7 @@ import 'package:pie_menyu_core/db/db.dart';
 import 'package:pie_menyu_core/db/pie_item.dart';
 import 'package:pie_menyu_core/db/pie_menu.dart';
 import 'package:pie_menyu_core/db/profile.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class HomePageViewModel extends ChangeNotifier {
   List<Profile> profiles = [];
@@ -22,6 +23,8 @@ class HomePageViewModel extends ChangeNotifier {
 
   set pieMenyuStatus(bool value) {
     _pieMenyuStatus = value;
+
+    launchUrl(Uri.parse("piemenyu://${value ? "start" : "stop"}"));
     notifyListeners();
   }
 
@@ -65,6 +68,7 @@ class HomePageViewModel extends ChangeNotifier {
       orElse: () => profiles.firstOrNull ?? Profile(name: "Loading..."),
     );
 
+    pieMenyuStatus = false;
     notifyListeners();
   }
 
@@ -107,7 +111,6 @@ class HomePageViewModel extends ChangeNotifier {
 
   Future<void> removePieMenuFrom(Profile profile, PieMenu pieMenu,
       {lazy = true}) async {
-
     _toDelete[pieMenu] = profile;
     _toDeleteTimer = Timer(Duration(seconds: lazy ? 5 : 0), () async {
       final newLinks = profile.pieMenuHotkeys.toList();
@@ -122,6 +125,7 @@ class HomePageViewModel extends ChangeNotifier {
       _toDelete.remove(pieMenu);
     });
 
+    pieMenyuStatus = false;
     notifyListeners();
   }
 
