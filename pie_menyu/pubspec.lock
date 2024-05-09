@@ -112,6 +112,13 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.0"
+  global_hotkey:
+    dependency: "direct main"
+    description:
+      path: "../global_hotkey"
+      relative: true
+    source: path
+    version: "0.0.1"
   google_fonts:
     dependency: "direct main"
     description:
@@ -128,46 +135,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.1.0"
-  hotkey_manager:
-    dependency: "direct main"
-    description:
-      name: hotkey_manager
-      sha256: fb4b976ce7f4240bf75c2be807d2e4bf9e1d73ad379187db2c96a11219efe707
-      url: "https://pub.dev"
-    source: hosted
-    version: "0.2.1"
-  hotkey_manager_linux:
-    dependency: transitive
-    description:
-      name: hotkey_manager_linux
-      sha256: "83676bda8210a3377bc6f1977f193bc1dbdd4c46f1bdd02875f44b6eff9a8473"
-      url: "https://pub.dev"
-    source: hosted
-    version: "0.2.0"
-  hotkey_manager_macos:
-    dependency: transitive
-    description:
-      name: hotkey_manager_macos
-      sha256: "03b5967e64357b9ac05188ea4a5df6fe4ed4205762cb80aaccf8916ee1713c96"
-      url: "https://pub.dev"
-    source: hosted
-    version: "0.2.0"
-  hotkey_manager_platform_interface:
-    dependency: transitive
-    description:
-      name: hotkey_manager_platform_interface
-      sha256: "98ffca25b8cc9081552902747b2942e3bc37855389a4218c9d50ca316b653b13"
-      url: "https://pub.dev"
-    source: hosted
-    version: "0.2.0"
-  hotkey_manager_windows:
-    dependency: transitive
-    description:
-      name: hotkey_manager_windows
-      sha256: "0d03ced9fe563ed0b68f0a0e1b22c9ffe26eb8053cb960e401f68a4f070e0117"
-      url: "https://pub.dev"
-    source: hosted
-    version: "0.2.0"
   http:
     dependency: transitive
     description:
@@ -208,22 +175,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.6.7"
-  json_annotation:
-    dependency: transitive
-    description:
-      name: json_annotation
-      sha256: b10a7b2ff83d83c777edba3c6a0f97045ddadd56c944e1a23a3fdf43a1bf4467
-      url: "https://pub.dev"
-    source: hosted
-    version: "4.8.1"
-  keyboard_event:
-    dependency: "direct main"
-    description:
-      name: keyboard_event
-      sha256: "8549ac054a7620c4a7d11a1256c5a15df5a8f8b20a6f4106a1c98ed2afb213b8"
-      url: "https://pub.dev"
-    source: hosted
-    version: "0.3.4"
   leak_tracker:
     dependency: transitive
     description:
@@ -264,14 +215,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.1.1"
-  logger:
-    dependency: transitive
-    description:
-      name: logger
-      sha256: "7ad7215c15420a102ec687bb320a7312afd449bac63bfb1c60d9787c27b9767f"
-      url: "https://pub.dev"
-    source: hosted
-    version: "1.4.0"
   matcher:
     dependency: transitive
     description:
@@ -584,10 +527,10 @@ packages:
     dependency: "direct main"
     description:
       name: win32
-      sha256: "0a989dc7ca2bb51eac91e8fd00851297cfffd641aa7538b165c62637ca0eaa4a"
+      sha256: "0eaf06e3446824099858367950a813472af675116bf63f008a4c2a75ae13e9cb"
       url: "https://pub.dev"
     source: hosted
-    version: "5.4.0"
+    version: "5.5.0"
   window_manager:
     dependency: "direct main"
     description:
@@ -605,5 +548,5 @@ packages:
     source: hosted
     version: "1.0.4"
 sdks:
-  dart: ">=3.3.0 <4.0.0"
+  dart: ">=3.3.3 <4.0.0"
   flutter: ">=3.16.0"
