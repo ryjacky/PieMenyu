@@ -11,6 +11,7 @@ import 'package:win32/win32.dart';
 
 import 'hotkey.dart';
 import 'hotkey_event.dart';
+import 'dart:developer';
 
 class WindowsHotkeyManager {
   static const LLKHF_INJECTED = 0x00000010;
@@ -41,7 +42,10 @@ class WindowsHotkeyManager {
     }
 
     lpfn.close();
-    Isolate.exit(sendPort, 0);
+    free(msg);
+
+    log("Exiting WindowsHotkeyManager isolate.");
+    Isolate.exit(sendPort);
   }
 
   int lowLevelKeyboardHookProc(int code, int wParam, int lParam) {
@@ -90,7 +94,7 @@ class WindowsHotkeyManager {
         if (kbs.ref.vkCode == 0xE8) {
           UnhookWindowsHookEx(keyHook);
 
-          print("exiting");
+          PostQuitMessage(0);
           return -1;
         }
       }

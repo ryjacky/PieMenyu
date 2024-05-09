@@ -51,10 +51,11 @@ class GlobalHotkey {
 
     receivePort.listen((message) {
       if (message is HotkeyEvent) _controller.add(message);
-      if (message == 0) {
+      if (message == null) {
         _controller.close();
         _instance = null;
       }
     });
+
   }
 }
