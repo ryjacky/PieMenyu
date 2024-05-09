@@ -53,7 +53,7 @@ class WindowsHotkeyManager {
       // Windows controls this memory; don't deallocate it.
       final kbs = Pointer<KBDLLHOOKSTRUCT>.fromAddress(lParam);
 
-      if ((kbs.ref.flags & LLKHF_INJECTED) == 0) {
+      if (kbs.ref.dwExtraInfo != 195833) {
         Hotkey keyPress = Hotkey.fromKeyCode(
           kbs.ref.vkCode,
           ctrl: GetAsyncKeyState(VIRTUAL_KEY.VK_CONTROL) != 0,
@@ -93,7 +93,6 @@ class WindowsHotkeyManager {
       } else {
         if (kbs.ref.vkCode == 0xE8) {
           UnhookWindowsHookEx(keyHook);
-
           PostQuitMessage(0);
           return -1;
         }
