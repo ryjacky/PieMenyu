@@ -12,6 +12,7 @@ import 'hotkey_event.dart';
 import 'windows_hotkey_manager.dart';
 
 class GlobalHotkey {
+  static const dwExtraInfoIgnoreFlag = 195833;
   static GlobalHotkey? _instance;
 
   Isolate? _hotkeyManagerIsolate;
