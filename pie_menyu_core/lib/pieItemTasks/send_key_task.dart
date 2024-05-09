@@ -5,6 +5,7 @@ import 'dart:io';
 
 import 'package:ffi/ffi.dart';
 import 'package:flutter/services.dart';
+import 'package:global_hotkey/global_hotkey.dart';
 import 'package:pie_menyu_core/db/pie_item_task.dart';
 import 'package:uni_platform/uni_platform.dart';
 import 'package:win32/win32.dart';
@@ -88,6 +89,7 @@ class SendKeyTask extends PieItemTask with Executable {
     final inputs = calloc<INPUT>(1);
     inputs[0].type = INPUT_KEYBOARD;
     inputs[0].ki.wVk = vKey;
+    inputs[0].ki.dwExtraInfo = GlobalHotkey.dwExtraInfoIgnoreFlag;
     SendInput(1, inputs, sizeOf<INPUT>());
     calloc.free(inputs);
   }
@@ -97,6 +99,7 @@ class SendKeyTask extends PieItemTask with Executable {
     inputs[0].type = INPUT_KEYBOARD;
     inputs[0].ki.wVk = vKey;
     inputs[0].ki.dwFlags = KEYEVENTF_KEYUP;
+    inputs[0].ki.dwExtraInfo = GlobalHotkey.dwExtraInfoIgnoreFlag;
     SendInput(1, inputs, sizeOf<INPUT>());
     calloc.free(inputs);
   }

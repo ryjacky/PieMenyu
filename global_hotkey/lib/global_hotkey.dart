@@ -39,6 +39,7 @@ class GlobalHotkey {
     final kbd = calloc<INPUT>();
     kbd.ref.type = INPUT_TYPE.INPUT_KEYBOARD;
     kbd.ref.ki.wVk = 0xE8;
+    kbd.ref.ki.dwExtraInfo = dwExtraInfoIgnoreFlag;
     SendInput(1, kbd, sizeOf<INPUT>());
     kbd.ref.ki.dwFlags = KEYBD_EVENT_FLAGS.KEYEVENTF_KEYUP;
     SendInput(1, kbd, sizeOf<INPUT>());
