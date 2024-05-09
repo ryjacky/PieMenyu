@@ -1,3 +1,4 @@
+import 'dart:developer';
 import 'dart:io';
 import 'dart:ui';
 
@@ -30,7 +31,11 @@ class PieMenyuSystemTray {
         appWindow.hide();
       }),
       MenuItemLabel(label: 'Exit', onClicked: (menuItem) async {
-        GlobalHotkey.instance.dispose();
+        try {
+          GlobalHotkey.instance.dispose();
+        } catch (e) {
+          log("Failed to dispose hotkey: $e");
+        }
         for (var callback in _onExitCallbacks) {
           callback();
         }
