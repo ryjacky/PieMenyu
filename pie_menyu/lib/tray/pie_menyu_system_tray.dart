@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'dart:ui';
 
+import 'package:global_hotkey/global_hotkey.dart';
 import 'package:system_tray/system_tray.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -29,6 +30,7 @@ class PieMenyuSystemTray {
         appWindow.hide();
       }),
       MenuItemLabel(label: 'Exit', onClicked: (menuItem) async {
+        GlobalHotkey.instance.dispose();
         for (var callback in _onExitCallbacks) {
           callback();
         }
