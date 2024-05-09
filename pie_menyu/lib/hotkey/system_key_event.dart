@@ -49,7 +49,11 @@ class SystemKeyEvent {
           registerHotkey();
           break;
         case DeepLinkCommand.stop:
-          GlobalHotkey.instance.dispose();
+          try {
+            GlobalHotkey.instance.dispose();
+          } catch (e) {
+            log("Failed to dispose hotkeys: $e");
+          }
           break;
       }
     });
