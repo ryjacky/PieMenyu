@@ -84,6 +84,7 @@ class PieMenuScreenViewModel extends ChangeNotifier {
         clearStateAndHide();
 
         addToExecutorQueue(executorService, activePieItem.tasks);
+        await pieMenyuWindow.hide();
         await executorService.start();
       }
     }
