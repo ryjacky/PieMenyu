@@ -41,6 +41,7 @@ class WindowsHotkeyManager {
     }
 
     lpfn.close();
+    Isolate.exit(sendPort, 0);
   }
 
   int lowLevelKeyboardHookProc(int code, int wParam, int lParam) {

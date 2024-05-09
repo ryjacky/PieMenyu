@@ -42,8 +42,6 @@ class GlobalHotkey {
     kbd.ref.ki.dwFlags = KEYBD_EVENT_FLAGS.KEYEVENTF_KEYUP;
     SendInput(1, kbd, sizeOf<INPUT>());
 
-    _hotkeyManagerIsolate?.kill(priority: Isolate.beforeNextEvent);
-    _instance = null;
   }
 
   void startWindowsHotkeyManagerIsolated(Set<Hotkey> hotkeys) async {
@@ -53,6 +51,10 @@ class GlobalHotkey {
 
     receivePort.listen((message) {
       if (message is HotkeyEvent) _controller.add(message);
+      if (message == 0) {
+        _controller.close();
+        _instance = null;
+      }
     });
   }
 }
