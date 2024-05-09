@@ -61,28 +61,6 @@ class _TitleBarState extends State<TitleBar> {
               if (widget.trailing != null)
                 Padding(padding: titlebarItemPadding, child: widget.trailing),
 
-              // pie menyu status switch ------
-              if (!widget.hidePieMenyuStatus)
-                Text(
-                  "label-pie-menyu-status".tr(),
-                  style: const TextStyle(color: Colors.grey),
-                ),
-              if (!widget.hidePieMenyuStatus)
-                Padding(
-                  padding: titlebarItemPadding,
-                  child: Transform.scale(
-                    scale: 0.6,
-                    child: Switch(
-                      value: pieMenyuStatus,
-                      onChanged: (bool value) {
-                        setState(() => pieMenyuStatus = value);
-                        launchUrl(Uri.parse(
-                            "piemenyu://${value ? "start" : "stop"}"));
-                      },
-                    ),
-                  ),
-                ),
-
               // window buttons ---------------
               MinimizeWindowButton(colors: buttonColors),
               MaximizeWindowButton(colors: buttonColors),

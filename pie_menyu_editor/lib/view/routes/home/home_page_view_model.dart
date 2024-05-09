@@ -16,6 +16,15 @@ class HomePageViewModel extends ChangeNotifier {
 
   bool _draggingPieMenu = false;
 
+  bool _pieMenyuStatus = false;
+
+  bool get pieMenyuStatus => _pieMenyuStatus;
+
+  set pieMenyuStatus(bool value) {
+    _pieMenyuStatus = value;
+    notifyListeners();
+  }
+
   bool get draggingPieMenu => _draggingPieMenu;
 
   set draggingPieMenu(bool value) {
