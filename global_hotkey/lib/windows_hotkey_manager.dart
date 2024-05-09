@@ -49,7 +49,6 @@ class WindowsHotkeyManager {
       final kbs = Pointer<KBDLLHOOKSTRUCT>.fromAddress(lParam);
 
       if ((kbs.ref.flags & LLKHF_INJECTED) == 0) {
-
         Hotkey keyPress = Hotkey.fromKeyCode(
           kbs.ref.vkCode,
           ctrl: GetAsyncKeyState(VIRTUAL_KEY.VK_CONTROL) != 0,
@@ -57,39 +56,41 @@ class WindowsHotkeyManager {
           alt: GetAsyncKeyState(VIRTUAL_KEY.VK_MENU) != 0,
         );
 
-        if (wParam == WM_KEYUP && activeHotkey != null){
-            sendPort.send(HotkeyEvent(HotkeyEventType.hotkeyReleased, keyPress));
-            activeHotkey = null;
+        if (wParam == WM_KEYUP && activeHotkey != null) {
+          sendPort.send(HotkeyEvent(HotkeyEventType.hotkeyReleased, keyPress));
+          activeHotkey = null;
 
-            return CallNextHookEx(keyHook, code, wParam, lParam);
+          return CallNextHookEx(keyHook, code, wParam, lParam);
         }
 
         Hotkey? matchedHotkey;
         for (Hotkey hotkey in hotkeys) {
-          if (hotkey.keySet == keyPress.keySet &&
-              (hotkey.context == null || hotkey.context == getKeyPressContext())
-          ) {
+          if (hotkey.keySet != keyPress.keySet) continue;
+
+          if (hotkey.context.contains("global")) {
             matchedHotkey = hotkey;
           }
-
-          if (matchedHotkey?.context != null) break;
+          if (hotkey.context.contains(getKeyPressContext())) {
+            matchedHotkey = hotkey;
+            break;
+          }
         }
 
         if (matchedHotkey != null && wParam == WM_KEYDOWN) {
           activeHotkey = matchedHotkey;
-          sendPort.send(HotkeyEvent(HotkeyEventType.hotkeyTriggered, matchedHotkey));
+          sendPort.send(
+              HotkeyEvent(HotkeyEventType.hotkeyTriggered, matchedHotkey));
 
           return -1;
         }
 
         return CallNextHookEx(keyHook, code, wParam, lParam);
       } else {
-
         if (kbs.ref.vkCode == 0xE8) {
           UnhookWindowsHookEx(keyHook);
 
           print("exiting");
-          return  -1;
+          return -1;
         }
       }
     }
@@ -105,7 +106,8 @@ class WindowsHotkeyManager {
     GetWindowThreadProcessId(foregroundWindow, processId);
 
     int processHandle = OpenProcess(
-        PROCESS_ACCESS_RIGHTS.PROCESS_QUERY_LIMITED_INFORMATION | PROCESS_ACCESS_RIGHTS.PROCESS_VM_READ,
+        PROCESS_ACCESS_RIGHTS.PROCESS_QUERY_LIMITED_INFORMATION |
+            PROCESS_ACCESS_RIGHTS.PROCESS_VM_READ,
         FALSE,
         processId.value);
 
@@ -113,7 +115,7 @@ class WindowsHotkeyManager {
 
     Pointer<Utf16> pathPointer = calloc<Uint16>(MAX_PATH).cast<Utf16>();
     int result =
-    GetModuleFileNameEx(processHandle, NULL, pathPointer, MAX_PATH);
+        GetModuleFileNameEx(processHandle, NULL, pathPointer, MAX_PATH);
 
     if (result == 0) return null;
 

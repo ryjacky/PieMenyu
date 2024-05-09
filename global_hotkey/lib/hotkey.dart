@@ -6,13 +6,13 @@ import 'package:flutter/widgets.dart';
 
 class Hotkey {
   final LogicalKeySet keySet;
-  final String? context;
+  final Set<String> context;
 
-  Hotkey(this.keySet, {this.context});
+  Hotkey(this.keySet, {this.context = const <String>{}});
 
   factory Hotkey.fromKeyCode(
       int keyCode, {
-        String? context,
+        Set<String> context = const <String>{},
         bool ctrl = false,
         bool shift = false,
         bool alt = false,
