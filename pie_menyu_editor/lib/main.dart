@@ -8,8 +8,9 @@ import 'package:launch_at_startup/launch_at_startup.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:pie_menyu_core/db/db.dart';
-import 'package:pie_menyu_core/shared_preferences/shared_preference_keys.dart';
 import 'package:pie_menyu_editor/deep_linking/deep_link_handler.dart';
+import 'package:pie_menyu_editor/preferences/editor_preferences.dart';
+import 'package:pie_menyu_editor/view/coach/coach_provider.dart';
 import 'package:pie_menyu_editor/view/routes/home/home_route.dart';
 import 'package:pie_menyu_editor/view/routes/on_boarding/on_boarding_page.dart';
 import 'package:provider/provider.dart';
@@ -46,7 +47,7 @@ Future<void> main() async {
     fallbackLocale: const Locale('en'),
     child: PieMenyu(
       db: db,
-      pref: prefs,
+      pref: EditorPreferences(prefs),
     ),
   ));
 
@@ -61,12 +62,12 @@ Future<void> main() async {
 
 class PieMenyu extends StatelessWidget {
   final Database _db;
-  final SharedPreferences _pref;
+  final EditorPreferences _pref;
 
   const PieMenyu({
     super.key,
     required Database db,
-    required SharedPreferences pref,
+    required EditorPreferences pref,
   })  : _db = db,
         _pref = pref;
 
@@ -77,6 +78,7 @@ class PieMenyu extends StatelessWidget {
       providers: [
         Provider(create: (_) => _db),
         Provider(create: (_) => _pref),
+        ChangeNotifierProvider(create: (_) => CoachProvider(_pref))
       ],
       child: MaterialApp(
         title: "PieMenyu Editor",
@@ -88,7 +90,7 @@ class PieMenyu extends StatelessWidget {
             colorScheme: darkColorScheme,
             textTheme: textTheme),
         themeMode: ThemeMode.dark,
-        home: (_pref.getBool(SharedPreferenceKeys.showOnBoarding) ?? true)
+        home: _pref.showOnBoarding
             ? const OnBoardingPage()
             : const HomeRoute(),
       ),

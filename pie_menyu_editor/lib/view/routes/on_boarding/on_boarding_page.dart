@@ -2,12 +2,11 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:introduction_screen/introduction_screen.dart';
-import 'package:pie_menyu_core/shared_preferences/shared_preference_keys.dart';
+import 'package:pie_menyu_editor/preferences/editor_preferences.dart';
 import 'package:pie_menyu_editor/view/routes/home/home_route.dart';
 import 'package:pie_menyu_editor/view/widgets/language_dropdown_menu.dart';
 import 'package:pie_menyu_editor/view/widgets/title_bar.dart';
 import 'package:provider/provider.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class OnBoardingPage extends StatefulWidget {
   const OnBoardingPage({super.key});
@@ -20,9 +19,7 @@ class OnBoardingPageState extends State<OnBoardingPage> {
   final introKey = GlobalKey<IntroductionScreenState>();
 
   void _onIntroEnd(BuildContext context) {
-    context
-        .read<SharedPreferences>()
-        .setBool(SharedPreferenceKeys.showOnBoarding, false);
+    context.read<EditorPreferences>().showOnBoarding = false;
     Navigator.of(context).pushReplacement(
       MaterialPageRoute(builder: (_) => const HomeRoute()),
     );
