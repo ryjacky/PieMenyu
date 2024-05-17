@@ -9,11 +9,13 @@ import 'package:pie_menyu_core/db/db.dart';
 import 'package:pie_menyu_core/db/pie_menu.dart';
 import 'package:pie_menyu_core/db/profile.dart';
 import 'package:pie_menyu_editor/flutter/navigator.dart';
+import 'package:pie_menyu_editor/view/coach/coach_provider.dart';
 import 'package:pie_menyu_editor/view/widgets/delayed_tooltip.dart';
 import 'package:pie_menyu_editor/view/widgets/key_press_recorder.dart';
 import 'package:pie_menyu_editor/view/widgets/minimal_text_field.dart';
 import 'package:pie_menyu_editor/view/widgets/outlined_icon_button.dart';
 import 'package:provider/provider.dart';
+import 'package:tutorial_coach_mark/tutorial_coach_mark.dart';
 
 import '../../pie_menu_editor/pie_menu_editor_route.dart';
 import '../home_page_view_model.dart';
@@ -26,6 +28,29 @@ class PieMenuTable extends StatefulWidget {
 }
 
 class _PieMenuTableState extends State<PieMenuTable> {
+  final hotkeyRecorderKey = GlobalKey();
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      final coachProvider = context.read<CoachProvider>();
+      coachProvider.addTarget(
+          CoachMark.hotkeyRecorder,
+          hotkeyRecorderKey,
+          TargetContent(
+            padding: const EdgeInsets.only(left: 200, right: 300),
+            align: ContentAlign.bottom,
+            child: Text(
+              "message-coach-hotkey-recorder".tr(),
+              style: const TextStyle(
+                fontSize: 16,
+              ),
+            ),
+          ));
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     final viewModel = context.read<HomePageViewModel>();
@@ -103,12 +128,18 @@ class _PieMenuTableState extends State<PieMenuTable> {
               ),
             ),
             Padding(
+              key: pieMenu == allPieMenuInProfile.first
+                  ? hotkeyRecorderKey
+                  : null,
               padding: const EdgeInsets.fromLTRB(0, 15, 8, 0),
               child: KeyPressRecorder(
                 key: ValueKey(pieMenu.id),
                 initialHotkey: getPieMenuHotkey(pieMenu, activeProfile),
-                onHotKeyRecorded: (newHotkey) =>
-                    addHotkeyToProfile(activeProfile, newHotkey, pieMenu.id),
+                onHotKeyRecorded: (newHotkey) {
+                  addHotkeyToProfile(activeProfile, newHotkey, pieMenu.id);
+                  context.read<CoachProvider>().showTutorial(context,
+                      mark: CoachMark.pieMenyuStatusSwitch);
+                },
                 onClear: (prevHotkey) =>
                     removeHotkeyFromProfile(activeProfile, prevHotkey),
                 validation: (hotkey) {

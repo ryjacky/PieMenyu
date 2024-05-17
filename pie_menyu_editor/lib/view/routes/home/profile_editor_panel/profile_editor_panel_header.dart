@@ -2,6 +2,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:pie_menyu_core/db/profile.dart';
+import 'package:pie_menyu_editor/view/coach/coach_provider.dart';
 import 'package:pie_menyu_editor/view/routes/home/profile_editor_panel/profile_action_buttons.dart';
 import 'package:pie_menyu_editor/view/widgets/flat_button.dart';
 import 'package:provider/provider.dart';
@@ -48,7 +49,12 @@ class _ProfileEditorPanelHeaderState extends State<ProfileEditorPanelHeader> {
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 10),
           child: FlatButton(
-            onPressed: () => homePageViewModel.createPieMenuIn(activeProfile),
+            onPressed: () {
+              homePageViewModel.createPieMenuIn(activeProfile);
+              context
+                  .read<CoachProvider>()
+                  .showTutorial(context, mark: CoachMark.hotkeyRecorder);
+            },
             icon: FontAwesomeIcons.plus,
             label: Text("button-new-pie-menu".tr()),
           ),
