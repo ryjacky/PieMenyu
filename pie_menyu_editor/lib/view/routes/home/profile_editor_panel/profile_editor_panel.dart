@@ -1,4 +1,5 @@
 import 'package:easy_localization/easy_localization.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:pie_menyu_core/db/pie_menu.dart';
 import 'package:pie_menyu_core/db/profile.dart';
@@ -45,16 +46,21 @@ class _ProfileEditorPanelState extends State<ProfileEditorPanel> {
             shape: Border.all(color: Colors.transparent),
             title: Text("title-add-pie-menu-from-other-profiles".tr()),
             children: [
-              Wrap(
-                children: [
-                  for (PieMenu pm in allPieMenuExceptInProfile)
-                    TextButton(
-                      onPressed: () {
-                        homePageViewModel.addPieMenuTo(activeProfile, pm);
-                      },
-                      child: Text("${pm.name} (id: ${pm.id})"),
-                    )
-                ],
+              SizedBox(
+                height: 200,
+                child: SingleChildScrollView(
+                  child: Wrap(
+                    children: [
+                      for (PieMenu pm in allPieMenuExceptInProfile)
+                        TextButton(
+                          onPressed: () {
+                            homePageViewModel.addPieMenuTo(activeProfile, pm);
+                          },
+                          child: Text("${pm.name} (id: ${pm.id})"),
+                        )
+                    ],
+                  ),
+                ),
               )
             ],
           ),
