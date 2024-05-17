@@ -2,14 +2,18 @@ import 'dart:io';
 
 import 'package:bitsdojo_window/bitsdojo_window.dart';
 import 'package:easy_localization/easy_localization.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:launch_at_startup/launch_at_startup.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:pie_menyu_core/db/db.dart';
+import 'package:pie_menyu_core/shared_preferences/shared_preference_keys.dart';
 import 'package:pie_menyu_editor/deep_linking/deep_link_handler.dart';
 import 'package:pie_menyu_editor/view/routes/home/home_route.dart';
+import 'package:pie_menyu_editor/view/routes/on_boarding/on_boarding_page.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import 'theme/color_schemes.g.dart';
 import 'theme/text_theme.g.dart';
@@ -29,11 +33,21 @@ Future<void> main() async {
   Database db = Database((await getApplicationSupportDirectory()).parent);
   await db.initialize();
 
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+
+  if (kDebugMode) {
+    // Clear the shared preferences on debug mode
+    await prefs.clear();
+  }
+
   runApp(EasyLocalization(
     supportedLocales: const [Locale('en'), Locale('ja')],
     path: 'assets/translations',
     fallbackLocale: const Locale('en'),
-    child: PieMenyu(db: db),
+    child: PieMenyu(
+      db: db,
+      pref: prefs,
+    ),
   ));
 
   doWhenWindowReady(() {
@@ -47,28 +61,37 @@ Future<void> main() async {
 
 class PieMenyu extends StatelessWidget {
   final Database _db;
+  final SharedPreferences _pref;
 
-  const PieMenyu({super.key, required Database db}) : _db = db;
+  const PieMenyu({
+    super.key,
+    required Database db,
+    required SharedPreferences pref,
+  })  : _db = db,
+        _pref = pref;
 
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-
     return MultiProvider(
       providers: [
         Provider(create: (_) => _db),
+        Provider(create: (_) => _pref),
       ],
       child: MaterialApp(
-          title: "PieMenyu Editor",
-          localizationsDelegates: context.localizationDelegates,
-          supportedLocales: context.supportedLocales,
-          locale: context.locale,
-          darkTheme: ThemeData(
-              useMaterial3: true,
-              colorScheme: darkColorScheme,
-              textTheme: textTheme),
-          themeMode: ThemeMode.dark,
-          home: const HomeRoute()),
+        title: "PieMenyu Editor",
+        localizationsDelegates: context.localizationDelegates,
+        supportedLocales: context.supportedLocales,
+        locale: context.locale,
+        darkTheme: ThemeData(
+            useMaterial3: true,
+            colorScheme: darkColorScheme,
+            textTheme: textTheme),
+        themeMode: ThemeMode.dark,
+        home: (_pref.getBool(SharedPreferenceKeys.showOnBoarding) ?? true)
+            ? const OnBoardingPage()
+            : const HomeRoute(),
+      ),
     );
   }
 }
