@@ -1,6 +1,5 @@
 import 'package:bitsdojo_window/bitsdojo_window.dart';
 import 'package:flutter/material.dart';
-import 'package:easy_localization/easy_localization.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class TitleBar extends StatefulWidget {
@@ -64,7 +63,10 @@ class _TitleBarState extends State<TitleBar> {
               // window buttons ---------------
               MinimizeWindowButton(colors: buttonColors),
               MaximizeWindowButton(colors: buttonColors),
-              CloseWindowButton(colors: closeButtonColors),
+              CloseWindowButton(colors: closeButtonColors, onPressed: (){
+                launchUrl(Uri.parse("piemenyu://start"));
+                appWindow.close();
+              },),
             ],
           ),
         ),
