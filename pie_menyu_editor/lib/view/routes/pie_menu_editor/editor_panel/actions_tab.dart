@@ -28,26 +28,24 @@ class ActionsTab extends StatelessWidget {
     final activePieItemDelegate = context.select<PieMenuState, PieItemDelegate>(
         (state) => state.activePieItemDelegate);
 
-    if (activePieItemDelegate.pieItem == null) {
-      throw Exception("activePieItem is null");
-    }
-
     final pieMenuState = context.read<PieMenuState>();
 
-    return Row(
-      children: [
-        const Expanded(
-          flex: 7,
-          child: PieItemTaskList(),
-        ),
-        Container(
-          padding: const EdgeInsets.fromLTRB(5, 0, 5, 0),
-          width: 50,
-          child:
-              buildAddTaskButtonListView(pieMenuState, activePieItemDelegate),
-        ),
-      ],
-    );
+    return activePieItemDelegate.pieItem == null
+        ? Container()
+        : Row(
+            children: [
+              const Expanded(
+                flex: 7,
+                child: PieItemTaskList(),
+              ),
+              Container(
+                padding: const EdgeInsets.fromLTRB(5, 0, 5, 0),
+                width: 50,
+                child: buildAddTaskButtonListView(
+                    pieMenuState, activePieItemDelegate),
+              ),
+            ],
+          );
   }
 
   buildAddTaskButtonListView(

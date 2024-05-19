@@ -2,7 +2,6 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 
 import 'actions_tab.dart';
-import 'pie_item_list_tab.dart';
 import 'properties_tab/properties_tab.dart';
 
 class EditorPanel extends StatefulWidget {
@@ -19,22 +18,20 @@ class _EditorPanelState extends State<EditorPanel> {
       children: [
         Expanded(
           child: DefaultTabController(
-            length: 3,
+            length: 2,
             child: Column(
               children: [
                 TabBar(
                   tabs: [
-                    Tab(text: "label-pie-items".tr()),
-                    Tab(text: "label-properties".tr()),
                     Tab(text: "label-tasks".tr()),
+                    Tab(text: "label-properties".tr()),
                   ],
                 ),
                 const Expanded(
                   child: TabBarView(
                     children: [
-                      PieItemListTab(),
-                      PropertiesTab(),
                       ActionsTab(),
+                      PropertiesTab(),
                     ],
                   ),
                 ),
