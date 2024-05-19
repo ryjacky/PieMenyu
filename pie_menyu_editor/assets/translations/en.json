@@ -138,6 +138,7 @@
   "tooltip-always-launch-if-empty-window-title": "Always open a new instance if window title is empty",
   "tooltip-duplicate-or-link-pie-menu": "Click to duplicate or drag to a profile to link the pie menu with other profiles",
   "tooltip-font-icon-size-hint": "The max of font size and icon size determines the height of every pie slice.",
+  "tooltip-remove-icon": "Click to remove the current icon",
   "tooltip-make-pie-menu-unique": "Click to make this pie menu unique",
   "tooltip-paste-text-task": "Add Paste Text Task - Send text to the foreground window",
   "tooltip-pie-item-key": "Pie Item key",

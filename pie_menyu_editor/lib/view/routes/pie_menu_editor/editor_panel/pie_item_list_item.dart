@@ -43,7 +43,13 @@ class _PieItemListItemState extends State<PieItemListItem> {
     final pieMenuState = widget.pieMenuState;
     final piInstance = widget.pieItemDelegate;
 
-    _icon = createIconWidget(pieItem.iconBase64);
+    _icon = Image.memory(
+      width: 28,
+      height: 28,
+      isAntiAlias: true,
+      base64Decode(pieItem.iconBase64),
+      errorBuilder: (_, __, ___) => const Icon(Icons.upload_file),
+    );
 
     return Row(
       children: [
@@ -83,13 +89,22 @@ class _PieItemListItemState extends State<PieItemListItem> {
         ),
         const Gap(6),
         if (widget.allowDelete) createDeleteButton(pieItem),
+        const Gap(6),
       ],
     );
   }
 
   Widget createAddIconButton(PieItem pieItem) {
     final themeColorScheme = Theme.of(context).colorScheme;
-    return TextButton(
+    return (button) {
+      if (pieItem.iconBase64 == "") return button;
+
+      return Tooltip(
+        message: "tooltip-remove-icon".tr(),
+        child: button,
+        preferBelow: false,
+      );
+    }(TextButton(
       style: TextButton.styleFrom(
         foregroundColor: themeColorScheme.secondary,
         padding: const EdgeInsets.all(0),
@@ -101,16 +116,20 @@ class _PieItemListItemState extends State<PieItemListItem> {
       onPressed: () async {
         String? icon;
 
-        PlatformFile? result =
-            (await FilePicker.platform.pickFiles())?.files.firstOrNull;
-        if (result != null && result.path != null) {
-          String mimeType = lookupMimeType(result.path!) ?? "";
+        if (pieItem.iconBase64 == "") {
+          PlatformFile? result =
+              (await FilePicker.platform.pickFiles())?.files.firstOrNull;
+          if (result != null && result.path != null) {
+            String mimeType = lookupMimeType(result.path!) ?? "";
 
-          if (mimeType.startsWith("image") && !result.path!.contains("svg")) {
-            icon = base64Encode(File(result.path!).readAsBytesSync());
-          } else {
-            icon = await FileIcon.getBase64(result.path!);
+            if (mimeType.startsWith("image") && !result.path!.contains("svg")) {
+              icon = base64Encode(File(result.path!).readAsBytesSync());
+            } else {
+              icon = await FileIcon.getBase64(result.path!);
+            }
           }
+        } else {
+          icon = "";
         }
 
         if (icon != null && mounted) {
@@ -119,17 +138,18 @@ class _PieItemListItemState extends State<PieItemListItem> {
         }
       },
       child: _icon!,
-    );
+    ));
   }
 
   Widget createDeleteButton(PieItem pieItem) {
     return TextButton(
       style: TextButton.styleFrom(
         foregroundColor: Colors.red,
-        padding: const EdgeInsets.all(5),
+        padding: const EdgeInsets.all(0),
         minimumSize: const Size(36, 36),
       ),
-      child: const Icon(FontAwesomeIcons.minus, color: Colors.red, size: 12),
+      child:
+          const Icon(Icons.delete_outline_rounded, color: Colors.red, size: 20),
       onPressed: () {
         final pieMenuState = context.read<PieMenuState>();
         final scaffoldMessenger = ScaffoldMessenger.of(context);
@@ -147,6 +167,10 @@ class _PieItemListItemState extends State<PieItemListItem> {
             ),
           );
         } else {
+          final pieMenuState = context.read<PieMenuState>();
+          pieMenuState.activePieItemDelegate =
+              pieMenuState.pieItemDelegates.first;
+
           scaffoldMessenger.hideCurrentSnackBar();
           scaffoldMessenger.showSnackBar(
             SnackBar(
@@ -166,16 +190,6 @@ class _PieItemListItemState extends State<PieItemListItem> {
           );
         }
       },
-    );
-  }
-
-  createIconWidget(String iconBase64) {
-    return Image.memory(
-      width: 28,
-      height: 28,
-      isAntiAlias: true,
-      base64Decode(iconBase64),
-      errorBuilder: (_, __, ___) => const Icon(Icons.upload_file),
     );
   }
 
