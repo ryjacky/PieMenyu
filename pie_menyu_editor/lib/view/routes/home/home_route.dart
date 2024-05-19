@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:pie_menyu_core/db/db.dart';
+import 'package:pie_menyu_editor/versioning/update_status_provider.dart';
 import 'package:pie_menyu_editor/view/routes/home/home_page.dart';
 import 'package:provider/provider.dart';
 
@@ -14,7 +15,10 @@ class HomeRoute extends StatelessWidget {
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.background,
       body: MultiProvider(
-        providers: [ChangeNotifierProvider(create: (_) => HomePageViewModel(db))],
+        providers: [
+          ChangeNotifierProvider(create: (_) => HomePageViewModel(db)),
+          ChangeNotifierProvider(create: (_) => UpdateStatusProvider())
+        ],
         child: const HomePage(),
       ),
     );
