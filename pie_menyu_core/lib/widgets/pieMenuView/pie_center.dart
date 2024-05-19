@@ -10,14 +10,16 @@ class PieCenter extends CustomPaint {
     required double centerThickness,
     required Color backgroundColor,
     required Color highlightColor,
+    required bool onCenter,
   }) : super(
-          painter: _PieCenterPainter(
-            centerThickness: centerThickness,
-            backgroundColor: backgroundColor,
-            highlightColor: highlightColor,
-            arcAngle: arcAngle,
-          ),
-        );
+    painter: _PieCenterPainter(
+      centerThickness: centerThickness,
+      backgroundColor: backgroundColor,
+      highlightColor: highlightColor,
+      arcAngle: arcAngle,
+      onCenter: onCenter,
+    ),
+  );
 }
 
 class _PieCenterPainter extends CustomPainter {
@@ -25,12 +27,14 @@ class _PieCenterPainter extends CustomPainter {
   final Color backgroundColor;
   final Color highlightColor;
   final double arcAngle;
+  final bool onCenter;
 
   _PieCenterPainter({
     required this.centerThickness,
     required this.backgroundColor,
     required this.highlightColor,
     required this.arcAngle,
+    required this.onCenter,
   });
 
   @override
@@ -43,6 +47,9 @@ class _PieCenterPainter extends CustomPainter {
     if (arcAngle != 2 * pi) {
       _drawArc(
           canvas, center, radius, highlightColor, centerThickness, arcAngle);
+    } else if (!onCenter) {
+      _drawCircle(canvas, center, radius + centerThickness / 2, highlightColor,
+          centerThickness / 2);
     } else {
       _drawCircle(canvas, center, radius - centerThickness / 2, highlightColor,
           centerThickness / 2);
@@ -66,7 +73,7 @@ class _PieCenterPainter extends CustomPainter {
       ..style = PaintingStyle.stroke;
     canvas.drawArc(
       Rect.fromCircle(center: center, radius: radius),
-      -pi / 2 -arcAngle / 2,
+      -pi / 2 - arcAngle / 2,
       arcAngle,
       false,
       arcPaint,
