@@ -1,6 +1,6 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
-import 'package:easy_localization/easy_localization.dart';
 import 'package:pie_menyu_core/db/pie_menu.dart';
 import 'package:pie_menyu_core/widgets/pieMenuView/pie_menu_state.dart';
 import 'package:pie_menyu_editor/view/widgets/collapasable_color_picker.dart';
@@ -41,9 +41,9 @@ class FontSection extends StatelessWidget {
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            const Padding(
-                padding: EdgeInsets.fromLTRB(42, 0, 0, 0),
-                child: Text("Font Family")),
+            Padding(
+                padding: const EdgeInsets.fromLTRB(42, 0, 0, 0),
+                child: Text("label-font-family".tr())),
             CompactDropdownMenu(
               initialSelection: font.fontFamily,
               dropdownMenuEntries: fonts
@@ -72,7 +72,7 @@ class FontSection extends StatelessWidget {
                 ),
               ),
             ),
-            const SizedBox(width: 160, child: Text("Font Size")),
+            SizedBox(width: 160, child: Text("label-font-size".tr())),
             SizedBox(
               width: 70,
               child: DraggableNumberField(

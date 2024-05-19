@@ -141,5 +141,14 @@
   "tooltip-make-pie-menu-unique": "Click to make this pie menu unique",
   "tooltip-paste-text-task": "Add Paste Text Task - Send text to the foreground window",
   "tooltip-pie-item-key": "Pie Item key",
+  "label-center-radius": "Center Radius",
+  "label-open-in-screen-center": "Open in screen center",
+  "label-escape-radius": "Escape Radius",
+  "label-icon-size": "Icon Size",
+  "label-font-size": "Font Size",
+  "label-font-family": "Font Family",
+  "label-center-thickness": "Center Thickness",
+  "label-pie-item-roundness": "Pie Item Roundness",
+  "label-pie-item-spread": "Pie Item Spread",
   "tooltip-sub-menu-activation-mode-hint": "Click - Sub Menu will be activated when the pie item is clicked. \nHover - Sub Menu will be activated when the pie item is hovered."
 }

@@ -30,9 +30,9 @@ class BehaviorSection extends StatelessWidget {
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            const Padding(
-              padding: EdgeInsets.fromLTRB(42, 0, 0, 0),
-              child: Text("Open In Screen Center"),
+            Padding(
+              padding: const EdgeInsets.fromLTRB(42, 0, 0, 0),
+              child: Text("label-open-in-screen-center".tr()),
             ),
             Switch(
               // This bool value toggles the switch.
@@ -50,9 +50,9 @@ class BehaviorSection extends StatelessWidget {
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            const Padding(
-              padding: EdgeInsets.fromLTRB(42, 0, 0, 0),
-              child: Text("Escape Radius"),
+            Padding(
+              padding: const EdgeInsets.fromLTRB(42, 0, 0, 0),
+              child: Text("label-escape-radius".tr()),
             ),
             SizedBox(
               width: 70,
