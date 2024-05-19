@@ -12,7 +12,7 @@ import 'package:pie_menyu_core/pieItemTasks/run_file_task.dart';
 import 'package:pie_menyu_core/pieItemTasks/send_key_task.dart';
 import 'package:pie_menyu_core/pieItemTasks/send_text_task.dart';
 import 'package:pie_menyu_core/widgets/pieMenuView/pie_menu_state.dart';
-import 'package:pie_menyu_editor/view/routes/pie_menu_editor/editor_panel/editor_panel_view_model.dart';
+import 'package:pie_menyu_editor/view/routes/pie_menu_editor/pie_menu_page_view_model.dart';
 import 'package:provider/provider.dart';
 
 import '../task_cards/mouse_click_task_card.dart';
@@ -36,7 +36,7 @@ class _PieItemTaskListState extends State<PieItemTaskList> {
   @override
   Widget build(BuildContext context) {
     final pieItemDelegate = context.watch<PieMenuState>().activePieItemDelegate;
-    final toDelete = context.select<EditorPanelViewModel, PieItemTask?>(
+    final toDelete = context.select<PieMenuEditorPageViewModel, PieItemTask?>(
       (viewModel) => viewModel.toDelete?.key,
     );
 
@@ -133,7 +133,7 @@ class _PieItemTaskListState extends State<PieItemTaskList> {
     final state = context.read<PieMenuState>();
     final scaffoldMessenger = ScaffoldMessenger.of(context);
 
-    final viewModel = context.read<EditorPanelViewModel>();
+    final viewModel = context.read<PieMenuEditorPageViewModel>();
 
     if (viewModel.toDelete != null) {
       viewModel.lazyDeleteTimer?.cancel();
@@ -159,7 +159,6 @@ class _PieItemTaskListState extends State<PieItemTaskList> {
             viewModel.lazyDeleteTimer?.cancel();
             viewModel.toDelete = null;
             scaffoldMessenger.clearSnackBars();
-
           },
         ),
       ),
