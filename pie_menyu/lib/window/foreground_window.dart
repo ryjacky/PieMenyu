@@ -17,7 +17,7 @@ class ForegroundWindow {
     GetWindowThreadProcessId(foregroundWindow, processId);
 
     int processHandle = OpenProcess(
-        PROCESS_QUERY_LIMITED_INFORMATION | PROCESS_VM_READ,
+        PROCESS_ACCESS_RIGHTS.PROCESS_QUERY_LIMITED_INFORMATION | PROCESS_ACCESS_RIGHTS.PROCESS_VM_READ,
         FALSE,
         processId.value);
 

@@ -1,17 +1,17 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:pie_menyu_core/widgets/pieMenuView/pie_center.dart';
 import 'package:pie_menyu_core/widgets/pieMenuView/pie_menu_state.dart';
 
 import '../../db/pie_menu.dart';
-import '../../painter/pie_center_painter.dart';
 import '../pie_item_view.dart';
 
 class PieMenuView extends StatefulWidget {
   final PieMenuState state;
 
-  final Function()? onTap;
-  final Function()? onHover;
+  final Function(PieItemDelegate instance)? onTap;
+  final Function(PieItemDelegate instance)? onHover;
 
   const PieMenuView({
     super.key,
@@ -41,74 +41,74 @@ class _PieMenuViewState extends State<PieMenuView> {
     final PieMenuState state = widget.state;
     final centerRadius = state.shape.centerRadius;
     final centerThickness = state.shape.centerThickness;
-    final nInstances = state.pieItemInstances.length;
-    final pieItemInstances = state.pieItemInstances;
+    final nSlices = state.pieItemDelegates.length - 1;
+    final pieItemInstances = state.pieItemDelegates;
     final colors = state.colors;
 
     final double pieCenterSize = (centerRadius + centerThickness) * 2;
 
-    angleDelta = 2 * pi / nInstances;
+    angleDelta = 2 * pi / nSlices;
 
     return LayoutBuilder(
       builder: (context, constraints) {
         return Stack(
           alignment: Alignment.center,
-
           children: [
             Positioned(
               left: getOriginX(constraints) - centerRadius - centerThickness,
               bottom: getOriginY(constraints) - centerRadius - centerThickness,
               child: Transform.rotate(
                 angle: getPieCenterRotation(),
-                child: CustomPaint(
-                  size: Size(pieCenterSize, pieCenterSize),
-                  painter: PieCenterPainter(
+                child: GestureDetector(
+                  onTapUp: (event) {
+                    widget.onTap?.call(pieItemInstances.first);
+                  },
+                  child: PieCenter(
+                    size: Size(pieCenterSize, pieCenterSize),
                     centerThickness: centerThickness.toDouble(),
                     backgroundColor: Color(colors.secondary),
-                    foregroundColor: Color(colors.primary),
-                    numberOfPieItems: nInstances,
+                    highlightColor: Color(colors.primary),
+                    arcAngle: state.activePieItemDelegate ==
+                            pieItemInstances.firstOrNull
+                        ? 2 * pi
+                        : angleDelta,
                   ),
                 ),
               ),
             ),
-            for (int i = 0; i < nInstances; i++)
+            for (int i = 0; i < nSlices; i++)
               if (pieItemInstances[i].pieItem != null)
                 Positioned(
-                  right: (i > nInstances / 2)
+                  right: (i > nSlices / 2)
                       ? getHorizontalOffset(i, constraints)
                       : null,
-                  left: (i > 0 && i < nInstances / 2)
+                  left: (i > 0 && i < nSlices / 2)
                       ? getHorizontalOffset(i, constraints)
                       : null,
                   bottom: getVerticalOffset(i, constraints),
-                  child: InkWell(
-                    highlightColor: Colors.transparent,
-                    hoverColor: Colors.transparent,
-                    mouseCursor: SystemMouseCursors.basic,
-                    splashColor: Colors.transparent,
-                    onTap: () {
-                      state.activePieItemInstance = pieItemInstances[i];
-                      widget.onTap?.call();
+                  child: GestureDetector(
+                    onTapUp: (event) {
+                      widget.onTap?.call(pieItemInstances[i + 1]);
                     },
-                    onHover: (value) {
-                      if (value) {
-                        state.activePieItemInstance = pieItemInstances[i];
-                        widget.onHover?.call();
-                      }
-                    },
-                    child: PieItemView(
-                      horizontalOffset: i % (nInstances / 2) == 0
-                          ? PieItemOffset.center
-                          : i > nInstances / 2
-                              ? PieItemOffset.toLeft
-                              : PieItemOffset.toRight,
-                      icon: state.icon,
-                      font: state.font,
-                      colors: state.colors,
-                      shape: state.shape,
-                      instance: state.pieItemInstances[i],
-                      active:
-                          state.activePieItemInstance == pieItemInstances[i],
+                    child: MouseRegion(
+                      onHover: (value) {
+                        widget.onHover?.call(pieItemInstances[i + 1]);
+                      },
+                      child: PieItemView(
+                        horizontalOffset: i % (nSlices / 2) == 0
+                            ? PieItemOffset.center
+                            : i > nSlices / 2
+                                ? PieItemOffset.toLeft
+                                : PieItemOffset.toRight,
+                        icon: state.icon,
+                        font: state.font,
+                        colors: state.colors,
+                        shape: state.shape,
+                        instance: state.pieItemDelegates[i + 1],
+                        active: state.activePieItemDelegate ==
+                            pieItemInstances[i + 1],
+                        height: state.runtimeHeight,
+                      ),
                     ),
                   ),
                 ),
@@ -119,12 +119,20 @@ class _PieMenuViewState extends State<PieMenuView> {
   }
 
   double getPieCenterRotation() {
-    double result = 2 *
-        pi *
-        widget.state.pieItemInstances
-            .indexOf(widget.state.activePieItemInstance) /
-        widget.state.pieItemInstances.length;
-    return (result.isNaN || result.isInfinite) ? 0 : result;
+    final pieItemPosition = widget.state.pieItemDelegates
+        .indexOf(widget.state.activePieItemDelegate);
+
+    if (pieItemPosition == 0) {
+      return 2 * pi;
+    } else {
+      double result = 2 *
+          pi *
+          (widget.state.pieItemDelegates
+                  .indexOf(widget.state.activePieItemDelegate) -
+              1) /
+          (widget.state.pieItemDelegates.length - 1);
+      return (result.isNaN || result.isInfinite) ? 0 : result;
+    }
   }
 
   double getHorizontalOffset(int i, BoxConstraints constraints) {
@@ -132,7 +140,7 @@ class _PieMenuViewState extends State<PieMenuView> {
     return getOriginX(constraints) +
         ((shape.centerRadius + shape.pieItemSpread) * sin(i * angleDelta))
             .abs() -
-        widget.state.icon.size / 2;
+        widget.state.runtimeHeight / 2;
   }
 
   double getVerticalOffset(int i, BoxConstraints constraints) {
@@ -140,8 +148,6 @@ class _PieMenuViewState extends State<PieMenuView> {
 
     return getOriginY(constraints) +
         ((shape.centerRadius + shape.pieItemSpread) * cos(i * angleDelta)) -
-        widget.state.icon.size / 2;
+        widget.state.runtimeHeight / 2;
   }
-
-
 }

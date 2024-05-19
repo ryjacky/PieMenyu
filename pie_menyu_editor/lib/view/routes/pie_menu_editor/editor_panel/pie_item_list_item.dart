@@ -1,11 +1,13 @@
 import 'dart:convert';
+import 'dart:io';
 import 'dart:math';
 
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:gap/gap.dart';
-import 'package:localization/localization.dart';
+import 'package:easy_localization/easy_localization.dart';
+import 'package:mime/mime.dart';
 import 'package:pie_menyu_core/db/pie_item.dart';
 import 'package:pie_menyu_core/db/pie_menu.dart';
 import 'package:pie_menyu_core/widgets/pieMenuView/pie_menu_state.dart';
@@ -15,11 +17,16 @@ import 'package:pie_menyu_editor/view/widgets/single_key_recorder.dart';
 import 'package:provider/provider.dart';
 
 class PieItemListItem extends StatefulWidget {
-  final PieItemInstance piInstance;
+  final PieItemDelegate pieItemDelegate;
   final PieMenuState pieMenuState;
+  final bool allowDelete;
 
-  const PieItemListItem(
-      {super.key, required this.piInstance, required this.pieMenuState});
+  const PieItemListItem({
+    super.key,
+    required this.pieItemDelegate,
+    required this.pieMenuState,
+    this.allowDelete = true,
+  });
 
   @override
   State<PieItemListItem> createState() => _PieItemListItemState();
@@ -30,13 +37,13 @@ class _PieItemListItemState extends State<PieItemListItem> {
 
   @override
   Widget build(BuildContext context) {
-    PieItem? pieItem = widget.piInstance.pieItem;
-    pieItem ??= PieItem(name: "Loading...".i18n());
+    PieItem? pieItem = widget.pieItemDelegate.pieItem;
+    pieItem ??= PieItem(name: "Loading...".tr());
 
     final pieMenuState = widget.pieMenuState;
-    final piInstance = widget.piInstance;
+    final piInstance = widget.pieItemDelegate;
 
-    _icon ??= createIconWidget(pieItem.iconBase64);
+    _icon = createIconWidget(pieItem.iconBase64);
 
     return Row(
       children: [
@@ -46,6 +53,7 @@ class _PieItemListItemState extends State<PieItemListItem> {
         Expanded(
           child: MinimalTextField(
             content: pieItem.name,
+            controller: TextEditingController(text: pieItem.name),
             onSubmitted: (String value) {
               pieMenuState.putPieItem(pieItem!..name = value);
             },
@@ -55,17 +63,26 @@ class _PieItemListItemState extends State<PieItemListItem> {
         SizedBox(
           width: 32,
           child: Tooltip(
-            message: "tooltip-pie-item-key".i18n(),
+            message: "tooltip-pie-item-key".tr(),
             child: SingleKeyRecorder(
-              initialValue: piInstance.keyCode,
+              controller: TextEditingController(text: piInstance.keyCode),
               onSubmitted: (String value) {
-                pieMenuState.updatePieItemInstance(piInstance..keyCode = value);
+                pieMenuState.updatePieItemDelegate(piInstance..keyCode = value);
+              },
+              validator: (String value) {
+                final valid = pieMenuState.pieItemDelegates
+                    .every((pieItem) => pieItem.keyCode != value);
+
+                if (!valid) {
+                  showErrorSnackBar();
+                }
+                return valid;
               },
             ),
           ),
         ),
         const Gap(6),
-        createDeleteButton(pieItem),
+        if (widget.allowDelete) createDeleteButton(pieItem),
       ],
     );
   }
@@ -84,13 +101,19 @@ class _PieItemListItemState extends State<PieItemListItem> {
       onPressed: () async {
         String? icon;
 
-        FilePickerResult? result = await FilePicker.platform.pickFiles();
-        if (result != null) {
-          icon = await FileIcon.getBase64(result.files.single.path!);
+        PlatformFile? result =
+            (await FilePicker.platform.pickFiles())?.files.firstOrNull;
+        if (result != null && result.path != null) {
+          String mimeType = lookupMimeType(result.path!) ?? "";
+
+          if (mimeType.startsWith("image") && !result.path!.contains("svg")) {
+            icon = base64Encode(File(result.path!).readAsBytesSync());
+          } else {
+            icon = await FileIcon.getBase64(result.path!);
+          }
         }
 
         if (icon != null && context.mounted) {
-          createIconWidget(icon);
           context.read<PieMenuState>().putPieItem(pieItem..iconBase64 = icon);
         }
       },
@@ -99,33 +122,49 @@ class _PieItemListItemState extends State<PieItemListItem> {
   }
 
   Widget createDeleteButton(PieItem pieItem) {
-    return Tooltip(
-      message: "tooltip-long-press-to-delete".i18n(),
-      child: TextButton(
-        style: TextButton.styleFrom(
-          foregroundColor: Colors.red,
-          padding: const EdgeInsets.all(5),
-          minimumSize: const Size(36, 36),
-        ),
-        onPressed: () {},
-        child: const Icon(FontAwesomeIcons.minus, color: Colors.red, size: 12),
-        onLongPress: () {
-          final result = context.read<PieMenuState>().removePieItem(pieItem);
-          final scaffoldMessenger = ScaffoldMessenger.of(context);
-          if (!result) {
-            scaffoldMessenger.hideCurrentSnackBar();
-            scaffoldMessenger.showSnackBar(
-              SnackBar(
-                backgroundColor: Colors.red[400],
-                content: Text(
-                  "message-pie-item-not-deleted-${Random().nextInt(5)}".i18n(),
-                ),
-                duration: const Duration(seconds: 5),
-              ),
-            );
-          }
-        },
+    return TextButton(
+      style: TextButton.styleFrom(
+        foregroundColor: Colors.red,
+        padding: const EdgeInsets.all(5),
+        minimumSize: const Size(36, 36),
       ),
+      child: const Icon(FontAwesomeIcons.minus, color: Colors.red, size: 12),
+      onPressed: () {
+        final pieMenuState = context.read<PieMenuState>();
+        final scaffoldMessenger = ScaffoldMessenger.of(context);
+        if (!pieMenuState.removePieItem(pieItem)) {
+          scaffoldMessenger.hideCurrentSnackBar();
+          scaffoldMessenger.showSnackBar(
+            SnackBar(
+              behavior: SnackBarBehavior.floating,
+              margin: const EdgeInsets.fromLTRB(8, 8, 334, 8),
+              backgroundColor: Colors.red[400],
+              content: Text(
+                "message-pie-item-not-deleted-${Random().nextInt(5)}".tr(),
+              ),
+              duration: const Duration(seconds: 5),
+            ),
+          );
+        } else {
+          scaffoldMessenger.hideCurrentSnackBar();
+          scaffoldMessenger.showSnackBar(
+            SnackBar(
+              behavior: SnackBarBehavior.floating,
+              margin: const EdgeInsets.fromLTRB(8, 8, 334, 8),
+              action: SnackBarAction(
+                label: "label-undo".tr(),
+                onPressed: () {
+                  pieMenuState.undoRemove();
+                  scaffoldMessenger.clearSnackBars();
+                },
+              ),
+              backgroundColor: Theme.of(context).colorScheme.primary,
+              content: Text("message-removed-pie-item".tr()),
+              duration: const Duration(seconds: 5),
+            ),
+          );
+        }
+      },
     );
   }
 
@@ -136,6 +175,20 @@ class _PieItemListItemState extends State<PieItemListItem> {
       isAntiAlias: true,
       base64Decode(iconBase64),
       errorBuilder: (_, __, ___) => const Icon(Icons.upload_file),
+    );
+  }
+
+  void showErrorSnackBar() {
+    final scaffoldMessenger = ScaffoldMessenger.of(context);
+    scaffoldMessenger.hideCurrentSnackBar();
+    scaffoldMessenger.showSnackBar(
+      SnackBar(
+        behavior: SnackBarBehavior.floating,
+        margin: const EdgeInsets.fromLTRB(8, 8, 334, 8),
+        backgroundColor: Colors.red[400],
+        content: Text("message-slice-key-is-used".tr()),
+        duration: const Duration(seconds: 5),
+      ),
     );
   }
 }

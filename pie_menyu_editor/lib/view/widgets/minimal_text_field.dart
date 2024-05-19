@@ -4,9 +4,15 @@ class MinimalTextField extends StatefulWidget {
   final Function(String)? onSubmitted;
   final String content;
   final TextInputType? keyboardType;
+  final TextEditingController? controller;
 
-  const MinimalTextField(
-      {super.key, this.content = "", this.onSubmitted, this.keyboardType});
+  const MinimalTextField({
+    super.key,
+    this.content = "",
+    this.onSubmitted,
+    this.keyboardType,
+    this.controller,
+  });
 
   @override
   State<MinimalTextField> createState() => _MinimalTextFieldState();
@@ -33,7 +39,7 @@ class _MinimalTextFieldState extends State<MinimalTextField> {
         onChanged: (String content) {
           this.content = content;
         },
-        controller: TextEditingController(text: content),
+        controller: widget.controller ?? TextEditingController(text: content),
         keyboardType: widget.keyboardType,
         decoration: const InputDecoration(
           border: OutlineInputBorder(),

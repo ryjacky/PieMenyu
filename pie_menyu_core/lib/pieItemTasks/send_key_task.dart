@@ -1,19 +1,24 @@
 library pie_menyu_core;
 
-import 'package:ffi/ffi.dart';
 import 'dart:ffi';
-import 'package:flutter_auto_gui/flutter_auto_gui.dart';
+import 'dart:io';
+
+import 'package:ffi/ffi.dart';
+import 'package:flutter/services.dart';
+import 'package:global_hotkey/global_hotkey.dart';
 import 'package:pie_menyu_core/db/pie_item_task.dart';
+import 'package:uni_platform/uni_platform.dart';
 import 'package:win32/win32.dart';
 
 import '../executor/executable.dart';
 
 class SendKeyTask extends PieItemTask with Executable {
+
   SendKeyTask() : super(taskType: PieItemTaskType.sendKey) {
     _fieldCheck();
   }
 
-  SendKeyTask.from(PieItemTask pieItemTask) : super.from(pieItemTask) {
+  SendKeyTask.from(super.pieItemTask) : super.from() {
     _fieldCheck();
   }
 
@@ -42,29 +47,28 @@ class SendKeyTask extends PieItemTask with Executable {
 
   bool get alt => arguments[2] == "true";
 
-  set key(String value) {
-    arguments[3] = value;
+  set key(LogicalKeyboardKey? value) {
+    if (value != null) arguments[3] = value.keyId.toString();
   }
 
-  String get key => arguments[3];
+  LogicalKeyboardKey? get key {
+    final keyId = int.tryParse(arguments[3]);
+    if (keyId == null) return null;
+    return LogicalKeyboardKey(keyId);
+  }
 
   List<String> get hotkeyStrings {
     final keys = <String>[];
-    if (ctrl) {
-      keys.add("Ctrl");
-    }
-    if (shift) {
-      keys.add("Shift");
-    }
-    if (alt) {
-      keys.add("Alt");
-    }
-    keys.add(key);
+
+    if (ctrl) keys.add("Ctrl");
+    if (shift) keys.add("Shift");
+    if (alt) keys.add("Alt");
+
+    keys.add(key?.keyLabel ?? "");
     return keys;
   }
 
-  @override
-  Future<void> execute() async {
+  void releasePressedKeysWindows() {
     // Get the state of all keys
     final keyboardState = calloc<BYTE>(256);
     GetKeyboardState(keyboardState);
@@ -74,28 +78,50 @@ class SendKeyTask extends PieItemTask with Executable {
       final keyState = GetAsyncKeyState(i);
 
       // Release the key if it is currently being pressed
-      if ((keyState & 0x8000) != 0) {
-        final inputs = calloc<INPUT>(1);
-        inputs[0].type = INPUT_KEYBOARD;
-        inputs[0].ki.wVk = i;
-        inputs[0].ki.dwFlags = KEYEVENTF_KEYUP;
-        SendInput(1, inputs, sizeOf<INPUT>());
-        calloc.free(inputs);
-      }
+      if ((keyState & 0x8000) != 0) releaseKeyWindows(i);
     }
 
     // Free the allocated memory
     calloc.free(keyboardState);
+  }
 
-    final keys = hotkeyStrings
-        .map((e) => e.toLowerCase())
-        .toList();
+  void pressKeyWindows(int vKey) {
+    final inputs = calloc<INPUT>(1);
+    inputs[0].type = INPUT_KEYBOARD;
+    inputs[0].ki.wVk = vKey;
+    inputs[0].ki.dwExtraInfo = GlobalHotkey.dwExtraInfoIgnoreFlag;
+    SendInput(1, inputs, sizeOf<INPUT>());
+    calloc.free(inputs);
+  }
 
-    await FlutterAutoGUI.hotkey(keys: keys, interval: const Duration(milliseconds: 10));
+  void releaseKeyWindows(int vKey) {
+    final inputs = calloc<INPUT>(1);
+    inputs[0].type = INPUT_KEYBOARD;
+    inputs[0].ki.wVk = vKey;
+    inputs[0].ki.dwFlags = KEYEVENTF_KEYUP;
+    inputs[0].ki.dwExtraInfo = GlobalHotkey.dwExtraInfoIgnoreFlag;
+    SendInput(1, inputs, sizeOf<INPUT>());
+    calloc.free(inputs);
+  }
 
-    // I've spent so much time debugging this and find out that
-    // FlutterAutoGUI.hotkey is a fake future that returns before hotkey
-    // is pressed.
-    await Future.delayed(const Duration(milliseconds: 50));
+  @override
+  Future<void> execute() async {
+    final platformKeyCode = key?.physicalKey?.keyCode;
+    if (platformKeyCode == null) return;
+
+    if (Platform.isWindows) {
+      releasePressedKeysWindows();
+
+      if (ctrl) pressKeyWindows(VK_CONTROL);
+      if (shift) pressKeyWindows(VK_SHIFT);
+      if (alt) pressKeyWindows(VK_MENU);
+      pressKeyWindows(platformKeyCode);
+
+      releaseKeyWindows(platformKeyCode);
+      if (alt) releaseKeyWindows(VK_MENU);
+      if (shift) releaseKeyWindows(VK_SHIFT);
+      if (ctrl) releaseKeyWindows(VK_CONTROL);
+    } else if (Platform.isMacOS) {
+    } else if (Platform.isLinux) {}
   }
 }

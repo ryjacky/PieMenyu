@@ -30,6 +30,12 @@ migrate_working_dir/
 .pub-cache/
 .pub/
 /build/
+*/flutter/ephemeral
+**/Flutter/ephemeral/
+**/Pods/
+**/generated_plugin_registrant.cc
+**/generated_plugin_registrant.h
+**/generated_plugins.cmake
 
 # Symbolication related
 app.*.symbols
@@ -41,3 +47,7 @@ app.*.map.json
 /android/app/debug
 /android/app/profile
 /android/app/release
+
+# Xcode-related
+**/dgph
+**/xcuserdata/

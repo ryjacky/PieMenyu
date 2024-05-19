@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:gap/gap.dart';
-import 'package:localization/localization.dart';
+import 'package:easy_localization/easy_localization.dart';
+import 'package:pie_menyu_editor/flutter/navigator.dart';
 import 'package:pie_menyu_editor/view/routes/home/left_panel/create_profile_button.dart';
 import 'package:pie_menyu_editor/view/routes/home/left_panel/profile_list_view.dart';
 import 'package:provider/provider.dart';
 
-import '../../settings/settings_page.dart';
+import '../../settings_page/settings_page.dart';
 import '../home_page_view_model.dart';
 
 class LeftPanel extends StatefulWidget {
@@ -32,7 +33,7 @@ class _LeftPanelState extends State<LeftPanel> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
-                "title-profiles".i18n(),
+                "title-profiles".tr(),
                 textAlign: TextAlign.center,
                 style: Theme.of(context).textTheme.displayLarge,
               ),
@@ -48,7 +49,7 @@ class _LeftPanelState extends State<LeftPanel> {
             children: [
               ElevatedButton.icon(
                 onPressed: () async {
-                  await Navigator.of(context).push(
+                  await Navigator.of(context).pushAndClearSnackBar(
                     MaterialPageRoute(
                       builder: (context) => const SettingsPage(),
                     ),
@@ -57,7 +58,7 @@ class _LeftPanelState extends State<LeftPanel> {
                   // Update home page after settings page is closed. (e.g. import data)
                   homePageViewModel.updateState();
                 },
-                label: Text("button-settings".i18n()),
+                label: Text("button-settings".tr()),
                 icon: const FaIcon(Icons.settings, size: 24),
               )
             ],

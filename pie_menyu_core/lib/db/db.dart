@@ -3,7 +3,6 @@ library pie_menyu_core;
 import 'dart:developer';
 import 'dart:io';
 
-import 'package:hotkey_manager/hotkey_manager.dart';
 import 'package:isar/isar.dart';
 import 'package:pie_menyu_core/db/profile_exe.dart';
 import 'package:pie_menyu_core/widgets/pieMenuView/pie_menu_state.dart';
@@ -32,12 +31,14 @@ class Database {
         ], directory: dir.path),
         _dbPath = dir.path;
 
-  initialize(Directory dbPath) async {
-    // Create initial record if not existed
+  /// Initialize the database with default profile if not existed.
+  Future<void> initialize() async {
     final defaultProf = Profile(name: 'Default Profile');
     final defaultProfExe = ProfileExe(path: "global")
       ..profile.value = defaultProf;
-    if (await _isar.profiles.count() == 0) {
+
+    if (await _isar.profiles.filter().nameEqualTo(defaultProf.name).count() ==
+        0) {
       await _isar.writeTxn(() async {
         await _isar.profileExes.put(defaultProfExe);
         await _isar.profiles.put(defaultProf);
@@ -46,10 +47,16 @@ class Database {
     }
   }
 
-  close() async {
-    await _isar.close();
+  /// Releases an Isar instance.
+  /// Returns whether the instance was actually closed.
+  close({bool deleteFromDisk = false}) async {
+    await _isar.close(deleteFromDisk: deleteFromDisk);
   }
 
+  /// Retrieves a list of [Profile] objects from the Isar database.
+  /// This function fetches profiles from the Isar database asynchronously.
+  /// You can optionally provide a list of [ids] to retrieve specific profiles.
+  /// If no [ids] are provided, all profiles are fetched from the database.
   Future<List<Profile>> getProfiles({List<int> ids = const <int>[]}) async {
     if (ids.isEmpty) {
       return _isar.profiles.where().findAll();
@@ -57,6 +64,12 @@ class Database {
     return (await _isar.profiles.getAll(ids)).whereType<Profile>().toList();
   }
 
+  /// Retrieves a single [Profile] object associated with a given executable path.
+
+  /// This function searches the database for a profile associated
+  /// with the provided [path].
+
+  /// If no profile is found, it returns [null].
   Future<Profile?> getProfileByExe(String path) async {
     ProfileExe? profileExe =
         await _isar.profileExes.where().pathEqualTo(path).findFirst();
@@ -69,50 +82,32 @@ class Database {
     return profileExe.profile.value;
   }
 
-  Future<List<HotKey>> getAllHotkeys() async {
-    final List<HotKey> hotkeys = [];
+  /// Retrieves a list of all enabled pie menu hotkeys from the database.
+
+  /// This function fetches all enabled pie menu hotkeys asynchronously.
+
+  /// Returns a `Future<List<PieMenuHotkey>>` containing a list of all enabled pie menu hotkeys.
+  Future<List<PieMenuHotkey>> getAllHotkeys() async {
+    final List<PieMenuHotkey> hotkeys = [];
 
     final List<Profile> profiles =
         await _isar.profiles.where().filter().enabledEqualTo(true).findAll();
+
     for (Profile profile in profiles) {
-      for (HotkeyToPieMenuId htpm in profile.hotkeyToPieMenuIdList) {
-        hotkeys.add(HotKey(htpm.keyCode, modifiers: htpm.keyModifiers));
-      }
+      hotkeys.addAll(profile.pieMenuHotkeys);
     }
 
     return hotkeys;
   }
 
-  Future<Map<String, List<HotKey>>> getExeToHotkeyMap() async {
-    final Map<String, List<HotKey>> exeToHotkeyMap = {};
+  /// Saves the current state of the pie menu to the Isar database asynchronously.
 
-    final List<ProfileExe> profileExes =
-        await _isar.profileExes.where().findAll();
-    for (ProfileExe profileExe in profileExes) {
-      await profileExe.profile.load();
-      final Profile? profile = profileExe.profile.value;
-
-      if (profile == null) {
-        log("Profile not found, id: ${profileExe.profile}");
-        continue;
-      }
-
-      final List<HotKey> hotkeys = [];
-      for (HotkeyToPieMenuId hotkeyToPieMenuId
-          in profile.hotkeyToPieMenuIdList) {
-        hotkeys.add(HotKey(hotkeyToPieMenuId.keyCode,
-            modifiers: hotkeyToPieMenuId.keyModifiers,
-            scope: HotKeyScope.system));
-      }
-
-      exeToHotkeyMap[profileExe.path] = hotkeys;
-    }
-
-    return exeToHotkeyMap;
-  }
-
+  /// This function takes a [PieMenuState] object as input and saves it to the database.
+  /// New PieItem or PieMenu will be added if they does not exist. Otherwise,
+  /// they will be updated.
   save(PieMenuState state) async {
-    final pieItems = state.pieItemInstances.map((e) {
+    log("Saving pie menu state", name: "db.dart save()");
+    final pieItems = state.pieItemDelegates.map((e) {
       if (e.pieItem != null && e.pieItem!.id < 0) {
         e.pieItem!.id = Isar.autoIncrement;
       }
@@ -120,13 +115,20 @@ class Database {
     }).whereType<PieItem>();
 
     await putPieItems(pieItems.toList());
-    for (PieItemInstance pieItemInstance in state.pieItemInstances) {
+    for (PieItemDelegate pieItemInstance in state.pieItemDelegates) {
       pieItemInstance.pieItemId = pieItemInstance.pieItem!.id;
     }
 
     await putPieMenu(state.pieMenu);
   }
 
+
+  /// Links a profile to an executable path in the Isar database asynchronously.
+
+  /// This function takes a [Profile] object and an executable path ([path]) as input.
+  /// It attempts to find an existing [ProfileExe] object associated with the path.
+
+  /// * Replaces the original exe path to the new [path]
   Future<void> linkProfileToExe(Profile profile, String path) async {
     ProfileExe? profileExe =
         await _isar.profileExes.where().pathEqualTo(path).findFirst();
@@ -140,6 +142,12 @@ class Database {
     });
   }
 
+  /// Retrieves a list of [PieMenu] objects from the database asynchronously.
+
+  /// This function fetches pie menus from the database.
+  /// You can optionally provide a list of [ids] to retrieve specific menus.
+
+  /// If no [ids] are provided, all pie menus are fetched from the database.
   Future<List<PieMenu>> getPieMenus({List<int> ids = const <int>[]}) async {
     if (ids.isEmpty) {
       return _isar.pieMenus.where().findAll();
@@ -147,6 +155,12 @@ class Database {
     return (await _isar.pieMenus.getAll(ids)).whereType<PieMenu>().toList();
   }
 
+  /// Retrieves a list of [PieItem] objects from the database asynchronously.
+
+  /// This function fetches pie items from the database.
+  /// You can optionally provide a list of [ids] to retrieve specific items.
+
+  /// If no [ids] are provided, all pie items are fetched from the database.
   Future<List<PieItem>> getPieItems({List<int> ids = const <int>[]}) async {
     if (ids.isEmpty) {
       return _isar.pieItems.where().findAll();
@@ -216,6 +230,7 @@ class Database {
 
   Future<void> updateProfileToPieMenuLinks(Profile profile) async {
     await _isar.writeTxn(() async {
+      await _isar.profiles.put(profile);
       await profile.pieMenus.save();
     });
   }
@@ -253,7 +268,7 @@ class Database {
       return;
     }
 
-    pieMenu.pieItemInstances.add(PieItemInstance(pieItemId: pieItem.id));
+    pieMenu.pieItemInstances.add(PieItemDelegate(pieItemId: pieItem.id));
     await _isar.writeTxn(() async {
       await _isar.pieMenus.put(pieMenu);
     });
@@ -262,14 +277,20 @@ class Database {
   @Deprecated("Use createPieItemIn instead in the future")
   addPieItemsToPieMenu(List<PieItem> pieItems, PieMenu pieMenu) async {
     pieMenu.pieItemInstances
-        .addAll(pieItems.map((e) => PieItemInstance(pieItemId: e.id)));
+        .addAll(pieItems.map((e) => PieItemDelegate(pieItemId: e.id)));
     await _isar.writeTxn(() async {
       await _isar.pieMenus.put(pieMenu);
     });
   }
 
-  Future<void> loadPieItemInstance(PieItemInstance pieItemInstance) async {
+  Future<void> loadPieItemInstance(PieItemDelegate pieItemInstance) async {
     pieItemInstance.pieItem =
         await _isar.pieItems.get(pieItemInstance.pieItemId);
+  }
+
+  Future<void> deleteProfile(Profile profile) async {
+    await _isar.writeTxn(() async {
+      await _isar.profiles.delete(profile.id);
+    });
   }
 }

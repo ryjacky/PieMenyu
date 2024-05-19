@@ -42,3 +42,6 @@ app.*.map.json
 /android/app/debug
 /android/app/profile
 /android/app/release
+/default.isar
+/default.isar-lck
+/isar.dll

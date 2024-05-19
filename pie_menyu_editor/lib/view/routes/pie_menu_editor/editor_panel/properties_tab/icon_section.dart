@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:localization/localization.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:pie_menyu_core/db/pie_menu.dart';
 import 'package:pie_menyu_core/widgets/pieMenuView/pie_menu_state.dart';
 import 'package:pie_menyu_editor/view/widgets/collapasable_color_picker.dart';
@@ -12,15 +12,16 @@ class IconSection extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final state = context.read<PieMenuState>();
-    final icon = context.select<PieMenuState, PieMenuIcon>((value) => value.icon);
+    final icon =
+        context.select<PieMenuState, PieMenuIconStyle>((value) => value.icon);
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text("label-icon".i18n(),
+        Text("label-icon".tr(),
             style: const TextStyle(fontWeight: FontWeight.bold)),
         CollapsableColorPicker(
-          title: Text("label-icon-color".i18n()),
+          title: Text("label-icon-color".tr()),
           color: Color(icon.color),
           onColorChanged: (color) {
             state.updatePieMenu(icon: icon..color = color.value);
@@ -29,8 +30,20 @@ class IconSection extends StatelessWidget {
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            const Padding(
-              padding: EdgeInsets.fromLTRB(42, 0, 0, 0),
+            Padding(
+              padding: const EdgeInsets.fromLTRB(8, 0, 0, 0),
+              child: Tooltip(
+                preferBelow: false,
+                message: "tooltip-font-icon-size-hint".tr(),
+                child: const Icon(
+                  Icons.help_outline,
+                  size: 16,
+                  color: Colors.grey,
+                ),
+              ),
+            ),
+            const SizedBox(
+              width: 160,
               child: Text("Icon Size"),
             ),
             SizedBox(

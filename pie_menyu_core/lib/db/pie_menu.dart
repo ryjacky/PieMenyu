@@ -17,18 +17,32 @@ class PieMenuColors {
   PieMenuColors.from(PieMenuColors colors)
       : primary = colors.primary,
         secondary = colors.secondary;
+
+  @override
+  operator ==(Object other) {
+    return other is PieMenuColors &&
+        primary == other.primary &&
+        secondary == other.secondary;
+  }
 }
 
 @embedded
-class PieMenuIcon {
+class PieMenuIconStyle {
   int color = 0xFFFFFFFF;
   double size = 32;
 
-  PieMenuIcon();
+  PieMenuIconStyle();
 
-  PieMenuIcon.from(PieMenuIcon icon)
+  PieMenuIconStyle.from(PieMenuIconStyle icon)
       : color = icon.color,
         size = icon.size;
+
+  @override
+  operator ==(Object other) {
+    return other is PieMenuIconStyle &&
+        color == other.color &&
+        size == other.size;
+  }
 }
 
 @embedded
@@ -43,6 +57,14 @@ class PieMenuFont {
       : color = font.color,
         size = font.size,
         fontFamily = font.fontFamily;
+
+  @override
+  operator ==(Object other) {
+    return other is PieMenuFont &&
+        color == other.color &&
+        size == other.size &&
+        fontFamily == other.fontFamily;
+  }
 }
 
 enum ActivationMode { onRelease, onHover, onClick }
@@ -56,13 +78,22 @@ class PieMenuBehavior {
   @enumerated
   ActivationMode subMenuActivationMode = ActivationMode.onHover;
 
-
   PieMenuBehavior();
 
   PieMenuBehavior.from(PieMenuBehavior behavior)
       : escapeRadius = behavior.escapeRadius,
         openInScreenCenter = behavior.openInScreenCenter,
-        activationMode = behavior.activationMode;
+        activationMode = behavior.activationMode,
+        subMenuActivationMode = behavior.subMenuActivationMode;
+
+  @override
+  operator ==(Object other) {
+    return other is PieMenuBehavior &&
+        escapeRadius == other.escapeRadius &&
+        openInScreenCenter == other.openInScreenCenter &&
+        activationMode == other.activationMode &&
+        subMenuActivationMode == other.subMenuActivationMode;
+  }
 }
 
 @embedded
@@ -70,7 +101,7 @@ class PieMenuShape {
   double centerRadius = 20;
   double centerThickness = 10;
   double pieItemRoundness = 7;
-  double pieItemSpread = 150;
+  double pieItemSpread = 65;
 
   PieMenuShape();
 
@@ -79,10 +110,19 @@ class PieMenuShape {
         centerThickness = shape.centerThickness,
         pieItemRoundness = shape.pieItemRoundness,
         pieItemSpread = shape.pieItemSpread;
+
+  @override
+  operator ==(Object other) {
+    return other is PieMenuShape &&
+        centerRadius == other.centerRadius &&
+        centerThickness == other.centerThickness &&
+        pieItemRoundness == other.pieItemRoundness &&
+        pieItemSpread == other.pieItemSpread;
+  }
 }
 
 @embedded
-class PieItemInstance {
+class PieItemDelegate {
   String keyCode = "";
   int pieItemId;
 
@@ -93,11 +133,11 @@ class PieItemInstance {
   @ignore
   PieItem? pieItem;
 
-  PieItemInstance({this.keyCode = "", this.pieItemId = 0});
+  PieItemDelegate({this.keyCode = "", this.pieItemId = 0});
 
-  factory PieItemInstance.from(PieItemInstance info) {
+  factory PieItemDelegate.from(PieItemDelegate info) {
     final instance =
-        PieItemInstance(keyCode: info.keyCode, pieItemId: info.pieItemId);
+        PieItemDelegate(keyCode: info.keyCode, pieItemId: info.pieItemId);
     if (info.pieItem != null) {
       instance.pieItem = PieItem.from(info.pieItem!);
     }
@@ -113,12 +153,12 @@ class PieMenu {
   bool enabled = true;
 
   PieMenuColors colors = PieMenuColors();
-  PieMenuIcon icon = PieMenuIcon();
+  PieMenuIconStyle iconStyle = PieMenuIconStyle();
   PieMenuFont font = PieMenuFont();
   PieMenuBehavior behavior = PieMenuBehavior();
   PieMenuShape shape = PieMenuShape();
 
-  List<PieItemInstance> pieItemInstances = [];
+  List<PieItemDelegate> pieItemInstances = [];
 
   @Backlink(to: 'pieMenus')
   IsarLinks<Profile> profiles = IsarLinks<Profile>();
@@ -128,11 +168,11 @@ class PieMenu {
   PieMenu.from(PieMenu pieMenu)
       : id = pieMenu.id,
         colors = PieMenuColors.from(pieMenu.colors),
-        icon = PieMenuIcon.from(pieMenu.icon),
+        iconStyle = PieMenuIconStyle.from(pieMenu.iconStyle),
         font = PieMenuFont.from(pieMenu.font),
         behavior = PieMenuBehavior.from(pieMenu.behavior),
         shape = PieMenuShape.from(pieMenu.shape),
         pieItemInstances = pieMenu.pieItemInstances
-            .map((e) => PieItemInstance.from(e))
+            .map((e) => PieItemDelegate.from(e))
             .toList();
 }

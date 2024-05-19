@@ -74,6 +74,11 @@ class Win32Window {
  private:
   friend class WindowClassRegistrar;
 
+  // Dispatches link if any.
+  // This method enables our app to be with a single instance too.
+  // This is mandatory if you want to catch further links in same app.
+  bool SendAppLinkToInstance(const std::wstring& title);
+
   // OS callback called by message pump. Handles the WM_NCCREATE message which
   // is passed when the non-client area is being created and enables automatic
   // non-client DPI scaling so that the non-client area automatically

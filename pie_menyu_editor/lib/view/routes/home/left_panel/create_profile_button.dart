@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:localization/localization.dart';
-import 'package:pie_menyu_editor/view/widgets/primary_button.dart';
+import 'package:easy_localization/easy_localization.dart';
+import 'package:pie_menyu_editor/view/widgets/flat_button.dart';
 import 'package:provider/provider.dart';
 
 import '../home_page_view_model.dart';
@@ -12,10 +12,10 @@ class CreateProfileButton extends StatelessWidget {
   Widget build(BuildContext context) {
     final creatingProfile = context
         .select<HomePageViewModel, bool>((value) => value.creatingProfile);
-    return PrimaryButton(
+    return FlatButton(
       onPressed: context.read<HomePageViewModel>().toggleCreateProfileMode,
       icon: creatingProfile ? Icons.arrow_back : Icons.create,
-      label: Text((creatingProfile ? "button-back" : "button-create").i18n()),
+      label: Text((creatingProfile ? "button-back" : "button-create").tr()),
     );
   }
 }

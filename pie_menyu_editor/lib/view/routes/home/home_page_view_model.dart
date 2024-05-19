@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:developer';
 
 import 'package:flutter/cupertino.dart';
@@ -6,6 +7,7 @@ import 'package:pie_menyu_core/db/db.dart';
 import 'package:pie_menyu_core/db/pie_item.dart';
 import 'package:pie_menyu_core/db/pie_menu.dart';
 import 'package:pie_menyu_core/db/profile.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class HomePageViewModel extends ChangeNotifier {
   List<Profile> profiles = [];
@@ -13,11 +15,36 @@ class HomePageViewModel extends ChangeNotifier {
 
   bool _creatingProfile = false;
 
+  bool _draggingPieMenu = false;
+
+  bool _pieMenyuStatus = true;
+
+  bool get pieMenyuStatus => _pieMenyuStatus;
+
+  set pieMenyuStatus(bool value) {
+    _pieMenyuStatus = value;
+
+    launchUrl(Uri.parse("piemenyu://${value ? "start" : "stop"}"));
+    notifyListeners();
+  }
+
+  bool get draggingPieMenu => _draggingPieMenu;
+
+  set draggingPieMenu(bool value) {
+    _draggingPieMenu = value;
+    notifyListeners();
+  }
+
   get creatingProfile => _creatingProfile;
 
   Profile _activeProfile = Profile(name: "Loading...");
 
   Profile get activeProfile => _activeProfile;
+
+  Map<PieMenu, Profile> _toDelete = {};
+
+  Map<PieMenu, Profile> get toDelete => _toDelete;
+  Timer? _toDeleteTimer;
 
   set activeProfile(Profile profile) {
     _activeProfile = profile;
@@ -25,6 +52,7 @@ class HomePageViewModel extends ChangeNotifier {
   }
 
   final Database _db;
+
   HomePageViewModel(this._db) {
     updateState();
   }
@@ -35,21 +63,29 @@ class HomePageViewModel extends ChangeNotifier {
     profiles = await _db.getProfiles();
     pieMenus = await _db.getPieMenus();
 
-    if (activeProfile.id == Isar.autoIncrement) {
-      activeProfile = profiles.firstOrNull ?? Profile(name: "Loading...");
-    }
+    activeProfile = profiles.firstWhere(
+      (element) => element.id == activeProfile.id,
+      orElse: () => profiles.firstOrNull ?? Profile(name: "Loading..."),
+    );
+
+    pieMenyuStatus = false;
     notifyListeners();
   }
 
   Iterable<PieMenu> getPieMenusOf(Profile profile) {
-    return pieMenus.where((element) => element.profiles
-        .where((element) => element.id == profile.id)
-        .isNotEmpty);
+    return pieMenus.where((pieMenu) =>
+        pieMenu.profiles
+            .where((thisProfile) => thisProfile.id == profile.id)
+            .isNotEmpty &&
+        !toDelete.containsKey(pieMenu));
   }
 
   Iterable<PieMenu> getAllPieMenusExceptIn(Profile profile) {
-    return pieMenus.where((element) =>
-        element.profiles.where((element) => element.id == profile.id).isEmpty);
+    return pieMenus.where((pieMenu) =>
+        pieMenu.profiles
+            .where((thisProfile) => thisProfile.id == profile.id)
+            .isEmpty &&
+        !toDelete.containsKey(pieMenu));
   }
 
   Future<void> createProfile(
@@ -73,17 +109,39 @@ class HomePageViewModel extends ChangeNotifier {
     await updateState();
   }
 
-  Future<void> removePieMenuFrom(Profile profile, PieMenu pieMenu) async {
-    profile.pieMenus.remove(pieMenu);
-    await _db.updateProfileToPieMenuLinks(profile);
-    await updateState();
+  Future<void> removePieMenuFrom(Profile profile, PieMenu pieMenu,
+      {lazy = true}) async {
+    _toDelete[pieMenu] = profile;
+    _toDeleteTimer = Timer(Duration(seconds: lazy ? 5 : 0), () async {
+      final newLinks = profile.pieMenuHotkeys.toList();
+      for (final toDeleteEntry in _toDelete.entries) {
+        profile.pieMenus.remove(toDeleteEntry.key);
+        newLinks.removeWhere(
+            (element) => element.pieMenuId == toDeleteEntry.key.id);
+      }
+      profile.pieMenuHotkeys = newLinks;
+      await _db.updateProfileToPieMenuLinks(profile);
+      await updateState();
+      _toDelete.remove(pieMenu);
+    });
+
+    pieMenyuStatus = false;
+    notifyListeners();
+  }
+
+  cancelDelete(PieMenu pieMenu) {
+    _toDeleteTimer?.cancel();
+    _toDelete.remove(pieMenu);
+    notifyListeners();
   }
 
   void makePieMenuUniqueIn(Profile profile, PieMenu pieMenu) async {
-    await removePieMenuFrom(profile, pieMenu);
-    pieMenu.id = Isar.autoIncrement;
-    await _db.putPieMenu(pieMenu);
-    await addPieMenuTo(profile, pieMenu);
+    await removePieMenuFrom(profile, pieMenu, lazy: false);
+    PieMenu newPieMenu = PieMenu.from(pieMenu);
+    newPieMenu.id = Isar.autoIncrement;
+
+    await _db.putPieMenu(newPieMenu);
+    await addPieMenuTo(profile, newPieMenu);
   }
 
   void createPieMenuIn(Profile profile) async {
@@ -129,4 +187,8 @@ class HomePageViewModel extends ChangeNotifier {
     updateState();
   }
 
+  Future<void> deleteProfile(Profile profile) async {
+    await _db.deleteProfile(profile);
+    updateState();
+  }
 }

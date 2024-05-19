@@ -1,18 +1,44 @@
 library pie_menyu_core;
+import 'dart:developer';
 import 'dart:io';
-import 'dart:math';
 
-import 'package:flutter_auto_gui/flutter_auto_gui.dart';
+import 'package:ffi/ffi.dart';
+import 'dart:ffi';
 import 'package:pie_menyu_core/db/pie_item_task.dart';
 import 'package:pie_menyu_core/executor/executable.dart';
 import 'package:win32/win32.dart';
+
+enum MouseButton { right, left, middle }
+
+extension _MouseButtonFlag on MouseButton {
+  int get downFlag {
+    switch (this) {
+      case MouseButton.right:
+        return MOUSEEVENTF_RIGHTDOWN;
+      case MouseButton.left:
+        return MOUSEEVENTF_LEFTDOWN;
+      case MouseButton.middle:
+        return MOUSEEVENTF_MIDDLEDOWN;
+    }
+  }
+  int get upFlag {
+    switch (this) {
+      case MouseButton.right:
+        return MOUSEEVENTF_RIGHTUP;
+      case MouseButton.left:
+        return MOUSEEVENTF_LEFTUP;
+      case MouseButton.middle:
+        return MOUSEEVENTF_MIDDLEUP;
+    }
+  }
+}
 
 class MouseClickTask extends PieItemTask with Executable {
   MouseClickTask() : super(taskType: PieItemTaskType.mouseClick){
     _fieldCheck();
   }
 
-  MouseClickTask.from(PieItemTask pieItemTask) : super.from(pieItemTask){
+  MouseClickTask.from(super.pieItemTask) : super.from(){
     _fieldCheck();
   }
 
@@ -53,14 +79,29 @@ class MouseClickTask extends PieItemTask with Executable {
     return int.tryParse(arguments[2]) ?? 0;
   }
 
+  sendClickWindows(){
+    SetCursorPos(x, y);
+
+    final mouse = calloc<INPUT>();
+    mouse.ref.type = INPUT_MOUSE;
+    mouse.ref.mi.dwFlags = mouseButton.downFlag;
+    var result = SendInput(1, mouse, sizeOf<INPUT>());
+    if (result != TRUE) log('Error: ${GetLastError()}');
+
+    mouse.ref.mi.dwFlags = mouseButton.upFlag;
+    result = SendInput(1, mouse, sizeOf<INPUT>());
+    if (result != TRUE) log('Error: ${GetLastError()}');
+
+    free(mouse);
+  }
+
   @override
   Future<void> execute() async {
     if (Platform.isWindows) {
-      SetCursorPos(x, y);
-    } else {
-      await FlutterAutoGUI.moveTo(point: Point(x, y));
+      sendClickWindows();
+    } else if (Platform.isMacOS) {
+    } else if (Platform.isLinux) {
+
     }
-    await Future.delayed(const Duration(milliseconds: 10));
-    await FlutterAutoGUI.click(button: mouseButton);
   }
 }

@@ -55,7 +55,7 @@ const PieMenuSchema = CollectionSchema(
       id: 6,
       name: r'pieItemInstances',
       type: IsarType.objectList,
-      target: r'PieItemInstance',
+      target: r'PieItemDelegate',
     ),
     r'shape': PropertySchema(
       id: 7,
@@ -85,7 +85,7 @@ const PieMenuSchema = CollectionSchema(
     r'PieMenuFont': PieMenuFontSchema,
     r'PieMenuBehavior': PieMenuBehaviorSchema,
     r'PieMenuShape': PieMenuShapeSchema,
-    r'PieItemInstance': PieItemInstanceSchema
+    r'PieItemDelegate': PieItemDelegateSchema
   },
   getId: _pieMenuGetId,
   getLinks: _pieMenuGetLinks,
@@ -110,15 +110,15 @@ int _pieMenuEstimateSize(
           object.font, allOffsets[PieMenuFont]!, allOffsets);
   bytesCount += 3 +
       PieMenuIconSchema.estimateSize(
-          object.icon, allOffsets[PieMenuIcon]!, allOffsets);
+          object.iconStyle, allOffsets[PieMenuIconStyle]!, allOffsets);
   bytesCount += 3 + object.name.length * 3;
   bytesCount += 3 + object.pieItemInstances.length * 3;
   {
-    final offsets = allOffsets[PieItemInstance]!;
+    final offsets = allOffsets[PieItemDelegate]!;
     for (var i = 0; i < object.pieItemInstances.length; i++) {
       final value = object.pieItemInstances[i];
       bytesCount +=
-          PieItemInstanceSchema.estimateSize(value, offsets, allOffsets);
+          PieItemDelegateSchema.estimateSize(value, offsets, allOffsets);
     }
   }
   bytesCount += 3 +
@@ -152,17 +152,17 @@ void _pieMenuSerialize(
     PieMenuFontSchema.serialize,
     object.font,
   );
-  writer.writeObject<PieMenuIcon>(
+  writer.writeObject<PieMenuIconStyle>(
     offsets[4],
     allOffsets,
     PieMenuIconSchema.serialize,
-    object.icon,
+    object.iconStyle,
   );
   writer.writeString(offsets[5], object.name);
-  writer.writeObjectList<PieItemInstance>(
+  writer.writeObjectList<PieItemDelegate>(
     offsets[6],
     allOffsets,
-    PieItemInstanceSchema.serialize,
+    PieItemDelegateSchema.serialize,
     object.pieItemInstances,
   );
   writer.writeObject<PieMenuShape>(
@@ -199,19 +199,19 @@ PieMenu _pieMenuDeserialize(
         allOffsets,
       ) ??
       PieMenuFont();
-  object.icon = reader.readObjectOrNull<PieMenuIcon>(
+  object.iconStyle = reader.readObjectOrNull<PieMenuIconStyle>(
         offsets[4],
         PieMenuIconSchema.deserialize,
         allOffsets,
       ) ??
-      PieMenuIcon();
+      PieMenuIconStyle();
   object.id = id;
   object.name = reader.readString(offsets[5]);
-  object.pieItemInstances = reader.readObjectList<PieItemInstance>(
+  object.pieItemInstances = reader.readObjectList<PieItemDelegate>(
         offsets[6],
-        PieItemInstanceSchema.deserialize,
+        PieItemDelegateSchema.deserialize,
         allOffsets,
-        PieItemInstance(),
+        PieItemDelegate(),
       ) ??
       [];
   object.shape = reader.readObjectOrNull<PieMenuShape>(
@@ -254,20 +254,20 @@ P _pieMenuDeserializeProp<P>(
           ) ??
           PieMenuFont()) as P;
     case 4:
-      return (reader.readObjectOrNull<PieMenuIcon>(
+      return (reader.readObjectOrNull<PieMenuIconStyle>(
             offset,
             PieMenuIconSchema.deserialize,
             allOffsets,
           ) ??
-          PieMenuIcon()) as P;
+          PieMenuIconStyle()) as P;
     case 5:
       return (reader.readString(offset)) as P;
     case 6:
-      return (reader.readObjectList<PieItemInstance>(
+      return (reader.readObjectList<PieItemDelegate>(
             offset,
-            PieItemInstanceSchema.deserialize,
+            PieItemDelegateSchema.deserialize,
             allOffsets,
-            PieItemInstance(),
+            PieItemDelegate(),
           ) ??
           []) as P;
     case 7:
@@ -678,14 +678,14 @@ extension PieMenuQueryObject
   }
 
   QueryBuilder<PieMenu, PieMenu, QAfterFilterCondition> icon(
-      FilterQuery<PieMenuIcon> q) {
+      FilterQuery<PieMenuIconStyle> q) {
     return QueryBuilder.apply(this, (query) {
       return query.object(q, r'icon');
     });
   }
 
   QueryBuilder<PieMenu, PieMenu, QAfterFilterCondition> pieItemInstancesElement(
-      FilterQuery<PieItemInstance> q) {
+      FilterQuery<PieItemDelegate> q) {
     return QueryBuilder.apply(this, (query) {
       return query.object(q, r'pieItemInstances');
     });
@@ -872,7 +872,7 @@ extension PieMenuQueryProperty
     });
   }
 
-  QueryBuilder<PieMenu, PieMenuIcon, QQueryOperations> iconProperty() {
+  QueryBuilder<PieMenu, PieMenuIconStyle, QQueryOperations> iconProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'icon');
     });
@@ -884,7 +884,7 @@ extension PieMenuQueryProperty
     });
   }
 
-  QueryBuilder<PieMenu, List<PieItemInstance>, QQueryOperations>
+  QueryBuilder<PieMenu, List<PieItemDelegate>, QQueryOperations>
       pieItemInstancesProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'pieItemInstances');
@@ -1116,7 +1116,7 @@ const PieMenuIconSchema = Schema(
 );
 
 int _pieMenuIconEstimateSize(
-  PieMenuIcon object,
+  PieMenuIconStyle object,
   List<int> offsets,
   Map<Type, List<int>> allOffsets,
 ) {
@@ -1125,7 +1125,7 @@ int _pieMenuIconEstimateSize(
 }
 
 void _pieMenuIconSerialize(
-  PieMenuIcon object,
+  PieMenuIconStyle object,
   IsarWriter writer,
   List<int> offsets,
   Map<Type, List<int>> allOffsets,
@@ -1134,13 +1134,13 @@ void _pieMenuIconSerialize(
   writer.writeDouble(offsets[1], object.size);
 }
 
-PieMenuIcon _pieMenuIconDeserialize(
+PieMenuIconStyle _pieMenuIconDeserialize(
   Id id,
   IsarReader reader,
   List<int> offsets,
   Map<Type, List<int>> allOffsets,
 ) {
-  final object = PieMenuIcon();
+  final object = PieMenuIconStyle();
   object.color = reader.readLong(offsets[0]);
   object.size = reader.readDouble(offsets[1]);
   return object;
@@ -1163,8 +1163,8 @@ P _pieMenuIconDeserializeProp<P>(
 }
 
 extension PieMenuIconQueryFilter
-    on QueryBuilder<PieMenuIcon, PieMenuIcon, QFilterCondition> {
-  QueryBuilder<PieMenuIcon, PieMenuIcon, QAfterFilterCondition> colorEqualTo(
+    on QueryBuilder<PieMenuIconStyle, PieMenuIconStyle, QFilterCondition> {
+  QueryBuilder<PieMenuIconStyle, PieMenuIconStyle, QAfterFilterCondition> colorEqualTo(
       int value) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.equalTo(
@@ -1174,7 +1174,7 @@ extension PieMenuIconQueryFilter
     });
   }
 
-  QueryBuilder<PieMenuIcon, PieMenuIcon, QAfterFilterCondition>
+  QueryBuilder<PieMenuIconStyle, PieMenuIconStyle, QAfterFilterCondition>
       colorGreaterThan(
     int value, {
     bool include = false,
@@ -1188,7 +1188,7 @@ extension PieMenuIconQueryFilter
     });
   }
 
-  QueryBuilder<PieMenuIcon, PieMenuIcon, QAfterFilterCondition> colorLessThan(
+  QueryBuilder<PieMenuIconStyle, PieMenuIconStyle, QAfterFilterCondition> colorLessThan(
     int value, {
     bool include = false,
   }) {
@@ -1201,7 +1201,7 @@ extension PieMenuIconQueryFilter
     });
   }
 
-  QueryBuilder<PieMenuIcon, PieMenuIcon, QAfterFilterCondition> colorBetween(
+  QueryBuilder<PieMenuIconStyle, PieMenuIconStyle, QAfterFilterCondition> colorBetween(
     int lower,
     int upper, {
     bool includeLower = true,
@@ -1218,7 +1218,7 @@ extension PieMenuIconQueryFilter
     });
   }
 
-  QueryBuilder<PieMenuIcon, PieMenuIcon, QAfterFilterCondition> sizeEqualTo(
+  QueryBuilder<PieMenuIconStyle, PieMenuIconStyle, QAfterFilterCondition> sizeEqualTo(
     double value, {
     double epsilon = Query.epsilon,
   }) {
@@ -1231,7 +1231,7 @@ extension PieMenuIconQueryFilter
     });
   }
 
-  QueryBuilder<PieMenuIcon, PieMenuIcon, QAfterFilterCondition> sizeGreaterThan(
+  QueryBuilder<PieMenuIconStyle, PieMenuIconStyle, QAfterFilterCondition> sizeGreaterThan(
     double value, {
     bool include = false,
     double epsilon = Query.epsilon,
@@ -1246,7 +1246,7 @@ extension PieMenuIconQueryFilter
     });
   }
 
-  QueryBuilder<PieMenuIcon, PieMenuIcon, QAfterFilterCondition> sizeLessThan(
+  QueryBuilder<PieMenuIconStyle, PieMenuIconStyle, QAfterFilterCondition> sizeLessThan(
     double value, {
     bool include = false,
     double epsilon = Query.epsilon,
@@ -1261,7 +1261,7 @@ extension PieMenuIconQueryFilter
     });
   }
 
-  QueryBuilder<PieMenuIcon, PieMenuIcon, QAfterFilterCondition> sizeBetween(
+  QueryBuilder<PieMenuIconStyle, PieMenuIconStyle, QAfterFilterCondition> sizeBetween(
     double lower,
     double upper, {
     bool includeLower = true,
@@ -1282,7 +1282,7 @@ extension PieMenuIconQueryFilter
 }
 
 extension PieMenuIconQueryObject
-    on QueryBuilder<PieMenuIcon, PieMenuIcon, QFilterCondition> {}
+    on QueryBuilder<PieMenuIconStyle, PieMenuIconStyle, QFilterCondition> {}
 
 // coverage:ignore-file
 // ignore_for_file: duplicate_ignore, non_constant_identifier_names, constant_identifier_names, invalid_use_of_protected_member, unnecessary_cast, prefer_const_constructors, lines_longer_than_80_chars, require_trailing_commas, inference_failure_on_function_invocation, unnecessary_parenthesis, unnecessary_raw_strings, unnecessary_null_checks, join_return_with_assignment, prefer_final_locals, avoid_js_rounded_ints, avoid_positional_boolean_parameters, always_specify_types
@@ -2300,15 +2300,15 @@ extension PieMenuShapeQueryObject
 // coverage:ignore-file
 // ignore_for_file: duplicate_ignore, non_constant_identifier_names, constant_identifier_names, invalid_use_of_protected_member, unnecessary_cast, prefer_const_constructors, lines_longer_than_80_chars, require_trailing_commas, inference_failure_on_function_invocation, unnecessary_parenthesis, unnecessary_raw_strings, unnecessary_null_checks, join_return_with_assignment, prefer_final_locals, avoid_js_rounded_ints, avoid_positional_boolean_parameters, always_specify_types
 
-const PieItemInstanceSchema = Schema(
-  name: r'PieItemInstance',
-  id: -3357939713037499918,
+const PieItemDelegateSchema = Schema(
+  name: r'PieItemDelegate',
+  id: 1829940434680981578,
   properties: {
     r'activationMode': PropertySchema(
       id: 0,
       name: r'activationMode',
       type: IsarType.byte,
-      enumMap: _PieItemInstanceactivationModeEnumValueMap,
+      enumMap: _PieItemDelegateactivationModeEnumValueMap,
     ),
     r'keyCode': PropertySchema(
       id: 1,
@@ -2321,14 +2321,14 @@ const PieItemInstanceSchema = Schema(
       type: IsarType.long,
     )
   },
-  estimateSize: _pieItemInstanceEstimateSize,
-  serialize: _pieItemInstanceSerialize,
-  deserialize: _pieItemInstanceDeserialize,
-  deserializeProp: _pieItemInstanceDeserializeProp,
+  estimateSize: _pieItemDelegateEstimateSize,
+  serialize: _pieItemDelegateSerialize,
+  deserialize: _pieItemDelegateDeserialize,
+  deserializeProp: _pieItemDelegateDeserializeProp,
 );
 
-int _pieItemInstanceEstimateSize(
-  PieItemInstance object,
+int _pieItemDelegateEstimateSize(
+  PieItemDelegate object,
   List<int> offsets,
   Map<Type, List<int>> allOffsets,
 ) {
@@ -2337,8 +2337,8 @@ int _pieItemInstanceEstimateSize(
   return bytesCount;
 }
 
-void _pieItemInstanceSerialize(
-  PieItemInstance object,
+void _pieItemDelegateSerialize(
+  PieItemDelegate object,
   IsarWriter writer,
   List<int> offsets,
   Map<Type, List<int>> allOffsets,
@@ -2348,23 +2348,23 @@ void _pieItemInstanceSerialize(
   writer.writeLong(offsets[2], object.pieItemId);
 }
 
-PieItemInstance _pieItemInstanceDeserialize(
+PieItemDelegate _pieItemDelegateDeserialize(
   Id id,
   IsarReader reader,
   List<int> offsets,
   Map<Type, List<int>> allOffsets,
 ) {
-  final object = PieItemInstance(
+  final object = PieItemDelegate(
     keyCode: reader.readStringOrNull(offsets[1]) ?? "",
     pieItemId: reader.readLongOrNull(offsets[2]) ?? 0,
   );
-  object.activationMode = _PieItemInstanceactivationModeValueEnumMap[
+  object.activationMode = _PieItemDelegateactivationModeValueEnumMap[
           reader.readByteOrNull(offsets[0])] ??
       ActivationMode.onRelease;
   return object;
 }
 
-P _pieItemInstanceDeserializeProp<P>(
+P _pieItemDelegateDeserializeProp<P>(
   IsarReader reader,
   int propertyId,
   int offset,
@@ -2372,7 +2372,7 @@ P _pieItemInstanceDeserializeProp<P>(
 ) {
   switch (propertyId) {
     case 0:
-      return (_PieItemInstanceactivationModeValueEnumMap[
+      return (_PieItemDelegateactivationModeValueEnumMap[
               reader.readByteOrNull(offset)] ??
           ActivationMode.onRelease) as P;
     case 1:
@@ -2384,20 +2384,20 @@ P _pieItemInstanceDeserializeProp<P>(
   }
 }
 
-const _PieItemInstanceactivationModeEnumValueMap = {
+const _PieItemDelegateactivationModeEnumValueMap = {
   'onRelease': 0,
   'onHover': 1,
   'onClick': 2,
 };
-const _PieItemInstanceactivationModeValueEnumMap = {
+const _PieItemDelegateactivationModeValueEnumMap = {
   0: ActivationMode.onRelease,
   1: ActivationMode.onHover,
   2: ActivationMode.onClick,
 };
 
-extension PieItemInstanceQueryFilter
-    on QueryBuilder<PieItemInstance, PieItemInstance, QFilterCondition> {
-  QueryBuilder<PieItemInstance, PieItemInstance, QAfterFilterCondition>
+extension PieItemDelegateQueryFilter
+    on QueryBuilder<PieItemDelegate, PieItemDelegate, QFilterCondition> {
+  QueryBuilder<PieItemDelegate, PieItemDelegate, QAfterFilterCondition>
       activationModeEqualTo(ActivationMode value) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.equalTo(
@@ -2407,7 +2407,7 @@ extension PieItemInstanceQueryFilter
     });
   }
 
-  QueryBuilder<PieItemInstance, PieItemInstance, QAfterFilterCondition>
+  QueryBuilder<PieItemDelegate, PieItemDelegate, QAfterFilterCondition>
       activationModeGreaterThan(
     ActivationMode value, {
     bool include = false,
@@ -2421,7 +2421,7 @@ extension PieItemInstanceQueryFilter
     });
   }
 
-  QueryBuilder<PieItemInstance, PieItemInstance, QAfterFilterCondition>
+  QueryBuilder<PieItemDelegate, PieItemDelegate, QAfterFilterCondition>
       activationModeLessThan(
     ActivationMode value, {
     bool include = false,
@@ -2435,7 +2435,7 @@ extension PieItemInstanceQueryFilter
     });
   }
 
-  QueryBuilder<PieItemInstance, PieItemInstance, QAfterFilterCondition>
+  QueryBuilder<PieItemDelegate, PieItemDelegate, QAfterFilterCondition>
       activationModeBetween(
     ActivationMode lower,
     ActivationMode upper, {
@@ -2453,7 +2453,7 @@ extension PieItemInstanceQueryFilter
     });
   }
 
-  QueryBuilder<PieItemInstance, PieItemInstance, QAfterFilterCondition>
+  QueryBuilder<PieItemDelegate, PieItemDelegate, QAfterFilterCondition>
       keyCodeEqualTo(
     String value, {
     bool caseSensitive = true,
@@ -2467,7 +2467,7 @@ extension PieItemInstanceQueryFilter
     });
   }
 
-  QueryBuilder<PieItemInstance, PieItemInstance, QAfterFilterCondition>
+  QueryBuilder<PieItemDelegate, PieItemDelegate, QAfterFilterCondition>
       keyCodeGreaterThan(
     String value, {
     bool include = false,
@@ -2483,7 +2483,7 @@ extension PieItemInstanceQueryFilter
     });
   }
 
-  QueryBuilder<PieItemInstance, PieItemInstance, QAfterFilterCondition>
+  QueryBuilder<PieItemDelegate, PieItemDelegate, QAfterFilterCondition>
       keyCodeLessThan(
     String value, {
     bool include = false,
@@ -2499,7 +2499,7 @@ extension PieItemInstanceQueryFilter
     });
   }
 
-  QueryBuilder<PieItemInstance, PieItemInstance, QAfterFilterCondition>
+  QueryBuilder<PieItemDelegate, PieItemDelegate, QAfterFilterCondition>
       keyCodeBetween(
     String lower,
     String upper, {
@@ -2519,7 +2519,7 @@ extension PieItemInstanceQueryFilter
     });
   }
 
-  QueryBuilder<PieItemInstance, PieItemInstance, QAfterFilterCondition>
+  QueryBuilder<PieItemDelegate, PieItemDelegate, QAfterFilterCondition>
       keyCodeStartsWith(
     String value, {
     bool caseSensitive = true,
@@ -2533,7 +2533,7 @@ extension PieItemInstanceQueryFilter
     });
   }
 
-  QueryBuilder<PieItemInstance, PieItemInstance, QAfterFilterCondition>
+  QueryBuilder<PieItemDelegate, PieItemDelegate, QAfterFilterCondition>
       keyCodeEndsWith(
     String value, {
     bool caseSensitive = true,
@@ -2547,7 +2547,7 @@ extension PieItemInstanceQueryFilter
     });
   }
 
-  QueryBuilder<PieItemInstance, PieItemInstance, QAfterFilterCondition>
+  QueryBuilder<PieItemDelegate, PieItemDelegate, QAfterFilterCondition>
       keyCodeContains(String value, {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.contains(
@@ -2558,7 +2558,7 @@ extension PieItemInstanceQueryFilter
     });
   }
 
-  QueryBuilder<PieItemInstance, PieItemInstance, QAfterFilterCondition>
+  QueryBuilder<PieItemDelegate, PieItemDelegate, QAfterFilterCondition>
       keyCodeMatches(String pattern, {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.matches(
@@ -2569,7 +2569,7 @@ extension PieItemInstanceQueryFilter
     });
   }
 
-  QueryBuilder<PieItemInstance, PieItemInstance, QAfterFilterCondition>
+  QueryBuilder<PieItemDelegate, PieItemDelegate, QAfterFilterCondition>
       keyCodeIsEmpty() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.equalTo(
@@ -2579,7 +2579,7 @@ extension PieItemInstanceQueryFilter
     });
   }
 
-  QueryBuilder<PieItemInstance, PieItemInstance, QAfterFilterCondition>
+  QueryBuilder<PieItemDelegate, PieItemDelegate, QAfterFilterCondition>
       keyCodeIsNotEmpty() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.greaterThan(
@@ -2589,7 +2589,7 @@ extension PieItemInstanceQueryFilter
     });
   }
 
-  QueryBuilder<PieItemInstance, PieItemInstance, QAfterFilterCondition>
+  QueryBuilder<PieItemDelegate, PieItemDelegate, QAfterFilterCondition>
       pieItemIdEqualTo(int value) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.equalTo(
@@ -2599,7 +2599,7 @@ extension PieItemInstanceQueryFilter
     });
   }
 
-  QueryBuilder<PieItemInstance, PieItemInstance, QAfterFilterCondition>
+  QueryBuilder<PieItemDelegate, PieItemDelegate, QAfterFilterCondition>
       pieItemIdGreaterThan(
     int value, {
     bool include = false,
@@ -2613,7 +2613,7 @@ extension PieItemInstanceQueryFilter
     });
   }
 
-  QueryBuilder<PieItemInstance, PieItemInstance, QAfterFilterCondition>
+  QueryBuilder<PieItemDelegate, PieItemDelegate, QAfterFilterCondition>
       pieItemIdLessThan(
     int value, {
     bool include = false,
@@ -2627,7 +2627,7 @@ extension PieItemInstanceQueryFilter
     });
   }
 
-  QueryBuilder<PieItemInstance, PieItemInstance, QAfterFilterCondition>
+  QueryBuilder<PieItemDelegate, PieItemDelegate, QAfterFilterCondition>
       pieItemIdBetween(
     int lower,
     int upper, {
@@ -2646,5 +2646,5 @@ extension PieItemInstanceQueryFilter
   }
 }
 
-extension PieItemInstanceQueryObject
-    on QueryBuilder<PieItemInstance, PieItemInstance, QFilterCondition> {}
+extension PieItemDelegateQueryObject
+    on QueryBuilder<PieItemDelegate, PieItemDelegate, QFilterCondition> {}
