@@ -1,9 +1,7 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 
 import 'actions_tab.dart';
-import 'editor_panel_view_model.dart';
 import 'pie_item_list_tab.dart';
 import 'properties_tab/properties_tab.dart';
 
@@ -17,7 +15,6 @@ class EditorPanel extends StatefulWidget {
 class _EditorPanelState extends State<EditorPanel> {
   @override
   Widget build(BuildContext context) {
-    final viewModel = context.watch<EditorPanelViewModel>();
     return Column(
       children: [
         Expanded(
@@ -48,6 +45,4 @@ class _EditorPanelState extends State<EditorPanel> {
       ],
     );
   }
-
-  void newHotkeyTask() {}
 }
