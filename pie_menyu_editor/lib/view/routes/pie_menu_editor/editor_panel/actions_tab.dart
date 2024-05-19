@@ -1,7 +1,6 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:gap/gap.dart';
 import 'package:pie_menyu_core/db/pie_menu.dart';
 import 'package:pie_menyu_core/pieItemTasks/mouse_click_task.dart';
 import 'package:pie_menyu_core/pieItemTasks/open_app_task.dart';
@@ -12,16 +11,14 @@ import 'package:pie_menyu_core/pieItemTasks/run_file_task.dart';
 import 'package:pie_menyu_core/pieItemTasks/send_key_task.dart';
 import 'package:pie_menyu_core/pieItemTasks/send_text_task.dart';
 import 'package:pie_menyu_core/widgets/pieMenuView/pie_menu_state.dart';
-import 'package:pie_menyu_editor/view/widgets/delayed_tooltip.dart';
 import 'package:pie_menyu_editor/view/widgets/single_icon_button.dart';
 import 'package:provider/provider.dart';
 
+import 'pie_item_list_item.dart';
 import 'pie_item_task_list.dart';
 
 class ActionsTab extends StatelessWidget {
   const ActionsTab({super.key});
-
-  final double gap = 6;
 
   @override
   Widget build(BuildContext context) {
@@ -32,10 +29,11 @@ class ActionsTab extends StatelessWidget {
 
     return activePieItemDelegate.pieItem == null
         ? Container()
-        : Row(
+        : Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               Padding(
-                padding: const EdgeInsets.all(8),
+                padding: const EdgeInsets.symmetric(horizontal: 2, vertical: 8),
                 child: PieItemListItem(
                   pieItemDelegate: activePieItemDelegate,
                   pieMenuState: context.read<PieMenuState>(),
@@ -47,14 +45,26 @@ class ActionsTab extends StatelessWidget {
                 child: Text(
                   "label-add-task".tr(),
                   textAlign: TextAlign.left,
+                  style: const TextStyle(
+                      fontWeight: FontWeight.bold, color: Colors.grey),
                 ),
               ),
               Container(
-                padding: const EdgeInsets.fromLTRB(5, 0, 5, 0),
-                width: 50,
+                padding: const EdgeInsets.symmetric(horizontal: 8),
+                width: 310,
+                height: 100,
                 child: buildAddTaskButtonListView(
                     pieMenuState, activePieItemDelegate),
               ),
+              const Padding(
+                padding: EdgeInsets.symmetric(horizontal: 8),
+                child: Divider(),
+              ),
+              const Expanded(
+                  child: Padding(
+                padding: EdgeInsets.fromLTRB(8, 0, 8, 8),
+                child: PieItemTaskList(),
+              )),
             ],
           );
   }
@@ -63,130 +73,92 @@ class ActionsTab extends StatelessWidget {
     PieMenuState pieMenuState,
     PieItemDelegate activePieItemDelegate,
   ) {
-    return ListView(children: [
-      Container(
-        alignment: Alignment.center,
-        padding: const EdgeInsets.fromLTRB(0, 10, 0, 0),
-        child: const FaIcon(
-          FontAwesomeIcons.plus,
-          color: Colors.white70,
-          size: 20,
+    return GridView.count(
+      crossAxisCount: 6,
+      mainAxisSpacing: 5,
+      crossAxisSpacing: 5,
+      children: [
+        Tooltip(
+          preferBelow: false,
+          message: "tooltip-add-send-key-task".tr(),
+          child: SingleColorIconButton(
+            icon: Icons.keyboard,
+            onPressed: () {
+              pieMenuState.addTaskTo(activePieItemDelegate, SendKeyTask());
+            },
+          ),
         ),
-      ),
-      const Divider(
-        indent: 7,
-        endIndent: 7,
-      ),
-      DelayedTooltip(
-        message: "tooltip-add-send-key-task".tr(),
-        child: SingleColorIconButton(
-          icon: Icons.keyboard,
-          onPressed: () {
-            pieMenuState.addTaskTo(activePieItemDelegate, SendKeyTask());
-          },
+        Tooltip(
+          preferBelow: false,
+          message: "tooltip-add-mouse-click-task".tr(),
+          child: SingleColorIconButton(
+            icon: FontAwesomeIcons.handPointer,
+            onPressed: () {
+              pieMenuState.addTaskTo(activePieItemDelegate, MouseClickTask());
+            },
+          ),
         ),
-      ),
-      Gap(gap),
-      DelayedTooltip(
-        message: "tooltip-add-mouse-click-task".tr(),
-        child: SingleColorIconButton(
-          icon: FontAwesomeIcons.handPointer,
-          onPressed: () {
-            pieMenuState.addTaskTo(activePieItemDelegate, MouseClickTask());
-          },
+        Tooltip(
+          preferBelow: false,
+          message: "tooltip-add-run-file-task".tr(),
+          child: SingleColorIconButton(
+            icon: Icons.file_open,
+            onPressed: () {
+              pieMenuState.addTaskTo(activePieItemDelegate, RunFileTask());
+            },
+          ),
         ),
-      ),
-      Gap(gap),
-      DelayedTooltip(
-        message: "tooltip-add-run-file-task".tr(),
-        child: SingleColorIconButton(
-          icon: Icons.file_open,
-          onPressed: () {
-            pieMenuState.addTaskTo(activePieItemDelegate, RunFileTask());
-          },
+        Tooltip(
+          preferBelow: false,
+          message: "tooltip-add-open-sub-menu-task".tr(),
+          child: SingleColorIconButton(
+            icon: Icons.pie_chart,
+            onPressed: () {
+              pieMenuState.addTaskTo(activePieItemDelegate, OpenSubMenuTask());
+            },
+          ),
         ),
-      ),
-      Gap(gap),
-      DelayedTooltip(
-        message: "tooltip-add-open-sub-menu-task".tr(),
-        child: SingleColorIconButton(
-          icon: Icons.pie_chart,
-          onPressed: () {
-            pieMenuState.addTaskTo(activePieItemDelegate, OpenSubMenuTask());
-          },
+        Tooltip(
+          preferBelow: false,
+          message: "tooltip-add-open-folder-task".tr(),
+          child: SingleColorIconButton(
+            icon: Icons.folder,
+            onPressed: () {
+              pieMenuState.addTaskTo(activePieItemDelegate, OpenFolderTask());
+            },
+          ),
         ),
-      ),
-      Gap(gap),
-      DelayedTooltip(
-        message: "tooltip-add-open-folder-task".tr(),
-        child: SingleColorIconButton(
-          icon: Icons.folder,
-          onPressed: () {
-            pieMenuState.addTaskTo(activePieItemDelegate, OpenFolderTask());
-          },
+        Tooltip(
+          preferBelow: false,
+          message: "tooltip-add-open-app-task".tr(),
+          child: SingleColorIconButton(
+            icon: Icons.play_arrow_rounded,
+            onPressed: () {
+              pieMenuState.addTaskTo(activePieItemDelegate, OpenAppTask());
+            },
+          ),
         ),
-      ),
-      Gap(gap),
-      DelayedTooltip(
-        message: "tooltip-add-open-app-task".tr(),
-        child: SingleColorIconButton(
-          icon: Icons.play_arrow_rounded,
-          onPressed: () {
-            pieMenuState.addTaskTo(activePieItemDelegate, OpenAppTask());
-          },
+        Tooltip(
+          preferBelow: false,
+          message: "tooltip-add-open-url-task".tr(),
+          child: SingleColorIconButton(
+            icon: Icons.link,
+            onPressed: () {
+              pieMenuState.addTaskTo(activePieItemDelegate, OpenUrlTask());
+            },
+          ),
         ),
-      ),
-      Gap(gap),
-      DelayedTooltip(
-        message: "tooltip-add-open-url-task".tr(),
-        child: SingleColorIconButton(
-          icon: Icons.link,
-          onPressed: () {
-            pieMenuState.addTaskTo(activePieItemDelegate, OpenUrlTask());
-          },
-        ),
-      ),
-      Gap(gap),
-      DelayedTooltip(
-        message: "tooltip-paste-text-task".tr(),
-        child: SingleColorIconButton(
-          icon: Icons.text_fields,
-          onPressed: () {
-            pieMenuState.addTaskTo(activePieItemDelegate, PasteTextTask());
-          },
-        ),
-      ),
-      // Gap(gap),
-      // _LeftTooltip(
-      //   message: "tooltip-add-open-editor-task".tr(),
-      //   child: MonochromeIconButton(
-      //     icon: Icons.edit_note,
-      //     onPressed: () => context
-      //         .read<PieMenuEditorPageViewModel>()
-      //         .createTaskInCurrentPieItem(PieItemTaskType.openEditor),
-      //   ),
-      // ),
-      // Gap(gap),
-      // _LeftTooltip(
-      //   message: "tooltip-add-resize-window-task".tr(),
-      //   child: MonochromeIconButton(
-      //     icon: Icons.photo_size_select_small,
-      //     onPressed: () => context
-      //         .read<PieMenuEditorPageViewModel>()
-      //         .createTaskInCurrentPieItem(PieItemTaskType.resizeWindow),
-      //   ),
-      // ),
-      // Gap(gap),
-      // _LeftTooltip(
-      //   message: "tooltip-add-move-window-task".tr(),
-      //   child: MonochromeIconButton(
-      //     icon: Icons.move_down,
-      //     onPressed: () => context
-      //         .read<PieMenuEditorPageViewModel>()
-      //         .createTaskInCurrentPieItem(PieItemTaskType.moveWindow),
-      //   ),
-      // ),
-      // Gap(gap),
-    ]);
+        Tooltip(
+          preferBelow: false,
+          message: "tooltip-paste-text-task".tr(),
+          child: SingleColorIconButton(
+            icon: Icons.text_fields,
+            onPressed: () {
+              pieMenuState.addTaskTo(activePieItemDelegate, PasteTextTask());
+            },
+          ),
+        )
+      ],
+    );
   }
 }
