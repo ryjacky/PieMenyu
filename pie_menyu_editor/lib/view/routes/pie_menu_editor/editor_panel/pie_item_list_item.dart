@@ -2,11 +2,11 @@ import 'dart:convert';
 import 'dart:io';
 import 'dart:math';
 
+import 'package:easy_localization/easy_localization.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:gap/gap.dart';
-import 'package:easy_localization/easy_localization.dart';
 import 'package:mime/mime.dart';
 import 'package:pie_menyu_core/db/pie_item.dart';
 import 'package:pie_menyu_core/db/pie_menu.dart';
@@ -113,8 +113,9 @@ class _PieItemListItemState extends State<PieItemListItem> {
           }
         }
 
-        if (icon != null && context.mounted) {
+        if (icon != null && mounted) {
           context.read<PieMenuState>().putPieItem(pieItem..iconBase64 = icon);
+          setState(() {});
         }
       },
       child: _icon!,
