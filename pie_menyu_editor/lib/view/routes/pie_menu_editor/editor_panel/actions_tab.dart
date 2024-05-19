@@ -37,7 +37,6 @@ class ActionsTab extends StatelessWidget {
                 child: PieItemListItem(
                   pieItemDelegate: activePieItemDelegate,
                   pieMenuState: context.read<PieMenuState>(),
-                  allowDelete: false,
                 ),
               ),
               Padding(
