@@ -1,7 +1,11 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:pie_menyu_core/db/pie_item.dart';
 import 'package:pie_menyu_core/widgets/pieMenuView/pie_menu_state.dart';
 import 'package:pie_menyu_core/widgets/pieMenuView/pie_menu_view.dart';
 import 'package:pie_menyu_editor/view/routes/pie_menu_editor/pie_menu_page_view_model.dart';
+import 'package:pie_menyu_editor/view/widgets/primary_button.dart';
 import 'package:provider/provider.dart';
 import 'package:spring/spring.dart';
 
@@ -26,6 +30,18 @@ class _PreviewPanelState extends State<PreviewPanel> {
     return Stack(
       alignment: Alignment.center,
       children: [
+        Align(
+          alignment: Alignment.topRight,
+          child: Padding(
+            padding: const EdgeInsets.all(10.0),
+            child: PrimaryButton(
+              onPressed: () => pieMenuState
+                  .putPieItem(PieItem(name: "label-new-pie-item".tr())),
+              label: Text("label-new-pie-item".tr()),
+              icon: FontAwesomeIcons.plus,
+            ),
+          ),
+        ),
         if (pieMenuState.behavior.escapeRadius > 0)
           EscapeRadiusPreview(pieMenuState.behavior.escapeRadius),
         PieMenuView(
