@@ -34,9 +34,20 @@ class ActionsTab extends StatelessWidget {
         ? Container()
         : Row(
             children: [
-              const Expanded(
-                flex: 7,
-                child: PieItemTaskList(),
+              Padding(
+                padding: const EdgeInsets.all(8),
+                child: PieItemListItem(
+                  pieItemDelegate: activePieItemDelegate,
+                  pieMenuState: context.read<PieMenuState>(),
+                  allowDelete: false,
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.only(left: 8.0, bottom: 4),
+                child: Text(
+                  "label-add-task".tr(),
+                  textAlign: TextAlign.left,
+                ),
               ),
               Container(
                 padding: const EdgeInsets.fromLTRB(5, 0, 5, 0),
