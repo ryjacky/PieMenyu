@@ -52,7 +52,7 @@ class _PreviewPanelState extends State<PreviewPanel> {
             onDraggableCanceled: (_, __) => viewModel.isDragging = false,
             data: index,
             feedback: defaultPieSlice,
-            childWhenDragging: Opacity(opacity: 0.3, child: defaultPieSlice),
+            childWhenDragging: Container(),
             child: DragTarget<int>(
               builder: (_, __, ___) {
                 return dragging
