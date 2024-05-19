@@ -210,6 +210,16 @@ class PieMenuState extends ChangeNotifier {
     notifyListeners();
   }
 
+  swapPieItem(int fromIndex, int toIndex) {
+    final fromInstance = _pieItemDelegates[fromIndex];
+    final toInstance = _pieItemDelegates[toIndex];
+
+    _pieItemDelegates[fromIndex] = toInstance;
+    _pieItemDelegates[toIndex] = fromInstance;
+
+    notifyListeners();
+  }
+
   removeTaskFrom(PieItemDelegate pieItemInstance, PieItemTask pieItemTask) {
     final pieItem = pieItemInstance.pieItem;
     if (pieItem == null) {
