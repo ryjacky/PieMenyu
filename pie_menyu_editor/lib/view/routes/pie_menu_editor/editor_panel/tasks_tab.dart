@@ -17,8 +17,8 @@ import 'package:provider/provider.dart';
 import 'pie_item_list_item.dart';
 import 'pie_item_task_list.dart';
 
-class ActionsTab extends StatelessWidget {
-  const ActionsTab({super.key});
+class TasksTab extends StatelessWidget {
+  const TasksTab({super.key});
 
   @override
   Widget build(BuildContext context) {

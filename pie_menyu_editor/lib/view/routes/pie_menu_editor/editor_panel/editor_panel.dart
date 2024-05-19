@@ -1,7 +1,7 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 
-import 'actions_tab.dart';
+import 'tasks_tab.dart';
 import 'properties_tab/properties_tab.dart';
 
 class EditorPanel extends StatefulWidget {
@@ -30,7 +30,7 @@ class _EditorPanelState extends State<EditorPanel> {
                 const Expanded(
                   child: TabBarView(
                     children: [
-                      ActionsTab(),
+                      TasksTab(),
                       PropertiesTab(),
                     ],
                   ),
