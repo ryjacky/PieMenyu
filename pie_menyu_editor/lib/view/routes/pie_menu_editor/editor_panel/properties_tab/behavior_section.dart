@@ -72,7 +72,7 @@ class BehaviorSection extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Padding(
-              padding: const EdgeInsets.fromLTRB(8, 0, 0, 0),
+              padding: const EdgeInsets.fromLTRB(8, 0, 18, 0),
               child: Tooltip(
                 preferBelow: false,
                 message: "tooltip-activation-mode-hint".tr(),
@@ -83,7 +83,7 @@ class BehaviorSection extends StatelessWidget {
                 ),
               ),
             ),
-            Text("label-activation-mode".tr()),
+            Expanded(child: Text("label-activation-mode".tr())),
             CompactDropdownMenu<ActivationMode>(
               width: 120,
               initialSelection: behavior.activationMode,
@@ -120,7 +120,7 @@ class BehaviorSection extends StatelessWidget {
               ),
             ),
             SizedBox(
-                width: 120, child: Text("label-sub-menu-activation-mode".tr())),
+                width: 124, child: Text("label-sub-menu-activation-mode".tr())),
             CompactDropdownMenu<ActivationMode>(
               width: 120,
               initialSelection: behavior.subMenuActivationMode,
