@@ -15,7 +15,7 @@ class CreateProfileButton extends StatelessWidget {
     return FlatButton(
       onPressed: context.read<HomePageViewModel>().toggleCreateProfileMode,
       icon: creatingProfile ? Icons.arrow_back : Icons.create,
-      label: Text((creatingProfile ? "button-back" : "button-create").tr()),
+      label: Text(creatingProfile ? "button-back".tr() : "button-create".tr()),
     );
   }
 }
