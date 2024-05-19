@@ -51,7 +51,7 @@ class _LeftPanelState extends State<LeftPanel> {
                 textAlign: TextAlign.center,
                 style: Theme.of(context).textTheme.displayLarge,
               ),
-              const CreateProfileButton(),
+              CreateProfileButton(),
             ],
           ),
           const Gap(20),

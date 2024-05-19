@@ -6,7 +6,7 @@ import 'package:provider/provider.dart';
 import '../home_page_view_model.dart';
 
 class CreateProfileButton extends StatelessWidget {
-  const CreateProfileButton({super.key});
+  CreateProfileButton({super.key});
 
   @override
   Widget build(BuildContext context) {
