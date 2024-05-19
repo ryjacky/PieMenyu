@@ -34,7 +34,7 @@ class PieItemView extends StatefulWidget {
 }
 
 class _PieItemViewState extends State<PieItemView> {
-  Image? imageIcon;
+  Widget? imageIcon;
   String imageIconBase64 = "";
 
   @override
@@ -71,7 +71,8 @@ class _PieItemViewState extends State<PieItemView> {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
-          SizedBox(height: widget.icon.size, child: imageIcon!),
+          if (imageIconBase64 != "") SizedBox(height: widget.icon.size, child: imageIcon!),
+
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 6),
             child: Text(
