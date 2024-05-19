@@ -62,6 +62,7 @@ dependencies:
   mime: ^1.0.5
   introduction_screen: ^3.1.14
   tutorial_coach_mark: ^1.2.11
+  spring: ^2.0.2
 
 dev_dependencies:
   flutter_test:
