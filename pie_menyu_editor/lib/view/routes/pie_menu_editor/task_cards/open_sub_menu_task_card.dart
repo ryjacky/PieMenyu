@@ -33,6 +33,7 @@ class _OpenSubMenuTaskCardState extends State<OpenSubMenuTaskCard> {
   void initState() {
     context.read<Database>().getPieMenus().then((value) {
       if (allPieMenus.length != value.length) {
+        if (!mounted) return;
         setState(() {
           allPieMenus = value;
         });
