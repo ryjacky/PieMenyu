@@ -6,8 +6,6 @@ Originally the version 3 of AutoHotPie but is later renamed and separated into i
 PieMenyu focuses on cross-platform and customizability. 
 **What's the same?**
 This project especially benefits users of creative software like design tools, video editors, and 3D modeling applications. Anyone struggling to manage numerous shortcuts and seeking a more intuitive way to trigger actions will find AHP and PieMenyu valuable.
-**What's special about this readme?**
-It's drafted by Gemini
 
 **Main features:**
 * **Cross-platform support (currently Windows, macOS and Linux coming soon).**
@@ -20,7 +18,7 @@ PieMenyu is actively under development and currently in beta. We welcome user fe
 If you would like to make contributions, here is a place you could start looking at: https://github.com/ryjacky/PieMenyu/wiki/Getting-Started
 
 **Milestones:**
-- [ ] Windows public release
+- [x] Windows public release
 - [ ] MacOS public release
 - [ ] Linux public release
 - [ ] more coming...
