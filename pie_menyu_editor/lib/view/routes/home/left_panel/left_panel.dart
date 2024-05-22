@@ -1,13 +1,14 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:gap/gap.dart';
-import 'package:easy_localization/easy_localization.dart';
 import 'package:pie_menyu_editor/flutter/navigator.dart';
-import 'package:pie_menyu_editor/versioning/update_status_provider.dart';
+import 'package:pie_menyu_editor/versioning/update_provider.dart';
 import 'package:pie_menyu_editor/view/routes/home/left_panel/create_profile_button.dart';
 import 'package:pie_menyu_editor/view/routes/home/left_panel/profile_list_view.dart';
+import 'package:pie_menyu_editor/view/widgets/notification/notification.dart';
+import 'package:pie_menyu_editor/view/widgets/notification/notification_badge.dart';
 import 'package:provider/provider.dart';
-import 'package:spring/spring.dart';
 
 import '../../settings_page/settings_page.dart';
 import '../home_page_view_model.dart';
@@ -23,18 +24,48 @@ class _LeftPanelState extends State<LeftPanel> {
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-      context.read<UpdateStatusProvider>().fetchUpdate();
-    });
+    checkForUpdate();
+  }
+
+  void checkForUpdate() async {
+    final hasUpdate = await context.read<UpdateProvider>().fetchUpdate();
+
+    if (hasUpdate && mounted) {
+      final homePageViewModel = context.read<HomePageViewModel>();
+
+      final updatingNotification = NotificationDelegate(
+        message: "tooltip-updating".tr(),
+        icon: const Icon(Icons.file_download_outlined, size: 16),
+        onPressed: () {},
+        type: NotificationType.warning,
+        curve: Curves.easeInOut,
+      );
+
+      homePageViewModel.addNotification(
+        NotificationDelegate(
+          message: "tooltip-update-available".tr(),
+          onPressed: () {
+            context.read<UpdateProvider>().update();
+            homePageViewModel.dismissNotification();
+            homePageViewModel.addNotification(updatingNotification,
+                urgent: true);
+          },
+          icon: const Text("!"),
+          type: NotificationType.warning,
+          curve: null,
+        ),
+      );
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     final homePageViewModel = context.read<HomePageViewModel>();
-    final updating =
-        context.select<UpdateStatusProvider, bool>((value) => value.updating);
-    final updateAvailable = context
-        .select<UpdateStatusProvider, bool>((value) => value.updateAvailable);
+
+    final nextNotification =
+        context.select<HomePageViewModel, NotificationDelegate?>(
+      (value) => value.firstNotification,
+    );
 
     return Container(
       color: Theme.of(context).colorScheme.surface,
@@ -61,8 +92,8 @@ class _LeftPanelState extends State<LeftPanel> {
           Row(
             mainAxisAlignment: MainAxisAlignment.end,
             children: [
-              if (updateAvailable) ...[
-                createUpdateBadge(updating),
+              if (nextNotification != null) ...[
+                NotificationBadge(notification: nextNotification),
                 const Gap(10),
               ],
               ElevatedButton.icon(
@@ -82,34 +113,6 @@ class _LeftPanelState extends State<LeftPanel> {
             ],
           )
         ],
-      ),
-    );
-  }
-
-  Widget createUpdateBadge(bool updating) {
-    final updateStatusProvider = context.read<UpdateStatusProvider>();
-
-    return Tooltip(
-      message:
-          updating ? "tooltip-updating".tr() : "tooltip-update-available".tr(),
-      child: (button) {
-        return updating
-            ? Spring.blink(child: button, curve: Curves.easeInOut)
-            : button;
-      }(
-        TextButton(
-          onPressed: () => updateStatusProvider.update(),
-          style: TextButton.styleFrom(
-            backgroundColor: Colors.orange.withOpacity(0.3),
-            foregroundColor: Colors.orange,
-            padding: const EdgeInsets.all(0),
-            minimumSize: const Size(32, 32),
-            textStyle: const TextStyle(fontWeight: FontWeight.bold),
-          ),
-          child: updating
-              ? const Icon(Icons.file_download_outlined, size: 16)
-              : const Text("!"),
-        ),
       ),
     );
   }
