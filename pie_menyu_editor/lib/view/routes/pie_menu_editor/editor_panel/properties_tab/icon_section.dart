@@ -1,5 +1,5 @@
-import 'package:flutter/material.dart';
 import 'package:easy_localization/easy_localization.dart';
+import 'package:flutter/material.dart';
 import 'package:pie_menyu_core/db/pie_menu.dart';
 import 'package:pie_menyu_core/widgets/pieMenuView/pie_menu_state.dart';
 import 'package:pie_menyu_editor/view/widgets/collapasable_color_picker.dart';
@@ -42,9 +42,9 @@ class IconSection extends StatelessWidget {
                 ),
               ),
             ),
-            const SizedBox(
+            SizedBox(
               width: 160,
-              child: Text("Icon Size"),
+              child: Text("label-icon-size".tr()),
             ),
             SizedBox(
               width: 70,

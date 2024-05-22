@@ -2,7 +2,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:pie_menyu_core/widgets/pieMenuView/pie_menu_state.dart';
 import 'package:pie_menyu_editor/flutter/navigator.dart';
-import 'package:pie_menyu_editor/view/routes/pie_menu_editor/editor_panel/editor_panel_view_model.dart';
+import 'package:pie_menyu_editor/view/routes/pie_menu_editor/pie_menu_page_view_model.dart';
 import 'package:pie_menyu_editor/view/routes/pie_menu_editor/preview_panel/preview_panel.dart';
 import 'package:provider/provider.dart';
 
@@ -33,7 +33,7 @@ class _PieMenuEditorPageState extends State<PieMenuEditorPage> {
               onPressed: () {
                 Navigator.of(context).popAndClearSnackBar();
 
-                final viewModel = context.read<EditorPanelViewModel>();
+                final viewModel = context.read<PieMenuEditorPageViewModel>();
                 viewModel.saveState(context.read<PieMenuState>());
               },
               child: const Icon(Icons.arrow_back_rounded, size: 15),
@@ -44,7 +44,7 @@ class _PieMenuEditorPageState extends State<PieMenuEditorPage> {
             ),
             trailing: TextButton(
               onPressed: () {
-                final viewModel = context.read<EditorPanelViewModel>();
+                final viewModel = context.read<PieMenuEditorPageViewModel>();
                 viewModel.saveState(context.read<PieMenuState>());
               },
               child: const Icon(Icons.save, size: 15),

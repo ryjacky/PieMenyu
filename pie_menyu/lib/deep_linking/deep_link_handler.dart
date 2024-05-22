@@ -1,5 +1,9 @@
+import 'dart:developer';
+import 'dart:io';
+
 import 'package:app_links/app_links.dart';
 import 'package:flutter/material.dart';
+import 'package:global_hotkey/global_hotkey.dart';
 import 'package:system_tray/system_tray.dart';
 import 'package:window_manager/window_manager.dart';
 
@@ -28,6 +32,14 @@ class DeepLinkHandler {
           listener(DeepLinkCommand.start);
         } else if (url.contains('stop')) {
           listener(DeepLinkCommand.stop);
+        } else if (url.contains('exit')) {
+          try {
+            GlobalHotkey.instance.dispose();
+          } catch (e) {
+            log("Failed to dispose hotkey: $e");
+          }
+
+          exit(0);
         }
       }
 
@@ -35,7 +47,6 @@ class DeepLinkHandler {
       await Future.delayed(const Duration(milliseconds: 100));
       await windowManager.hide();
       await AppWindow().hide();
-
     });
   }
 }

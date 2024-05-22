@@ -12,7 +12,8 @@ class ShapeSection extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final state = context.read<PieMenuState>();
-    final shape = context.select<PieMenuState, PieMenuShape>((value) => value.shape);
+    final shape =
+        context.select<PieMenuState, PieMenuShape>((value) => value.shape);
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -23,9 +24,9 @@ class ShapeSection extends StatelessWidget {
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            const Padding(
-              padding: EdgeInsets.fromLTRB(42, 0, 0, 0),
-              child: Text("Center Radius"),
+            Padding(
+              padding: const EdgeInsets.fromLTRB(42, 0, 0, 0),
+              child: Text("label-center-radius".tr()),
             ),
             SizedBox(
               width: 70,
@@ -44,9 +45,9 @@ class ShapeSection extends StatelessWidget {
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            const Padding(
-              padding: EdgeInsets.fromLTRB(42, 0, 0, 0),
-              child: Text("Center Thickness"),
+            Padding(
+              padding: const EdgeInsets.fromLTRB(42, 0, 0, 0),
+              child: Text("label-center-thickness".tr()),
             ),
             SizedBox(
               width: 70,
@@ -65,9 +66,9 @@ class ShapeSection extends StatelessWidget {
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            const Padding(
-              padding: EdgeInsets.fromLTRB(42, 0, 0, 0),
-              child: Text("Pie Item Roundness"),
+            Padding(
+              padding: const EdgeInsets.fromLTRB(42, 0, 0, 0),
+              child: Text("label-pie-item-roundness".tr()),
             ),
             SizedBox(
               width: 70,
@@ -86,9 +87,9 @@ class ShapeSection extends StatelessWidget {
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            const Padding(
-              padding: EdgeInsets.fromLTRB(42, 0, 0, 0),
-              child: Text("Pie Item Spread"),
+            Padding(
+              padding: const EdgeInsets.fromLTRB(42, 0, 0, 0),
+              child: Text("label-pie-item-spread".tr()),
             ),
             SizedBox(
               width: 70,

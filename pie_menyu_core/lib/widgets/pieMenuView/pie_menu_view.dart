@@ -12,12 +12,15 @@ class PieMenuView extends StatefulWidget {
 
   final Function(PieItemDelegate instance)? onTap;
   final Function(PieItemDelegate instance)? onHover;
+  final Widget? Function(PieItemView defaultPieSlice, int index)?
+  pieSliceBuilder;
 
   const PieMenuView({
     super.key,
     required this.state,
     this.onTap,
     this.onHover,
+    this.pieSliceBuilder,
   });
 
   @override
@@ -69,9 +72,11 @@ class _PieMenuViewState extends State<PieMenuView> {
                     backgroundColor: Color(colors.secondary),
                     highlightColor: Color(colors.primary),
                     arcAngle: state.activePieItemDelegate ==
-                            pieItemInstances.firstOrNull
+                        pieItemInstances.firstOrNull
                         ? 2 * pi
                         : angleDelta,
+                    onCenter: state.activePieItemDelegate ==
+                        pieItemInstances.firstOrNull,
                   ),
                 ),
               ),
@@ -94,20 +99,23 @@ class _PieMenuViewState extends State<PieMenuView> {
                       onHover: (value) {
                         widget.onHover?.call(pieItemInstances[i + 1]);
                       },
-                      child: PieItemView(
-                        horizontalOffset: i % (nSlices / 2) == 0
-                            ? PieItemOffset.center
-                            : i > nSlices / 2
-                                ? PieItemOffset.toLeft
-                                : PieItemOffset.toRight,
-                        icon: state.icon,
-                        font: state.font,
-                        colors: state.colors,
-                        shape: state.shape,
-                        instance: state.pieItemDelegates[i + 1],
-                        active: state.activePieItemDelegate ==
-                            pieItemInstances[i + 1],
-                        height: state.runtimeHeight,
+                      child: buildPieSlice(
+                        PieItemView(
+                          horizontalOffset: i % (nSlices / 2) == 0
+                              ? PieItemOffset.center
+                              : i > nSlices / 2
+                              ? PieItemOffset.toLeft
+                              : PieItemOffset.toRight,
+                          icon: state.icon,
+                          font: state.font,
+                          colors: state.colors,
+                          shape: state.shape,
+                          instance: state.pieItemDelegates[i + 1],
+                          active: state.activePieItemDelegate ==
+                              pieItemInstances[i + 1],
+                          height: state.runtimeHeight,
+                        ),
+                        i + 1,
                       ),
                     ),
                   ),
@@ -128,7 +136,7 @@ class _PieMenuViewState extends State<PieMenuView> {
       double result = 2 *
           pi *
           (widget.state.pieItemDelegates
-                  .indexOf(widget.state.activePieItemDelegate) -
+              .indexOf(widget.state.activePieItemDelegate) -
               1) /
           (widget.state.pieItemDelegates.length - 1);
       return (result.isNaN || result.isInfinite) ? 0 : result;
@@ -149,5 +157,9 @@ class _PieMenuViewState extends State<PieMenuView> {
     return getOriginY(constraints) +
         ((shape.centerRadius + shape.pieItemSpread) * cos(i * angleDelta)) -
         widget.state.runtimeHeight / 2;
+  }
+
+  buildPieSlice(PieItemView pieSliceView, int index) {
+    return widget.pieSliceBuilder?.call(pieSliceView, index) ?? pieSliceView;
   }
 }

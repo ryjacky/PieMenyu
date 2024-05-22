@@ -30,9 +30,9 @@ class BehaviorSection extends StatelessWidget {
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            const Padding(
-              padding: EdgeInsets.fromLTRB(42, 0, 0, 0),
-              child: Text("Open In Screen Center"),
+            Padding(
+              padding: const EdgeInsets.fromLTRB(42, 0, 0, 0),
+              child: Text("label-open-in-screen-center".tr()),
             ),
             Switch(
               // This bool value toggles the switch.
@@ -50,9 +50,9 @@ class BehaviorSection extends StatelessWidget {
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            const Padding(
-              padding: EdgeInsets.fromLTRB(42, 0, 0, 0),
-              child: Text("Escape Radius"),
+            Padding(
+              padding: const EdgeInsets.fromLTRB(42, 0, 0, 0),
+              child: Text("label-escape-radius".tr()),
             ),
             SizedBox(
               width: 70,
@@ -72,7 +72,7 @@ class BehaviorSection extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Padding(
-              padding: const EdgeInsets.fromLTRB(8, 0, 0, 0),
+              padding: const EdgeInsets.fromLTRB(8, 0, 18, 0),
               child: Tooltip(
                 preferBelow: false,
                 message: "tooltip-activation-mode-hint".tr(),
@@ -83,7 +83,7 @@ class BehaviorSection extends StatelessWidget {
                 ),
               ),
             ),
-            Text("label-activation-mode".tr()),
+            Expanded(child: Text("label-activation-mode".tr())),
             CompactDropdownMenu<ActivationMode>(
               width: 120,
               initialSelection: behavior.activationMode,
@@ -120,7 +120,7 @@ class BehaviorSection extends StatelessWidget {
               ),
             ),
             SizedBox(
-                width: 120, child: Text("label-sub-menu-activation-mode".tr())),
+                width: 124, child: Text("label-sub-menu-activation-mode".tr())),
             CompactDropdownMenu<ActivationMode>(
               width: 120,
               initialSelection: behavior.subMenuActivationMode,
