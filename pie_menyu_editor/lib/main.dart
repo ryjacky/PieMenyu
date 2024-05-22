@@ -42,7 +42,7 @@ Future<void> main() async {
   }
 
   runApp(EasyLocalization(
-    supportedLocales: const [Locale('en'), Locale('ja')],
+    supportedLocales: const [Locale('en'), Locale('ja'), Locale('zh')],
     path: 'assets/translations',
     fallbackLocale: const Locale('en'),
     child: PieMenyu(

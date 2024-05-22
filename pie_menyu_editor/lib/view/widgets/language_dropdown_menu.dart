@@ -8,14 +8,9 @@ class LanguageDropdownMenu extends CompactDropdownMenu<String> {
     super.initialSelection,
   }) : super(
           dropdownMenuEntries: const [
-            DropdownMenuEntry(
-              label: "English",
-              value: "en",
-            ),
-            DropdownMenuEntry(
-              label: "日本語",
-              value: "ja",
-            ),
+            DropdownMenuEntry(label: "English", value: "en"),
+            DropdownMenuEntry(label: "日本語", value: "ja"),
+            DropdownMenuEntry(label: "中文", value: "zh")
           ],
         );
 }

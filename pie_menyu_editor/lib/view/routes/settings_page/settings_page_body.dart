@@ -1,9 +1,9 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:launch_at_startup/launch_at_startup.dart';
-import 'package:easy_localization/easy_localization.dart';
 import 'package:pie_menyu_editor/view/routes/settings_page/settings_page_state.dart';
-import 'package:pie_menyu_editor/view/widgets/compact_dropdown_menu.dart';
+import 'package:pie_menyu_editor/view/widgets/language_dropdown_menu.dart';
 import 'package:pie_menyu_editor/view/widgets/setting_list_tile.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -212,22 +212,12 @@ class _SettingsPageBodyState extends State<SettingsPageBody> {
         title: "label-language".tr(),
         subtitle: "description-language-setting".tr(),
         tileColor: Theme.of(context).colorScheme.surface,
-        trailing: CompactDropdownMenu<String>(
+        trailing: LanguageDropdownMenu(
           initialSelection: context.locale.languageCode,
           onSelected: (value) {
             if (value == null) return;
             context.setLocale(Locale(value));
           },
-          dropdownMenuEntries: const [
-            DropdownMenuEntry(
-              label: "English",
-              value: "en",
-            ),
-            DropdownMenuEntry(
-              label: "日本語",
-              value: "ja",
-            ),
-          ],
         ),
       ),
     ];
