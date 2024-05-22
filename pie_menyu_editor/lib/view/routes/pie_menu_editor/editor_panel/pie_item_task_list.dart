@@ -110,6 +110,7 @@ class _PieItemTaskListState extends State<PieItemTaskList> {
       case PieItemTaskType.sendText:
         final task = PasteTextTask.from(pieItemTask);
         return PasteTextTaskCard(
+          key: ValueKey(pieItemTask.runtimeId),
           task: task,
           order: order,
           onDelete: () => removeTask(pieItemTask),
