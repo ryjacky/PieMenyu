@@ -35,7 +35,11 @@ class CollapsableColorPicker extends StatelessWidget {
         children: [
           ColorPicker(
             color: color,
-            pickersEnabled: const {},
+            pickersEnabled: const {
+              ColorPickerType.primary: true,
+              ColorPickerType.wheel: true,
+              ColorPickerType.accent: false,
+            },
             subheading: Text("label-select-color-shade".tr()),
             width: colorIndicatorSize,
             height: colorIndicatorSize,
