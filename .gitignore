@@ -10,6 +10,10 @@
 .svn/
 migrate_working_dir/
 Release/
+pie_menyu_editor/macos/Flutter/GeneratedPluginRegistrant.swift
+pie_menyu_editor/macos/windows/generated_plugin_registrant.cc
+pie_menyu_editor/macos/linux/generated_plugin_registrant.cc
+pie_menyu_installer/PieMenyuInstaller.exe
 
 # IntelliJ related
 *.iml
