@@ -106,7 +106,7 @@ begin
     else
     begin
       Exec('taskkill', '/F /IM pie_menyu.exe /t', '', SW_HIDE, ewWaitUntilTerminated, ResultCode);
-      Exec('taskkill', '/F /IM pie_menyu_editor.exe /t', '', SW_HIDE, ewWaitUntilTerminated, ResultCode);
+      Exec('taskkill', '/F /IM pie_menyu_editor.exe', '', SW_HIDE, ewWaitUntilTerminated, ResultCode);
     end;
   end;
 end;
