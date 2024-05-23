@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:collection';
 import 'dart:developer';
 
 import 'package:flutter/cupertino.dart';
@@ -11,11 +12,31 @@ import 'package:pie_menyu_core/db/profile.dart';
 import 'package:pie_menyu_core/pieItemTasks/open_folder_task.dart';
 import 'package:pie_menyu_core/pieItemTasks/send_key_task.dart';
 import 'package:pie_menyu_core/pieItemTasks/send_text_task.dart';
+import 'package:pie_menyu_editor/view/widgets/notification/notification.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class HomePageViewModel extends ChangeNotifier {
   List<Profile> profiles = [];
   List<PieMenu> pieMenus = [];
+
+  /// Notifications that are queued to be shown.
+  /// Notifications are shown in the order they are added unless they are marked as urgent.
+  final Queue<NotificationDelegate> _notifications = Queue();
+
+  void addNotification(NotificationDelegate notification, {bool urgent = false}) {
+    if (urgent) {
+      _notifications.addFirst(notification);
+    } else {
+      _notifications.add(notification);
+    }
+    notifyListeners();
+  }
+
+  NotificationDelegate? get firstNotification => _notifications.firstOrNull;
+
+  NotificationDelegate? dismissNotification() {
+    return _notifications.removeFirst();
+  }
 
   bool _creatingProfile = false;
 
