@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:pie_menyu_editor/preferences/editor_preferences.dart';
 import 'package:tutorial_coach_mark/tutorial_coach_mark.dart';
 
-enum CoachMark { hotkeyRecorder, pieMenyuStatusSwitch }
+enum CoachMark { hotkeyRecorder, pieMenyuStatusSwitch, pieMenuPreview }
 
 class CoachProvider extends ChangeNotifier {
   final Map<CoachMark, TargetFocus> _targets = {};
