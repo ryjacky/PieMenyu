@@ -4,10 +4,12 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:pie_menyu_core/db/pie_item.dart';
 import 'package:pie_menyu_core/widgets/pieMenuView/pie_menu_state.dart';
 import 'package:pie_menyu_core/widgets/pieMenuView/pie_menu_view.dart';
+import 'package:pie_menyu_editor/view/coach/coach_provider.dart';
 import 'package:pie_menyu_editor/view/routes/pie_menu_editor/pie_menu_page_view_model.dart';
 import 'package:pie_menyu_editor/view/widgets/primary_button.dart';
 import 'package:provider/provider.dart';
 import 'package:spring/spring.dart';
+import 'package:tutorial_coach_mark/tutorial_coach_mark.dart';
 
 import 'escape_radius_preview.dart';
 
@@ -19,6 +21,33 @@ class PreviewPanel extends StatefulWidget {
 }
 
 class _PreviewPanelState extends State<PreviewPanel> {
+  final previewPieMenuKey = GlobalKey();
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      final coachProvider = context.read<CoachProvider>();
+      coachProvider.addTarget(
+        CoachMark.pieMenuPreview,
+        previewPieMenuKey,
+        TargetContent(
+          customPosition: CustomTargetContentPosition(top: 50, right: 35),
+          align: ContentAlign.custom,
+          padding: const EdgeInsets.only(left: 700),
+          child: Text(
+            "message-coach-pie-menu-preview".tr(),
+            style: const TextStyle(fontSize: 16),
+          ),
+        ),
+      );
+
+      context
+          .read<CoachProvider>()
+          .showTutorial(context, mark: CoachMark.pieMenuPreview);
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     final pieMenuState = context.watch<PieMenuState>();
@@ -45,6 +74,7 @@ class _PreviewPanelState extends State<PreviewPanel> {
         if (pieMenuState.behavior.escapeRadius > 0)
           EscapeRadiusPreview(pieMenuState.behavior.escapeRadius),
         PieMenuView(
+          key: previewPieMenuKey,
           state: pieMenuState,
           onTap: (instance) => pieMenuState.activePieItemDelegate = instance,
           pieSliceBuilder: (defaultPieSlice, index) => Draggable(
