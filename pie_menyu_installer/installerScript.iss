@@ -2,7 +2,7 @@
 ; SEE THE DOCUMENTATION FOR DETAILS ON CREATING INNO SETUP SCRIPT FILES!
 
 #define MyAppName "PieMenyu"
-#define MyAppVersion "0.0.3-nightly"
+#define MyAppVersion "0.0.4-alpha"
 #define MyAppPublisher "PieMenyu"
 #define MyAppURL "https://github.com/ryjacky/PieMenyu"
 #define MyAppExeName "pie_menyu_editor.exe"
@@ -24,7 +24,7 @@ ArchitecturesAllowed=x64
 ArchitecturesInstallIn64BitMode=x64
 ; Uncomment the following line to run in non administrative install mode (install for current user only.)
 ;PrivilegesRequired=lowest
-OutputDir=E:\pie_menyu\pie_menyu_installer
+OutputDir=.
 OutputBaseFilename=PieMenyuInstaller
 Compression=lzma
 SolidCompression=yes
@@ -45,12 +45,13 @@ Root: "HKCR"; Subkey: "piemenyueditor\shell\open\command"; ValueType: string; Va
 [Languages]
 Name: "english"; MessagesFile: "compiler:Default.isl"
 Name: "japanese"; MessagesFile: "compiler:Languages\Japanese.isl"
+Name: "chinese"; MessagesFile: "compiler:Languages\ChineseSimplified.isl"
 
 [Tasks]
 Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{cm:AdditionalIcons}"; Flags: unchecked
 
 [Files]
-Source: "E:\pie_menyu\Release\*"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs
+Source: "..\Release\*"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs
 ; NOTE: Don't use "Flags: ignoreversion" on any shared system files
 
 [Icons]
@@ -68,6 +69,44 @@ begin
     if MsgBox('Do you also want to remove all user data related to PieMenyu?', mbConfirmation, MB_YESNO or MB_DEFBUTTON2) = IDYES then
     begin
         DelTree(ExpandConstant('{userappdata}\PieMenyu'), True, True, True);
+    end;
+  end;
+end;
+
+function IsProcessRunning(const FileName : string): Boolean;
+var
+    FSWbemLocator: Variant;
+    FWMIService   : Variant;
+    FWbemObjectSet: Variant;
+begin
+    Result := false;
+    FSWbemLocator := CreateOleObject('WBEMScripting.SWBEMLocator');
+    FWMIService := FSWbemLocator.ConnectServer('', 'root\CIMV2', '', '');
+    FWbemObjectSet :=
+      FWMIService.ExecQuery(
+        Format('SELECT Name FROM Win32_Process Where Name="%s"', [FileName]));
+    Result := (FWbemObjectSet.Count > 0);
+    FWbemObjectSet := Unassigned;
+    FWMIService := Unassigned;
+    FSWbemLocator := Unassigned;
+end;
+
+function InitializeSetup(): Boolean;
+var
+    ResultCode: Integer;
+begin
+  Result := True;
+  
+  if IsProcessRunning('pie_menyu.exe') or IsProcessRunning('pie_menyu_editor.exe') then
+  begin
+    if MsgBox('There are instances of PieMenyu running. Please save any unsaved work and close them before proceeding with the installation. Click OK to continue or Cancel to abort the installation.', mbConfirmation, MB_OKCANCEL) = IDCANCEL then
+    begin
+      Result := False;
+    end
+    else
+    begin
+      Exec('taskkill', '/F /IM pie_menyu.exe /t', '', SW_HIDE, ewWaitUntilTerminated, ResultCode);
+      Exec('taskkill', '/F /IM pie_menyu_editor.exe /t', '', SW_HIDE, ewWaitUntilTerminated, ResultCode);
     end;
   end;
 end;
