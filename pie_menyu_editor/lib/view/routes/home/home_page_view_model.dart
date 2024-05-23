@@ -2,11 +2,15 @@ import 'dart:async';
 import 'dart:developer';
 
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/services.dart';
 import 'package:isar/isar.dart';
 import 'package:pie_menyu_core/db/db.dart';
 import 'package:pie_menyu_core/db/pie_item.dart';
 import 'package:pie_menyu_core/db/pie_menu.dart';
 import 'package:pie_menyu_core/db/profile.dart';
+import 'package:pie_menyu_core/pieItemTasks/open_folder_task.dart';
+import 'package:pie_menyu_core/pieItemTasks/send_key_task.dart';
+import 'package:pie_menyu_core/pieItemTasks/send_text_task.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class HomePageViewModel extends ChangeNotifier {
@@ -144,13 +148,48 @@ class HomePageViewModel extends ChangeNotifier {
     await addPieMenuTo(profile, newPieMenu);
   }
 
+  Future<void> createTutorialPieMenu() async {
+    PieMenu? tutorialPieMenu = (await _db.getPieMenus(ids: [1])).firstOrNull;
+    if (tutorialPieMenu == null) {
+      tutorialPieMenu = PieMenu()
+        ..id = 1
+        ..name = "New Pie Menu";
+      await _db.putPieMenu(tutorialPieMenu);
+    }
+
+    List<PieItem> newPieItems = [
+      PieItem(name: "Center"),
+      PieItem(name: "Save")
+        ..tasks = [
+          SendKeyTask()
+            ..ctrl = true
+            ..key = LogicalKeyboardKey.keyS
+        ],
+      PieItem(name: "Open Downloads")
+        ..tasks = [OpenFolderTask()..folderPath = "~/Documents"],
+      PieItem(name: "Toggle Volume")
+        ..tasks = [SendKeyTask()..key = LogicalKeyboardKey.audioVolumeMute],
+      PieItem(name: "Paste texts")
+        ..tasks = [PasteTextTask()..text = "Piiiiiiiiiiiie Menyu!"],
+      PieItem(name: "New Pie Item"),
+    ];
+
+    await _db.putPieItems(newPieItems);
+    await _db.linkPieItemsTo(tutorialPieMenu, newPieItems);
+
+    updateState();
+  }
+
   void createPieMenuIn(Profile profile) async {
     PieMenu newPieMenu = PieMenu()..name = "New Pie Menu";
 
     int pieMenuId = await _db.putPieMenu(newPieMenu);
     await _db.addPieMenuToProfile(pieMenuId, profile.id);
 
+    if (pieMenuId == 1) return await createTutorialPieMenu();
+
     List<PieItem> newPieItems = [
+      PieItem(name: "Center"),
       PieItem(name: "New Pie Item"),
       PieItem(name: "New Pie Item"),
       PieItem(name: "New Pie Item"),

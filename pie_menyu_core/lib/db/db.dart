@@ -24,11 +24,11 @@ class Database {
 
   Database(Directory dir)
       : _isar = Isar.openSync([
-          ProfileSchema,
-          PieMenuSchema,
-          PieItemSchema,
-          ProfileExeSchema,
-        ], directory: dir.path),
+    ProfileSchema,
+    PieMenuSchema,
+    PieItemSchema,
+    ProfileExeSchema,
+  ], directory: dir.path),
         _dbPath = dir.path;
 
   /// Initialize the database with default profile if not existed.
@@ -72,7 +72,7 @@ class Database {
   /// If no profile is found, it returns [null].
   Future<Profile?> getProfileByExe(String path) async {
     ProfileExe? profileExe =
-        await _isar.profileExes.where().pathEqualTo(path).findFirst();
+    await _isar.profileExes.where().pathEqualTo(path).findFirst();
 
     if (profileExe == null) {
       return null;
@@ -91,7 +91,7 @@ class Database {
     final List<PieMenuHotkey> hotkeys = [];
 
     final List<Profile> profiles =
-        await _isar.profiles.where().filter().enabledEqualTo(true).findAll();
+    await _isar.profiles.where().filter().enabledEqualTo(true).findAll();
 
     for (Profile profile in profiles) {
       hotkeys.addAll(profile.pieMenuHotkeys);
@@ -131,7 +131,7 @@ class Database {
   /// * Replaces the original exe path to the new [path]
   Future<void> linkProfileToExe(Profile profile, String path) async {
     ProfileExe? profileExe =
-        await _isar.profileExes.where().pathEqualTo(path).findFirst();
+    await _isar.profileExes.where().pathEqualTo(path).findFirst();
     profileExe ??= ProfileExe(path: path);
 
     profileExe.profile.value = profile;
@@ -283,9 +283,19 @@ class Database {
     });
   }
 
+  Future<void> linkPieItemsTo(PieMenu pieMenu, List<PieItem> pieItems) async {
+    pieMenu.pieItemInstances = [
+      ...pieMenu.pieItemInstances,
+      ...pieItems.map((e) => PieItemDelegate(pieItemId: e.id))
+    ];
+    await _isar.writeTxn(() async {
+      await _isar.pieMenus.put(pieMenu);
+    });
+  }
+
   Future<void> loadPieItemInstance(PieItemDelegate pieItemInstance) async {
     pieItemInstance.pieItem =
-        await _isar.pieItems.get(pieItemInstance.pieItemId);
+    await _isar.pieItems.get(pieItemInstance.pieItemId);
   }
 
   Future<void> deleteProfile(Profile profile) async {
