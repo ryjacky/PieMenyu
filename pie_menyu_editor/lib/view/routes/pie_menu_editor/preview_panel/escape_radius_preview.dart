@@ -10,6 +10,6 @@ class EscapeRadiusPreview extends DottedBorder {
           borderType: BorderType.Circle,
           dashPattern: [3, (2 * pi * escapeRadius - 100) / 100],
           strokeWidth: 3.0,
-          child: SizedBox.square(dimension: escapeRadius),
+          child: SizedBox.square(dimension: escapeRadius * 2),
         );
 }
