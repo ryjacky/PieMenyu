@@ -15,12 +15,12 @@ import 'package:pie_menyu_editor/view/widgets/minimal_text_field.dart';
 import 'package:pie_menyu_editor/view/widgets/single_key_recorder.dart';
 import 'package:provider/provider.dart';
 
-class PieItemListItem extends StatefulWidget {
+class PieItemEdit extends StatefulWidget {
   final PieItemDelegate pieItemDelegate;
   final PieMenuState pieMenuState;
   final bool allowDelete;
 
-  const PieItemListItem({
+  const PieItemEdit({
     super.key,
     required this.pieItemDelegate,
     required this.pieMenuState,
@@ -28,10 +28,10 @@ class PieItemListItem extends StatefulWidget {
   });
 
   @override
-  State<PieItemListItem> createState() => _PieItemListItemState();
+  State<PieItemEdit> createState() => _PieItemEditState();
 }
 
-class _PieItemListItemState extends State<PieItemListItem> {
+class _PieItemEditState extends State<PieItemEdit> {
   Widget? _icon;
 
   static const List<IconData> icons = [

@@ -4,7 +4,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:pie_menyu_core/db/pie_item.dart';
 import 'package:pie_menyu_core/db/pie_menu.dart';
 import 'package:pie_menyu_core/widgets/pieMenuView/pie_menu_state.dart';
-import 'package:pie_menyu_editor/view/routes/pie_menu_editor/editor_panel/pie_item_list_item.dart';
+import 'package:pie_menyu_editor/view/routes/pie_menu_editor/editor_panel/pie_item_edit.dart';
 import 'package:pie_menyu_editor/view/widgets/primary_button.dart';
 import 'package:provider/provider.dart';
 
@@ -56,7 +56,7 @@ class _PieItemListTabState extends State<PieItemListTab> {
                   ),
                 ),
                 Expanded(
-                  child: PieItemListItem(
+                  child: PieItemEdit(
                     pieItemDelegate: piInstance,
                     pieMenuState: pieMenuState,
                   ),
