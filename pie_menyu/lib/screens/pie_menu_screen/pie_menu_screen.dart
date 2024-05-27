@@ -36,14 +36,29 @@ class _PieMenuScreenState extends State<PieMenuScreen> {
   }
 
   _processMouseEvent(PointerEvent event) {
-    final pieMenuPos = context.read<PieMenuStateProvider>().pieMenuPositions;
     final pieMenuStates = context.read<PieMenuStateProvider>().pieMenuStates;
-    if (pieMenuPos.isEmpty || pieMenuStates.isEmpty) return;
+
+    if (pieMenuStates.isEmpty) return;
+    final lastPieMenuPos = context
+        .read<PieMenuStateProvider>()
+        .pieMenuPositions[pieMenuStates.last];
+
+    if (lastPieMenuPos == null) return;
 
     _mousePosition = event.position;
+
+    // Do nothing and hide the menu if the mouse is outside the escape radius
+    // if the escape radius is set
+    if (pieMenuStates.last.behavior.escapeRadius > 0 &&
+        getPointerToPieCenterLength(_mousePosition, lastPieMenuPos) >
+            pieMenuStates.last.behavior.escapeRadius) {
+      context.read<PieMenuScreenViewModel>().clearStateAndHide();
+      return;
+    }
+
     final instance = getPieItemDelegateAt(
       _mousePosition,
-      pieMenuPos[pieMenuStates.last] ??= _mousePosition,
+      lastPieMenuPos,
       pieMenuStates.last.shape.centerRadius,
       pieMenuStates.last.pieItemDelegates,
     );
@@ -142,8 +157,7 @@ class _PieMenuScreenState extends State<PieMenuScreen> {
   ) {
     if (instances.isEmpty) return null;
 
-    if (sqrt(pow(position.dx - pieCenterPosition.dx, 2) +
-            pow(position.dy - pieCenterPosition.dy, 2)) <=
+    if (getPointerToPieCenterLength(position, pieCenterPosition) <=
         pieCenterRadius) {
       return instances[0];
     }
@@ -227,5 +241,10 @@ class _PieMenuScreenState extends State<PieMenuScreen> {
     final pieMenuStates = context.read<PieMenuStateProvider>().pieMenuStates;
     final route = pieMenuStates.map((e) => e.name).join(" > ");
     return route;
+  }
+
+  double getPointerToPieCenterLength(Offset pos, Offset pieCenterPos) {
+    return sqrt(
+        pow(pos.dx - pieCenterPos.dx, 2) + pow(pos.dy - pieCenterPos.dy, 2));
   }
 }
