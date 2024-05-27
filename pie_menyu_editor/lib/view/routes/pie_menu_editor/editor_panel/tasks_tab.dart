@@ -14,7 +14,7 @@ import 'package:pie_menyu_core/widgets/pieMenuView/pie_menu_state.dart';
 import 'package:pie_menyu_editor/view/widgets/single_icon_button.dart';
 import 'package:provider/provider.dart';
 
-import 'pie_item_list_item.dart';
+import 'pie_item_edit.dart';
 import 'pie_item_task_list.dart';
 
 class TasksTab extends StatelessWidget {
@@ -34,7 +34,7 @@ class TasksTab extends StatelessWidget {
             children: [
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 2, vertical: 8),
-                child: PieItemListItem(
+                child: PieItemEdit(
                   pieItemDelegate: activePieItemDelegate,
                   pieMenuState: context.read<PieMenuState>(),
                 ),

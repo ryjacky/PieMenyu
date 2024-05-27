@@ -40,11 +40,11 @@ const PieMenuSchema = CollectionSchema(
       type: IsarType.object,
       target: r'PieMenuFont',
     ),
-    r'icon': PropertySchema(
+    r'iconStyle': PropertySchema(
       id: 4,
-      name: r'icon',
+      name: r'iconStyle',
       type: IsarType.object,
-      target: r'PieMenuIcon',
+      target: r'PieMenuIconStyle',
     ),
     r'name': PropertySchema(
       id: 5,
@@ -81,7 +81,7 @@ const PieMenuSchema = CollectionSchema(
   },
   embeddedSchemas: {
     r'PieMenuColors': PieMenuColorsSchema,
-    r'PieMenuIcon': PieMenuIconSchema,
+    r'PieMenuIconStyle': PieMenuIconStyleSchema,
     r'PieMenuFont': PieMenuFontSchema,
     r'PieMenuBehavior': PieMenuBehaviorSchema,
     r'PieMenuShape': PieMenuShapeSchema,
@@ -109,7 +109,7 @@ int _pieMenuEstimateSize(
       PieMenuFontSchema.estimateSize(
           object.font, allOffsets[PieMenuFont]!, allOffsets);
   bytesCount += 3 +
-      PieMenuIconSchema.estimateSize(
+      PieMenuIconStyleSchema.estimateSize(
           object.iconStyle, allOffsets[PieMenuIconStyle]!, allOffsets);
   bytesCount += 3 + object.name.length * 3;
   bytesCount += 3 + object.pieItemInstances.length * 3;
@@ -155,7 +155,7 @@ void _pieMenuSerialize(
   writer.writeObject<PieMenuIconStyle>(
     offsets[4],
     allOffsets,
-    PieMenuIconSchema.serialize,
+    PieMenuIconStyleSchema.serialize,
     object.iconStyle,
   );
   writer.writeString(offsets[5], object.name);
@@ -201,7 +201,7 @@ PieMenu _pieMenuDeserialize(
       PieMenuFont();
   object.iconStyle = reader.readObjectOrNull<PieMenuIconStyle>(
         offsets[4],
-        PieMenuIconSchema.deserialize,
+        PieMenuIconStyleSchema.deserialize,
         allOffsets,
       ) ??
       PieMenuIconStyle();
@@ -256,7 +256,7 @@ P _pieMenuDeserializeProp<P>(
     case 4:
       return (reader.readObjectOrNull<PieMenuIconStyle>(
             offset,
-            PieMenuIconSchema.deserialize,
+            PieMenuIconStyleSchema.deserialize,
             allOffsets,
           ) ??
           PieMenuIconStyle()) as P;
@@ -677,10 +677,10 @@ extension PieMenuQueryObject
     });
   }
 
-  QueryBuilder<PieMenu, PieMenu, QAfterFilterCondition> icon(
+  QueryBuilder<PieMenu, PieMenu, QAfterFilterCondition> iconStyle(
       FilterQuery<PieMenuIconStyle> q) {
     return QueryBuilder.apply(this, (query) {
-      return query.object(q, r'icon');
+      return query.object(q, r'iconStyle');
     });
   }
 
@@ -872,9 +872,10 @@ extension PieMenuQueryProperty
     });
   }
 
-  QueryBuilder<PieMenu, PieMenuIconStyle, QQueryOperations> iconProperty() {
+  QueryBuilder<PieMenu, PieMenuIconStyle, QQueryOperations>
+      iconStyleProperty() {
     return QueryBuilder.apply(this, (query) {
-      return query.addPropertyName(r'icon');
+      return query.addPropertyName(r'iconStyle');
     });
   }
 
@@ -1094,9 +1095,9 @@ extension PieMenuColorsQueryObject
 // coverage:ignore-file
 // ignore_for_file: duplicate_ignore, non_constant_identifier_names, constant_identifier_names, invalid_use_of_protected_member, unnecessary_cast, prefer_const_constructors, lines_longer_than_80_chars, require_trailing_commas, inference_failure_on_function_invocation, unnecessary_parenthesis, unnecessary_raw_strings, unnecessary_null_checks, join_return_with_assignment, prefer_final_locals, avoid_js_rounded_ints, avoid_positional_boolean_parameters, always_specify_types
 
-const PieMenuIconSchema = Schema(
-  name: r'PieMenuIcon',
-  id: 5631395984661722160,
+const PieMenuIconStyleSchema = Schema(
+  name: r'PieMenuIconStyle',
+  id: -6925166569962286936,
   properties: {
     r'color': PropertySchema(
       id: 0,
@@ -1109,13 +1110,13 @@ const PieMenuIconSchema = Schema(
       type: IsarType.double,
     )
   },
-  estimateSize: _pieMenuIconEstimateSize,
-  serialize: _pieMenuIconSerialize,
-  deserialize: _pieMenuIconDeserialize,
-  deserializeProp: _pieMenuIconDeserializeProp,
+  estimateSize: _pieMenuIconStyleEstimateSize,
+  serialize: _pieMenuIconStyleSerialize,
+  deserialize: _pieMenuIconStyleDeserialize,
+  deserializeProp: _pieMenuIconStyleDeserializeProp,
 );
 
-int _pieMenuIconEstimateSize(
+int _pieMenuIconStyleEstimateSize(
   PieMenuIconStyle object,
   List<int> offsets,
   Map<Type, List<int>> allOffsets,
@@ -1124,7 +1125,7 @@ int _pieMenuIconEstimateSize(
   return bytesCount;
 }
 
-void _pieMenuIconSerialize(
+void _pieMenuIconStyleSerialize(
   PieMenuIconStyle object,
   IsarWriter writer,
   List<int> offsets,
@@ -1134,7 +1135,7 @@ void _pieMenuIconSerialize(
   writer.writeDouble(offsets[1], object.size);
 }
 
-PieMenuIconStyle _pieMenuIconDeserialize(
+PieMenuIconStyle _pieMenuIconStyleDeserialize(
   Id id,
   IsarReader reader,
   List<int> offsets,
@@ -1146,7 +1147,7 @@ PieMenuIconStyle _pieMenuIconDeserialize(
   return object;
 }
 
-P _pieMenuIconDeserializeProp<P>(
+P _pieMenuIconStyleDeserializeProp<P>(
   IsarReader reader,
   int propertyId,
   int offset,
@@ -1162,10 +1163,10 @@ P _pieMenuIconDeserializeProp<P>(
   }
 }
 
-extension PieMenuIconQueryFilter
+extension PieMenuIconStyleQueryFilter
     on QueryBuilder<PieMenuIconStyle, PieMenuIconStyle, QFilterCondition> {
-  QueryBuilder<PieMenuIconStyle, PieMenuIconStyle, QAfterFilterCondition> colorEqualTo(
-      int value) {
+  QueryBuilder<PieMenuIconStyle, PieMenuIconStyle, QAfterFilterCondition>
+      colorEqualTo(int value) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.equalTo(
         property: r'color',
@@ -1188,7 +1189,8 @@ extension PieMenuIconQueryFilter
     });
   }
 
-  QueryBuilder<PieMenuIconStyle, PieMenuIconStyle, QAfterFilterCondition> colorLessThan(
+  QueryBuilder<PieMenuIconStyle, PieMenuIconStyle, QAfterFilterCondition>
+      colorLessThan(
     int value, {
     bool include = false,
   }) {
@@ -1201,7 +1203,8 @@ extension PieMenuIconQueryFilter
     });
   }
 
-  QueryBuilder<PieMenuIconStyle, PieMenuIconStyle, QAfterFilterCondition> colorBetween(
+  QueryBuilder<PieMenuIconStyle, PieMenuIconStyle, QAfterFilterCondition>
+      colorBetween(
     int lower,
     int upper, {
     bool includeLower = true,
@@ -1218,7 +1221,8 @@ extension PieMenuIconQueryFilter
     });
   }
 
-  QueryBuilder<PieMenuIconStyle, PieMenuIconStyle, QAfterFilterCondition> sizeEqualTo(
+  QueryBuilder<PieMenuIconStyle, PieMenuIconStyle, QAfterFilterCondition>
+      sizeEqualTo(
     double value, {
     double epsilon = Query.epsilon,
   }) {
@@ -1231,7 +1235,8 @@ extension PieMenuIconQueryFilter
     });
   }
 
-  QueryBuilder<PieMenuIconStyle, PieMenuIconStyle, QAfterFilterCondition> sizeGreaterThan(
+  QueryBuilder<PieMenuIconStyle, PieMenuIconStyle, QAfterFilterCondition>
+      sizeGreaterThan(
     double value, {
     bool include = false,
     double epsilon = Query.epsilon,
@@ -1246,7 +1251,8 @@ extension PieMenuIconQueryFilter
     });
   }
 
-  QueryBuilder<PieMenuIconStyle, PieMenuIconStyle, QAfterFilterCondition> sizeLessThan(
+  QueryBuilder<PieMenuIconStyle, PieMenuIconStyle, QAfterFilterCondition>
+      sizeLessThan(
     double value, {
     bool include = false,
     double epsilon = Query.epsilon,
@@ -1261,7 +1267,8 @@ extension PieMenuIconQueryFilter
     });
   }
 
-  QueryBuilder<PieMenuIconStyle, PieMenuIconStyle, QAfterFilterCondition> sizeBetween(
+  QueryBuilder<PieMenuIconStyle, PieMenuIconStyle, QAfterFilterCondition>
+      sizeBetween(
     double lower,
     double upper, {
     bool includeLower = true,
@@ -1281,7 +1288,7 @@ extension PieMenuIconQueryFilter
   }
 }
 
-extension PieMenuIconQueryObject
+extension PieMenuIconStyleQueryObject
     on QueryBuilder<PieMenuIconStyle, PieMenuIconStyle, QFilterCondition> {}
 
 // coverage:ignore-file

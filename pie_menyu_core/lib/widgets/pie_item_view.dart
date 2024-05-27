@@ -35,7 +35,6 @@ class PieItemView extends StatefulWidget {
 
 class _PieItemViewState extends State<PieItemView> {
   Widget? imageIcon;
-  String imageIconBase64 = "";
 
   @override
   Widget build(BuildContext context) {
@@ -43,20 +42,25 @@ class _PieItemViewState extends State<PieItemView> {
 
     if (pieItem == null) throw Exception("PieItem is null");
 
-    if (imageIconBase64 != pieItem.iconBase64) {
-      imageIconBase64 = pieItem.iconBase64;
+    if (pieItem.iconBase64 != null) {
+      imageIcon = Image.memory(
+        base64Decode(pieItem.iconBase64!),
+        alignment: Alignment.centerLeft,
+        fit: BoxFit.fitHeight,
+        isAntiAlias: true,
+        errorBuilder: (context, object, error) {
+          return const SizedBox(width: 0, height: 0);
+        },
+      );
+    } else if (pieItem.iconDataCode != null) {
+      imageIcon = Icon(
+        IconData(pieItem.iconDataCode!, fontFamily: 'MaterialIcons'),
+        size: max(widget.icon.size - 10, 0), // somehow the icon size is too big, so we reduce it by 10
+        color: Color(widget.icon.color),
+      );
+    } else {
       imageIcon = null;
     }
-
-    imageIcon ??= Image.memory(
-      base64Decode(pieItem.iconBase64),
-      alignment: Alignment.centerLeft,
-      fit: BoxFit.fitHeight,
-      isAntiAlias: true,
-      errorBuilder: (context, object, error) {
-        return const SizedBox(width: 0, height: 0);
-      },
-    );
 
     return Container(
       height: widget.height,
@@ -71,23 +75,28 @@ class _PieItemViewState extends State<PieItemView> {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
-          if (imageIconBase64 != "") SizedBox(height: widget.icon.size, child: imageIcon!),
-
+          if ((pieItem.iconBase64 != null && pieItem.iconBase64 != "") || pieItem.iconDataCode != null)
+            SizedBox(height: widget.icon.size, child: imageIcon!),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 6),
             child: Text(
               pieItem.name,
-              style: GoogleFonts.getFont(widget.font.fontFamily,
-                  color: Color(widget.active
-                      ? widget.colors.secondary
-                      : widget.font.color,),
-                  fontSize: widget.font.size),
+              style: GoogleFonts.getFont(
+                widget.font.fontFamily,
+                color: Color(widget.active
+                    ? widget.colors.secondary
+                    : widget.font.color),
+                fontSize: widget.font.size,
+              ),
             ),
           ),
           Text(
             widget.instance.keyCode,
-            style: GoogleFonts.getFont(widget.font.fontFamily,
-                color: Color(widget.font.color), fontSize: widget.font.size),
+            style: GoogleFonts.getFont(
+              widget.font.fontFamily,
+              color: Color(widget.font.color),
+              fontSize: widget.font.size,
+            ),
           ),
         ],
       ),

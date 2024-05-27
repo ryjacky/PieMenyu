@@ -22,13 +22,18 @@ const PieItemSchema = CollectionSchema(
       name: r'iconBase64',
       type: IsarType.string,
     ),
-    r'name': PropertySchema(
+    r'iconDataCode': PropertySchema(
       id: 1,
+      name: r'iconDataCode',
+      type: IsarType.long,
+    ),
+    r'name': PropertySchema(
+      id: 2,
       name: r'name',
       type: IsarType.string,
     ),
     r'tasks': PropertySchema(
-      id: 2,
+      id: 3,
       name: r'tasks',
       type: IsarType.objectList,
       target: r'PieItemTask',
@@ -54,7 +59,12 @@ int _pieItemEstimateSize(
   Map<Type, List<int>> allOffsets,
 ) {
   var bytesCount = offsets.last;
-  bytesCount += 3 + object.iconBase64.length * 3;
+  {
+    final value = object.iconBase64;
+    if (value != null) {
+      bytesCount += 3 + value.length * 3;
+    }
+  }
   bytesCount += 3 + object.name.length * 3;
   bytesCount += 3 + object.tasks.length * 3;
   {
@@ -74,9 +84,10 @@ void _pieItemSerialize(
   Map<Type, List<int>> allOffsets,
 ) {
   writer.writeString(offsets[0], object.iconBase64);
-  writer.writeString(offsets[1], object.name);
+  writer.writeLong(offsets[1], object.iconDataCode);
+  writer.writeString(offsets[2], object.name);
   writer.writeObjectList<PieItemTask>(
-    offsets[2],
+    offsets[3],
     allOffsets,
     PieItemTaskSchema.serialize,
     object.tasks,
@@ -90,12 +101,13 @@ PieItem _pieItemDeserialize(
   Map<Type, List<int>> allOffsets,
 ) {
   final object = PieItem(
-    iconBase64: reader.readStringOrNull(offsets[0]) ?? '',
-    name: reader.readStringOrNull(offsets[1]) ?? '',
+    iconBase64: reader.readStringOrNull(offsets[0]),
+    iconDataCode: reader.readLongOrNull(offsets[1]),
+    name: reader.readStringOrNull(offsets[2]) ?? '',
   );
   object.id = id;
   object.tasks = reader.readObjectList<PieItemTask>(
-        offsets[2],
+        offsets[3],
         PieItemTaskSchema.deserialize,
         allOffsets,
         PieItemTask(),
@@ -112,10 +124,12 @@ P _pieItemDeserializeProp<P>(
 ) {
   switch (propertyId) {
     case 0:
-      return (reader.readStringOrNull(offset) ?? '') as P;
+      return (reader.readStringOrNull(offset)) as P;
     case 1:
-      return (reader.readStringOrNull(offset) ?? '') as P;
+      return (reader.readLongOrNull(offset)) as P;
     case 2:
+      return (reader.readStringOrNull(offset) ?? '') as P;
+    case 3:
       return (reader.readObjectList<PieItemTask>(
             offset,
             PieItemTaskSchema.deserialize,
@@ -217,8 +231,24 @@ extension PieItemQueryWhere on QueryBuilder<PieItem, PieItem, QWhereClause> {
 
 extension PieItemQueryFilter
     on QueryBuilder<PieItem, PieItem, QFilterCondition> {
+  QueryBuilder<PieItem, PieItem, QAfterFilterCondition> iconBase64IsNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNull(
+        property: r'iconBase64',
+      ));
+    });
+  }
+
+  QueryBuilder<PieItem, PieItem, QAfterFilterCondition> iconBase64IsNotNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNotNull(
+        property: r'iconBase64',
+      ));
+    });
+  }
+
   QueryBuilder<PieItem, PieItem, QAfterFilterCondition> iconBase64EqualTo(
-    String value, {
+    String? value, {
     bool caseSensitive = true,
   }) {
     return QueryBuilder.apply(this, (query) {
@@ -231,7 +261,7 @@ extension PieItemQueryFilter
   }
 
   QueryBuilder<PieItem, PieItem, QAfterFilterCondition> iconBase64GreaterThan(
-    String value, {
+    String? value, {
     bool include = false,
     bool caseSensitive = true,
   }) {
@@ -246,7 +276,7 @@ extension PieItemQueryFilter
   }
 
   QueryBuilder<PieItem, PieItem, QAfterFilterCondition> iconBase64LessThan(
-    String value, {
+    String? value, {
     bool include = false,
     bool caseSensitive = true,
   }) {
@@ -261,8 +291,8 @@ extension PieItemQueryFilter
   }
 
   QueryBuilder<PieItem, PieItem, QAfterFilterCondition> iconBase64Between(
-    String lower,
-    String upper, {
+    String? lower,
+    String? upper, {
     bool includeLower = true,
     bool includeUpper = true,
     bool caseSensitive = true,
@@ -343,6 +373,76 @@ extension PieItemQueryFilter
       return query.addFilterCondition(FilterCondition.greaterThan(
         property: r'iconBase64',
         value: '',
+      ));
+    });
+  }
+
+  QueryBuilder<PieItem, PieItem, QAfterFilterCondition> iconDataCodeIsNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNull(
+        property: r'iconDataCode',
+      ));
+    });
+  }
+
+  QueryBuilder<PieItem, PieItem, QAfterFilterCondition>
+      iconDataCodeIsNotNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNotNull(
+        property: r'iconDataCode',
+      ));
+    });
+  }
+
+  QueryBuilder<PieItem, PieItem, QAfterFilterCondition> iconDataCodeEqualTo(
+      int? value) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'iconDataCode',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<PieItem, PieItem, QAfterFilterCondition> iconDataCodeGreaterThan(
+    int? value, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        include: include,
+        property: r'iconDataCode',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<PieItem, PieItem, QAfterFilterCondition> iconDataCodeLessThan(
+    int? value, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.lessThan(
+        include: include,
+        property: r'iconDataCode',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<PieItem, PieItem, QAfterFilterCondition> iconDataCodeBetween(
+    int? lower,
+    int? upper, {
+    bool includeLower = true,
+    bool includeUpper = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.between(
+        property: r'iconDataCode',
+        lower: lower,
+        includeLower: includeLower,
+        upper: upper,
+        includeUpper: includeUpper,
       ));
     });
   }
@@ -640,6 +740,18 @@ extension PieItemQuerySortBy on QueryBuilder<PieItem, PieItem, QSortBy> {
     });
   }
 
+  QueryBuilder<PieItem, PieItem, QAfterSortBy> sortByIconDataCode() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'iconDataCode', Sort.asc);
+    });
+  }
+
+  QueryBuilder<PieItem, PieItem, QAfterSortBy> sortByIconDataCodeDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'iconDataCode', Sort.desc);
+    });
+  }
+
   QueryBuilder<PieItem, PieItem, QAfterSortBy> sortByName() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'name', Sort.asc);
@@ -664,6 +776,18 @@ extension PieItemQuerySortThenBy
   QueryBuilder<PieItem, PieItem, QAfterSortBy> thenByIconBase64Desc() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'iconBase64', Sort.desc);
+    });
+  }
+
+  QueryBuilder<PieItem, PieItem, QAfterSortBy> thenByIconDataCode() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'iconDataCode', Sort.asc);
+    });
+  }
+
+  QueryBuilder<PieItem, PieItem, QAfterSortBy> thenByIconDataCodeDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'iconDataCode', Sort.desc);
     });
   }
 
@@ -701,6 +825,12 @@ extension PieItemQueryWhereDistinct
     });
   }
 
+  QueryBuilder<PieItem, PieItem, QDistinct> distinctByIconDataCode() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addDistinctBy(r'iconDataCode');
+    });
+  }
+
   QueryBuilder<PieItem, PieItem, QDistinct> distinctByName(
       {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
@@ -717,9 +847,15 @@ extension PieItemQueryProperty
     });
   }
 
-  QueryBuilder<PieItem, String, QQueryOperations> iconBase64Property() {
+  QueryBuilder<PieItem, String?, QQueryOperations> iconBase64Property() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'iconBase64');
+    });
+  }
+
+  QueryBuilder<PieItem, int?, QQueryOperations> iconDataCodeProperty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addPropertyName(r'iconDataCode');
     });
   }
 
