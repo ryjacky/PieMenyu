@@ -1,6 +1,8 @@
 import 'dart:ffi';
+import 'dart:io';
 
 import 'package:ffi/ffi.dart';
+import 'package:flutter/services.dart';
 import 'package:win32/win32.dart';
 
 /// Represents information about a running process, which the process has a
@@ -11,6 +13,7 @@ class GUIProcess {
   final String exePath;
   String base64Icon;
   final String mainWindowTitle;
+  static const platform = MethodChannel('pie.menyu/gui_process');
 
   static final Map<String, GUIProcess> _taskBarProcessInfoMap = {};
 
@@ -80,15 +83,28 @@ class GUIProcess {
   /// List the window handle and text for all top-level desktop windows
   /// in the current session.
   static Set<GUIProcess> enumerateWindows() {
-    _taskBarProcessInfoMap.clear();
+    if (Platform.isWindows) {
+      _taskBarProcessInfoMap.clear();
 
-    final lpEnumFunc = NativeCallable<WNDENUMPROC>.isolateLocal(
-      _enumWindowsProc,
-      exceptionalReturn: 0,
-    );
-    EnumWindows(lpEnumFunc.nativeFunction, 0);
-    lpEnumFunc.close();
+      final lpEnumFunc = NativeCallable<WNDENUMPROC>.isolateLocal(
+        _enumWindowsProc,
+        exceptionalReturn: 0,
+      );
+      EnumWindows(lpEnumFunc.nativeFunction, 0);
+      lpEnumFunc.close();
 
-    return _taskBarProcessInfoMap.values.toSet();
+      return _taskBarProcessInfoMap.values.toSet();
+    } else if (Platform.isLinux) {
+
+    } else if (Platform.isMacOS) {
+      try {
+        final result = platform.invokeMethod<List>('enumerateWindows');
+        print(result);
+      } on PlatformException catch (e) {
+        print(e.message);
+      }
+    }
+
+    return {};
   }
 }
