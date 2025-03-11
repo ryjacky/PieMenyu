@@ -12,7 +12,7 @@ This project especially benefits users of creative software like design tools, v
 * **Customizable tasks - Each pie item slice can perform multiple tasks in PieMenyu.**
 
 ## Current Status:
-PieMenyu is actively under development and currently in beta. We welcome user feedback and contributions to make this project even better.
+PieMenyu's development is paused due to busy life. I'm looking to restart as soon as possible if time allows.
 
 ### Contributing to the project
 If you would like to make contributions, here is a place you could start looking at: https://github.com/ryjacky/PieMenyu/wiki/Getting-Started
